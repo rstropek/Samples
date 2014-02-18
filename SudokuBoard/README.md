@@ -18,7 +18,7 @@ I regularly do C# sessions and trainings. I use this sample to demonstrate the f
   * Operator overloading
   * Functional programming with lambdas
   
-## Prerequisites to play with the sample:
+## Prerequisites to play with the sample
 
 * Visual Studio 2013
 * [Sandcastle Helpfile Builder](https://shfb.codeplex.com/)
