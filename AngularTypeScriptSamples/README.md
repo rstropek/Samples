@@ -1,4 +1,4 @@
-# AngularJS 
+# Windows Azure Mobile Services, AngularJS, and TypeScript
 
 This sample demonstrates various topics around TypeScript and AngularJS. It covers:
 
