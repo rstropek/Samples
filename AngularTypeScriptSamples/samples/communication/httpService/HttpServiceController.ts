@@ -74,6 +74,8 @@ module HttpServiceModule {
                 .success(result => {
                     current.$scope.events = result.results;
                     current.$scope.totalItems = result.count;
+                })
+                .finally(() => {
                     current.$scope.loading = false;
                 });
         }

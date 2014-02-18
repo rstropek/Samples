@@ -1,6 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-/// <reference path="NotificationsArchive.ts"/>
-
 module NotificationsModule {
     export interface INotificationsCtrlScope extends ng.IScope {
         notification: string;

@@ -56,6 +56,7 @@ var HttpServiceModule;
             this.eventTable.query(this.$scope.currentPage).success(function (result) {
                 current.$scope.events = result.results;
                 current.$scope.totalItems = result.count;
+            }).finally(function () {
                 current.$scope.loading = false;
             });
         };

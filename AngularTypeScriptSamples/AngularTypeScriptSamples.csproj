@@ -426,8 +426,6 @@
     <Content Include="Scripts\ui-bootstrap-0.10.0.min.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.min.js" />
-    <Content Include="styles\bootstrap-2.3.1\bootstrap.css" />
-    <Content Include="styles\bootstrap-2.3.1\bootstrap.min.css" />
     <Content Include="Tests\lib\jasmine-1.3.1\jasmine-html.js" />
     <Content Include="Tests\lib\jasmine-1.3.1\jasmine.css" />
     <Content Include="Tests\lib\jasmine-1.3.1\jasmine.js" />

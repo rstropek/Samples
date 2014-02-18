@@ -1,5 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-
 var WorldCtrl = function ($scope) {
     $scope.population = 7000;
     $scope.countries = [

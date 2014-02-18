@@ -1,5 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-
 var Hello;
 (function (Hello) {
     var HelloCtrl = (function () {

@@ -1,6 +1,3 @@
-/// <reference path="../../../Scripts/typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../Scripts/typings/angularjs/angular-mocks.d.ts"/>
 angular.module("notificationsApp", []).factory("notificationsArchive", function () {
     return new NotificationsModule.NotificationsArchive();
 });
@@ -13,7 +10,7 @@ describe("Notifications Archive Tests", function () {
     }));
 
     it(' should give access to the archived items', function () {
-        var notification = { msg: 'Old message.' };
+        var notification = 'Old message.';
         notificationsArchive.archive(notification);
         expect(notificationsArchive.getArchived()).toContain(notification);
     });

@@ -1,10 +1,8 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-
-interface IHelloScope extends ng.IScope {
-    name: string;
-}
-
 module Hello {
+    export interface IHelloScope extends ng.IScope {
+        name: string;
+    }
+
     export class HelloCtrl {
         constructor($scope: IHelloScope) {
             $scope.name = "World!";

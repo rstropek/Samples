@@ -1,8 +1,3 @@
-/// <reference path="../../../Scripts/typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../Scripts/typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="MobileServicesTable.ts"/>
-
 interface IDummyRow extends MobileServicesDataAccess.ITableRow {
 }
 

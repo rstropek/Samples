@@ -1,5 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-
 module MobileServicesDataAccess {
     export interface ITableRow {
         id?: number;

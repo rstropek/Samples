@@ -1,5 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-
 interface ICountry {
     name: string;
     population: number;
