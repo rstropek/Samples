@@ -1,4 +1,4 @@
-# Samples
+# Samples 
 
 This repository contains sample code I wrote for conference sessions, trainings, and workshops.
 You find more information about the samples in my blogs at [http://www.software-architects.com](http://www.software-architects.com)
