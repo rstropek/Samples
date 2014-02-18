@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="7772a9b2-988a-48dc-94a5-5183f30a2f44" visible="True" isDefault="true" title="Welcome to the [TODO: Add project name]">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Welcome" />
+    </HelpKeywords>
+  </Topic>
+  <Topic id="5c095217-14db-4e00-94c3-da37708b1223" visible="True" noFile="true" isSelected="true" apiParentMode="InsertAsChild" title="API Documentation" />
+</Topics>
