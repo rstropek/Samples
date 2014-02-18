@@ -1,0 +1,83 @@
+﻿<Window x:Class="AsyncSensors.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:AsyncSensors"
+        Title="MainWindow" Height="350" Width="525">
+	<Window.DataContext>
+		<local:MainWindowViewModel />
+	</Window.DataContext>
+	
+    <DockPanel>
+		<Grid DockPanel.Dock="Top">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<ComboBox ItemsSource="{Binding Path=AvailableSensors}"
+					  Margin="3" SelectedItem="{Binding Path=SelectedSensor}">
+				<ComboBox.Style>
+					<Style TargetType="ComboBox">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Path=IsRefreshingSensorList}" Value="True">
+								<Setter Property="IsEnabled" Value="False" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding Path=IsRefreshingSensorList}" Value="False">
+								<Setter Property="IsEnabled" Value="True" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</ComboBox.Style>
+			</ComboBox>
+			<TextBlock Text="Loading Sensors..." Grid.Column="1" 
+					   VerticalAlignment="Center" Name="LoadingIndicator">
+				<TextBlock.Style>
+					<Style TargetType="TextBlock">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Path=IsRefreshingSensorList}" Value="True">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding Path=IsRefreshingSensorList}" Value="False">
+								<Setter Property="Visibility" Value="Collapsed" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+			</TextBlock>
+		</Grid>
+		
+		<Button DockPanel.Dock="Top" Margin="3" Command="{Binding Path=OpenSensorCommand}">
+			<Button.Style>
+				<Style TargetType="Button">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Path=IsOpeningSensor}" Value="True">
+							<Setter Property="Content" Value="Opening..." />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding Path=IsOpeningSensor}" Value="False">
+							<Setter Property="Content" Value="Open" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding Path=IsOpen}" Value="True">
+							<Setter Property="Visibility" Value="Collapsed" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding Path=IsOpen}" Value="False">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
+		</Button>
+
+		<Grid DockPanel.Dock="Top" Margin="3">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Button Command="{Binding Path=LongTermMeasurementCommand}" Margin="0,0,3,0">Start long term measurement</Button>
+			<Button Command="{Binding Path=CancelLongTermMeasurementCommand}" Grid.Column="1" Margin="3,0,0,0">CANCEL long term measurement</Button>
+		</Grid>
+
+		<ProgressBar DockPanel.Dock="Bottom" Minimum="0" Maximum="1" Value="{Binding Path=Progress}" MinHeight="25" />
+		
+		<TextBlock FontSize="150" Text="{Binding Path=Measurement}" />
+		
+	</DockPanel>
+</Window>
