@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular.js Samples Using TypeScript</title>
+
+	<link href="../../../Content/bootstrap/bootstrap.css" rel="stylesheet">
+
+	<script src="../../../Scripts/angular.js"></script>
+	<script src="hierarchyOfScopes.js"></script>
+</head>
+
+<body ng-app>
+
+	<div ng-controller="WorldCtrl">
+		<hr>
+		<ul>
+			<li ng-repeat="country in countries">
+				{{country.name}} has population of {{country.population | number:1}} millions,
+				{{worldsPercentage(country.population) | number:1}} % of the World's population
+			</li>
+		</ul>
+		<hr>
+		World's population: {{population | number:1}} millions
+	</div>
+</body>
+</html>

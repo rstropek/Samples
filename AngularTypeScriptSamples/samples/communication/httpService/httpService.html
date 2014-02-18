@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+	<!--<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>-->
+	<script src="../../../Scripts/jquery-1.9.1.js"></script>
+	<script src="../../../Scripts/angular.js"></script>
+	<script src="../../../Scripts/ng-grid-2.0.7.min.js"></script>
+	<script src="../../../Scripts/ui-bootstrap-tpls-0.6.0.js"></script>
+	<script src="MobileServicesTable.js"></script>
+	<script src="HttpServiceController.js"></script>
+	<script src="app.js"></script>
+
+	<!-- <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet" />-->
+	<link href="../../../styles/bootstrap-2.3.1/bootstrap.css" rel="stylesheet" />
+	<link href="../../../Content/ng-grid.min.css" rel="stylesheet" />
+	<link href="app.css" rel="stylesheet" />
+</head>
+
+<body ng-app="HttpServiceModule" ng-controller="HttpServiceController">
+	<div class="well well-small">
+		<input type="button" class="btn" ng-click="vm.generateEvents()" value="Generate 25 random events" />
+		<input type="button" class="btn" ng-click="vm.deleteEvents()" value="Delete first 50 events" />
+	</div>
+
+	<div class="well well-small">
+		<div>
+			<div class="gridStyle" ng-grid="gridOptions"></div>
+		</div>
+		<div>
+			<pagination total-items="totalItems" items-per-page="paginationItemsPerPage"
+				page="currentPage"></pagination>
+		</div>
+		<div ng-class="{'div-visible': loading, 'div-hidden': !loading}">
+			<alert type="success">Loading...</alert>
+		</div>
+	</div>
+
+	<div class="well well-small">
+		<form name="eventForm" class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="eventCategory">Category</label>
+				<div class="controls">
+					<select id="eventCategory" ng-model="currentEvent.eventCategory">
+						<option>Concert</option>
+						<option>Sports Event</option>
+					</select>
+				</div>
+				<label class="control-label" for="eventTitle">Title</label>
+				<div class="controls">
+					<input type="text" id="eventTitle" ng-model="currentEvent.eventTitle" />
+				</div>
+				<label class="control-label" for="eventDescription">Description</label>
+				<div class="controls">
+					<textarea rows="3" id="eventDescription" ng-model="currentEvent.eventDescription"></textarea>
+				</div>
+				<label class="control-label" for="eventDate">Date</label>
+				<div class="controls" ng-model="currentEvent.eventDate">
+					<datepicker id="eventDate"></datepicker>
+				</div>
+				<label class="control-label" for="maxParticipants">Participant Limit</label>
+				<div class="controls">
+					<input type="number" name="maxParticipants" id="maxParticipants" ng-model="currentEvent.maximumParticipants" />
+				</div>
+				<div class="controls">
+					<input type="button" class="btn" ng-click="vm.addEvent()" value="Add Event" />
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

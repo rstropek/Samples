@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular.js Samples Using TypeScript</title>
+
+	<link href="../../../Content/bootstrap/bootstrap.css" rel="stylesheet">
+
+	<script src="../../../Scripts/angular.js"></script>
+	<script src="NotificationsArchive.js"></script>
+	<script src="NotificationsService.js"></script>
+	<script src="NotificationsCtrl.js"></script>
+	<script src="app.js"></script>
+	
+	<style>
+	 body {
+		 max-width: 500px;
+		 margin: 25px;
+	 }
+
+	 table {
+		 margin-top: 10px;
+	 }
+	</style>
+</head>
+
+<body ng-app="notificationsApp" ng-controller="NotificationsCtrl">
+	<div>
+		<form>
+			<textarea ng-model="notification" cols="40" rows="3" class="span6"></textarea><br>
+			<button class="btn btn-primary" ng-click="vm.addNotification()">Add</button>
+		</form>
+	</div>
+	<table class="table table-striped table-bordered">
+		<tr>
+			<th>Notifications</th>
+		</tr>
+		<tr ng-repeat="notification in vm.getNotifications()">
+			<td>{{notification}}</td>
+		</tr>
+	</table>
+</body>
+</html>

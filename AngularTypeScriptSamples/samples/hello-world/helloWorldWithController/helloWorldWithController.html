@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular.js Samples Using TypeScript</title>
+
+	<link href="../../../Content/bootstrap/bootstrap.css" rel="stylesheet">
+	<link href="helloWorldWithController.css" rel="stylesheet">
+
+	<script src="../../../Scripts/angular.js"></script>
+	<script src="helloWorldWithController.js"></script>
+</head>
+<body ng-app>
+	<div ng-controller="HelloCtrl">
+
+		<form>
+			<h2>Two-Way Binding</h2>
+			<label for="messageInput">Say 'Hello' to:</label>
+			<input type="text" id="messageInput" ng-model="name">
+
+			<h2>Simple Bindings</h2>
+			<table class="table table-hover table-condensed">
+				<tr>
+					<th>Syntax</th><th>Result</th>
+				</tr>
+				<tr>
+					<td>Interpolation</td><td>Hello, {{name}}!</td>
+				</tr>
+				<tr>
+					<td>ng-bind</td><td>Hello, <span ng-bind="name" />!</td>
+				</tr>
+				<tr>
+					<td>Interpolation with controller function</td>
+					<td>Hello, {{getName()}}!</td>
+				</tr>
+				<tr>
+					<td>ng-bind with getEnclosedName</td>
+					<td>Hello, <span ng-bind="getEnclosedName('b')" />!</td>
+				</tr>
+				<tr>
+					<td>ng-bind-html-unsafe with getEnclosedName</td>
+					<td>Hello, <span ng-bind-html-unsafe="getEnclosedName('b')" />!</td>
+				</tr>
+			</table>
+
+			<h2>Collection Binding</h2>
+			<table class="table table-hover table-condensed">
+				<tr>
+					<th>Pos.</th>
+					<th>ISO Code</th>
+					<th>Country Name</th>
+				</tr>
+				<tr ng-repeat="country in countries">
+					<td>{{$index}}</td>
+					<td>{{country.isoCode}}</td>
+					<td>{{country.name}}</td>
+				</tr>
+			</table>
+		</form>
+
+	</div>
+</body>
+</html>

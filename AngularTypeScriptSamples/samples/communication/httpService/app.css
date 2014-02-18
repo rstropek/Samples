@@ -1,0 +1,26 @@
+﻿.gridStyle {
+	border: 1px solid rgb(212,212,212);
+	width: 700px;
+	height: 300px;
+}
+
+label {
+	margin-top: 10px;
+}
+
+div .controls {
+	margin-top: 10px;
+}
+
+div .div-hidden {
+	visibility: hidden;
+}
+
+div .div-visible {
+	visibility: visible;
+}
+
+.well-small {
+	max-width: 750px;
+	margin: 25px;
+}
