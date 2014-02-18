@@ -1,5 +1,12 @@
 var MobileServicesDataAccess;
 (function (MobileServicesDataAccess) {
+    
+
+    
+
+    
+
+    // Implements a class used to access an Azure Mobile Services table.
     var Table = (function () {
         function Table($http, serviceName, tableName, pageSize, apiKey) {
             var _this = this;
@@ -43,6 +50,7 @@ var MobileServicesDataAccess;
                 }
             }
 
+            // Returns a promise representing the async web request
             return this.$http.get(uri, this.header);
         };
 

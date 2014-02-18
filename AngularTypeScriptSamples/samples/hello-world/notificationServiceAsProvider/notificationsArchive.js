@@ -1,4 +1,3 @@
-/// <reference path="INotificationsArchive.ts"/>
 var NotificationsModule;
 (function (NotificationsModule) {
     var NotificationsArchive = (function () {

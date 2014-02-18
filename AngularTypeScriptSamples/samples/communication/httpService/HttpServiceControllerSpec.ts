@@ -1,9 +1,3 @@
-/// <reference path="../../../Scripts/typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-/// <reference path="../../../Scripts/typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="MobileServicesTable.ts"/>
-/// <reference path="HttpServiceController.ts"/>
-
 describe("Mobile Services Table Test", function () {
     var $http: ng.IHttpService;
     var $httpBackend: ng.IHttpBackendService;
@@ -28,11 +22,11 @@ describe("Mobile Services Table Test", function () {
         ctrl = $controller(HttpServiceModule.HttpServiceController, { $scope: $scope, eventTable: table, paginationItemsPerPage: 10 });
     }));
 
-    it(' should get events after creation', () => {
+    it(" should get events after creation", () => {
         $httpBackend.flush();
     });
 
-    it(' should load second page if clicked on pager', () => {
+    it(" should be loading second page if clicked on pager", () => {
         $httpBackend.whenGET("https://dummyService.azure-mobile.net/tables/dummyTable?$inlinecount=allpages&$orderby=id&$top=10&$skip=10")
             .respond({ results: [], count: 0 });
         $scope.currentPage = 2;
@@ -40,7 +34,7 @@ describe("Mobile Services Table Test", function () {
         $httpBackend.flush();
     });
 
-    it(' should delete all events correctly', () => {
+    it(" should delete all events correctly", () => {
         $httpBackend.whenGET("https://dummyService.azure-mobile.net/tables/dummyTable?$inlinecount=allpages&$orderby=id")
             .respond({
                 results: [{

@@ -1,6 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-/// <reference path="MobileServicesTable.ts"/>
-
 module HttpServiceModule {
     export interface IEvent extends MobileServicesDataAccess.ITableRow {
         eventTitle: string;
@@ -31,8 +28,8 @@ module HttpServiceModule {
 
             $scope.events = [];
             $scope.gridOptions = {
-                data: 'events',
-                totalServerItems: 'totalItems',
+                data: "events",
+                totalServerItems: "totalItems",
                 showFooter: true,
                 columnDefs: [
                     { field: "eventCategory", displayName: "Category" },
@@ -109,7 +106,8 @@ module HttpServiceModule {
             var events: IEvent[] = [];
             numberOfEvents = numberOfEvents || 25;
 
-            for (var i = 0; i < (numberOfEvents / 2); i++) {
+            var i: number;
+            for (i = 0; i < (numberOfEvents / 2); i++) {
                 events.push({
                     eventCategory: "Concert",
                     eventDescription: "Artist " + i.toString() + " live in concert at central opera hall",
@@ -119,7 +117,7 @@ module HttpServiceModule {
                 });
             }
 
-            for (var i = (numberOfEvents / 2); i < numberOfEvents; i++) {
+            for (i = (numberOfEvents / 2); i < numberOfEvents; i++) {
                 events.push({
                     eventCategory: "Sport Event",
                     eventDescription: "Soccer Championship " + i.toString() + ". Who will be the new champion?",

@@ -1,8 +1,14 @@
 module MobileServicesDataAccess {
+    // Acts as the base type for interfaces representing
+    // rows of Azure Mobile Services tables. It just contains an id
+    // column as every table in Azure Mobile Services must have at least
+    // this primary key.
     export interface ITableRow {
         id?: number;
     }
 
+    // Contains async operations used to interact with
+    // an Azure Mobile Services table.
     export interface ITable<T extends ITableRow> {
         query: (page?: number) => ng.IHttpPromise<IQueryResult<T>>;
         insert: (item: T) => ng.IHttpPromise<any>;
@@ -11,13 +17,18 @@ module MobileServicesDataAccess {
         deleteItemById: (id: number) => ng.IHttpPromise<any>;
     }
 
+    // Represents a query result consisting of the total
+    // result count (independent of which page was requested)
+    // and the results for the requested page.
     export interface IQueryResult<T extends ITableRow> {
         results: T[];
         count: number;
     }
 
+    // Implements a class used to access an Azure Mobile Services table.
     export class Table<T extends ITableRow> implements ITable<T> {
-        constructor(private $http: ng.IHttpService, private serviceName: string, private tableName: string, private pageSize: number, private apiKey: string) {
+        constructor(private $http: ng.IHttpService, private serviceName: string, private tableName: string,
+            private pageSize: number, private apiKey: string) {
             // Set public methods using lambdas for proper "this" handling
             this.query = (page?) => this.queryInternal(page);
             this.insert = (item) => this.insertInternal(item);
@@ -33,7 +44,10 @@ module MobileServicesDataAccess {
             };
         }
 
+        // Note that the query method returns a type-safe promise referencing the
+        // interface for a query result.
         public query: (page?: number) => ng.IHttpPromise<IQueryResult<T>>;
+
         public insert: (item: T) => ng.IHttpPromise<any>;
         public update: (item: T) => ng.IHttpPromise<any>;
         public deleteItem: (item: T) => ng.IHttpPromise<any>;
@@ -52,6 +66,7 @@ module MobileServicesDataAccess {
                 }
             }
 
+            // Returns a promise representing the async web request
             return this.$http.get(uri, this.header);
         }
 

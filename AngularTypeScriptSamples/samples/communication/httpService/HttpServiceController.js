@@ -1,5 +1,3 @@
-/// <reference path="../../../Scripts/typings/angularjs/angular.d.ts"/>
-/// <reference path="MobileServicesTable.ts"/>
 var HttpServiceModule;
 (function (HttpServiceModule) {
     var HttpServiceController = (function () {
@@ -12,8 +10,8 @@ var HttpServiceModule;
 
             $scope.events = [];
             $scope.gridOptions = {
-                data: 'events',
-                totalServerItems: 'totalItems',
+                data: "events",
+                totalServerItems: "totalItems",
                 showFooter: true,
                 columnDefs: [
                     { field: "eventCategory", displayName: "Category" },
@@ -90,7 +88,8 @@ var HttpServiceModule;
             var events = [];
             numberOfEvents = numberOfEvents || 25;
 
-            for (var i = 0; i < (numberOfEvents / 2); i++) {
+            var i;
+            for (i = 0; i < (numberOfEvents / 2); i++) {
                 events.push({
                     eventCategory: "Concert",
                     eventDescription: "Artist " + i.toString() + " live in concert at central opera hall",
@@ -100,7 +99,7 @@ var HttpServiceModule;
                 });
             }
 
-            for (var i = (numberOfEvents / 2); i < numberOfEvents; i++) {
+            for (i = (numberOfEvents / 2); i < numberOfEvents; i++) {
                 events.push({
                     eventCategory: "Sport Event",
                     eventDescription: "Soccer Championship " + i.toString() + ". Who will be the new champion?",

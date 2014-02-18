@@ -1,5 +1,3 @@
-/// <reference path="INotificationsArchive.ts"/>
-
 module NotificationsModule {
     export class NotificationsService {
         private notifications: string[];
