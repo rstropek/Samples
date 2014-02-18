@@ -40,6 +40,7 @@ x64/
 *.vssscc
 .builds
 .log
+_Chutzpah*.html
 
 # Visual C++ cache files
 ipch/
