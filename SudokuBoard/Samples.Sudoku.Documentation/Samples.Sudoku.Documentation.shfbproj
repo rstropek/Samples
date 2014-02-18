@@ -29,7 +29,6 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Samples.Sudoku\bin\Debug\Samples.Sudoku.dll" />
       <DocumentationSource sourceFile="..\Samples.Sudoku\bin\Debug\Samples.Sudoku.xml" />
-      <DocumentationSource sourceFile="..\Samples.Sudoku\bin\Debug\CodeContracts\Samples.Sudoku.Contracts.dll" />
     </DocumentationSources>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform

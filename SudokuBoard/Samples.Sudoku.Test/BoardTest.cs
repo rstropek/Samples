@@ -20,53 +20,45 @@ namespace Samples.Sudoku.Test
                 6, 7, 8, 9, 1, 2, 3, 4, 5,
                 9, 1, 2, 3, 4, 5, 6, 7, 0 };
 
+		/// <summary>
+		/// Tests type cast operators for <see cref="Samples.Sudoku.Board"/> class.
+		/// </summary>
         [TestMethod]
         public void TestBoardTypeCasts()
-        {
-			// Test cast to byte[]
-            using (var board = new Board())
-            {
-				var po = new PrivateObject(board);
-				po.Invoke("SetBoardContentUnchecked", sampleBoard);
-
-				Assert.IsTrue(((byte[])board).SequenceEqual(sampleBoard));
-            }
-
-			// Test cast from byte[] to Board
-			using (var board = (Board)sampleBoard)
-			{
-				Assert.IsTrue(((byte[])board).SequenceEqual(sampleBoard));
-			}
-        }
-
-		[TestMethod]
-		public void TestCopyOfRow()
 		{
-			using (var board = new Board())
+			#region Example for type cast operators
+			byte[] boardData = BoardTest.sampleBoard;
+
+			// Cast bytes to Board instance
+			using (Board board = (Board)boardData)
 			{
-				var po = new PrivateObject(board);
-				po.Invoke("SetBoardContentUnchecked", sampleBoard);
+				// Cast board instance back to bytes
+				byte[] resultingBoardData = (byte[])board;
 
-				// Test copying first row
-				var row = (byte[])board[0];
-				Assert.IsTrue(row.SequenceEqual(sampleBoard.Take(9)));
-
-				// Test copying a row in the middle
-				row = (byte[])board[1];
-				Assert.IsTrue(row.SequenceEqual(sampleBoard.Skip(9).Take(9)));
-
-				// Test copying the last row
-				row = (byte[])board[8];
-				Assert.IsTrue(row.SequenceEqual(sampleBoard.Skip(8 * 9).Take(9)));
-
-				// Test if argument is validated
-				AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => { var r = (byte[])board[9]; });
+				// Content of boardData is equal to content of resultingBoardData
+				Assert.IsTrue(resultingBoardData.SequenceEqual(boardData));
 			}
+			#endregion
+
+			// Test if type converter throw exception in case of invalid board data.
+			var invalidBoard = new byte[9 * 9];
+			Array.Copy(BoardTest.sampleBoard, invalidBoard, 9 * 9);
+			invalidBoard[9 * 9 - 1] = 1;
+			AssertExtensions.ThrowsException<BoardException>(() => { var board = (Board)invalidBoard; });
 		}
 
-        [TestMethod]
-        public async Task TestIsValuePossible()
-        {
+		/// <summary>
+		/// Tests methods used to validate board values.
+		/// </summary>
+		/// <returns>Task representing the async test.</returns>
+		[TestMethod]
+		public async Task TestIsValuePossibleAsync()
+		{
+			// Note that we do not use an instance of the Board class for testing.
+			// The validation functions are pure functions and can be tested individually
+			// without the rest of the infrastructure of the Board class.
+
+			// Note the use of PrivateType to access private members during unit testing.
 			var pt = new PrivateType(typeof(Board));
 
 			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 0, (byte)1));
@@ -90,15 +82,47 @@ namespace Samples.Sudoku.Test
 			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 8, 8, (byte)8));
 			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 8, 8, (byte)9));
 
+			// Note the use of the await keyword here. This will result in an async unit test.
+			// Remember to change the return value of the test method to Task. If you forget to do so,
+			// your unit test will fail.
 			Assert.IsTrue(await (Task<bool>)pt.InvokeStatic("IsValuePossibleAsync", BoardTest.sampleBoard, 0, 0, (byte)1));
 			Assert.IsFalse(await (Task<bool>)pt.InvokeStatic("IsValuePossibleAsync", BoardTest.sampleBoard, 0, 0, (byte)2));
-        }
+		}
 
+		/// <summary>
+		/// Tests copying a row of the board.
+		/// </summary>
+		[TestMethod]
+		public void TestCopyOfRow()
+		{
+			using (var board = (Board)sampleBoard)
+			{
+				// Test copying first row
+				var row = (byte[])board[0];
+				Assert.IsTrue(row.SequenceEqual(sampleBoard.Take(9)));
+
+				// Test copying a row in the middle
+				row = (byte[])board[1];
+				Assert.IsTrue(row.SequenceEqual(sampleBoard.Skip(9).Take(9)));
+
+				// Test copying the last row
+				row = (byte[])board[8];
+				Assert.IsTrue(row.SequenceEqual(sampleBoard.Skip(8 * 9).Take(9)));
+
+				// Test if argument is validated
+				AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => { var r = (byte[])board[9]; });
+			}
+		}
+
+		/// <summary>
+		/// Tests setting of cell values.
+		/// </summary>
         [TestMethod]
         public void TestSetCell()
         {
             using (var board = new Board())
             {
+				// Test TrySetCell
                 for (var i = 0; i < sampleBoard.Length; i++)
                 {
                     if (sampleBoard[i] != 0)
@@ -107,25 +131,40 @@ namespace Samples.Sudoku.Test
                     }
                 }
 
-                for (int row = 0; row < 9; row++)
-                {
-                    Assert.IsTrue(board.GetCopyOfRow(row).SequenceEqual(sampleBoard.Skip(row * 9).Take(9)));
-                }
+				Assert.IsTrue(((byte[])board).SequenceEqual(sampleBoard));
 
+				// Test parameter validation
                 AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => board.TrySetCell(9, 0, 1));
                 AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => board.TrySetCell(0, 9, 1));
                 AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => board.TrySetCell(0, 0, 10));
-            }
+
+				// Test SetCell
+				AssertExtensions.ThrowsException<BoardException>(() => board.SetCell(0, 0, 9));
+			}
         }
+
+		/// <summary>
+		/// Tests resetting cells.
+		/// </summary>
+		[TestMethod]
+		public void TestResetCell()
+		{
+			using (var board = (Board)sampleBoard)
+			{
+				for (var i = 0; i < sampleBoard.Length; i++)
+				{
+					board.ResetCell(i / 9, i % 9);
+				}
+
+				Assert.AreEqual(0, ((byte[])board).Count(v => v != 0));
+			}
+		}
 
         [TestMethod]
         public void TestGetCell()
         {
-            using (var board = new Board())
+            using (var board = (Board)sampleBoard)
             {
-				var po = new PrivateObject(board);
-				po.Invoke("SetBoardContentUnchecked", sampleBoard);
-
                 Assert.AreEqual(0, board.GetCell(0, 0));
                 Assert.AreEqual(0, board.GetCell(3, 3));
                 Assert.AreEqual(0, board.GetCell(8, 8));

@@ -4,6 +4,9 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 
+	/// <summary>
+	/// Contains helper methods for commonly used release contracts.
+	/// </summary>
 	internal static class ContractExtensions
 	{
 		[ContractArgumentValidator]

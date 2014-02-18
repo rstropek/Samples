@@ -5,9 +5,9 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 	using System.Globalization;
+	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using System.Linq;
 
 	/// <summary>
 	/// Represents a Sudoku board
@@ -18,33 +18,103 @@
 		// Note that fields that are initialized during object creation are marked
 		// with "readonly".
 
+		/// <summary>
+		/// Semaphore used to protect access to board data (<see cref="content"/>).
+		/// </summary>
 		private readonly ReaderWriterLockSlim contentLock = new ReaderWriterLockSlim();
+
+		/// <summary>
+		/// Board data.
+		/// </summary>
 		private readonly byte[] content = new byte[9 * 9];
-		private readonly BoardRow[] rows = new BoardRow[9];
+
+		/// <summary>
+		/// Helper objects used to access the rows of the Sudoku board.
+		/// </summary>
+		private readonly BoardRow[] rows = null;
+
+		/// <summary>
+		/// Value indicating whether the object has been disposed.
+		/// </summary>
 		private bool disposed = false;
 		#endregion
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Board"/> class.
+		/// </summary>
 		public Board()
 		{
-			// Create objects representing board rows
-			for (var row = 0; row < 9; row++)
-			{
-				// Note that the "localRow" variable is necessary for the closure to
-				// work correctly.
-				var localRow = row;
+			// Create objects representing board rows. Note the use of Linq.
+			this.rows = Enumerable.Range(0, 9)
+				.Select(row =>
+				{
+					// Helper variable; necessary for closure to work correctly.
+					var internalRow = row;
 
-				// A board row does not store its own state. Therefore we have to provide
-				// functions that the board row can use to read/write state.
-				this.rows[row] = new BoardRow(
-					zeroBasedColumnIndex => this.GetCell(localRow, zeroBasedColumnIndex),
-					(zeroBasedColumnIndex, value) => this.SetCell(localRow, zeroBasedColumnIndex, value),
-					() => this.GetCopyOfRow(localRow));
-			}
+					// Note the use of lambdas and functional programming here.
+					return new BoardRow(
+						zeroBasedColumnIndex => this.GetCell(internalRow, zeroBasedColumnIndex),
+						(zeroBasedColumnIndex, value) => this.SetCell(internalRow, zeroBasedColumnIndex, value),
+						() => this.GetCopyOfRow(internalRow));
+				})
+				.ToArray();
 		}
 
+		#region Type cast operators
+		/// <summary>
+		/// Type cast from bytes to <see cref="Board"/> instance.
+		/// </summary>
+		/// <param name="source">Source byte array containing board data.</param>
+		/// <returns>New <see cref="Board"/> instance.</returns>
+		/// <remarks>
+		/// Note the use of unit test as a code sample.
+		/// </remarks>
+		/// <example>
+		/// <code source="../Samples.Sudoku.Test/BoardTest.cs" region="Example for type cast operators"
+		///		language="C#" />
+		/// </example>
+		/// <seealso cref="FromBytes"/>
+		public static explicit operator Board(byte[] source)
+		{
+			return Board.FromBytes(source);
+		}
+
+		/// <summary>
+		/// Type cast from <see cref="Board"/> instance to bytes.
+		/// </summary>
+		/// <param name="source">Source board.</param>
+		/// <returns>Board data as a byte array.</returns>
+		/// <example>
+		/// <code source="../Samples.Sudoku.Test/BoardTest.cs" region="Example for type cast operators"
+		///		language="C#" />
+		/// </example>
+		/// <seealso cref="ToBytes"/>
+		public static explicit operator byte[](Board source)
+		{
+			return Board.ToBytes(source);
+		}
+
+		/// <summary>
+		/// Converts board bytes to <see cref="Board"/> instance.
+		/// </summary>
+		/// <param name="source">Source byte array containing board data.</param>
+		/// <returns>New <see cref="Board"/> instance.</returns>
+		/// <remarks>
+		/// It is best practice to offer a FromXXX and ToXXX method if you create
+		/// type cast operators. Note that if you forget, Visual Studio Code Analysis will warn you.
+		/// You see, code analysis is a very good thing.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Technical error message, no need to translate it")]
 		public static Board FromBytes(byte[] source)
 		{
+			// The following lines represent the contracts that are checked even in release builds.
+			// Commonly used contracts were extracted into the ContractExtensions helper class.
+			// Note the use of the ContractArgumentValidator attribute in the helper methods.
+
+			// Note that you can set the 'Emit contracts into XML doc file' project option for 
+			// code contracts. If you do so, Sandcastle will include the contract in the generated
+			// documentation.
+
 			ContractExtensions.IsNotNull(source, "source");
 			ContractExtensions.IsArgumentInRange(source.Length == 9 * 9, "source", "Source does not have correct size (9 * 9 = 81 elements)");
 			if (Contract.ForAll(source, cellValue => cellValue < 0 || cellValue > 9))
@@ -67,6 +137,8 @@
 						// Ignore zero
 						if (cellValue != 0)
 						{
+							// Note that it is not necessary to protect board bytes because result
+							// has just been created and nobody else has a reference on it.
 							if (!Board.TrySetCellInternal(result.content, rowIndex, columnIndex, cellValue))
 							{
 								throw new BoardException(string.Format(
@@ -90,6 +162,11 @@
 			return result;
 		}
 
+		/// <summary>
+		/// Converts <see cref="Board"/> instance to bytes.
+		/// </summary>
+		/// <param name="source">Source board.</param>
+		/// <returns>Board data as a byte array.</returns>
 		public static byte[] ToBytes(Board source)
 		{
 			ContractExtensions.IsNotNull(source, "source");
@@ -109,48 +186,26 @@
 			}
 
 		}
+		#endregion
 
-		public static explicit operator Board(byte[] source)
-		{
-			return Board.FromBytes(source);
-		}
-
-		public static explicit operator byte[](Board source)
-		{
-			return Board.ToBytes(source);
-		}
-
-		~Board()
-		{
-			this.Dispose(false);
-		}
-
-		public IEnumerable<BoardRow> Rows
-		{
-			get
-			{
-				ContractExtensions.IsNotDisposed(this, this.IsDisposed);
-				Contract.EndContractBlock();
-
-				for (var row = 0; row < 9; row++ )
-				{
-					yield return this.rows[row];
-				}
-			}
-		}
-
-		public BoardRow this[int zeroBasedRowIndex]
-		{
-			get
-			{
-				ContractExtensions.IsNotDisposed(this, this.IsDisposed);
-				ContractExtensions.IsValidIndex(zeroBasedRowIndex, "zeroBasedRowIndex");
-				Contract.EndContractBlock();
-
-				return this.rows[zeroBasedRowIndex];
-			}
-		}
-
+		#region Access to board data
+		/// <summary>
+		/// Tries the set the value of a cell.
+		/// </summary>
+		/// <param name="zeroBasedRowIndex">Index of the row.</param>
+		/// <param name="zeroBasedColumnIndex">Index of the column.</param>
+		/// <param name="value">The new value.</param>
+		/// <returns><c>True</c> if the value could be set successfully, otherwise <c>false</c>.</returns>
+		/// <remarks>
+		/// <para>
+		/// Note that <paramref name="value"/> must not be zero. If you want to unset a cell,
+		/// use <see cref="ResetCell"/> instead.
+		/// </para>
+		/// <para>
+		/// Note the TryXXX naming pattern. <see cref="TrySetCell"/> does the same as <see cref="SetCell"/>
+		/// except that it does not throw an exception if the value could not be set.
+		/// </para>
+		/// </remarks>
 		public bool TrySetCell(int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
 			ContractExtensions.IsNotDisposed(this, this.IsDisposed);
@@ -159,16 +214,13 @@
 			ContractExtensions.IsValidValue(value, "value");
 			Contract.EndContractBlock();
 
+			// Note that we use a write lock this time. This makes sure that only one thread
+			// can write to the board bytes at the same time.
 			this.contentLock.EnterWriteLock();
 			try
 			{
-				if (Board.IsValuePossible(this.content, zeroBasedRowIndex, zeroBasedColumnIndex, value))
-				{
-					this.content[Board.CalculateIndexFromRowAndColumn(zeroBasedRowIndex, zeroBasedColumnIndex)] = value;
-					return true;
-				}
-
-				return false;
+				// Call internal implementation.
+				return Board.TrySetCellInternal(this.content, zeroBasedRowIndex, zeroBasedColumnIndex, value);
 			}
 			finally
 			{
@@ -176,14 +228,43 @@
 			}
 		}
 
+		/// <summary>
+		/// Sets the value of a cell.
+		/// </summary>
+		/// <param name="zeroBasedRowIndex">Index of the row.</param>
+		/// <param name="zeroBasedColumnIndex">Index of the column.</param>
+		/// <param name="value">The new value.</param>
+		/// <exception cref="BoardException">Thrown if value could not be set.</exception>
+		/// <remarks>
+		/// <para>
+		/// Note that <paramref name="value"/> must not be zero. If you want to unset a cell,
+		/// use <see cref="ResetCell"/> instead.
+		/// </para>
+		/// <para>
+		/// Note the TryXXX naming pattern. <see cref="TrySetCell"/> does the same as <see cref="SetCell"/>
+		/// except that it does not throw an exception if the value could not be set.
+		/// </para>
+		/// </remarks>
 		public void SetCell(int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
+			// Note that we do not need contracts here because contracts are included in
+			// the implementation of TrySetCell.
+
 			if (!this.TrySetCell(zeroBasedRowIndex, zeroBasedColumnIndex, value))
 			{
 				throw new BoardException("Specified value is not possible at the specified position");
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of a cell.
+		/// </summary>
+		/// <param name="zeroBasedRowIndex">Index of the row.</param>
+		/// <param name="zeroBasedColumnIndex">Index of the column.</param>
+		/// <returns>Value of the cell at the specified row and column index.</returns>
+		/// <remarks>
+		/// Zero is returned for an unset cell.
+		/// </remarks>
 		public byte GetCell(int zeroBasedRowIndex, int zeroBasedColumnIndex)
 		{
 			ContractExtensions.IsNotDisposed(this, this.IsDisposed);
@@ -191,6 +272,8 @@
 			ContractExtensions.IsValidIndex(zeroBasedColumnIndex, "zeroBasedColumnIndex");
 			Contract.EndContractBlock();
 
+			// Note that we use a read lock this time. This makes sure that many threads
+			// can read the board's content at the same time.
 			this.contentLock.EnterReadLock();
 			try
 			{
@@ -202,6 +285,11 @@
 			}
 		}
 
+		/// <summary>
+		/// Resets a cell's value to unset.
+		/// </summary>
+		/// <param name="zeroBasedRowIndex">Index of the row.</param>
+		/// <param name="zeroBasedColumnIndex">Index of the column.</param>
 		public void ResetCell(int zeroBasedRowIndex, int zeroBasedColumnIndex)
 		{
 			ContractExtensions.IsNotDisposed(this, this.IsDisposed);
@@ -220,56 +308,30 @@
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", Justification = "Cannot overflow because index is small")]
-		public byte[] GetCopyOfRow(int zeroBasedRowIndex)
+		/// <summary>
+		/// Internal implementation for setting a cell's value.
+		/// </summary>
+		private static bool TrySetCellInternal(byte[] boardData, int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
-			ContractExtensions.IsNotDisposed(this, this.IsDisposed);
-			ContractExtensions.IsValidIndex(zeroBasedRowIndex, "zeroBasedRowIndex");
-			Contract.EndContractBlock();
+			Board.BoardDataContract(boardData);
+			Board.IndexValidContract(zeroBasedRowIndex);
+			Board.IndexValidContract(zeroBasedColumnIndex);
+			Board.CellValueContract(value, allowZero: false);
 
-			var result = new byte[9];
-			this.contentLock.EnterReadLock();
-			try
+			if (Board.IsValuePossible(boardData, zeroBasedRowIndex, zeroBasedColumnIndex, value))
 			{
-				Array.Copy(this.content, zeroBasedRowIndex * 9, result, 0, 9);
-			}
-			finally
-			{
-				this.contentLock.ExitReadLock();
+				boardData[Board.CalculateIndexFromRowAndColumn(zeroBasedRowIndex, zeroBasedColumnIndex)] = value;
+				return true;
 			}
 
-			return result;
-		}
-
-		#region IDisposable implementation
-		public void Dispose()
-		{
-			if (!this.disposed)
-			{
-				this.Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-		}
-
-		public bool IsDisposed
-		{
-			get
-			{
-				return this.disposed;
-			}
-		}
-
-		protected virtual void Dispose(bool disposeObject)
-		{
-			if (disposeObject)
-			{
-				this.contentLock.Dispose();
-				this.disposed = true;
-			}
+			return false;
 		}
 		#endregion
 
 		#region Methods for validating board values
+		// Note that the methods for validating board values are pure functions. They do not
+		// depend on the rest of the Board class infrastructure. Therefore they are testing friendly.
+
 		private static bool IsValuePossible(byte[] boardData, int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
 			return Board.IsValuePossibleAsync(boardData, zeroBasedRowIndex, zeroBasedColumnIndex, value).Result;
@@ -282,6 +344,7 @@
 			Board.IndexValidContract(zeroBasedRowIndex);
 			Board.CellValueContract(value);
 
+			// Note how we run the three tests in parallel. They are independent of each other.
 			var tasks = new Task<bool>[3];
 			tasks[0] = Task.Run<bool>(() => Board.IsValuePossibleInRow(boardData, zeroBasedRowIndex, value));
 			tasks[1] = Task.Run<bool>(() => Board.IsValuePossibleInColumn(boardData, zeroBasedColumnIndex, value));
@@ -345,36 +408,125 @@
 		}
 		#endregion
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Helper method used by unit tests")]
-		private void SetBoardContentUnchecked(byte[] boardContent)
+		#region Access to board rows
+		/// <summary>
+		/// Gets the rows of the board.
+		/// </summary>
+		/// <value>
+		/// The rows or the board.
+		/// </value>
+		public IEnumerable<BoardRow> Rows
 		{
-			this.contentLock.EnterWriteLock();
+			get
+			{
+				ContractExtensions.IsNotDisposed(this, this.IsDisposed);
+				Contract.EndContractBlock();
+
+				// Note the use of an enumerator block here.
+				for (var row = 0; row < 9; row++)
+				{
+					yield return this.rows[row];
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets the <see cref="BoardRow"/> with the specified zero based row index.
+		/// </summary>
+		/// <value>
+		/// The <see cref="BoardRow"/> at index <paramref name="zeroBasedRowIndex"/>.
+		/// </value>
+		/// <param name="zeroBasedRowIndex">Index of the row.</param>
+		public BoardRow this[int zeroBasedRowIndex]
+		{
+			get
+			{
+				ContractExtensions.IsNotDisposed(this, this.IsDisposed);
+				ContractExtensions.IsValidIndex(zeroBasedRowIndex, "zeroBasedRowIndex");
+				Contract.EndContractBlock();
+
+				return this.rows[zeroBasedRowIndex];
+			}
+		}
+
+		/// <summary>
+		/// Gets a copy of a row as a byte array.
+		/// </summary>
+		/// <param name="zeroBasedRowIndex">Index of the row.</param>
+		/// <returns>Bytes of the specified row.</returns>
+		[SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", Justification = "Cannot overflow because index is small")]
+		public byte[] GetCopyOfRow(int zeroBasedRowIndex)
+		{
+			ContractExtensions.IsNotDisposed(this, this.IsDisposed);
+			ContractExtensions.IsValidIndex(zeroBasedRowIndex, "zeroBasedRowIndex");
+			Contract.EndContractBlock();
+
+			var result = new byte[9];
+			this.contentLock.EnterReadLock();
 			try
 			{
-				boardContent.CopyTo(this.content, 0);
+				Array.Copy(this.content, zeroBasedRowIndex * 9, result, 0, 9);
 			}
 			finally
 			{
-				this.contentLock.ExitWriteLock();
+				this.contentLock.ExitReadLock();
 			}
-		}
 
-		private static bool TrySetCellInternal(byte[] boardData, int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
+			return result;
+		}
+		#endregion 
+
+		#region IDisposable implementation
+		/// <summary>
+		/// Finalizes an instance of the <see cref="Board"/> class.
+		/// </summary>
+		~Board()
 		{
-			Board.BoardDataContract(boardData);
-			Board.IndexValidContract(zeroBasedRowIndex);
-			Board.IndexValidContract(zeroBasedColumnIndex);
-			Board.CellValueContract(value, allowZero: false);
-
-			if (Board.IsValuePossible(boardData, zeroBasedRowIndex, zeroBasedColumnIndex, value))
-			{
-				boardData[Board.CalculateIndexFromRowAndColumn(zeroBasedRowIndex, zeroBasedColumnIndex)] = value;
-				return true;
-			}
-
-			return false;
+			this.Dispose(false);
 		}
 
+		// Note the usage of inheritdoc instead of repeating documentation for the
+		// Dispose method.
+
+		/// <inheritdoc />
+		public void Dispose()
+		{
+			if (!this.disposed)
+			{
+				this.Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether object is disposed.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if object is disposed; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsDisposed
+		{
+			get
+			{
+				return this.disposed;
+			}
+		}
+
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources.
+		/// </summary>
+		/// <param name="disposeObject"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool disposeObject)
+		{
+			if (disposeObject)
+			{
+				this.contentLock.Dispose();
+				this.disposed = true;
+			}
+		}
+		#endregion
+
+		#region Various helper methods
 		private static int CalculateIndexFromRowAndColumn(int zeroBasedRowIndex, int zeroBasedColumnIndex)
 		{
 			Board.IndexValidContract(zeroBasedRowIndex);
@@ -384,6 +536,8 @@
 			return zeroBasedRowIndex * 9 + zeroBasedColumnIndex;
 		}
 
+		// Note the use of the ContractAbbreviator attribute here. It is necessary
+		// because the method only contains code contracts.
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Used by code contracts")]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Used by code contracts")]
 		[ContractAbbreviator]
@@ -410,5 +564,6 @@
 			Contract.Requires(value >= 1);
 			Contract.Requires(value <= 9);
 		}
+		#endregion
 	}
 }

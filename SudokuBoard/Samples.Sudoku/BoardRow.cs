@@ -6,10 +6,13 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 	using System.Linq;
-	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Represents a row of a board.
+	/// </summary>
+	/// <seealso cref="Board"/>
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Name should be like this")]
-    public class BoardRow : IEnumerable<byte>
+    public class BoardRow : IEnumerable<byte>, IEnumerable
     {
         private Action<int, byte> setter;
         private Func<int, byte> getter;
@@ -26,40 +29,61 @@
             this.copier = copier;
         }
 
+		/// <summary>
+		/// Gets or sets the value of the cell at the specified column index.
+		/// </summary>
+		/// <value>
+		/// The value of the cell.
+		/// </value>
+		/// <param name="zeroBasedColumnIndex">Index of the column.</param>
         public byte this[int zeroBasedColumnIndex]
         {
             get
             {
-				Contract.Requires(zeroBasedColumnIndex >= 0 && zeroBasedColumnIndex < 9);
+				ContractExtensions.IsValidIndex(zeroBasedColumnIndex, "zeroBasedColumnIndex");
                 return this.getter(zeroBasedColumnIndex);
             }
 
             set
             {
-				Contract.Requires(zeroBasedColumnIndex >= 0 && zeroBasedColumnIndex < 9);
+				ContractExtensions.IsValidIndex(zeroBasedColumnIndex, "zeroBasedColumnIndex");
 				this.setter(zeroBasedColumnIndex, value);
             }
         }
 
-        public static implicit operator byte[](BoardRow row)
+		/// <summary>
+		/// Type cast from <see cref="BoardRow"/> instance to bytes.
+		/// </summary>
+		/// <param name="source">Source board row.</param>
+		/// <returns>Board row data as a byte array.</returns>
+		/// <seealso cref="ToBytes"/>
+		public static implicit operator byte[](BoardRow row)
         {
-			Contract.Requires(row != null);
+			ContractExtensions.IsNotNull(row, "row");
 			return row.ToBytes();
         }
 
-        public byte[] ToBytes()
+		/// <summary>
+		/// Converts <see cref="BoardRow"/> instance to bytes.
+		/// </summary>
+		/// <param name="source">Source board row.</param>
+		/// <returns>Board row data as a byte array.</returns>
+		public byte[] ToBytes()
         {
+			// Note the use of a postcondition here.
 			Contract.Ensures(Contract.Result<byte[]>() != null);
 			Contract.Ensures(Contract.Result<byte[]>().Length == 9);
 			return this.copier();
         }
 
+		/// <inheritdoc />
         public IEnumerator<byte> GetEnumerator()
         {
             return this.ToBytes().AsEnumerable<byte>().GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+		/// <inheritdoc />
+		IEnumerator IEnumerable.GetEnumerator()
         {
             return this.ToBytes().GetEnumerator();
         }

@@ -9,4 +9,13 @@ I regularly do C# sessions and trainings. I use this sample to demonstrate the f
 * Code Contracts
 * Basics of parallel programming with Task Parallel Library (TPL)
 * Visual Studio unit testing
-* C# code documentation and Sandcastle Helpfile Builder (SHFB)
+* C# code documentation, Sandcastle Helpfile Builder (SHFB), and Ghostdoc
+* Various C# language topics like:
+  * IDisposable
+  * IEnumerable
+  * Enumerator blocks
+  * Exception handling
+  * Indexer
+  * Operator overloading
+  * Functional programming with lambdas
+  

@@ -129,6 +129,7 @@
     <Compile Include="BoardRow.cs" />
     <Compile Include="ContractExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidatedNotNullAttribute.cs" />
   </ItemGroup>

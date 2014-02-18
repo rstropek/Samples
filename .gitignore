@@ -36,6 +36,7 @@ x64/
 *.vspscc
 *.vssscc
 .builds
+.log
 
 # Visual C++ cache files
 ipch/
@@ -71,7 +72,6 @@ DocProject/Help/*.hhk
 DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
-Help/
 
 # Click-Once directory
 publish
