@@ -48,6 +48,9 @@ ipch/
 *.opensdf
 *.sdf
 
+# TypeScript map files
+*.js.map
+
 # Visual Studio profiler
 *.psess
 *.vsp
