@@ -54,7 +54,7 @@
 		/// <summary>
 		/// Type cast from <see cref="BoardRow"/> instance to bytes.
 		/// </summary>
-		/// <param name="source">Source board row.</param>
+		/// <param name="row">Source board row.</param>
 		/// <returns>Board row data as a byte array.</returns>
 		/// <seealso cref="ToBytes"/>
 		public static implicit operator byte[](BoardRow row)
@@ -66,7 +66,6 @@
 		/// <summary>
 		/// Converts <see cref="BoardRow"/> instance to bytes.
 		/// </summary>
-		/// <param name="source">Source board row.</param>
 		/// <returns>Board row data as a byte array.</returns>
 		public byte[] ToBytes()
         {

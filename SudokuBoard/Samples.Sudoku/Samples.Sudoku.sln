@@ -10,17 +10,6 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Samples.Sudoku.Documentation", "..\Samples.Sudoku.Documentation\Samples.Sudoku.Documentation.shfbproj", "{250EA4CD-FB17-4B59-A114-AFAF90EBD6E7}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://silver:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Samples.Sudoku.csproj
-		SccLocalPath1 = .
-		SccProjectUniqueName2 = ..\\Samples.Sudoku.Test\\Samples.Sudoku.Test.csproj
-		SccProjectName2 = ../Samples.Sudoku.Test
-		SccLocalPath2 = ..\\Samples.Sudoku.Test
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

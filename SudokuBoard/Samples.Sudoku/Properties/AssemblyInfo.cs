@@ -8,10 +8,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Samples.Sudoku")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Samples.Sudoku")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,7 +30,4 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: CLSCompliant(true)]
-[assembly: InternalsVisibleTo("Samples.Sudoku.Test, PublicKey=00240000048000009400000006020000002400005253413100040000010001001baa27ab217794226ddea4199fda496306a449c553c7b047b95ce4a6beb115e40cd96fd14b146d2017705ac37d26f0eea84b0f7d0f2b7a53028ebae7282d17cecf70768620535ab6a718e8de82ddd9f23cfe41145b3831183f035bb67172662d7964420fc4948ea16aa3b968c9b47dd4186848771d26e10b2351d71558eca5de")]
