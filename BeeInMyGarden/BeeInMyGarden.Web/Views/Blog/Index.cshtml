@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BeeInMyGarden.Data.BlogItem>
+
+@{
+    this.Layout = null;
+	var markdown = new MarkdownDeep.Markdown();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bee in my garden blog</title>
+</head>
+<body>
+	<h1>Table of Contents</h1>
+	<ul>
+		@foreach(var item in this.Model) {
+			<li><a href="#@item.BlogId">@item.Title</a></li>
+		}
+	</ul>
+	<hr />
+	@foreach(var item in this.Model) {
+		<a id="@item.BlogId"><img src="@item.FeaturedImageUri" /></a>
+		<h1>@item.Title</h1>
+		@Html.Raw(markdown.Transform(item.Content))
+		<hr />
+	 }
+</body>
+</html>

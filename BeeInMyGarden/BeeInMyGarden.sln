@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeeInMyGarden.Web", "BeeInMyGarden.Web\BeeInMyGarden.Web.csproj", "{99C4D0D9-172D-425D-B1C8-EC7805D62337}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeeInMyGarden.Tests", "BeeInMyGarden.Tests\BeeInMyGarden.Tests.csproj", "{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeeInMyGarden.Data", "BeeInMyGarden.Data\BeeInMyGarden.Data.csproj", "{3F0B4651-8EB4-4290-9074-2FC0735F1918}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C7833937-7B44-4646-BCBB-4F2C08BE2406}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugVSOnline|Any CPU = DebugVSOnline|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99C4D0D9-172D-425D-B1C8-EC7805D62337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99C4D0D9-172D-425D-B1C8-EC7805D62337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99C4D0D9-172D-425D-B1C8-EC7805D62337}.DebugVSOnline|Any CPU.ActiveCfg = DebugVSOnline|Any CPU
+		{99C4D0D9-172D-425D-B1C8-EC7805D62337}.DebugVSOnline|Any CPU.Build.0 = DebugVSOnline|Any CPU
+		{99C4D0D9-172D-425D-B1C8-EC7805D62337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99C4D0D9-172D-425D-B1C8-EC7805D62337}.Release|Any CPU.Build.0 = Release|Any CPU
+		{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}.DebugVSOnline|Any CPU.ActiveCfg = Debug|Any CPU
+		{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}.DebugVSOnline|Any CPU.Build.0 = Debug|Any CPU
+		{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{866E42C4-1DEC-4C41-A6EB-DA9C8274FBDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F0B4651-8EB4-4290-9074-2FC0735F1918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F0B4651-8EB4-4290-9074-2FC0735F1918}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F0B4651-8EB4-4290-9074-2FC0735F1918}.DebugVSOnline|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F0B4651-8EB4-4290-9074-2FC0735F1918}.DebugVSOnline|Any CPU.Build.0 = Debug|Any CPU
+		{3F0B4651-8EB4-4290-9074-2FC0735F1918}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F0B4651-8EB4-4290-9074-2FC0735F1918}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
