@@ -9,17 +9,6 @@ namespace Samples.Sudoku.Test
     [TestClass]
     public class BoardTest
     {
-        private static readonly byte[] sampleBoard = new byte[] {
-                0, 2, 3, 4, 5, 6, 7, 8, 9,
-                4, 5, 6, 7, 8, 9, 1, 2, 3,
-                7, 8, 9, 1, 2, 3, 4, 5, 6,
-                2, 3, 4, 0, 6, 7, 8, 9, 1,
-                5, 6, 7, 8, 9, 1, 2, 3, 4,
-                8, 9, 1, 2, 3, 4, 5, 6, 7,
-                3, 4, 5, 6, 7, 8, 9, 1, 2,
-                6, 7, 8, 9, 1, 2, 3, 4, 5,
-                9, 1, 2, 3, 4, 5, 6, 7, 0 };
-
 		/// <summary>
 		/// Tests type cast operators for <see cref="Samples.Sudoku.Board"/> class.
 		/// </summary>
@@ -27,7 +16,7 @@ namespace Samples.Sudoku.Test
         public void TestBoardTypeCasts()
 		{
 			#region Example for type cast operators
-			byte[] boardData = BoardTest.sampleBoard;
+			byte[] boardData = BoardSampleData.sampleBoard;
 
 			// Cast bytes to Board instance
 			using (Board board = (Board)boardData)
@@ -42,7 +31,7 @@ namespace Samples.Sudoku.Test
 
 			// Test if type converter throw exception in case of invalid board data.
 			var invalidBoard = new byte[9 * 9];
-			Array.Copy(BoardTest.sampleBoard, invalidBoard, 9 * 9);
+			Array.Copy(BoardSampleData.sampleBoard, invalidBoard, 9 * 9);
 			invalidBoard[9 * 9 - 1] = 1;
 			AssertExtensions.ThrowsException<BoardException>(() => { var board = (Board)invalidBoard; });
 		}
@@ -61,32 +50,32 @@ namespace Samples.Sudoku.Test
 			// Note the use of PrivateType to access private members during unit testing.
 			var pt = new PrivateType(typeof(Board));
 
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 0, (byte)1));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 0, (byte)2));
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 3, (byte)5));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 3, (byte)6));
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 8, (byte)8));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardTest.sampleBoard, 8, (byte)9));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardSampleData.sampleBoard, 0, (byte)1));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardSampleData.sampleBoard, 0, (byte)2));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardSampleData.sampleBoard, 3, (byte)5));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardSampleData.sampleBoard, 3, (byte)6));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardSampleData.sampleBoard, 8, (byte)8));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInRow", BoardSampleData.sampleBoard, 8, (byte)9));
 
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardTest.sampleBoard, 0, (byte)1));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardTest.sampleBoard, 0, (byte)2));
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardTest.sampleBoard, 3, (byte)5));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardTest.sampleBoard, 3, (byte)6));
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardTest.sampleBoard, 8, (byte)8));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardTest.sampleBoard, 8, (byte)9));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardSampleData.sampleBoard, 0, (byte)1));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardSampleData.sampleBoard, 0, (byte)2));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardSampleData.sampleBoard, 3, (byte)5));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardSampleData.sampleBoard, 3, (byte)6));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardSampleData.sampleBoard, 8, (byte)8));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInColumn", BoardSampleData.sampleBoard, 8, (byte)9));
 
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 0, 0, (byte)1));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 0, 0, (byte)2));
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 3, 3, (byte)5));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 3, 3, (byte)6));
-			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 8, 8, (byte)8));
-			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardTest.sampleBoard, 8, 8, (byte)9));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardSampleData.sampleBoard, 0, 0, (byte)1));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardSampleData.sampleBoard, 0, 0, (byte)2));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardSampleData.sampleBoard, 3, 3, (byte)5));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardSampleData.sampleBoard, 3, 3, (byte)6));
+			Assert.IsTrue((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardSampleData.sampleBoard, 8, 8, (byte)8));
+			Assert.IsFalse((bool)pt.InvokeStatic("IsValuePossibleInSquare", BoardSampleData.sampleBoard, 8, 8, (byte)9));
 
 			// Note the use of the await keyword here. This will result in an async unit test.
 			// Remember to change the return value of the test method to Task. If you forget to do so,
 			// your unit test will fail.
-			Assert.IsTrue(await (Task<bool>)pt.InvokeStatic("IsValuePossibleAsync", BoardTest.sampleBoard, 0, 0, (byte)1));
-			Assert.IsFalse(await (Task<bool>)pt.InvokeStatic("IsValuePossibleAsync", BoardTest.sampleBoard, 0, 0, (byte)2));
+			Assert.IsTrue(await (Task<bool>)pt.InvokeStatic("IsValuePossibleAsync", BoardSampleData.sampleBoard, 0, 0, (byte)1));
+			Assert.IsFalse(await (Task<bool>)pt.InvokeStatic("IsValuePossibleAsync", BoardSampleData.sampleBoard, 0, 0, (byte)2));
 		}
 
 		/// <summary>
@@ -95,19 +84,19 @@ namespace Samples.Sudoku.Test
 		[TestMethod]
 		public void TestCopyOfRow()
 		{
-			using (var board = (Board)sampleBoard)
+			using (var board = (Board)BoardSampleData.sampleBoard)
 			{
 				// Test copying first row
 				var row = (byte[])board[0];
-				Assert.IsTrue(row.SequenceEqual(sampleBoard.Take(9)));
+				Assert.IsTrue(row.SequenceEqual(BoardSampleData.sampleBoard.Take(9)));
 
 				// Test copying a row in the middle
 				row = (byte[])board[1];
-				Assert.IsTrue(row.SequenceEqual(sampleBoard.Skip(9).Take(9)));
+				Assert.IsTrue(row.SequenceEqual(BoardSampleData.sampleBoard.Skip(9).Take(9)));
 
 				// Test copying the last row
 				row = (byte[])board[8];
-				Assert.IsTrue(row.SequenceEqual(sampleBoard.Skip(8 * 9).Take(9)));
+				Assert.IsTrue(row.SequenceEqual(BoardSampleData.sampleBoard.Skip(8 * 9).Take(9)));
 
 				// Test if argument is validated
 				AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => { var r = (byte[])board[9]; });
@@ -123,15 +112,15 @@ namespace Samples.Sudoku.Test
             using (var board = new Board())
             {
 				// Test TrySetCell
-                for (var i = 0; i < sampleBoard.Length; i++)
+				for (var i = 0; i < BoardSampleData.sampleBoard.Length; i++)
                 {
-                    if (sampleBoard[i] != 0)
+					if (BoardSampleData.sampleBoard[i] != 0)
                     {
-                        Assert.IsTrue(board.TrySetCell(i / 9, i % 9, sampleBoard[i]));
+						Assert.IsTrue(board.TrySetCell(i / 9, i % 9, BoardSampleData.sampleBoard[i]));
                     }
                 }
 
-				Assert.IsTrue(((byte[])board).SequenceEqual(sampleBoard));
+				Assert.IsTrue(((byte[])board).SequenceEqual(BoardSampleData.sampleBoard));
 
 				// Test parameter validation
                 AssertExtensions.ThrowsException<ArgumentOutOfRangeException>(() => board.TrySetCell(9, 0, 1));
@@ -149,9 +138,9 @@ namespace Samples.Sudoku.Test
 		[TestMethod]
 		public void TestResetCell()
 		{
-			using (var board = (Board)sampleBoard)
+			using (var board = (Board)BoardSampleData.sampleBoard)
 			{
-				for (var i = 0; i < sampleBoard.Length; i++)
+				for (var i = 0; i < BoardSampleData.sampleBoard.Length; i++)
 				{
 					board.ResetCell(i / 9, i % 9);
 				}
@@ -163,7 +152,7 @@ namespace Samples.Sudoku.Test
         [TestMethod]
         public void TestGetCell()
         {
-            using (var board = (Board)sampleBoard)
+			using (var board = (Board)BoardSampleData.sampleBoard)
             {
                 Assert.AreEqual(0, board.GetCell(0, 0));
                 Assert.AreEqual(0, board.GetCell(3, 3));
@@ -183,9 +172,9 @@ namespace Samples.Sudoku.Test
                 {
                     for (var columnIndex = 0; columnIndex < 9; columnIndex++)
                     {
-                        if (sampleBoard[i] != 0)
+						if (BoardSampleData.sampleBoard[i] != 0)
                         {
-                            board[rowIndex][columnIndex] = sampleBoard[i];
+							board[rowIndex][columnIndex] = BoardSampleData.sampleBoard[i];
                         }
 
                         i++;
@@ -196,7 +185,7 @@ namespace Samples.Sudoku.Test
                 {
                     for (var columnIndex = 0; columnIndex < 9; columnIndex++)
                     {
-                        Assert.AreEqual(board[rowIndex][columnIndex], sampleBoard[i++]);
+						Assert.AreEqual(board[rowIndex][columnIndex], BoardSampleData.sampleBoard[i++]);
                     }
                 }
 
@@ -205,7 +194,7 @@ namespace Samples.Sudoku.Test
                 {
                     foreach (var cell in row)
                     {
-                        Assert.AreEqual(sampleBoard[sampleBoardIndex++], cell);
+						Assert.AreEqual(BoardSampleData.sampleBoard[sampleBoardIndex++], cell);
                     }
                 }
 

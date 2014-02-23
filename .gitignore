@@ -11,6 +11,9 @@ TestResults
 # Nuget Packages
 packages
 
+# Fakes
+*fakes*
+
 # User-specific files
 *.suo
 *.user
