@@ -154,14 +154,14 @@
     <Compile Include="BoardStreamRepository.cs" />
     <Compile Include="BoardRow.cs" />
     <Compile Include="ContractExtensions.cs" />
-    <Compile Include="CloudBlobReaderWriter.cs" />
-    <Compile Include="FileReaderWriter.cs" />
+    <Compile Include="CloudBlobStreamManager.cs" />
+    <Compile Include="FileStreamManager.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IStreamInitializer.cs" />
-    <Compile Include="IBoardRepository.cs" />
+    <Compile Include="IStreamManager.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Version.cs" />
+    <Compile Include="StreamManagerContract.cs" />
     <Compile Include="ValidatedNotNullAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

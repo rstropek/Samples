@@ -7,17 +7,17 @@
 	using System.Threading.Tasks;
 
 	/// <summary>
-	/// Implements a reader/writer for board data which stores boards in Azure Blob Storage.
+	/// Stream manager implementation for Windows Azure Blob Storage.
 	/// </summary>
-	public class CloudBlobReaderWriter : IStreamInitializer
+	public class CloudBlobStreamManager : IStreamManager
 	{
 		private CloudBlobContainer container;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CloudBlobReaderWriter"/> class.
+		/// Initializes a new instance of the <see cref="CloudBlobStreamManager"/> class.
 		/// </summary>
 		/// <param name="container">The container in which the boards should be stored.</param>
-		public CloudBlobReaderWriter(CloudBlobContainer container)
+		public CloudBlobStreamManager(CloudBlobContainer container)
 		{
 			ContractExtensions.IsNotNull(container, "container");
 			Contract.Ensures(this.container != null);
@@ -30,10 +30,8 @@
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller responsible for disposing")]
 		public async Task<Stream> OpenStreamAsync(string boardName, AccessMode accessMode)
 		{
-			Contract.Ensures(Contract.Result<Task<Stream>>() != null);
-			Contract.Ensures(Contract.Result<Task<Stream>>().Result != null);
-			ContractExtensions.IsNotNull(boardName, "boardName");
-			Contract.EndContractBlock();
+			// Note that we do not need any preconditions here. They are inherited from
+			// the base interface.
 
 			// Get reference to requested blob and open stream
 			var blob = this.container.GetBlockBlobReference(boardName);

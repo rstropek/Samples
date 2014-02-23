@@ -4,23 +4,23 @@
 	using System.Threading.Tasks;
 
 	/// <summary>
-	/// Contains methods to read/write <see cref="Board"/> instances.
+	/// Contains methods to read/write <see cref="Board"/> instances from/to a <see cref="Stream"/>.
 	/// </summary>
 	public class BoardStreamRepository
 	{
-		private IStreamInitializer readerWriter;
+		private IStreamManager streamManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BoardStreamRepository"/> class.
 		/// </summary>
-		/// <param name="readerWriter">The underlying reader/writer.</param>
-		public BoardStreamRepository(IStreamInitializer readerWriter)
+		/// <param name="streamManager">Underlying stream manager.</param>
+		public BoardStreamRepository(IStreamManager streamManager)
 		{
-			ContractExtensions.IsNotNull(readerWriter, "readerWriter");
-			Contract.Ensures(this.readerWriter != null);
+			ContractExtensions.IsNotNull(streamManager, "streamManager");
+			Contract.Ensures(this.streamManager != null);
 			Contract.EndContractBlock();
 
-			this.readerWriter = readerWriter;
+			this.streamManager = streamManager;
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@
 			Contract.EndContractBlock();
 
 			// Open underlying stream for writing
-			using (var stream = await this.readerWriter.OpenStreamAsync(boardName, AccessMode.Write))
+			using (var stream = await this.streamManager.OpenStreamAsync(boardName, AccessMode.Write))
 			{
 				// Get byte array from board and save it.
 				var boardData = (byte[])board;
@@ -64,7 +64,7 @@
 			Contract.EndContractBlock();
 
 			// Open underlying stream for reading
-			using (var stream = await this.readerWriter.OpenStreamAsync(boardName, AccessMode.Read))
+			using (var stream = await this.streamManager.OpenStreamAsync(boardName, AccessMode.Read))
 			{
 				// Load board content
 				var boardData = new byte[9 * 9];

@@ -66,6 +66,9 @@
     <Reference Include="Microsoft.WindowsAzure.Storage.3.0.3.0.Fakes">
       <HintPath>FakesAssemblies\Microsoft.WindowsAzure.Storage.3.0.3.0.Fakes.dll</HintPath>
     </Reference>
+    <Reference Include="mscorlib.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\mscorlib.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\Samples.Sudoku\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -73,6 +76,9 @@
       <HintPath>FakesAssemblies\Samples.Sudoku.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Services.Client" />
@@ -96,7 +102,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BoardSampleData.cs" />
-    <Compile Include="BoardRepositoryTest.cs" />
+    <Compile Include="StreamManagerTest.cs" />
+    <Compile Include="BoardStreamRepositoryTest.cs" />
     <Compile Include="BoardTest.cs" />
     <Compile Include="InitializeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +119,8 @@
     <Fakes Include="Fakes\Samples.Sudoku.fakes" />
     <Fakes Include="Fakes\Microsoft.WindowsAzure.Storage.fakes" />
     <None Include="App.config" />
+    <Fakes Include="Fakes\System.fakes" />
+    <Fakes Include="Fakes\mscorlib.fakes" />
     <None Include="packages.config" />
     <None Include="sn.snk" />
   </ItemGroup>
