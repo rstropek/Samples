@@ -17,30 +17,13 @@ using System.Threading.Tasks;
 	public class BoardRepositoryTest
 	{
 		[TestMethod]
-		public async Task TestGetBoardNames()
-		{
-			var stub = new StubIBoardReaderWriter();
-			stub.GetBoardNamesAsync = () => Task.FromResult(new[] { "Board1", "Board2" }.AsEnumerable());
-
-			var repository = new BoardRepository(stub);
-			var boardNames = (await repository.GetBoardNamesAsync()).ToArray();
-			Assert.AreEqual(2, boardNames.Length);
-			Assert.AreEqual("Board1", boardNames[0]);
-			Assert.AreEqual("Board2", boardNames[1]);
-
-			stub.GetBoardNamesAsync = () => Task.FromResult(new string[] { }.AsEnumerable());
-			boardNames = (await repository.GetBoardNamesAsync()).ToArray();
-			Assert.AreEqual(0, boardNames.Length);
-		}
-
-		[TestMethod]
 		public async Task TestLoadBoard()
 		{
-			var stub = new StubIBoardReaderWriter();
+			var stub = new StubIStreamInitializer();
 			stub.OpenStreamAsyncStringAccessMode = (_, __) =>
 				Task.FromResult(new MemoryStream(BoardSampleData.sampleBoard) as Stream);
 
-			var repository = new BoardRepository(stub);
+			var repository = new BoardStreamRepository(stub);
 			var board = await repository.LoadAsync("DummyBoardName");
 			Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual((byte[])board));
 
@@ -57,11 +40,11 @@ using System.Threading.Tasks;
 		public async Task TestSaveBoard()
 		{
 			var buffer = new byte[9 * 9];
-			var stub = new StubIBoardReaderWriter();
+			var stub = new StubIStreamInitializer();
 			stub.OpenStreamAsyncStringAccessMode = (_, __) =>
 				Task.FromResult(new MemoryStream(buffer) as Stream);
 
-			var repository = new BoardRepository(stub);
+			var repository = new BoardStreamRepository(stub);
 			await repository.SaveAsync("DummyBoardName", (Board)BoardSampleData.sampleBoard);
 			Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual(buffer));
 		}
@@ -88,7 +71,7 @@ using System.Threading.Tasks;
 						}
 					};
 
-				var repository = new BoardRepository(new CloudBlobReaderWriter(
+				var repository = new BoardStreamRepository(new CloudBlobReaderWriter(
 					new CloudBlobContainer(new Uri("http://dummy.blob.com"))));
 
 				Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual(
@@ -109,7 +92,7 @@ using System.Threading.Tasks;
 			var blobClient = account.CreateCloudBlobClient();
 			var container = blobClient.GetContainerReference(containerName);
 
-			var repository = new BoardRepository(new CloudBlobReaderWriter(container));
+			var repository = new BoardStreamRepository(new CloudBlobReaderWriter(container));
 			await repository.SaveAsync("TestBoard", (Board)BoardSampleData.sampleBoard);
 
 			var board = await repository.LoadAsync("TestBoard");

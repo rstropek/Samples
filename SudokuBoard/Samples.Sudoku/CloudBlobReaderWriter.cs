@@ -1,62 +1,45 @@
 ﻿namespace Samples.Sudoku
 {
-	using System;
-	using System.Collections.Generic;
+	using Microsoft.WindowsAzure.Storage.Blob;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 	using System.IO;
-	using System.Linq;
 	using System.Threading.Tasks;
-	using Microsoft.WindowsAzure.Storage;
-	using Microsoft.WindowsAzure.Storage.Blob;
-	
-	public class CloudBlobReaderWriter : IBoardReaderWriter
+
+	/// <summary>
+	/// Implements a reader/writer for board data which stores boards in Azure Blob Storage.
+	/// </summary>
+	public class CloudBlobReaderWriter : IStreamInitializer
 	{
 		private CloudBlobContainer container;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CloudBlobReaderWriter"/> class.
+		/// </summary>
+		/// <param name="container">The container in which the boards should be stored.</param>
 		public CloudBlobReaderWriter(CloudBlobContainer container)
 		{
 			ContractExtensions.IsNotNull(container, "container");
+			Contract.Ensures(this.container != null);
 			Contract.EndContractBlock();
 
 			this.container = container;
 		}
 
-		public async Task<IEnumerable<string>> GetBoardNamesAsync()
-		{
-			Contract.Ensures(Contract.Result<Task<IEnumerable<string>>>() != null);
-			Contract.Ensures(Contract.Result<Task<IEnumerable<string>>>().Result != null);
-			Contract.Ensures(Contract.ForAll(Contract.Result<Task<IEnumerable<string>>>().Result, boardName => boardName != null));
-			Contract.Ensures(Contract.ForAll(Contract.Result<Task<IEnumerable<string>>>().Result, boardName => boardName.Length > 0));
-
-			var result = new List<string>();
-			BlobContinuationToken token = null;
-			BlobResultSegment resultSegment;
-			do
-			{
-				resultSegment = await this.container.ListBlobsSegmentedAsync(token);
-				result.AddRange(resultSegment.Results.Select(blob => blob.Uri.ToString()));
-			}
-			while (resultSegment.ContinuationToken != null);
-			return result;
-		}
-
+		/// <inheritdoc />
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller responsible for disposing")]
 		public async Task<Stream> OpenStreamAsync(string boardName, AccessMode accessMode)
 		{
+			Contract.Ensures(Contract.Result<Task<Stream>>() != null);
 			Contract.Ensures(Contract.Result<Task<Stream>>().Result != null);
 			ContractExtensions.IsNotNull(boardName, "boardName");
 			Contract.EndContractBlock();
 
+			// Get reference to requested blob and open stream
 			var blob = this.container.GetBlockBlobReference(boardName);
-			if (accessMode == AccessMode.Read)
-			{
-				return await blob.OpenReadAsync();
-			}
-			else
-			{
-				return await blob.OpenWriteAsync();
-			}
+			return accessMode == AccessMode.Read
+				? await blob.OpenReadAsync().ConfigureAwait(false)
+				: await blob.OpenWriteAsync().ConfigureAwait(false);
 		}
 	}
 }

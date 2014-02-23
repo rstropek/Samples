@@ -7,9 +7,13 @@
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
-	
-	public class FileReaderWriter : IBoardReaderWriter
+
+	/// <summary>
+	/// Implements a reader/writer for board data which stores boards in files.
+	/// </summary>
+	public class FileReaderWriter : IStreamInitializer
 	{
+		// Note the use of Lazy<T> here.
 		private Lazy<string> boardsDirectory = null;
 
 		public FileReaderWriter()
@@ -17,16 +21,7 @@
 			this.boardsDirectory = new Lazy<string>(FileReaderWriter.GetBoardsDirectory);
 		}
 
-		public Task<IEnumerable<string>> GetBoardNamesAsync()
-		{
-			Contract.Ensures(Contract.Result<Task<IEnumerable<string>>>() != null);
-			Contract.Ensures(Contract.Result<Task<IEnumerable<string>>>().Result != null);
-			Contract.Ensures(Contract.ForAll(Contract.Result<Task<IEnumerable<string>>>().Result, boardName => boardName != null));
-			Contract.Ensures(Contract.ForAll(Contract.Result<Task<IEnumerable<string>>>().Result, boardName => boardName.Length > 0));
-
-			return Task.Run(() => Directory.GetFiles(this.boardsDirectory.Value, "*.board").AsEnumerable());
-		}
-
+		/// <inheritdoc />
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller responsible for disposing")]
 		public Task<Stream> OpenStreamAsync(string boardName, AccessMode accessMode)
 		{

@@ -151,13 +151,13 @@
     <Compile Include="AccessMode.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="BoardException.cs" />
-    <Compile Include="BoardRepository.cs" />
+    <Compile Include="BoardStreamRepository.cs" />
     <Compile Include="BoardRow.cs" />
     <Compile Include="ContractExtensions.cs" />
     <Compile Include="CloudBlobReaderWriter.cs" />
     <Compile Include="FileReaderWriter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IBoardReaderWriter.cs" />
+    <Compile Include="IStreamInitializer.cs" />
     <Compile Include="IBoardRepository.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
