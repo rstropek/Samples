@@ -332,11 +332,13 @@
 		// Note that the methods for validating board values are pure functions. They do not
 		// depend on the rest of the Board class infrastructure. Therefore they are testing friendly.
 
+		[Pure]
 		private static bool IsValuePossible(byte[] boardData, int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
 			return Board.IsValuePossibleAsync(boardData, zeroBasedRowIndex, zeroBasedColumnIndex, value).Result;
 		}
 
+		[Pure]
 		private static Task<bool> IsValuePossibleAsync(byte[] boardData, int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
 			Board.BoardDataContract(boardData);
@@ -352,6 +354,7 @@
 			return Task.Factory.ContinueWhenAll(tasks, t => t[0].Result && t[1].Result && t[2].Result);
 		}
 
+		[Pure]
 		private static bool IsValuePossibleInRow(byte[] boardData, int zeroBasedRowIndex, byte value)
 		{
 			Board.BoardDataContract(boardData);
@@ -369,6 +372,7 @@
 			return true;
 		}
 
+		[Pure]
 		private static bool IsValuePossibleInColumn(byte[] boardData, int zeroBasedColumnIndex, byte value)
 		{
 			Board.BoardDataContract(boardData);
@@ -386,6 +390,7 @@
 			return true;
 		}
 
+		[Pure]
 		private static bool IsValuePossibleInSquare(byte[] boardData, int zeroBasedRowIndex, int zeroBasedColumnIndex, byte value)
 		{
 			Board.BoardDataContract(boardData);
