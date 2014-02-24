@@ -6,7 +6,6 @@
 	using Microsoft.WindowsAzure.Storage.Auth;
 	using Microsoft.WindowsAzure.Storage.Blob;
 	using Microsoft.WindowsAzure.Storage.Blob.Fakes;
-	using Samples.Sudoku.Fakes;
 	using System;
 	using System.Configuration;
 	using System.IO;

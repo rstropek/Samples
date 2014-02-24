@@ -4,7 +4,7 @@
 	using System.Threading.Tasks;
 
 	/// <summary>
-	/// Contains methods to read/write <see cref="Board"/> instances from/to a <see cref="Stream"/>.
+	/// Contains methods to read/write <see cref="Board"/> instances from/to a <see cref="System.IO.Stream"/>.
 	/// </summary>
 	public class BoardStreamRepository
 	{
