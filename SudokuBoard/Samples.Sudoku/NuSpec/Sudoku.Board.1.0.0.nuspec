@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Sudoku.Board</id>
+        <version>1.0.0</version>
+        <title>Sudoku Board Sample</title>
+        <authors>Rainer Stropek</authors>
+        <licenseUrl>http://www.gnu.org/licenses/lgpl-3.0.en.html</licenseUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Implements handling classes for a Sudoku board.</description>
+        <summary>Sample from BASTA Spring 2014 conference</summary>
+        <releaseNotes>For demo purposes only.</releaseNotes>
+        <language>en-US</language>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="WindowsAzure.Storage" version="3.0.3.0" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\bin\Debug\Samples.Sudoku.dll" target="lib\net45\Samples.Sudoku.dll" />
+        <file src="..\bin\Debug\Samples.Sudoku.pdb" target="lib\net45\Samples.Sudoku.pdb" />
+    </files>
+</package>

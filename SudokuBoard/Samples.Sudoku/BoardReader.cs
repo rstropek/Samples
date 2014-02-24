@@ -2,6 +2,7 @@
 {
 	using Microsoft.WindowsAzure.Storage;
 	using Microsoft.WindowsAzure.Storage.Auth;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 	using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@
 		/// A task that represents the asynchronous operation. The value of the 
 		/// TResult parameter contains the loaded board.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Reviewed")]
 		public static Task<Board> LoadFromFileAsync(string boardName, string boardsDirectory = null)
 		{
 			ContractExtensions.IsNotNull(boardName, "boardName");
