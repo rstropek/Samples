@@ -151,6 +151,7 @@
     <Compile Include="AccessMode.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="BoardException.cs" />
+    <Compile Include="BoardReader.cs" />
     <Compile Include="BoardStreamRepository.cs" />
     <Compile Include="BoardRow.cs" />
     <Compile Include="ContractExtensions.cs" />
