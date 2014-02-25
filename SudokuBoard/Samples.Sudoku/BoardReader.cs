@@ -15,6 +15,7 @@
 		/// Loads board from file asynchronously.
 		/// </summary>
 		/// <param name="boardName">Name of the board.</param>
+		/// <param name="boardsDirectory">Optional name of the directory where board files are stored.</param>
 		/// <returns>
 		/// A task that represents the asynchronous operation. The value of the 
 		/// TResult parameter contains the loaded board.
@@ -33,6 +34,9 @@
 		/// <summary>
 		/// Loads board from Azure Blob Storage asynchronously.
 		/// </summary>
+		/// <param name="accountName">Name of the Windows Azure Storage account.</param>
+		/// <param name="accountKey">Key for the Windows Azure Storaeg account.</param>
+		/// <param name="containerName">Container in which boards are stored.</param>
 		/// <param name="boardName">Name of the board.</param>
 		/// <returns>
 		/// A task that represents the asynchronous operation. The value of the 
