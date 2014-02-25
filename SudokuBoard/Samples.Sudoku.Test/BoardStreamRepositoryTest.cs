@@ -14,6 +14,7 @@
 	public class BoardStreamRepositoryTest
 	{
 		[TestMethod]
+		[TestCategory("With fakes")]
 		public async Task TestLoadBoard()
 		{
 			// A BoardStreamRepository needs an IStreamManager. Note that we use a
@@ -30,6 +31,7 @@
 		}
 
 		[TestMethod]
+		[TestCategory("With fakes")]
 		public async Task TestLoadBoardFailures()
 		{
 			var repository = BoardStreamRepositoryTest.SetupBoardStreamRepository(new byte[] { 1, 2 });
@@ -39,6 +41,7 @@
 		}
 
 		[TestMethod]
+		[TestCategory("With fakes")]
 		public async Task TestSaveBoard()
 		{
 			var buffer = new byte[9 * 9];
