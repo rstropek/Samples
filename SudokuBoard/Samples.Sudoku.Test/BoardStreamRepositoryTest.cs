@@ -1,14 +1,8 @@
 ﻿namespace Samples.Sudoku.Test
 {
-	using Microsoft.QualityTools.Testing.Fakes;
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
-	using Microsoft.WindowsAzure.Storage;
-	using Microsoft.WindowsAzure.Storage.Auth;
-	using Microsoft.WindowsAzure.Storage.Blob;
-	using Microsoft.WindowsAzure.Storage.Blob.Fakes;
 	using Samples.Sudoku.Fakes;
 	using System;
-	using System.Configuration;
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
