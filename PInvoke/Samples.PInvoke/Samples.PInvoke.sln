@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Samples.PInvoke.Introductio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.PInvoke.IntroductionClient", "Samples.PInvoke.IntroductionClient\Samples.PInvoke.IntroductionClient.csproj", "{CD4AB65C-FAE6-4F46-A657-D3C34EF61C3C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PinvokeLib", "PinvokeLib\PinvokeLib.vcxproj", "{CF88564B-5C01-4242-84B8-3F1081109DC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,16 @@ Global
 		{CD4AB65C-FAE6-4F46-A657-D3C34EF61C3C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CD4AB65C-FAE6-4F46-A657-D3C34EF61C3C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CD4AB65C-FAE6-4F46-A657-D3C34EF61C3C}.Release|Win32.ActiveCfg = Release|Any CPU
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Debug|Win32.Build.0 = Debug|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Release|Any CPU.ActiveCfg = Release|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Release|Win32.ActiveCfg = Release|Win32
+		{CF88564B-5C01-4242-84B8-3F1081109DC3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

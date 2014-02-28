@@ -21,4 +21,5 @@
 #include <windows.h>
 #include <objbase.h>
 #include <iostream>
-
+#include <windef.h>
+#include <math.h>
