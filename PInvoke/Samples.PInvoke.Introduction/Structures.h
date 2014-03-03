@@ -1,33 +1,37 @@
 #include "stdafx.h"
 
-// Functions Receiving Structures
+// Various structure to demonstrate different aspects of marshaling
+
+// Structure with embedded pointers to wide strings
 typedef struct 
 {
-	LPCSTR make;
-	LPCSTR color;
+	LPCWSTR make;
+	LPCWSTR color;
 } CAR;
 
-// Variant of CAR with embedded character arrays
+// Different flavor of CAR with embedded character arrays
 typedef struct 
 {
-	char make[256];
-	char color[256];
+	WCHAR make[256];
+	WCHAR color[256];
 } CARFIXED;
 
-// Structure containing a structure
-typedef struct _CAR2
+// Structure containing a structure plus an embedded character array
+typedef struct
 {
 	CAR theCar;
-	LPCSTR petName;
-} CAR2;
+	LPCWSTR petName;
+} BETTERCAR;
 
-// Function returning an array of three cars
+
+
+// Function returning an array of exactly three cars
 extern "C" PINVOKE_API void GiveMeThreeBasicCars(CAR** theCars);
 
 // Function receiving a complex structure
-extern "C" PINVOKE_API void DisplayBetterCar(CAR2* theCar);
+extern "C" PINVOKE_API void DisplayBetterCar(BETTERCAR* theCar);
 
-// Function filling an array of three CARFIXED structures
+// Function filling an array of exactly three CARFIXED structures
 extern "C" PINVOKE_API void FillThreeBasicCars(CARFIXED* theCars);
 
 // Function returning an array of BSTRs with variable length

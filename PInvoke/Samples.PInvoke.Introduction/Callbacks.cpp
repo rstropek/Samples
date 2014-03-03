@@ -12,7 +12,7 @@ extern "C" PINVOKE_API void CallMeBackToSayHello(SAYHELLOCALLBACK callback)
 // Function with a more complex callback
 extern "C" PINVOKE_API void ReportPythagorasBack(double a, double b, PYTHAGORASCALLBACK callback)
 {
-	// Calculate result
+	// Note that we put triangle on the stack here.
 	TRIANGLE triangle;
 	triangle.a = a;
 	triangle.b = b;

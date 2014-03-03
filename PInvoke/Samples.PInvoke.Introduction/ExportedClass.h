@@ -19,6 +19,11 @@ public:
 };
 
 // Functions for class marshaling.
+// Create object
 extern "C" PINVOKE_API CMiniVan* CreateMiniVan();
+
+// Work with object
 extern "C" PINVOKE_API void DeleteMiniVan(CMiniVan* obj);
+
+// Destroy object
 extern "C" PINVOKE_API int GetNumberOfSeats(CMiniVan* obj);

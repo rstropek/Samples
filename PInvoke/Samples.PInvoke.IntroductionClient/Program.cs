@@ -12,15 +12,15 @@ namespace Samples.PInvoke.IntroductionClient
 		[STAThread]
 		static void Main(string[] args)
 		{
-			CalculationFunctionExample();
+			CalculationFunctions.Run();
 
-			StructAndArraySamples();
+			Structures.Run();
 
-			ClassSamples();
+			ExportedClass.Run();
 
 			Win32Samples();
 
-			CallbackSamples();
+			Callbacks.Run();
 
 			StringHandlingSamples();
 		}
@@ -31,66 +31,20 @@ namespace Samples.PInvoke.IntroductionClient
 			StringIntPtrHandling.ExecuteSample();
 		}
 
-		private static void CallbackSamples()
-		{
-			PInvokeWrapper.CallMeBackToSayHello(() => Console.WriteLine("\tHello from C#"));
-
-			PInvokeWrapper.ReportPythagorasBack(1, 2, t => Console.WriteLine(t.c));
-		}
+		#region Example for a Win32 import
+		// Rename the MessageBoxW() function to 'DisplayMessage'.
+		[DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Unicode, EntryPoint = "MessageBoxW", SetLastError = true)]
+		public static extern int DisplayMessage(int hwnd, string text, string caption, int type);
 
 		private static void Win32Samples()
 		{
-			PInvokeWrapper.DisplayMessage(0, "Hello World!", "Greeting", 0);
+			DisplayMessage(0, "Hello World!", "Greeting", 0);
 
-			PInvokeWrapper.DisplayMessage(999, "Hello World!", "Greeting", 0);
-			Console.WriteLine("Last Win32 Error: {0}", Marshal.GetLastWin32Error());
-			Console.WriteLine(new Win32Exception(Marshal.GetLastWin32Error()).Message);
+			DisplayMessage(999, "Hello World!", "Greeting", 0);
+			var win32Error = Marshal.GetLastWin32Error();
+			Console.WriteLine("Last Win32 Error: {0}", win32Error);
+			Console.WriteLine(new Win32Exception(win32Error).Message);
 		}
-
-		private static void ClassSamples()
-		{
-			var miniVan = PInvokeWrapper.CreateMiniVan();
-			try
-			{
-				Console.WriteLine(PInvokeWrapper.GetNumberOfSeats(miniVan));
-			}
-			finally
-			{
-				PInvokeWrapper.DeleteMiniVan(miniVan);
-			}
-		}
-
-		private static void StructAndArraySamples()
-		{
-			PInvokeWrapper.DisplayBetterCar(new Car2()
-			{
-				Car = new Car() { Color = "Black", Make = "Toyota" },
-				PetName = "Blacky"
-			});
-
-			foreach (var car in PInvokeWrapper.GiveMeThreeBasicCarsHelper())
-			{
-				Console.WriteLine(car.Make);
-			}
-
-			var cars = new CarStruct[3];
-			PInvokeWrapper.FillThreeBasicCars(cars);
-			foreach (var car in cars)
-			{
-				Console.WriteLine(car.Make);
-			}
-
-			var makes = new string[3];
-			int length = 0;
-			PInvokeWrapper.GiveMeMakes(out makes, out length);
-		}
-
-		private static void CalculationFunctionExample()
-		{
-			Console.WriteLine(PInvokeWrapper.AddNumbers(1, 2));
-
-			var source = new[] { 1, 2, 3 };
-			Console.WriteLine(PInvokeWrapper.AddArray(source, source.Length));
-		}
+		#endregion
 	}
 }

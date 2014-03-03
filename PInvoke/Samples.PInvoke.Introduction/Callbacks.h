@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+// Note that all callbacks are defined with CALLBACK here. This means they used
+// __stdcall calling convention.
+
 // Function with a very simple callback
 typedef void (CALLBACK *SAYHELLOCALLBACK)();
 extern "C" PINVOKE_API void CallMeBackToSayHello(SAYHELLOCALLBACK callback);

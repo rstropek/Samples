@@ -10,11 +10,11 @@ extern "C" PINVOKE_API int AddNumbers(int x, int y)
 // A method taking an array.
 extern "C" PINVOKE_API int AddArray(int numbers[], int size)
 {
-	auto ans = 0;
+	auto result = 0;
 	for (int i = 0; i < size; i++)
 	{
-		ans += numbers[i];
+		result += numbers[i];
 	}
 
-	return ans;
+	return result;
 }
