@@ -99,6 +99,50 @@ namespace Samples.PInvoke.IntroductionClient
 			[Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.BStr, SizeParamIndex = 1)] out string[] makes,
 			[Out] out int length);
 
+		// Note that the following example does the same as the one above. It is
+		// just for demo purposes to show how to manually handle BSTRs that were
+		// marshaled as an IntPtr.
+		// extern "C" PINVOKE_API void GiveMeMakes(BSTR** makes, int *length);
+		[DllImport("PInvokeIntroduction.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode,
+			EntryPoint = "GiveMeMakes")]
+		private static extern void GiveMeMakesManual([Out] out IntPtr makes, [Out] out int length);
+
+		public static IEnumerable<string> GiveMeMakesHelper()
+		{
+			IntPtr unmanagedResult = IntPtr.Zero;
+			string[] resultList = null;
+			try
+			{
+				// Note that in this example we get the array of BSTRs via an IntPtr.
+				int length = 0;
+				GiveMeMakesManual(out unmanagedResult, out length);
+
+				resultList = new string[length];
+
+				// Note how we use unsafe C# pointer arithmetic here
+				var currentBstr = (void**)unmanagedResult;
+				for (int i = 0; i < length; i++)
+				{
+					// Get string from BSTR. We have to free the BSTRs because they have
+					// been allocated with SysAllocString. Note that this does not free
+					// the array of BSTR*, it just frees the BSTRs the array elements refer to.
+					var stringResult = Marshal.PtrToStringBSTR((IntPtr)(*currentBstr));
+					Marshal.FreeBSTR((IntPtr)(*currentBstr++));
+					resultList[i] = stringResult;
+				}
+			}
+			finally
+			{
+				// Free BSTR array.
+				if (unmanagedResult != IntPtr.Zero)
+				{
+					Marshal.FreeCoTaskMem(unmanagedResult);
+				}
+			}
+
+			return resultList;
+		}
+
 		public static void Run()
 		{
 			DisplayBetterCar(new BetterCar()
@@ -135,6 +179,15 @@ namespace Samples.PInvoke.IntroductionClient
 			var makes = new string[3];
 			int length = 0;
 			GiveMeMakes(out makes, out length);
+			foreach (var make in makes)
+			{
+				Console.WriteLine(make);
+			}
+
+			foreach (var make in GiveMeMakesHelper())
+			{
+				Console.WriteLine(make);
+			}
 		}
 	}
 }
