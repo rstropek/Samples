@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="Home.js"></script>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container" ng-app="WebApiSample" ng-controller="Controller">
+        <h1>Multi-tier Sample</h1>
+        <h2>Input</h2>
+        <form role="form">
+            <div class="form-group">
+                <label>User:</label>
+                <input type="text" class="form-control" placeholder="Username" ng-model="username" />
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="text" class="form-control" placeholder="Password" ng-model="password" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-default" ng-click="retrieveCustomers()">Get Customers</button>
+            </div>
+        </form>
+        <h2>Result</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                </tr>
+            </thead>
+            <tr ng-repeat="customer in customers">
+                <td>{{customer.ID}}</td>
+                <td>{{customer.FirstName}}</td>
+                <td>{{customer.LastName}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
