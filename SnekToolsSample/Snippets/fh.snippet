@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>File Header</Title>
+			<Shortcut>fh</Shortcut>
+			<Description>Code snippet for StyleCop-conform file header</Description>
+			<Author>Rainer Stropek</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>company</ID>
+					<ToolTip>Name of the company</ToolTip>
+					<Default>software architects gmbh</Default>
+				</Literal>
+				<Literal>
+					<ID>file</ID>
+					<ToolTip>File name</ToolTip>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+				<![CDATA[// --------------------------------------------------------------------------------------------------------------------
+// <copyright company="$company$" file="$file$">
+//   (c) $company$
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
