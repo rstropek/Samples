@@ -15,19 +15,23 @@
 		{
 			using (ShimsContext.Create())
 			{
+				// Parameter variables for closure
 				var settingName = string.Empty;
 				string providerName = null;
+
+				// Note that we use a shim here to simulate different config files.
+
+				// ReSharper disable AccessToModifiedClosure
 				ShimConfigurationManager.ConnectionStringsGet =
 					() => new ConnectionStringSettingsCollection()
 						      {
-							      // ReSharper disable once AccessToModifiedClosure
 							      new ConnectionStringSettings(
 								      settingName,
 								      "Server=DummyServer;Database=DummyDatabase;Integrated Security=true",
 								      // ReSharper disable once ExpressionIsAlwaysNull
-								      // ReSharper disable once AccessToModifiedClosure
 								      providerName)
 						      };
+				// ReSharper restore AccessToModifiedClosure
 
 				// Test if constructor with empty parameter list works
 				settingName = "TimesheetDatabase";

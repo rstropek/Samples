@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snek.ToolsSample.Tests", "S
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Snek.ToolsSample.Doc", "Snek.ToolsSample.Doc\Snek.ToolsSample.Doc.shfbproj", "{2D0731BB-0D8C-40DA-A479-803615AD1486}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snek.ToolsSample.PerfTest", "Snek.ToolsSample.PerfTest\Snek.ToolsSample.PerfTest.csproj", "{4BC93AF4-DD2D-431C-AA8F-3CC579C2C9D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snek.ToolsSample.WpfClient", "Snek.ToolsSample.WpfClient\Snek.ToolsSample.WpfClient.csproj", "{347AD8BD-BF37-40EC-9255-E3523BB7B123}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,7 +37,14 @@ Global
 		{42305AF1-CC70-44E8-BE9F-3AE080261773}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D0731BB-0D8C-40DA-A479-803615AD1486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D0731BB-0D8C-40DA-A479-803615AD1486}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D0731BB-0D8C-40DA-A479-803615AD1486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BC93AF4-DD2D-431C-AA8F-3CC579C2C9D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BC93AF4-DD2D-431C-AA8F-3CC579C2C9D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BC93AF4-DD2D-431C-AA8F-3CC579C2C9D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BC93AF4-DD2D-431C-AA8F-3CC579C2C9D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{347AD8BD-BF37-40EC-9255-E3523BB7B123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{347AD8BD-BF37-40EC-9255-E3523BB7B123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{347AD8BD-BF37-40EC-9255-E3523BB7B123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{347AD8BD-BF37-40EC-9255-E3523BB7B123}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

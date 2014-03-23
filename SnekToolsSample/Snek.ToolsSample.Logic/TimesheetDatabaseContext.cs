@@ -3,32 +3,33 @@
 //   (c) software architects gmbh
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Snek.ToolsSample.Logic
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Configuration;
 	using System.Data;
 	using System.Data.SqlClient;
 	using System.Diagnostics.CodeAnalysis;
-	using System.IO;
-	using System.Reflection;
-	using System.Resources;
+	using System.Globalization;
 
 	/// <summary>
 	/// Represents a database connection to a Timesheet database.
 	/// </summary>
 	public class TimesheetDatabaseContext : IDisposable
 	{
-		/// <summary>
-		/// Underlying database connection.
-		/// </summary>
-		private SqlConnection connection;
+		private SqlConnection connection = null;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimesheetDatabaseContext" /> class.
+		/// Initializes a new instance of the <see cref="TimesheetDatabaseContext"/> class.
 		/// </summary>
-		/// <param name="configurationConnectionStringName">Name of the configuration setting containing the connection string.</param>
+		/// <param name="configurationConnectionStringName">
+		/// Name of the configuration setting containing the connection string.
+		/// </param>
+		/// <remarks>
+		/// If you do not specify <paramref name="configurationConnectionStringName"/>,
+		/// the method will look for a connection string setting named TimesheetDatabase.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Reviewed, is OK.")]
 		public TimesheetDatabaseContext(string configurationConnectionStringName = null)
 		{
@@ -62,16 +63,23 @@ namespace Snek.ToolsSample.Logic
 		/// <summary>
 		/// Generates the demo data.
 		/// </summary>
-		/// <exception cref="System.InvalidOperationException">Sample data file not found.</exception>
 		public void GenerateDemoData()
 		{
-			// Open database if not already open
-			if (this.connection.State != ConnectionState.Open)
-			{
-				this.connection.Open();
-			}
-
+			this.Open();
 			SampleDataGenerator.GenerateSampleData(this.connection);
+		}
+
+		/// <summary>
+		/// Finds the and processes travels.
+		/// </summary>
+		/// <returns>List of travels with their associated costs.</returns>
+		public IEnumerable<Travel> FindAndProcessTravels()
+		{
+			using (var timesheets = this.GetTravelTimesheetsDataTable())
+			{
+				return TravelCostCalculator.FindAndProcessTravels(
+					TravelCostCalculator.GetTravelCalculationTimesheets(timesheets));
+			}
 		}
 
 		/// <inheritdoc />
@@ -79,6 +87,33 @@ namespace Snek.ToolsSample.Logic
 		{
 			this.Dispose(true);
 			GC.SuppressFinalize(this);
+		}
+
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller has to dispose")]
+		internal DataTable GetTravelTimesheetsDataTable()
+		{
+			this.Open();
+
+			using (var cmd = this.connection.CreateCommand())
+			{
+				cmd.CommandText = "SELECT BeginTime, EndTime, TravelTypeId FROM Timesheet WHERE TravelTypeId IS NOT NULL ORDER BY BeginTime";
+				var result = new DataTable() { Locale = CultureInfo.InvariantCulture };
+				using (var reader = cmd.ExecuteReader())
+				{
+					result.Load(reader);
+				}
+
+				return result;
+			}
+		}
+
+		private void Open()
+		{
+			// Open database if not already open
+			if (this.connection.State != ConnectionState.Open)
+			{
+				this.connection.Open();
+			}
 		}
 
 		/// <summary>

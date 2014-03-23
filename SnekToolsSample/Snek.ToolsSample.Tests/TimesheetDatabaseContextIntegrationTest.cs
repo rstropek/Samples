@@ -23,10 +23,13 @@
 		[ClassInitialize]
 		public static void TestClassInitialize(TestContext context)
 		{
+			// Generate a name for the temporary database
 			testDatabaseName = string.Format(CultureInfo.InvariantCulture, "TestRun_{0}", DateTime.Now.ToString("s", CultureInfo.InvariantCulture).Replace(':', '_'));
 
+			// Use DAC service to deploy the temporary database
 			var dacService = new DacServices(string.Format(CultureInfo.InvariantCulture, ConnectionStringTemplate, "master"));
 			var dacPacLocation = Path.Combine(
+				// ReSharper disable once AssignNullToNotNullAttribute
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
 				"Snek.ToolsSample.Database.dacpac");
 			using (var stream = File.OpenRead(dacPacLocation))
@@ -42,14 +45,17 @@
 		[ClassCleanup]
 		public static void TestClassCleanup()
 		{
+			// Drop temporarily created database
 			using (var conn = new SqlConnection(string.Format(CultureInfo.InvariantCulture, ConnectionStringTemplate, "master")))
 			{
 				conn.Open();
 				using (var cmd = conn.CreateCommand())
 				{
+					// Force all users out
 					cmd.CommandText = string.Format(CultureInfo.InvariantCulture, "ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE", testDatabaseName);
 					cmd.ExecuteNonQuery();
 
+					// Drop the database
 					cmd.CommandText = string.Format(CultureInfo.InvariantCulture, "DROP DATABASE [{0}]", testDatabaseName);
 					cmd.ExecuteNonQuery();
 				}
@@ -62,6 +68,7 @@
 		{
 			using (ShimsContext.Create())
 			{
+				// Note that we use a shim to inject the dynamically generated connection string
 				ShimConfigurationManager.ConnectionStringsGet =
 					() => new ConnectionStringSettingsCollection()
 						      {
@@ -72,6 +79,8 @@
 				using (var db = new TimesheetDatabaseContext())
 				{
 					db.GenerateDemoData();
+
+					// In real life, add ASSERTS here
 				}
 			}
 		}

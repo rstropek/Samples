@@ -1,22 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright company="software architects gmbh" file="AssemblyInfo.cs">
-//   (c) software architects gmbh
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Snek.ToolsSample.Logic")]
+[assembly: AssemblyTitle("Snek.ToolsSample.PerfTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Snek.ToolsSample.Logic")]
+[assembly: AssemblyProduct("Snek.ToolsSample.PerfTest")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -26,8 +19,8 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the type lib if this project is exposed to COM
-[assembly: Guid("ef239aeb-5893-4b5c-bc9e-1d3487f28917")]
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("85671eba-3e64-4e9b-8c61-430f422f38ea")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -41,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: CLSCompliant(false)]
-[assembly: InternalsVisibleTo("Snek.ToolsSample.PerfTest")]

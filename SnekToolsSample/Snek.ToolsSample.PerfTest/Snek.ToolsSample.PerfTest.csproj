@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{64F63390-94F8-4010-8CFF-BDA604546256}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4BC93AF4-DD2D-431C-AA8F-3CC579C2C9D4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Snek.ToolsSample.Logic</RootNamespace>
-    <AssemblyName>Snek.ToolsSample.Logic</AssemblyName>
+    <RootNamespace>Snek.ToolsSample.PerfTest</RootNamespace>
+    <AssemblyName>Snek.ToolsSample.PerfTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,11 +21,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <DocumentationFile>bin\Debug\Snek.ToolsSample.Logic.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,28 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleData.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SampleData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TimesheetDatabaseContext.cs" />
-    <Compile Include="Travel.cs" />
-    <Compile Include="TravelCalculationTimesheet.cs" />
-    <Compile Include="TravelCostCalculator.cs" />
-    <Compile Include="TravelType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SampleData.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SampleData.g.cs</LastGenOutput>
-    </None>
-    <None Include="SampleTimesheets.csv" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <ProjectReference Include="..\Snek.ToolsSample.Logic\Snek.ToolsSample.Logic.csproj">
+      <Project>{64f63390-94f8-4010-8cff-bda604546256}</Project>
+      <Name>Snek.ToolsSample.Logic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

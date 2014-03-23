@@ -1,0 +1,14 @@
+﻿<Window x:Class="Snek.ToolsSample.WpfClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <TabControl SelectionChanged="OnSelectionChanged">
+		<TabItem Header="Welcome">
+			<!-- Just a placeholder for demo purposes -->
+			<Button Margin="5">Hello World!</Button>
+		</TabItem>
+		
+		<!-- Here we will add the travel list -->
+		<TabItem Header="Travels" Name="TravelsItem" />
+	</TabControl>
+</Window>
