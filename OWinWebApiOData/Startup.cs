@@ -37,7 +37,7 @@ namespace WebApi
 			//config.Formatters.Remove(config.Formatters.JsonFormatter);
 
             config.Formatters.JsonFormatter.UseDataContractJsonSerializer = true;
-			config.Formatters.Remove(config.Formatters.XmlFormatter);
+			//config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             builder.UseWebApi(config);
 		}

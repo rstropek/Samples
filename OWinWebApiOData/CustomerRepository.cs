@@ -19,6 +19,17 @@ namespace WebApi
 				State = "WA",
 				ZipCode = "98053"
 			});
+			customers.Add(new Customer()
+			{
+				ID = 1,
+				LastName = "John",
+				FirstName = "Doe",
+				HouseNumber = "111",
+				Street = "Broadway NE",
+				City = "Seattle",
+				State = "WA",
+				ZipCode = "98054"
+			});
 		}
 
 		public static IList<Customer> Customers
