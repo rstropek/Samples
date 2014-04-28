@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="RegistrySearchExample" Language="1033" Version="1.0.0.0" 
+			 Manufacturer="software architects" UpgradeCode="9615803F-7521-4F76-B1C9-D6122ED4C680">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="RegistrySearch" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+
+		<!--Search for Sync Framework in the registry-->
+		<Property Id="SYNC_FRAMEWORK">
+			<RegistrySearch
+				 Id="SyncFrameworkInstalled"
+				 Root="HKLM"
+				 Key="Software\Microsoft\Microsoft Sync Framework\v2.0\Setup\SynchronizationX64"
+				 Name="Version"
+				 Type="raw" />
+		</Property>
+
+		<!--This will always evaluate to false and show the message-->
+		<Condition Message="Sync Framework 2 version is: [SYNC_FRAMEWORK]">
+			1 = 2
+		</Condition>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="RegistrySearch" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+		</ComponentGroup>
+	</Fragment>
+</Wix>

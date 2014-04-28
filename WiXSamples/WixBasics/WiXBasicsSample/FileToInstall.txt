@@ -1,0 +1,1 @@
+﻿Use this sample to learn about WiX basics.

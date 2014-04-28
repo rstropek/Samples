@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<!-- Note the use of the bind variable here -->
+	<Product Id="*"
+			 Name=".NET Tool" 
+			 Language="1033" 
+			 Version="!(bind.fileVersion.FILE_DotNetToolExe)" 
+			 Manufacturer="software architects" 
+			 UpgradeCode="30b15597-8d7f-4e81-b93d-6e40287938a5">
+		
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="DotNetToolInstaller" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Property Id="PlatformProgramFilesFolder" Value="[ProgramFilesFolder]" />
+		
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<!-- Note using the preprocessor variable here -->
+			<?if $(var.ProcessorArchitecture)=x64 ?>
+				<Directory Id="ProgramFiles64Folder">
+					<Directory Id="INSTALLFOLDER" Name=".NET Tool" />
+				</Directory>
+			<?else ?>
+				<Directory Id="ProgramFilesFolder">
+					<Directory Id="INSTALLFOLDER" Name=".NET Tool" />
+				</Directory>
+			<?endif ?>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="COMP_DotNetToolExe">
+				<!-- Note using the project reference for specifying the source here -->
+				<File Id="FILE_DotNetToolExe" Source="$(var.DotNetTool.TargetPath)" KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
