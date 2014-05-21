@@ -6,7 +6,7 @@ namespace BeeInMyGarden.Data
 	public class BlogContext : DbContext
 	{
 		public BlogContext()
-			: base("AlmDays")
+			: base("BeeInGardenDB")
 		{
 		}
 
