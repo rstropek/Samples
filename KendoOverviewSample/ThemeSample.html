@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Theme Demo</title>
+
+	<!-- Get style sheets from kendo's CDN
+		 In this example we use the Twitter Bootstrap theme. -->
+	<link href="http://cdn.kendostatic.com/2014.1.528/styles/kendo.common-bootstrap.min.css" rel="stylesheet" />
+	<link href="http://cdn.kendostatic.com/2014.1.528/styles/kendo.bootstrap.min.css" rel="stylesheet" />
+	<link href="Samples.css" rel="stylesheet" />
+
+	<!-- Get scripts from kendo's CDN
+		 Note that we get JQuery from kendo's CDN, too, to always get a compatible version. -->
+	<script src="http://cdn.kendostatic.com/2014.1.528/js/jquery.min.js"></script>
+	<script src="http://cdn.kendostatic.com/2014.1.528/js/kendo.ui.core.min.js"></script>
+</head>
+<body>
+	<button id="myButton" type="button">A button</button>
+	<script>
+		$(function () {
+			$("#myButton").kendoButton();
+		});
+	</script>
+</body>
+</html>

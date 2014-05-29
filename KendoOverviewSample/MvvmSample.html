@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>MVVM Demo</title>
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+	<!-- Get style sheets from kendo's CDN
+		 In this example we use the Twitter Bootstrap theme. -->
+	<link href="http://cdn.kendostatic.com/2014.1.528/styles/kendo.common-bootstrap.min.css" rel="stylesheet" />
+	<link href="http://cdn.kendostatic.com/2014.1.528/styles/kendo.bootstrap.min.css" rel="stylesheet" />
+	<link href="Samples.css" rel="stylesheet" />
+
+	<!-- Get scripts from kendo's CDN
+		 Note that we get JQuery from kendo's CDN, too, to always get a compatible version. -->
+	<script src="http://cdn.kendostatic.com/2014.1.528/js/jquery.min.js"></script>
+	<script src="http://cdn.kendostatic.com/2014.1.528/js/kendo.ui.core.min.js"></script>
+</head>
+<body>
+	<form id="registrationForm">
+		<!-- Note that we bind the list of available values as well as the selected value -->
+		<label for="salutation">Salutation:</label>
+		<input id="salutation" data-bind="source: availableSalutations, value: salutation" />
+
+		<!-- Simple binding to "value" -->
+		<label for="name">Name:</label>
+		<input type="text" id="name" class="form-control" data-bind="value: name" />
+
+		<!-- Binding using a date picker -->
+		<label for="birthday">Birthday:</label>
+		<input id="birthday" data-bind="value: birthday" />
+		
+		<!-- Note that we bind the "enabled" state as well as the click handler -->
+		<button id="register" type="button" class="register" 
+				data-bind="enabled: isValid, click: register">Register</button>
+	</form>
+
+	<script>
+		// Setup the view model.
+		var viewModel = kendo.observable({
+			// List of available salutations
+			availableSalutations: ["Mr.", "Ms."],
+
+			// List of current fields entered by the user
+			salutation: "Mr.",
+			name: "Max Muster",
+			birthday: new Date(1970, 4, 1)
+		});
+		// Calculated values and functions
+		viewModel.set("age", function () {
+			// Note that it is extremely important to use the "get" method here. If
+			// you access "viewModel.birthday" without "get", Kendo would not recognize
+			// that "age" depends on the "birthday" field.
+			var ageDifMs = Date.now() - viewModel.get("birthday").getTime();
+			var ageDate = new Date(ageDifMs);
+			return Math.abs(ageDate.getUTCFullYear() - 1970);
+		});
+		viewModel.set("isValid", function () {
+			return viewModel.get("age")() >= 18;
+		});
+		viewModel.set("register", function () {
+			if (viewModel.get("isValid")()) {
+				alert("Registering ...");
+			}
+		});
+
+		// Setup Kendo controls
+		$("#salutation").kendoComboBox();
+		$("#birthday").kendoDatePicker();
+		$("#register").kendoButton();
+
+		// Bind form to the view model
+		kendo.bind($("#registrationForm"), viewModel);
+	</script>
+</body>
+</html>

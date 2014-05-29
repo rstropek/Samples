@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>SPA Demo</title>
+
+	<!-- Get style sheets from kendo's CDN
+		 In this example we use the Twitter Bootstrap theme. -->
+	<link href="http://cdn.kendostatic.com/2014.1.528/styles/kendo.common-bootstrap.min.css" rel="stylesheet" />
+	<link href="http://cdn.kendostatic.com/2014.1.528/styles/kendo.bootstrap.min.css" rel="stylesheet" />
+	<link href="Samples.css" rel="stylesheet" />
+
+	<!-- Get scripts from kendo's CDN
+		 Note that we get JQuery from kendo's CDN, too, to always get a compatible version. -->
+	<script src="http://cdn.kendostatic.com/2014.1.528/js/jquery.min.js"></script>
+	<script src="http://cdn.kendostatic.com/2014.1.528/js/kendo.ui.core.min.js"></script>
+
+</head>
+<body>
+	<!-- Master template -->
+	<script id="layout" type="text/x-kendo-template">
+		<!-- All other views will be rendered in the following div -->
+		<div id="content"></div>
+		<!-- Add a footer that will appear below every view -->
+		<footer>This sample was brought to you by Windows Developer Magazine.</footer>
+	</script>
+
+	<!-- Simple view template -->
+	<script id="rootView" type="text/x-kendo-template">
+		<h1>Welcome</h1>
+		<p>This is the initial page!</p>
+		<p>Want to know more about the app? Read our <a href="#about">About</a> section.</p>
+		<p>Want <a href="#customer/ALFKI">details about customer ALFKI</a>?</p>
+	</script>
+
+	<!-- View template with bindings to a model -->
+	<script id="customerView" type="text/x-kendo-template">
+		<h1>Customer <span data-bind="text: customer.CompanyName"></span></h1>
+		<p>This is data about the customer ...</p>
+	</script>
+
+	<!-- This is the div where our layout will be rendered to -->
+	<div id="app"></div>
+
+	<script>
+		// Note that this sample contains only local templates. If you are 
+		// interested how to load external templates (separate files), 
+		// see http://docs.telerik.com/kendo-ui/howto/load-templates-external-files.
+
+		// Crete layout and first to simple views
+		var layout = new kendo.Layout("layout");
+		var rootView = new kendo.View("rootView");
+		var aboutView = new kendo.View("<h1>About</h1><p>Lorem ipsum ...</p>");
+
+		// Create view for customer data. Note how we add a model for data binding.
+		var customerModel = new kendo.observable();
+		var customerView = new kendo.View("customerView", { model: customerModel });
+		var customerNotFoundView = new kendo.View("<p>Sorry, customer not found!</p>");
+
+		// Setup routing logic
+		var router = new kendo.Router({
+			// Render layout when initializing the router
+			init: function () { layout.render("#app"); }
+		});
+		router.route("/", function () {
+			// Show root view
+			layout.showIn("#content", rootView);
+		});
+		router.route("about", function () {
+			// Show "about" view
+			layout.showIn("#content", aboutView);
+		});
+		// Note that the next route contains a parameter (customer ID)
+		router.route("customer/:id", function (id) {
+			// Get customer data using OData
+			$.ajax({
+				url: "http://services.odata.org/Northwind/Northwind.svc/Customers?$filter=CustomerID eq '" + id + "'",
+				headers: { Accept: "application/json" }
+			}).then(function (result) {
+				// Check if customer was found
+				if (result.value.length == 0) {
+					layout.showIn("#content", customerNotFoundView);
+				}
+				else {
+					// Update customer model and display customer view (contains data binding)
+					customerModel.set("customer", result.value[0]);
+					layout.showIn("#content", customerView);
+				}
+			});
+		});
+		$(function () {
+			router.start();
+		});
+	</script>
+</body>
+</html>
