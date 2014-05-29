@@ -64,10 +64,13 @@
 		router.route("/", function () {
 			// Show root view
 			layout.showIn("#content", rootView);
+			// Set document title to make browser history more beautiful
+			document.title = "Home";
 		});
 		router.route("about", function () {
 			// Show "about" view
 			layout.showIn("#content", aboutView);
+			document.title = "About";
 		});
 		// Note that the next route contains a parameter (customer ID)
 		router.route("customer/:id", function (id) {
@@ -79,11 +82,13 @@
 				// Check if customer was found
 				if (result.value.length == 0) {
 					layout.showIn("#content", customerNotFoundView);
+					document.title = "Customer not found";
 				}
 				else {
 					// Update customer model and display customer view (contains data binding)
 					customerModel.set("customer", result.value[0]);
 					layout.showIn("#content", customerView);
+					document.title = "Customer " + customerModel.customer.CompanyName;
 				}
 			});
 		});
