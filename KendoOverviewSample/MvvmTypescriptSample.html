@@ -25,6 +25,7 @@
 	<!-- Local sources -->
 	<script src="Scripts/KendoUICore/jquery.min.js"></script>
 	<script src="Scripts/KendoUICore/kendo.ui.core.min.js"></script>
+	<script src="MvvmTypescriptSample.js"></script>
 </head>
 <body>
 	<form id="registrationForm">
@@ -45,42 +46,6 @@
 				data-bind="enabled: isValid, click: register">Register</button>
 	</form>
 
-	<script>
-		// Setup the view model.
-		var viewModel = kendo.observable({
-			// List of available salutations
-			availableSalutations: ["Mr.", "Ms."],
-
-			// List of current fields entered by the user
-			salutation: "Mr.",
-			name: "Max Muster",
-			birthday: new Date(1970, 4, 1)
-		});
-		// Calculated values and functions
-		viewModel.set("age", function () {
-			// Note that it is extremely important to use the "get" method here. If
-			// you access "viewModel.birthday" without "get", Kendo would not recognize
-			// that "age" depends on the "birthday" field.
-			var ageDifMs = Date.now() - viewModel.get("birthday").getTime();
-			var ageDate = new Date(ageDifMs);
-			return Math.abs(ageDate.getUTCFullYear() - 1970);
-		});
-		viewModel.set("isValid", function () {
-			return viewModel.get("age")() >= 18;
-		});
-		viewModel.set("register", function () {
-			if (viewModel.get("isValid")()) {
-				alert("Registering ...");
-			}
-		});
-
-		// Setup Kendo controls
-		$("#salutation").kendoComboBox();
-		$("#birthday").kendoDatePicker();
-		$("#register").kendoButton();
-
-		// Bind form to the view model
-		kendo.bind($("#registrationForm"), viewModel);
-	</script>
+	<script src="MvvmTypescriptSample.js"></script>
 </body>
 </html>
