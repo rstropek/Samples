@@ -39,6 +39,7 @@
 		<!-- Binding using a date picker -->
 		<label for="birthday">Birthday:</label>
 		<input id="birthday" data-bind="value: birthday" />
+		<p>So you are <span data-bind="text: age()"></span> year(s) old.</p>
 		
 		<!-- Note that we bind the "enabled" state as well as the click handler -->
 		<button id="register" type="button" class="register" 
