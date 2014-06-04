@@ -1,0 +1,6 @@
+*.js
+*.js.map
+*.d.ts
+*.css
+*.map
+version.json

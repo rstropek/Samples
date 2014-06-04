@@ -14,6 +14,9 @@ packages
 # Fakes
 *fakes*
 
+#node
+node_modules/
+
 # User-specific files
 *.suo
 *.user
