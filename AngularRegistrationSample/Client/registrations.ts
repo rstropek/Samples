@@ -31,13 +31,13 @@ class Registration implements IRegistration {
 }
 
 
-interface IViewModel extends ng.IScope {
+interface IRegistrationsViewModel extends ng.IScope {
 	registrations: Array<IRegistration>;
 	refresh: () => void;
 }
 
-class ViewModel {
-	constructor($scope: IViewModel, $http: ng.IHttpService, private logger: ILogger) {
+class RegistrationsViewModel {
+	constructor($scope: IRegistrationsViewModel, $http: ng.IHttpService, private logger: ILogger) {
 		$scope.registrations = new Array<IRegistration>();
 		$scope.refresh = () => {
 			logger.log("Requesting...");

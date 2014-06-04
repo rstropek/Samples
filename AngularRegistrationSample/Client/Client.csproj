@@ -25,7 +25,7 @@
     <Content Include="Content\ng-grid.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
-    <Content Include="registration.html" />
+    <Content Include="register.html" />
     <Content Include="registrations.html" />
     <Content Include="packages.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -319,7 +319,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="index.ts" />
-    <TypeScriptCompile Include="registration.ts" />
+    <TypeScriptCompile Include="register.ts" />
     <TypeScriptCompile Include="registrations.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />

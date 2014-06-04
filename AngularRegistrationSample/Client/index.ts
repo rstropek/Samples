@@ -1,13 +1,13 @@
 ﻿angular.module("RegistrationApp", ["ngRoute"])
 	.factory("logger", () => new DefaultLogger())
-	.controller("RegistrationController", ViewModel)
-	.controller("RegistrationController2", RegistrationViewModel)
+	.controller("RegistrationsController", RegistrationsViewModel)
+	.controller("RegisterController", RegisterViewModel)
 	.config(($routeProvider: ng.route.IRouteProvider) => {
 		$routeProvider
 			.when("/registrations", {
-				templateUrl: "registrations.html", controller: "RegistrationController"
+				templateUrl: "registrations.html", controller: "RegistrationsController"
 			})
-			.when("/registration", {
-				templateUrl: "registration.html", controller: "RegistrationController2"
+			.when("/register", {
+				templateUrl: "register.html", controller: "RegisterController"
 			});
 	});
