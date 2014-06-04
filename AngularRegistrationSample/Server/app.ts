@@ -36,33 +36,20 @@ registrations.push(
 // Setup express
 var app = express();
 app.use(bodyParser());
+app.use(express.static("../Client"));
 
 // Uncommend this line to demo basic auth
 // app.use(express.basicAuth((user, password) => user == "user2" && password == "password"));
 
-// Allow CORS for debugging purposes
-app.all("/*", function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-	res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
-	return next();
-});
-app.all("/api/*", function (req, res, next) {
-	if (req.method.toLowerCase() !== "options") {
-		return next();
-	}
-	return res.send(204);
-});
-
 
 // Implement web API
-app.get("/registrations", (req, res) => {
+app.get("/api/registrations", (req, res) => {
 	// Get all registrations
 	res.send(registrations);
 });
 
 // Register
-app.post("/register", (req, res) => {
+app.post("/api/register", (req, res) => {
 	var registration = new Registration(<IRegistration>req.body);
 	if (registration.isValid()) {
 		registrations.push(registration);
