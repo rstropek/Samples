@@ -1,0 +1,22 @@
+﻿<h1>Registration Sample</h1>
+
+<form role="form" style="max-width: 300px;">
+	<div class="form-group">
+		<label for="salutation">Salution:</label>
+		<select class="form-control" ng-model="salutation">
+			<option value="Mr." ng-selected="salutation=='Mr.'">Mr.</option>
+			<option value="Ms." ng-selected="salutation=='Ms.'">Ms.</option>
+		</select>
+		<div class="form-group">
+			<label for="name">Name:</label>
+			<input type="text" class="form-control" placeholder="Name" ng-model="name" />
+		</div>
+		<div class="form-group">
+			<label for="name">Age:</label>
+			<input type="text" class="form-control" placeholder="Age" ng-model="age" />
+		</div>
+		<button type="button" class="btn btn-primary" ng-click="save()">Register</button>
+	</div>
+</form>
+
+<p>Do you want to view <a href="#/">registrations</a>?</p>
