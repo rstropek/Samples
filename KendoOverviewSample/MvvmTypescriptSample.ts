@@ -10,7 +10,7 @@ class MvvmSampleViewModel extends kendo.data.ObservableObject {
 
 	// List of fields as entered by the user
 	public salutation = "Mr.";
-	public name = "Max Muster";
+	public name = "Max Muster2";
 	public birthday = new Date(1970, 4, 1);
 
 	// Calculated fields
@@ -52,4 +52,5 @@ $("#birthday").kendoDatePicker();
 $("#register").kendoButton();
 
 // Bind form to the view model
-kendo.bind(
+kendo.bind($("#registrationForm"), new MvvmSampleViewModel());
+
