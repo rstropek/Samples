@@ -51,7 +51,7 @@ This sample script can be used to demonstrate various topics concerning Visual S
 	4. tsd query angular-route –a install
 	5. tsd query AzureMobileServicesClient –a install
 3. Change default.ts to use TypeScript
-	1. /// <reference path="./typings/jquery/jquery.d.ts" /> function sayHello() { $("#target").html("<h1>Hello World</h1>"); }
+	1. `/// <reference path="./typings/jquery/jquery.d.ts" /> function sayHello() { $("#target").html("<h1>Hello World</h1>"); }`
 4. Show IntelliSense based on .d.ts
 
 5. Remove default.* demo files
