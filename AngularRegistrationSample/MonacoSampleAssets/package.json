@@ -4,6 +4,8 @@
   "devDependencies": {
     "grunt": "",
     "grunt-contrib-watch": "",
-    "grunt-typescript": ""
+    "grunt-typescript": "",
+    "grunt-contrib-concat": "",
+    "grunt-jasmine-node": ""
   }
 }
