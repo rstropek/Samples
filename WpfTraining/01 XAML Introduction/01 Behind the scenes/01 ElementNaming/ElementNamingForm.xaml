@@ -1,0 +1,15 @@
+﻿<Window x:Class="ElementNaming.ElementNamingForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="ElementNaming" Height="125" Width="225" >
+  <StackPanel Orientation="Vertical" Margin="10,10,10,10">
+    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+      <TextBox x:Name="Variable_X" Width="50"/>
+      <TextBlock>*</TextBlock>
+      <TextBox x:Name="Variable_Y" Width="50"/>
+      <TextBlock>=</TextBlock>
+      <TextBox x:Name="Result" IsEnabled="False" Width="50"/>
+    </StackPanel>
+    <Button x:Name="Calculate" Click="OnCalculate_Click">Calculate</Button>
+  </StackPanel>
+</Window>
