@@ -1,0 +1,31 @@
+﻿<Window x:Class="NamespaceSample.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="NamespaceSample" Height="262" Width="423"
+    >
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="2*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<ListBox Name="lstPages" Grid.Column="0" Grid.Row="0" SelectedIndex="0" ItemContainerStyle="{StaticResource MenuListBoxItem}" Style="{StaticResource MenuListBox}" >
+			<ListBoxItem>Array</ListBoxItem>
+			<ListBoxItem>Class</ListBoxItem>
+			<ListBoxItem>Code</ListBoxItem>
+			<ListBoxItem>Navigation</ListBoxItem>
+			<ListBoxItem>Null</ListBoxItem>
+			<ListBoxItem>Space</ListBoxItem>
+			<ListBoxItem>Static</ListBoxItem>
+			<ListBoxItem>Text</ListBoxItem>
+			<ListBoxItem>XData</ListBoxItem>
+			<ListBoxItem>XmlNamespace</ListBoxItem>
+		</ListBox>
+
+		<Frame Padding="10" Grid.Column="1" Grid.Row="0" Name="frmContent" NavigationUIVisibility="Hidden" Source="Pages/Array.xaml" />
+	</Grid>
+</Window>

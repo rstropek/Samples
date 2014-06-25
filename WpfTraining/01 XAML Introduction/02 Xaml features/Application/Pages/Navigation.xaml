@@ -1,0 +1,8 @@
+﻿<Page x:Class="NamespaceSample.Pages.Navigation"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Navigation">
+	<StackPanel>
+		<Button x:Name="btnNavigate" Content="Navigate" />
+	</StackPanel>
+</Page>

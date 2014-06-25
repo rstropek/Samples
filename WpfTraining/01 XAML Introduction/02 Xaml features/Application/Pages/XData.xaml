@@ -1,0 +1,31 @@
+﻿<Page x:Class="NamespaceSample.Pages.XData"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="XData"
+    >
+	<Page.Resources>
+		<XmlDataProvider x:Key="books" XPath="Books">
+			<x:XData>
+				<Books xmlns="">
+					<Book ISBN="978-3-939084-40-2" Stock="in">
+						<Title>Visual C# Programmierhandbuch</Title>
+					</Book>
+					<Book ISBN="978-3-935042-91-8" Stock="in">
+						<Title>XML Standards</Title>
+					</Book>
+					<Book ISBN="978-3-935042-85-7" Stock="out">
+						<Title>SQL Server 2005</Title>
+					</Book>
+				</Books>
+			</x:XData>
+		</XmlDataProvider>	   
+	</Page.Resources>
+
+	<ListBox ItemsSource="{Binding Source={StaticResource books}, XPath=Book[@Stock\=\'in\']}">
+		<ListBox.ItemTemplate>
+			<DataTemplate>
+				<TextBlock Text="{Binding XPath=Title}" />
+			</DataTemplate>
+		</ListBox.ItemTemplate>
+	</ListBox>
+</Page>

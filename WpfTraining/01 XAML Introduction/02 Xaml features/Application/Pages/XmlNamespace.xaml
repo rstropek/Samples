@@ -1,0 +1,16 @@
+﻿<Page x:Class="NamespaceSample.Pages.XmlNamespace"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:txt="http://schemas.karin.com/winfx"
+    Title="XmlNamespace">
+	<StackPanel>
+		<Button>
+			<txt:ButtonText Text="My Button" Repeat="3" />
+		</Button>
+		<ListBox>
+			<txt:ListBoxText Text="ListBoxItem1" Repeat="1" />
+			<txt:ListBoxText Text="ListBoxItem2" Repeat="2" />
+			<txt:ListBoxText Text="ListBoxItem3" Repeat="3" />
+		</ListBox>
+	</StackPanel>
+</Page>

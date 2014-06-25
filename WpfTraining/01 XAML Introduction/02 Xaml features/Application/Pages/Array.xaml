@@ -1,0 +1,14 @@
+﻿<Page x:Class="NamespaceSample.Pages.Array"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Title="Array">
+	<Page.Resources>
+		<x:Array Type="{x:Type sys:String}" x:Key="listItems">
+			<sys:String>Array</sys:String>
+			<sys:String>Sample</sys:String>
+		</x:Array>
+	</Page.Resources>
+
+	<ListBox ItemsSource="{StaticResource listItems}" />
+</Page>
