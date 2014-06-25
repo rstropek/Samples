@@ -1,0 +1,57 @@
+<Page 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Page.Resources>
+    <Style TargetType="{x:Type Image}">
+      <Setter Property="BitmapEffect">
+        <Setter.Value>
+          <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" 
+            Softness="1" Opacity="0"/>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="LayoutTransform">
+        <Setter.Value>
+          <ScaleTransform ScaleX="1" ScaleY="1"/>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="Margin" Value="10,15,10,15"/>
+      <Style.Triggers>
+        <Trigger Property="IsMouseOver" Value="True">
+          <Trigger.EnterActions>
+            <BeginStoryboard>
+              <Storyboard>
+                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX" 
+                  To="1.1" Duration="0:0:0.2"/>
+                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" 
+                  To="1.1" Duration="0:0:0.2"/>
+                <DoubleAnimation Storyboard.TargetProperty="BitmapEffect.Opacity" 
+                  To="0.75" Duration="0:0:0.2"/>
+              </Storyboard>
+            </BeginStoryboard>
+          </Trigger.EnterActions>
+          <Trigger.ExitActions>
+            <BeginStoryboard>
+              <Storyboard>
+                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleX" 
+                  To="1" Duration="0:0:0.2"/>
+                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" 
+                  To="1" Duration="0:0:0.2"/>
+                <DoubleAnimation Storyboard.TargetProperty="BitmapEffect.Opacity" 
+                  To="0" Duration="0:0:0.2"/>
+              </Storyboard>
+            </BeginStoryboard>
+          </Trigger.ExitActions>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </Page.Resources>
+  <WrapPanel Margin="5,5,5,5">
+    <Image Height="200" Source="..\eichkaetzchen.jpg"/>
+    <Image Height="200" Source="..\enten.jpg"/>
+    <Image Height="200" Source="..\muellkatze.jpg"/>
+    <Image Height="200" Source="..\pedro.jpg"/>
+    <Image Height="200" Source="..\Schillerfalter.jpg"/>
+    <Image Height="200" Source="..\Schmetterling.jpg"/>
+    <Image Height="200" Source="..\Gelse.jpg"/>
+  </WrapPanel>
+</Page>

@@ -66,7 +66,7 @@ extensions, type converters, content properties, etc. in custom classes.
 
 ## Using Dependency Properties
 
-This set of stand-alone XAML pages demonstrate various applications of dependency
+This set of stand-alone XAML pages demonstrates various applications of dependency
 properties like resources, data binding, styling, etc. You can run the XAML pages
 e.g. in Internet Explorer.
 
@@ -93,6 +93,39 @@ This sample contains various small examples for data bindings. It covers:
 * Use of `UpdateSourceTrigger`
 * Use of `CompositeCollection`
 * Binding and notification (`INotifyPropertyChanged`, `ObservableCollection`, etc.)
+
+# UI Design With WPF and XAML
+
+## Simple XAML Sources
+
+This set of stand-alone XAML pages demonstrates some basics about WPF UI design
+(e.g. grid, flow document, canvas, panels, etc.).
+
+## Adorner
+
+I use this sample in trainings if people are interested in how to use adorners.
+
+## Styles and Templates
+
+This is again a larger sample. It consists of many pages each demonstrating a different
+aspect of styling and templating. It covers for instance:
+
+* Styles (default styles, named style, style inheritance, etc.)
+* Triggers (data triggers, event triggers, etc.)
+* Simple animations
+* Data templates
+* Data template selector
+* Control templates
+
+## Step Panel
+
+This sample demonstrates a very simple custom panel. I use it to discuss the role of
+`MeasureOverride` and `ArrangeOverride`.
+
+## Lookless Control
+
+This sample has been created by my colleague Karin. It shows how to implement a custom
+control with a control templates that you can override.
 
 
 

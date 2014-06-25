@@ -1,0 +1,10 @@
+<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Page.Resources>
+    <PathGeometry x:Key="MyPath" Figures="M0,0 H100 V100 L0,0z"/>
+  </Page.Resources>
+  <StackPanel Orientation="Horizontal">
+    <Path Data="{StaticResource MyPath}" Fill="Blue"/>
+    <Path Data="{StaticResource MyPath}" Fill="Green"/>
+  </StackPanel>
+</Page>

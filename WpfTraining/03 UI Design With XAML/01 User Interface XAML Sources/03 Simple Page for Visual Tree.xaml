@@ -1,0 +1,9 @@
+<Page 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Title="VisualTreeWatcher" Height="200" Width="300">
+  <StackPanel x:Name="MyStackPanel" Margin="10">
+    <TextBlock x:Name="MyTextBlock" Text="My TextBlock" />
+    <TextBox x:Name="MyTextBox" Text="My TextBox" />
+  </StackPanel>
+</Page>

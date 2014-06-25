@@ -1,0 +1,68 @@
+<Page 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+mc:Ignorable="PresentationOptions">
+  <Page.Resources>
+    <PathGeometry x:Key="Curve" 
+      Figures="M0,0 H50 V50 H100 V100 H150 V150 H200 V200" 
+      PresentationOptions:Freeze="True">
+      <PathGeometry.Transform>
+        <TranslateTransform X="11" Y="11"/>
+      </PathGeometry.Transform>
+    </PathGeometry>
+    <Pen x:Key="Pen" Brush="Black" Thickness="1"
+      PresentationOptions:Freeze="True"/>
+  </Page.Resources>
+  <Canvas>
+    <Image>
+      <Image.Source>
+        <DrawingImage>
+          <DrawingImage.Drawing>
+            <DrawingGroup>
+              <!-- Draw background rectangle -->
+              <DrawingGroup PresentationOptions:Freeze="True">
+                <GeometryDrawing Brush="LightGray">
+                  <GeometryDrawing.Geometry>
+                    <RectangleGeometry Rect="0,0,222,222"/>
+                  </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <!-- Draw curve on which the stone is moving -->
+                <GeometryDrawing Geometry="{StaticResource Curve}" 
+                  Pen="{StaticResource Pen}" />
+              </DrawingGroup>
+              <!-- Draw the stone that will move -->
+              <GeometryDrawing Pen="{StaticResource Pen}">
+                <GeometryDrawing.Geometry>
+                  <EllipseGeometry RadiusX="10" RadiusY="10" Center="11,11">
+                    <EllipseGeometry.Transform>
+                      <TranslateTransform x:Name="StonePosition" X="0" Y="0"/>
+                    </EllipseGeometry.Transform>
+                  </EllipseGeometry>
+                </GeometryDrawing.Geometry>
+              </GeometryDrawing>
+            </DrawingGroup>
+          </DrawingImage.Drawing>
+        </DrawingImage>
+      </Image.Source>
+    </Image>
+    <Canvas.Triggers>
+      <EventTrigger RoutedEvent="Canvas.Loaded">
+        <BeginStoryboard>
+          <Storyboard PresentationOptions:Freeze="True">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="StonePosition" 
+              Storyboard.TargetProperty="Y">
+              <DiscreteDoubleKeyFrame KeyTime="0:0:1" Value="50"/>
+              <DiscreteDoubleKeyFrame KeyTime="0:0:2" Value="100"/>
+              <DiscreteDoubleKeyFrame KeyTime="0:0:3" Value="150"/>
+              <DiscreteDoubleKeyFrame KeyTime="0:0:4" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimation To="200" Duration="0:0:4" 
+              Storyboard.TargetName="StonePosition" Storyboard.TargetProperty="X"/>
+          </Storyboard>
+        </BeginStoryboard>
+      </EventTrigger>
+    </Canvas.Triggers>
+  </Canvas>
+</Page>

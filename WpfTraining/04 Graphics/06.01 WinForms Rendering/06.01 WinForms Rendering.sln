@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.01 WinForms Rendering", "06.01 WinForms Rendering.csproj", "{E6536B02-5B44-4AC7-870E-223301C96FCC}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://silver:8080/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = 06.01\u0020WinForms\u0020Rendering.csproj
+		SccLocalPath1 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6536B02-5B44-4AC7-870E-223301C96FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6536B02-5B44-4AC7-870E-223301C96FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6536B02-5B44-4AC7-870E-223301C96FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6536B02-5B44-4AC7-870E-223301C96FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

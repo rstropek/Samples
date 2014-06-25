@@ -1,0 +1,44 @@
+﻿<Window x:Class="StylesAndTemplates.FileList"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Title="Styles and Templates" 
+Height="300" Width="500"
+>
+	<Window.CommandBindings>
+		<CommandBinding Command="NavigationCommands.GoToPage" Executed="GoToPageExecuted" CanExecute="GoToPageCanExecute" />
+	</Window.CommandBindings>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Menu Grid.Column="0" Grid.Row="0">
+			<MenuItem Header="File Lists">
+				<MenuItem Header="Simple FileList" CommandParameter="Pages/FileList1.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with Styles per Type" CommandParameter="Pages/FileList2.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with named Styles" CommandParameter="Pages/FileList3.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with inherited Styles" CommandParameter="Pages/FileList4.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with Trigger" CommandParameter="Pages/FileList5.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with DataTrigger" CommandParameter="Pages/FileList6.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with Trigger and Animatinos" CommandParameter="Pages/FileList7.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with EventTrigger" CommandParameter="Pages/FileList8.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with DataTemplate" CommandParameter="Pages/FileList9.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with DataTemplate and Trigger" CommandParameter="Pages/FileList10.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with DataTemplate for SelectedItems" CommandParameter="Pages/FileList11.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with DataTemplateSelector" CommandParameter="Pages/FileList12.xaml" Command="NavigationCommands.GoToPage" />
+                <MenuItem Header="Button with DataTemplate" CommandParameter="Pages/FileList13.xaml" Command="NavigationCommands.GoToPage" />
+                <MenuItem Header="Button with ControlTemplate" CommandParameter="Pages/FileList14.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="Button with TemplateBinding" CommandParameter="Pages/FileList15.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with DataTemplate" CommandParameter="Pages/FileList16.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="FileList with ItemsPanelTemplate" CommandParameter="Pages/FileList17.xaml" Command="NavigationCommands.GoToPage" />
+				<MenuItem Header="EventSetter" CommandParameter="Pages/FileList18.xaml" Command="NavigationCommands.GoToPage" />
+			</MenuItem>
+		</Menu>
+
+		<Frame NavigationUIVisibility="Hidden" x:Name="frmContent" Grid.Column="0" Grid.Row="1" Source="Pages/FileList1.xaml" />
+	</Grid>
+</Window>

@@ -1,0 +1,34 @@
+<Page
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"> 
+  <Path Stroke="Black" StrokeThickness="1" Fill="SteelBlue">
+    <Path.Data>
+      <PathGeometry>
+        <PathGeometry.Figures>
+          <PathFigureCollection>
+            <PathFigure StartPoint="20,20">
+              <PathFigure.Segments>
+                <PathSegmentCollection>
+                  <LineSegment Point="70,20" />
+                  <LineSegment Point="70,70" />
+                  <LineSegment Point="20,70" />
+                  <LineSegment Point="20,20" />
+                </PathSegmentCollection>
+              </PathFigure.Segments>
+            </PathFigure>
+            <PathFigure StartPoint="100,20">
+              <PathFigure.Segments>
+                <PathSegmentCollection>
+                  <LineSegment Point="150,20" />
+                  <LineSegment Point="150,70" />
+                  <LineSegment Point="100,70" />
+                  <LineSegment Point="100,20" />
+                </PathSegmentCollection>
+              </PathFigure.Segments>
+            </PathFigure>
+          </PathFigureCollection>
+        </PathGeometry.Figures>
+      </PathGeometry>
+    </Path.Data>
+  </Path>
+</Page>

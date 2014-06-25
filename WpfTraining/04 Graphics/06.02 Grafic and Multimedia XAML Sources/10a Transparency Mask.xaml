@@ -1,0 +1,39 @@
+<Page 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Canvas Grid.Row="0">
+      <Rectangle Fill="Black" Width="500" Height="200">
+        <Rectangle.OpacityMask>
+          <LinearGradientBrush>
+            <GradientStop x:Name="OpacityTransparent" Color="#FF000000" 
+              Offset="1" />
+            <GradientStop x:Name="OpacityNonTransparent" Color="#00000000" 
+              Offset="1" />
+          </LinearGradientBrush>
+        </Rectangle.OpacityMask>
+      </Rectangle>
+    </Canvas>
+    <Button Grid.Row="1">
+      <Button.Triggers>
+        <EventTrigger RoutedEvent="Button.Click">
+          <BeginStoryboard>
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetName="OpacityTransparent" 
+                Storyboard.TargetProperty="Offset" 
+                From="1" To="0" Duration="0:0:2"/>
+              <DoubleAnimation Storyboard.TargetName="OpacityNonTransparent" 
+                Storyboard.TargetProperty="Offset" 
+                From="1" To="0" Duration="0:0:2" BeginTime="0:0:0.5"/>
+            </Storyboard>
+          </BeginStoryboard>
+        </EventTrigger>
+      </Button.Triggers>
+      Next Picture
+    </Button>
+  </Grid>
+</Page>

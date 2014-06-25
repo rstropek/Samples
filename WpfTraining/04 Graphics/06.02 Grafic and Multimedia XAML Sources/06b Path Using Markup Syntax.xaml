@@ -1,0 +1,6 @@
+<Page
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"> 
+  <Path Stroke="Black" StrokeThickness="1" Fill="SteelBlue"
+    Data="M20,20 H70 V70 H20 V20z M100,20 H150 V70 H100 V20 z"/>
+</Page>

@@ -1,0 +1,10 @@
+﻿<Window x:Class="Samples.Adorner.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Adorner" Height="300" Width="300"
+    >
+	<Canvas x:Name="moveElementsCanvas" Background="White">
+		<Rectangle Fill="LightGray" Canvas.Top="10" Canvas.Left="10" Width="100" Height="100" />
+		<Ellipse Fill="Gray" Canvas.Top="80" Canvas.Left="80" Width="120" Height="50" />
+	</Canvas>
+</Window>

@@ -1,0 +1,33 @@
+<Page 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Page.Resources>
+    <Style TargetType="{x:Type Image}">
+      <Setter Property="BitmapEffect">
+        <Setter.Value>
+          <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" 
+            Softness="1" Opacity="0.5"/>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="Margin" Value="10,15,10,15"/>
+      <Style.Triggers>
+        <Trigger Property="IsMouseOver" Value="True">
+          <Setter Property="Image.BitmapEffect">
+            <Setter.Value>
+              <OuterGlowBitmapEffect GlowColor="Orange" GlowSize="30" />
+            </Setter.Value>
+          </Setter>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </Page.Resources>
+  <WrapPanel Margin="5,5,5,5">
+    <Image Height="200" Source="..\eichkaetzchen.jpg"/>
+    <Image Height="200" Source="..\enten.jpg"/>
+    <Image Height="200" Source="..\muellkatze.jpg"/>
+    <Image Height="200" Source="..\pedro.jpg"/>
+    <Image Height="200" Source="..\Schillerfalter.jpg"/>
+    <Image Height="200" Source="..\Schmetterling.jpg"/>
+    <Image Height="200" Source="..\Gelse.jpg"/>
+  </WrapPanel>
+</Page>

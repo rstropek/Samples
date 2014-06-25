@@ -1,0 +1,84 @@
+<Page 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+mc:Ignorable="PresentationOptions">
+  <Page.Resources>
+    <Point x:Key="P0" X="0" Y="300" PresentationOptions:Freeze="True"/>
+    <Point x:Key="P1" X="50" Y="0" PresentationOptions:Freeze="True"/>
+    <Point x:Key="P2" X="500" Y="200" PresentationOptions:Freeze="True"/>
+    <Pen x:Key="TrackPen" Brush="Gray" Thickness="1" 
+      PresentationOptions:Freeze="True"/>
+    <Pen x:Key="CurvePen" Brush="Red" Thickness="2" 
+      PresentationOptions:Freeze="True"/>
+    <Pen x:Key="MovingPointer" Brush="Black" Thickness="2" 
+      PresentationOptions:Freeze="True"/>
+    <PathGeometry x:Key="Bezier" PresentationOptions:Freeze="True">
+      <PathGeometry.Figures>
+        <PathFigureCollection>
+          <PathFigure StartPoint="{StaticResource P0}">
+            <PathFigure.Segments>
+              <PathSegmentCollection>
+                <QuadraticBezierSegment Point1="{StaticResource P1}" 
+                  Point2="{StaticResource P2}" />
+              </PathSegmentCollection>
+            </PathFigure.Segments>
+          </PathFigure>
+        </PathFigureCollection>
+      </PathGeometry.Figures>
+    </PathGeometry>
+  </Page.Resources>
+  <Canvas>
+    <Image>
+      <Image.Source>
+        <DrawingImage>
+          <DrawingImage.Drawing>
+            <DrawingGroup>
+              <GeometryDrawing Pen="{StaticResource TrackPen}" 
+                PresentationOptions:Freeze="True">
+                <GeometryDrawing.Geometry>
+                  <GeometryGroup>
+                    <LineGeometry StartPoint="{StaticResource P0}" 
+                      EndPoint="{StaticResource P1}"/>
+                    <LineGeometry StartPoint="{StaticResource P1}" 
+                      EndPoint="{StaticResource P2}"/>
+                  </GeometryGroup>
+                </GeometryDrawing.Geometry>
+              </GeometryDrawing>
+              <GeometryDrawing Pen="{StaticResource CurvePen}" 
+                Geometry="{StaticResource Bezier}" 
+                PresentationOptions:Freeze="True"/>
+              <GeometryDrawing Pen="{StaticResource MovingPointer}">
+                <GeometryDrawing.Geometry>
+                  <PathGeometry x:Name="Pointer">
+                    <PathFigure StartPoint="0,0">
+                      <LineSegment Point="75,0"/>
+                      <LineSegment Point="70,5"/>
+                      <LineSegment Point="70,-5"/>
+                      <LineSegment Point="75,0"/>
+                    </PathFigure>
+                    <PathGeometry.Transform>
+                      <MatrixTransform x:Name="PointerPosition"/>
+                    </PathGeometry.Transform>
+                  </PathGeometry>
+                </GeometryDrawing.Geometry>
+              </GeometryDrawing>
+            </DrawingGroup>
+          </DrawingImage.Drawing>
+        </DrawingImage>
+      </Image.Source>
+    </Image>
+    <Canvas.Triggers>
+      <EventTrigger RoutedEvent="Canvas.Loaded">
+        <BeginStoryboard>
+          <Storyboard>
+            <MatrixAnimationUsingPath Storyboard.TargetName="PointerPosition"
+              Storyboard.TargetProperty="Matrix" Duration="0:0:5" 
+              PathGeometry="{StaticResource Bezier}" DoesRotateWithTangent="True"/>
+          </Storyboard>
+        </BeginStoryboard>
+      </EventTrigger>
+    </Canvas.Triggers>
+  </Canvas>
+</Page>
