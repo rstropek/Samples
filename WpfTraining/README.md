@@ -62,4 +62,37 @@ following topics:
 I use this sample in WPF trainings to show how to implement XAML concepts like markup
 extensions, type converters, content properties, etc. in custom classes.
 
+# Data Bindings
+
+## Using Dependency Properties
+
+This set of stand-alone XAML pages demonstrate various applications of dependency
+properties like resources, data binding, styling, etc. You can run the XAML pages
+e.g. in Internet Explorer.
+
+## Free Space Watcher
+
+I use this sample in WPF trainings to demonstrate how to implement custom dependency
+properties. `02 FreeSpaceWatcher - Step 1` is a simple implementation while 
+`03 FreeSpaceWatcher - Step 2` adds a user control with dependency properties.
+`04 FreeSpaceWatcher - Step 3` finally adds a timer and multiple UI threads in a 
+single WPF application.
+
+## Data Binding Scenarios
+
+This sample contains various small examples for data bindings. It covers:
+
+* `ElementName` bindings
+* Binding to XML using XPath
+* Binding to objects in resources
+* `OneWayToSource`
+* Binding to the result of a method using `ObjectDataProvider`
+* Binding to collections
+* Binding to ADO.NET
+* Binding validation
+* Use of `UpdateSourceTrigger`
+* Use of `CompositeCollection`
+* Binding and notification (`INotifyPropertyChanged`, `ObservableCollection`, etc.)
+
+
 

@@ -1,0 +1,53 @@
+<Page
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"> 
+  <Grid Margin="5,5,5,5" HorizontalAlignment="Center">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <CheckBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" 
+      x:Name="Authenticate" Content="Authenticate with User and Password">
+      <CheckBox.Triggers>
+        <EventTrigger RoutedEvent="CheckBox.Checked">
+          <BeginStoryboard>
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="User" 
+                Storyboard.TargetProperty="Background.Color"
+                To="Yellow" Duration="0:0:1"/> 
+              <ColorAnimation Storyboard.TargetName="Password" 
+                Storyboard.TargetProperty="Background.Color" 
+                To="Yellow" Duration="0:0:1"/> 
+            </Storyboard>
+          </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="CheckBox.Unchecked">
+          <BeginStoryboard>
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="User" 
+                Storyboard.TargetProperty="Background.Color"
+                To="White" Duration="0:0:1"/> 
+              <ColorAnimation Storyboard.TargetName="Password" 
+                Storyboard.TargetProperty="Background.Color" 
+                To="White" Duration="0:0:1"/> 
+            </Storyboard>
+          </BeginStoryboard>
+        </EventTrigger>
+      </CheckBox.Triggers>
+    </CheckBox>
+
+    <Label Grid.Column="0" Grid.Row="1" 
+      HorizontalAlignment="Right">User:</Label>
+    <TextBox Grid.Column="1" Grid.Row="1" Text="User" x:Name="User"/>
+
+    <Label Grid.Column="0" Grid.Row="2" 
+      HorizontalAlignment="Right">Password:</Label>
+    <TextBox Grid.Column="1" Grid.Row="2" x:Name="Password"/>
+  </Grid>
+</Page>

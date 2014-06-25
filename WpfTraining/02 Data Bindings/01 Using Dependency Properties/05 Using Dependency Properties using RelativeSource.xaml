@@ -1,0 +1,16 @@
+<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <Canvas Width="300" Height="200" Background="Black">
+    <Ellipse Canvas.Top="0" Canvas.Left="0" Fill="LightGray"
+    Height="{Binding Path=Height, 
+    RelativeSource={RelativeSource Mode=FindAncestor, 
+      AncestorType=Canvas}}">
+      <Ellipse.Width>
+        <Binding Path="Width">
+          <Binding.RelativeSource>
+            <RelativeSource Mode="FindAncestor" AncestorType="Canvas"/>
+          </Binding.RelativeSource>
+        </Binding>
+      </Ellipse.Width>
+    </Ellipse>
+  </Canvas>
+</Page>

@@ -1,0 +1,27 @@
+<UserControl x:Class="Samples.RatioPieChart"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Width="100" Height="100">
+	<Canvas Width="100" Height="100">
+		<Path Stroke="Black" StrokeThickness="1" Fill="Green">
+			<Path.Data>
+				<PathGeometry>
+					<PathFigure StartPoint="50,50" IsClosed="True" IsFilled="True">
+						<LineSegment Point="50,0"/>
+						<ArcSegment Size="50,50" Point="{Binding Path=Point}" SweepDirection="Clockwise" IsLargeArc="{Binding Path=IsLargeArcRatio}"/>
+					</PathFigure>
+				</PathGeometry>
+			</Path.Data>
+		</Path>
+		<Path Stroke="Black" StrokeThickness="1" Fill="Blue">
+			<Path.Data>
+				<PathGeometry>
+					<PathFigure StartPoint="50,50" IsClosed="True" IsFilled="True">
+						<LineSegment Point="{Binding Path=Point}"/>
+						<ArcSegment Size="50,50" Point="50,0" SweepDirection="Clockwise" IsLargeArc="{Binding Path=IsLargeArcRest}"/>
+					</PathFigure>
+				</PathGeometry>
+			</Path.Data>
+		</Path>
+	</Canvas>
+</UserControl>

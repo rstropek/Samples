@@ -1,0 +1,26 @@
+﻿<Window x:Class="FreeSpaceWatcher.DispatcherQueue"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Dispatch Queue Monitor" Height="135" Width="325"
+    >
+	<Grid Margin="5,5,5,5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+
+		<Label FontWeight="Bold" Margin="2,2,2,7" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Dispatcher Queue Monitor</Label>
+
+		<Label Grid.Row="1" Grid.Column="0">Total number of posted operations:</Label>
+		<TextBox HorizontalContentAlignment="Right" Margin="2,2,2,2" Grid.Row="1" Grid.Column="1" IsEnabled="False" x:Name="OperationsTotal" Text="{Binding Path=TotalOperationsCounter}"/>
+
+		<Label Grid.Row="2" Grid.Column="0">Posted operations in the last second:</Label>
+		<TextBox HorizontalContentAlignment="Right" Margin="2,2,2,2" Grid.Row="2" Grid.Column="1" IsEnabled="False" x:Name="OperationsPerSecond" Text="{Binding Path=OperationsPerSecondCounter}"/>
+	</Grid>
+</Window>
+

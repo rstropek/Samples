@@ -1,0 +1,63 @@
+﻿<Window x:Class="Samples.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:y="clr-namespace:Samples"
+    Title="DataBindingSzenarios" Height="300" Width="550"
+    >
+	<Window.Resources>
+		<x:Array Type="{x:Type y:Szenario}" x:Key="Szenarios">
+			<y:Szenario Description="Eigenschaft zweier Controls aneinander binden."
+						SourceUri="BindTwoControls.xaml"/>
+			<y:Szenario Description="Eigenschaft an ein Objekt in den Ressourcen binden."
+						SourceUri="BindToObjectInResource.xaml"/>
+			<y:Szenario Description="Eigenschaft an das Ergebnis einer Methode binden."
+						SourceUri="BindToMethodResult.xaml"/>
+			<y:Szenario Description="Data Binding an eine Collection."
+						SourceUri="BindToCollection.xaml"/>
+			<y:Szenario Description="Data Binding an eine ändernde Collection."
+						SourceUri="DataBindingNotification.xaml"/>
+			<y:Szenario Description="Master/Detail Data Bindings."
+						SourceUri="MasterDetailBinding.xaml"/>
+			<y:Szenario Description="Mehrere Collections in einem Binding kombinieren."
+						SourceUri="CombineCollectionsInBinding.xaml"/>
+			<y:Szenario Description="Data Binding mit ADO.NET."
+						SourceUri="BindToADO.xaml"/>
+			<y:Szenario Description="Data Binding mit XML."
+						SourceUri="BindToXml.xaml"/>
+			<y:Szenario Description="OneWayToSource Data Binding."
+						SourceUri="BindToSource.xaml"/>
+			<y:Szenario Description="Binding Expressions"
+						SourceUri="BindingExpressions.xaml"/>
+            <y:Szenario Description="Validation"
+						SourceUri="BindingValidation.xaml"/>
+        </x:Array>
+
+		<DataTemplate DataType="{x:Type y:Szenario}">
+			<TextBlock Text="{Binding Path=Description}"/>
+		</DataTemplate>
+
+		<Style TargetType="Grid">
+			<Setter Property="Margin" Value="5,5,5,5"/>
+		</Style>
+		<Style TargetType="Frame">
+			<Setter Property="Margin" Value="0,5,0,0"/>
+		</Style>
+	</Window.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<Label Grid.Column="0" Grid.Row="0">Sample Szenario:</Label>
+		<ComboBox Grid.Column="1" Grid.Row="0" x:Name="SzenarioSelector" ItemsSource="{StaticResource Szenarios}"/>
+
+		<Frame Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" x:Name="ContentFrame"
+			   Source="{Binding ElementName=SzenarioSelector, Path=SelectedItem.SourceUri}"
+			   NavigationUIVisibility="Hidden" />
+	</Grid>
+</Window>

@@ -1,0 +1,77 @@
+﻿<Page x:Class="Samples.MasterDetailBinding"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:sysio="clr-namespace:System.IO;assembly=mscorlib"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Title="MasterDetailBinding"
+    >
+	<Page.Resources>
+		<ObjectDataProvider
+		  ObjectType="{x:Type sysio:DirectoryInfo}"
+		  MethodName="GetFiles" x:Key="Files">
+			<ObjectDataProvider.ConstructorParameters>
+				<sys:String>c:\</sys:String>
+			</ObjectDataProvider.ConstructorParameters>
+		</ObjectDataProvider>
+		<DataTemplate x:Key="Details">
+			<Grid Background="LightBlue">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="200"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="200"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock Grid.Column="0" Grid.Row="0" Margin="2,2,0,2"
+				  FontWeight="Bold" Text="{Binding Path=Name}"/>
+				<TextBlock Grid.Column="0" Grid.Row="1" Margin="2,0,2,0"
+				  Text="Created at"/>
+				<TextBlock Grid.Column="1" Grid.Row="1"
+				  Text="{Binding Path=CreationTime}"/>
+				<TextBlock Grid.Column="2" Grid.Row="1" Margin="0,0,2,0"
+				  Text="Last access at"/>
+				<TextBlock Grid.Column="3" Grid.Row="1"
+				  Text="{Binding Path=LastAccessTime}"/>
+				<TextBlock Grid.Column="0" Grid.Row="2" Margin="2,0,2,0"
+				  Text="Is read only?"/>
+				<TextBlock Grid.Column="1" Grid.Row="2"
+				  Text="{Binding Path=IsReadOnly}"/>
+				<TextBlock Grid.Column="2" Grid.Row="2" Margin="2,0,2,2"
+				  Text="Directory"/>
+				<TextBlock Grid.Column="3" Grid.Row="2"
+				  Text="{Binding Path=Directory}"/>
+			</Grid>
+		</DataTemplate>
+	</Page.Resources>
+	<Grid Margin="2,2,2,2">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Label Grid.Column="0" Grid.Row="0">Directory:</Label>
+		<TextBox Grid.Column="1" Grid.Row="0"
+		  Margin="0,2,0,2"
+		  Text="{Binding 
+			Source={StaticResource Files}, 
+			Path=ConstructorParameters[0], 
+			BindsDirectlyToSource=true}"/>
+		<Label Grid.Column="0" Grid.Row="1">Files:</Label>
+		<ListBox Grid.Column="1" Grid.Row="1"
+		  Margin="0,2,0,2"
+		  ItemsSource="{Binding Source={StaticResource Files}}"
+		  IsSynchronizedWithCurrentItem="true"/>
+		<ContentControl Grid.Column="1" Grid.Row="2"
+		  Margin="0,2,0,2"
+		  Content="{Binding Source={StaticResource Files}}"
+		  ContentTemplate="{StaticResource Details}"/>
+	</Grid>
+</Page>

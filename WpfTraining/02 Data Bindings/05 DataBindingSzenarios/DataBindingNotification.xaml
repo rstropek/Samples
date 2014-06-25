@@ -1,0 +1,44 @@
+﻿<Page x:Class="Samples.DataBindingNotification"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  	xmlns:y="clr-namespace:Samples"
+    >
+	<Page.Resources>
+		<y:Person x:Key="Person" FirstName="Rainer" LastName="Stropek"/>
+		<y:NotifyingPerson x:Key="NotifyingPerson" FirstName="Rainer" LastName="Stropek"/>
+		<Style TargetType="{x:Type StackPanel}">
+			<Setter Property="Margin" Value="2,2,2,2"/>
+		</Style>
+	</Page.Resources>
+	<StackPanel Orientation="Vertical">
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Vertical">
+				<Label FontWeight="Bold">Listbox with "List"</Label>
+				<ListBox x:Name="ListListbox"/>
+				<Button x:Name="AddPersonListListbox">Add Person</Button>
+			</StackPanel>
+			<StackPanel Orientation="Vertical">
+				<Label FontWeight="Bold">Listbox with "ObservableList"</Label>
+				<ListBox x:Name="ObservableListListbox"/>
+				<Button x:Name="AddPersonObservableListListbox">Add Person</Button>
+			</StackPanel>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Vertical">
+				<StackPanel.DataContext>
+					<Binding x:Name="PersonBinding" Source="{StaticResource Person}"/>
+				</StackPanel.DataContext>
+				<Label FontWeight="Bold">Standard CLR-Object</Label>
+				<TextBlock Text="{Binding Path=FirstName}"/>
+				<TextBlock Text="{Binding Path=LastName}"/>
+				<Button x:Name="ChangePerson">Change Person</Button>
+			</StackPanel>
+			<StackPanel Orientation="Vertical" DataContext="{Binding Source={StaticResource NotifyingPerson}}">
+				<Label FontWeight="Bold">CLR-Object with INotifyPropertyChanged</Label>
+				<TextBlock Text="{Binding Path=FirstName}"/>
+				<TextBlock Text="{Binding Path=LastName}"/>
+				<Button x:Name="ChangeNotifyingPerson">Change Person</Button>
+			</StackPanel>
+		</StackPanel>
+	</StackPanel>
+</Page>
