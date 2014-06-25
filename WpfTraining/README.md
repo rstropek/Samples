@@ -41,3 +41,25 @@ the XAML file during runtime.
 embed C# code in XAML. Note that this is not a recommended approach. However, it 
 typically helps to understand what's going on in the background during XAML compilation.
 
+## XAML Features
+
+This sample demonstrates different aspects of the XAML programming language. It covers the
+following topics:
+
+* `x:Array`
+* `x:Class`
+* `x:Code`
+* Page Functions
+* `{x:Null}`
+* `xml:space="preserve"`
+* `{x:Static}`
+* Content Properties
+* `x:XData`
+* Custom XML Namespaces (`XmlnsDefinition`)
+
+## TV Listings
+
+I use this sample in WPF trainings to show how to implement XAML concepts like markup
+extensions, type converters, content properties, etc. in custom classes.
+
+

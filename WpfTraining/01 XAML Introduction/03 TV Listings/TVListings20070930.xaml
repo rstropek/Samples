@@ -1,0 +1,32 @@
+﻿<TVListings
+	x:Class="Samples.TVListings20070930"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns="clr-namespace:Samples">
+	<Channel Name="ProSieben">
+		<MotionPicture Name="King Arthur" TVListings.StartTime="20:15" ImdbInfo="{ImdbInfo tt0349683}">
+			<MotionPicture.Actors>
+				<Person FirstName="Clive" LastName="Owen" />
+				<Person FirstName="Ioan" LastName="Gruffudd" />
+				<Person FirstName="Ray" LastName="Winstone" />
+			</MotionPicture.Actors>
+			<MotionPicture.Directors>
+				<Person FirstName="Antoine" LastName="Fuqua" />
+			</MotionPicture.Directors>
+		</MotionPicture>
+		<MotionPicture Name="Bad Boys - Harte Jungs" TVListings.StartTime="22:50" ImdbInfo="{ImdbInfo tt0112442}"
+		Actors="Martin Lawrence, Will Smith, Tea Leoni, Tcheky Karyo" Directors="Michael Bay"/>
+	</Channel>
+	<Channel Name="RTL">
+		<MotionPicture Name="X-Men 2" TVListings.StartTime="20:15" ImdbInfo="{ImdbInfo tt0290334}"
+		Actors="Patrick Stewart, Hugh Jackman, Ian MyKellen, Halle Berry" Directors="Bryan Singer" />
+		<Broadcast Name="Spiegel TV Magazin" TVListings.StartTime="22:25" />
+		<Broadcast Name="Muskelspiele - Deutschlands stärkste Männer" TVListings.StartTime="23:40" />
+	</Channel>
+	<Channel Name="Sat.1">
+		<Broadcast Name="Navy CIS" TVListings.StartTime="20:15" />
+		<Broadcast Name="Ciminal Minds" TVListings.StartTime="21:15" />
+		<Broadcast Name="Sechserpack" TVListings.StartTime="22:15" />
+		<Broadcast Name="Planetopia" TVListings.StartTime="22:45" />
+		<Broadcast Name="News und Stories" TVListings.StartTime="23:35" />
+	</Channel>
+</TVListings>
