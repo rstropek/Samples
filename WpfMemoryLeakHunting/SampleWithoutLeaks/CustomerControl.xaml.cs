@@ -1,7 +1,4 @@
-﻿// Note that this example CONTAINS MEMORY LEAKS. I use it in workshops to show how you can use
-// memory profilers to find typical .NET memory leaks.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
