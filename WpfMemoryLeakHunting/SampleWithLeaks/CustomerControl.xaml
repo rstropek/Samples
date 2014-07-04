@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="WpfApplication19.CustomerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel>
+		<ListBox Name="CustomersList" ItemsSource="{Binding Path=Customers}"
+				 DisplayMemberPath="LastName" DockPanel.Dock="Left" MinWidth="250" />
+		
+		<Grid Margin="5">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Text="Details:" FontSize="15" />
+			<TextBlock Text="{Binding ElementName=CustomersList, Path=SelectedItem.FirstName}" 
+					   Grid.Row="1" Margin="0,10,0,0" />
+			<TextBlock Text="{Binding ElementName=CustomersList, Path=SelectedItem.LastName}" 
+					   Grid.Row="2" />
+		</Grid>
+	</DockPanel>
+</UserControl>
