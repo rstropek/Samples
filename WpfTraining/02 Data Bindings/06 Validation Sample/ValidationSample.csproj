@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MaxValueValidationRule.cs" />
+    <Compile Include="QuantityConverter.cs" />
     <Compile Include="StringBuilderExtensions.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

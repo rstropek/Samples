@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ValidationSample
 {
@@ -85,24 +82,10 @@ namespace ValidationSample
 			get
 			{
 				var builder = new StringBuilder();
-				Action<string> appendSubError = (subError) =>
-				{
-					if (!string.IsNullOrWhiteSpace(subError))
-					{
-						if (builder.Length > 0)
-						{
-							builder.Append('\n');
-						}
-
-						builder.Append(subError);
-					}
-				};
-
-				appendSubError(this[() => this.CustomerName]);
-				appendSubError(this[() => this.ProductName]);
-				appendSubError(this[() => this.RebateCode]);
-				appendSubError(this[() => this.OrderQuantity]);
-
+				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.CustomerName]);
+				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.ProductName]);
+				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.RebateCode]);
+				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.OrderQuantity]);
 				return builder.ToString();
 			}
 		}

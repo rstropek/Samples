@@ -18,7 +18,7 @@
 				<Trigger Property="Validation.HasError" Value="true">
 					<Setter Property="ToolTip"
 							Value="{Binding RelativeSource={x:Static RelativeSource.Self},
-							Path=(Validation.Errors)[0].ErrorContent}"/>
+							Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
 				</Trigger>
 			</Style.Triggers>
 		</Style>
@@ -27,9 +27,8 @@
 		</Style>
 		<ControlTemplate x:Key="ErrorTemplate">
 			<Grid>
-				<Border Background="Red" HorizontalAlignment="Right"
-						VerticalAlignment="Center"
-						Margin="3" CornerRadius="5" MinWidth="15">
+				<Border Background="Red" HorizontalAlignment="Right" VerticalAlignment="Center" 
+						Margin="3" CornerRadius="5" MinWidth="15" ToolTip="{Binding Path=ErrorContent}">
 					<TextBlock Foreground="White" Text="!"
 							   FontWeight="Bold" HorizontalAlignment="Center"/>
 				</Border>
@@ -37,6 +36,7 @@
 			</Grid>
 		</ControlTemplate>
 		<local:ConcatConverter x:Key="ConcatConverter" />
+		<local:QuantityConverter x:Key="QuantityConverter" />
 	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -72,9 +72,10 @@
 		<TextBox Name="OrderQuantityTextBox" 
 				 Grid.Column="1" Grid.Row="3">
 			<TextBox.Text>
-				<Binding Path="OrderQuantity" ValidatesOnDataErrors="True">
+				<Binding Path="OrderQuantity" ValidatesOnDataErrors="True" Converter="{StaticResource QuantityConverter}"
+						 ValidatesOnExceptions="True">
 					<Binding.ValidationRules>
-						<local:MaxValueValidationRule Maximum="100" />
+						<local:MaxValueValidationRule Maximum="100" ValidationStep="ConvertedProposedValue" />
 					</Binding.ValidationRules>
 				</Binding>
 			</TextBox.Text>
@@ -83,10 +84,10 @@
 		<TextBlock Grid.Column="1" Grid.Row="4" Style="{StaticResource ErrorText}">
 			<TextBlock.Text>
 				<MultiBinding Converter="{StaticResource ConcatConverter}">
-					<Binding ElementName="CustomerNameTextBox" Path="(Validation.Errors)[0].ErrorContent" />
-					<Binding ElementName="ProductNameTextBox" Path="(Validation.Errors)[0].ErrorContent" />
-					<Binding ElementName="RebateCodeTextBox" Path="(Validation.Errors)[0].ErrorContent" />
-					<Binding ElementName="OrderQuantityTextBox" Path="(Validation.Errors)[0].ErrorContent" />
+					<Binding ElementName="CustomerNameTextBox" Path="(Validation.Errors).CurrentItem.ErrorContent" />
+					<Binding ElementName="ProductNameTextBox" Path="(Validation.Errors).CurrentItem.ErrorContent" />
+					<Binding ElementName="RebateCodeTextBox" Path="(Validation.Errors).CurrentItem.ErrorContent" />
+					<Binding ElementName="OrderQuantityTextBox" Path="(Validation.Errors).CurrentItem.ErrorContent" />
 				</MultiBinding>
 			</TextBlock.Text>
 		</TextBlock>
