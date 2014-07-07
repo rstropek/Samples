@@ -40,7 +40,7 @@ namespace ValidationSample
 						return result;
 					}
 
-					throw new ApplicationException("Value is not a number");
+					return null;
 			}
 		}
 	}

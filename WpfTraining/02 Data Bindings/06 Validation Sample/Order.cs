@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Linq;
 
 namespace ValidationSample
 {
@@ -46,6 +47,7 @@ namespace ValidationSample
 				{
 					this.RebateCodeValue = value;
 					this.RaisePropertyChanged();
+					this.RaisePropertyChanged(PropertyName(() => this.OrderQuantity));
 				}
 			}
 		}
@@ -60,6 +62,7 @@ namespace ValidationSample
 				{
 					this.OrderQuantityValue = value;
 					this.RaisePropertyChanged();
+					this.RaisePropertyChanged(PropertyName(() => this.RebateCode));
 				}
 			}
 		}
@@ -81,38 +84,26 @@ namespace ValidationSample
 		{
 			get
 			{
-				var builder = new StringBuilder();
-				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.CustomerName]);
-				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.ProductName]);
-				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.RebateCode]);
-				builder.AppendSeparatedIfNotEmpty('\n', this[() => this.OrderQuantity]);
-				return builder.ToString();
+				return new[] {
+					this[PropertyName(() => CustomerName)], 
+					this[PropertyName(() => ProductName)],
+					this[PropertyName(() => RebateCode)], 
+					this[PropertyName(() => OrderQuantity)]
+				}
+				.Distinct()
+				.Aggregate<string, StringBuilder, string>(
+					new StringBuilder(),
+					(builder, next) => { builder.AppendSeparatedIfNotEmpty('\n', next); return builder; },
+					builder => builder.ToString());
 			}
 		}
 
-		public string this[Expression<Func<object>> ex]
-		{
-			get
-			{
-				return this[Order.PropertyName(ex)];
-			}
-		}
-
-		private static string PropertyName(Expression<Func<object>> ex)
+		private static string PropertyName<T>(Expression<Func<T>> ex)
 		{
 			var lambda = ex as LambdaExpression;
 			if (lambda != null)
 			{
 				var memberAccess = lambda.Body as MemberExpression;
-				if (memberAccess == null)
-				{
-					var unary = lambda.Body as UnaryExpression;
-					if (unary != null)
-					{
-						memberAccess = unary.Operand as MemberExpression;
-					}
-				}
-
 				if (memberAccess != null)
 				{
 					return memberAccess.Member.Name;
