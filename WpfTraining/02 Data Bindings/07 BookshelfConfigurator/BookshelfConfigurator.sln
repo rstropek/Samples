@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookshelfConfigurator.Data"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookshelfConfigurator.ViewModel", "ViewModel\BookshelfConfigurator.ViewModel.csproj", "{13860F3D-A0E2-4D35-B01C-2638820798F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookshelfConfigurator_Step1", "Client - Step 1\BookshelfConfigurator_Step1.csproj", "{5488419E-5267-4DBD-AC72-67F0C63B854C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{13860F3D-A0E2-4D35-B01C-2638820798F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13860F3D-A0E2-4D35-B01C-2638820798F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13860F3D-A0E2-4D35-B01C-2638820798F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5488419E-5267-4DBD-AC72-67F0C63B854C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5488419E-5267-4DBD-AC72-67F0C63B854C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5488419E-5267-4DBD-AC72-67F0C63B854C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5488419E-5267-4DBD-AC72-67F0C63B854C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
