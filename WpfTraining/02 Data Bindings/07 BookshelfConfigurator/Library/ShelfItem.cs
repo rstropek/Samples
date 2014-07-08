@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace BookshelfConfigurator.Data
 {
-	public class ShelfItem : NotificationObject
+	public class ShelfItem : NotificationObject/*, IDataErrorInfo*/, INotifyDataErrorInfo
 	{
 		private ElementHeight HeightValue;
 		public ElementHeight Height
@@ -34,6 +34,7 @@ namespace BookshelfConfigurator.Data
 				{
 					this.WidthValue = value;
 					this.RaisePropertyChanged();
+					this.RaiseErrorsChanged();
 				}
 			}
 		}
@@ -62,6 +63,7 @@ namespace BookshelfConfigurator.Data
 				{
 					this.NumberOfShelfsValue = value;
 					this.RaisePropertyChanged();
+					this.RaiseErrorsChanged();
 				}
 			}
 		}
@@ -92,6 +94,86 @@ namespace BookshelfConfigurator.Data
 
 		private void OnParentChanged(object _, PropertyChangedEventArgs ea)
 		{
+			this.RaiseErrorsChanged(NotificationObject.PropertyName(() => this.Width));
 		}
+
+		#region IDataErrorInfo implementation
+		public string Error
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public string this[string columnName]
+		{
+			get
+			{
+				var maxNumberOfShelfs = ElementDimension.MaximumNumberOfShelfs(this.Height);
+				if (columnName == NotificationObject.PropertyName(() => this.NumberOfShelfs))
+				{
+					if (this.NumberOfShelfs > maxNumberOfShelfs)
+					{
+						return string.Format("Too many shelfs; maximum for this height is {0}", maxNumberOfShelfs);
+					}
+				}
+				else if (columnName == NotificationObject.PropertyName(() => this.Width))
+				{
+					if (this.Width != this.Parent.Width)
+					{
+						return "Width of item does not fit to width of element";
+					}
+				}
+
+				return string.Empty;
+			}
+		}
+		#endregion
+
+		#region INotifyDataErrorInfo implementation
+		private void RaiseErrorsChanged([CallerMemberName]string propertyName = null)
+		{
+			if (this.ErrorsChanged != null)
+			{
+				this.ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+			}
+		}
+
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+		public IEnumerable GetErrors(string propertyName)
+		{
+			return this.GetErrorsImpl(propertyName);
+		}
+
+		private IList<string> GetErrorsImpl(string propertyName)
+		{
+			var result = new List<string>();
+			var maxNumberOfShelfs = ElementDimension.MaximumNumberOfShelfs(this.Height);
+			if (propertyName == NotificationObject.PropertyName(() => this.NumberOfShelfs))
+			{
+				if (this.NumberOfShelfs > maxNumberOfShelfs)
+				{
+					result.Add(string.Format("Too many shelfs; maximum for this height is {0}", maxNumberOfShelfs));
+				}
+			}
+			else if (propertyName == NotificationObject.PropertyName(() => this.Width))
+			{
+				if (this.Width != this.Parent.Width)
+				{
+					result.Add("Width of item does not fit to width of element");
+				}
+			}
+
+			return result;
+		}
+
+		public bool HasErrors
+		{
+			get
+			{
+				return this.GetErrorsImpl(NotificationObject.PropertyName(() => this.Width)).Count != 0
+					|| this.GetErrorsImpl(NotificationObject.PropertyName(() => this.NumberOfShelfs)).Count != 0;
+			}
+		}
+		#endregion
 	}
 }

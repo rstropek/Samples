@@ -10,6 +10,21 @@
 		<local:MainWindowViewModel />
 	</Window.DataContext>
 	<Window.Resources>
+		<ObjectDataProvider ObjectType="{x:Type sys:Enum}"
+							MethodName="GetValues" x:Key="WidthValues">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type Type="{x:Type data:ElementWidth}" />
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+
+		<ObjectDataProvider ObjectType="{x:Type sys:Enum}"
+							MethodName="GetValues" x:Key="HeightValues">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type TypeName="data:ElementHeight" />
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+
+
 		<Style TargetType="{x:Type TextBlock}">
 			<Setter Property="Margin" Value="0,0,3,0" />
 			<Setter Property="VerticalAlignment" Value="Center" />
@@ -31,7 +46,13 @@
 				<TextBlock Text="Elements" />
 			</Border>
 			<ListBox Name="ElementsSelector" ItemsSource="{Binding Path=Shelf.Elements}"
-					 HorizontalContentAlignment="Stretch" DisplayMemberPath="Width">
+					 HorizontalContentAlignment="Stretch">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<ComboBox ItemsSource="{Binding Source={StaticResource WidthValues}}" 
+								  SelectedItem="{Binding Path=Width}" Margin="10,0,0,0"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
 			</ListBox>
 		</DockPanel>
 		<DockPanel Grid.Row="1"> 
@@ -59,15 +80,17 @@
 				</Grid.RowDefinitions>
 				
 				<TextBlock Text="Width:" />
-				<ComboBox Grid.Column="1" SelectedItem="{Binding Path=Width}"  />
+				<ComboBox Grid.Column="1" SelectedItem="{Binding Path=Width, ValidatesOnDataErrors=True}"
+						  ItemsSource="{Binding Source={StaticResource WidthValues}, Mode=OneTime}" />
 
 				<TextBlock Text="Height:" Grid.Row="1" />
-				<ComboBox Grid.Column="1" Grid.Row="1" SelectedItem="{Binding Path=Height}" />
+				<ComboBox Grid.Column="1" Grid.Row="1" SelectedItem="{Binding Path=Height}"
+						  ItemsSource="{Binding Source={StaticResource HeightValues}, Mode=OneTime}"/>
 				
 				<CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=HasDoor}">Has Door</CheckBox>
 
 				<TextBlock Text="Shelfs:" Grid.Row="3" />
-				<TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=NumberOfShelfs}" />
+				<TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=NumberOfShelfs, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
 			</Grid>
 		</DockPanel>
 		
