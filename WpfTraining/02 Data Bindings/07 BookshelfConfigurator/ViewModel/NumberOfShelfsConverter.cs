@@ -2,26 +2,27 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.ViewModel
 {
-	public class ElementHeightConverter : IValueConverter
+	public class NumberOfShelfsConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is ElementHeight)
+			if (value is int)
 			{
-				var height = (ElementHeight)value;
-
-				var zoomFactor = 1.0;
-				if (parameter != null)
+				var intValue = (int)value;
+				switch(intValue)
 				{
-					Double.TryParse(parameter.ToString(), out zoomFactor);
+					case 0:
+						return "No Shelfs";
+					case 1:
+						return "1 Shelf";
+					default:
+						return string.Format("{0} Shelfs", intValue);
 				}
-
-				return ElementDimension.HeightInCm(height) * zoomFactor;
 			}
 
-			return 0.0;
+			return string.Empty;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

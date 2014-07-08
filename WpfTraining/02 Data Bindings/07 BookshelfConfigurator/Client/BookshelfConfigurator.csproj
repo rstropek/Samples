@@ -54,17 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ElementDimension.cs" />
-    <Compile Include="ElementHeight.cs" />
-    <Compile Include="ElementWidth.cs" />
-    <Compile Include="ElementHeightConverter.cs" />
-    <Compile Include="ElementWidthConverter.cs" />
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="NotificationObject.cs" />
-    <Compile Include="NumberOfShelfsConverter.cs" />
-    <Compile Include="Shelf.cs" />
-    <Compile Include="ShelfElement.cs" />
-    <Compile Include="ShelfItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,6 +94,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Library\BookshelfConfigurator.Data.csproj">
+      <Project>{13f9bc5e-bd47-4f13-b31d-26b63b4d220c}</Project>
+      <Name>BookshelfConfigurator.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewModel\BookshelfConfigurator.ViewModel.csproj">
+      <Project>{13860f3d-a0e2-4d35-b01c-2638820798f1}</Project>
+      <Name>BookshelfConfigurator.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

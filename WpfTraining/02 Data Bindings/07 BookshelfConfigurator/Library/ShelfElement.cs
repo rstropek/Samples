@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.Data
 {
 	public class ShelfElement : NotificationObject
 	{

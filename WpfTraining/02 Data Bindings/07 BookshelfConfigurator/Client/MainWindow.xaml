@@ -1,6 +1,8 @@
 ﻿<Window x:Class="BookshelfConfigurator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:data="clr-namespace:BookshelfConfigurator.Data;assembly=BookshelfConfigurator.Data"
+		xmlns:vm="clr-namespace:BookshelfConfigurator.ViewModel;assembly=BookshelfConfigurator.ViewModel"
 		xmlns:local="clr-namespace:BookshelfConfigurator"
 		xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="MainWindow" Height="350" Width="525">
@@ -11,21 +13,21 @@
 		<!-- Provides the values of the ElementWidth enum for data binding -->
 		<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="WidthValues">
 			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="local:ElementWidth" />
+				<x:Type TypeName="data:ElementWidth" />
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 		
 		<!-- Provides the values of the ElementHeight enum for data binding -->
 		<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="HeightValues">
 			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="local:ElementHeight" />
+				<x:Type TypeName="data:ElementHeight" />
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 
 		<!-- Some converter -->
-		<local:ElementWidthConverter x:Key="ElementWidthConverter" />
-		<local:ElementHeightConverter x:Key="ElementHeightConverter" />
-		<local:NumberOfShelfsConverter x:Key="NumberOfShelfsConverter" />
+		<vm:ElementWidthConverter x:Key="ElementWidthConverter" />
+		<vm:ElementHeightConverter x:Key="ElementHeightConverter" />
+		<vm:NumberOfShelfsConverter x:Key="NumberOfShelfsConverter" />
 
 		<ControlTemplate x:Key="ErrorTemplate">
 			<Grid>

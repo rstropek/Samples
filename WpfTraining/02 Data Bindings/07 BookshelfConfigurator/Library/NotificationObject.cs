@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.Data
 {
 	public class NotificationObject : INotifyPropertyChanged
 	{

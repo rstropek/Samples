@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.Data
 {
 	public class ShelfItem : NotificationObject/*, IDataErrorInfo*/, INotifyDataErrorInfo
 	{

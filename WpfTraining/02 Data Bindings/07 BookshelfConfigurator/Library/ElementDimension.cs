@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.Data
 {
 	public static class ElementDimension
 	{

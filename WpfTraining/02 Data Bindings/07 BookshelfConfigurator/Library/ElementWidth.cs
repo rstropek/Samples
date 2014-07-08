@@ -1,4 +1,4 @@
-﻿namespace BookshelfConfigurator
+﻿namespace BookshelfConfigurator.Data
 {
 	public enum ElementWidth
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.Data
 {
 	public class Shelf : NotificationObject
 	{

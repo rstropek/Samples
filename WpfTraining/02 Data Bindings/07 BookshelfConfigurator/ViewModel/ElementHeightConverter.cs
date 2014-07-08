@@ -1,16 +1,17 @@
-﻿using System;
+﻿using BookshelfConfigurator.Data;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BookshelfConfigurator
+namespace BookshelfConfigurator.ViewModel
 {
-	public class ElementWidthConverter : IValueConverter
+	public class ElementHeightConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is ElementWidth)
+			if (value is ElementHeight)
 			{
-				var width = (ElementWidth)value;
+				var height = (ElementHeight)value;
 
 				var zoomFactor = 1.0;
 				if (parameter != null)
@@ -18,7 +19,7 @@ namespace BookshelfConfigurator
 					Double.TryParse(parameter.ToString(), out zoomFactor);
 				}
 
-				return ElementDimension.WidthInCm(width) * zoomFactor;
+				return ElementDimension.HeightInCm(height) * zoomFactor;
 			}
 
 			return 0.0;
