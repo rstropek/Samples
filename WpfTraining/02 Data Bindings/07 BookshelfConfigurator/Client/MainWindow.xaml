@@ -5,43 +5,15 @@
 		xmlns:vm="clr-namespace:BookshelfConfigurator.ViewModel;assembly=BookshelfConfigurator.ViewModel"
 		xmlns:local="clr-namespace:BookshelfConfigurator"
 		xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="600" Width="800">
 	<Window.DataContext>
 		<local:MainWindowViewModel />
 	</Window.DataContext>
 	<Window.Resources>
-		<!-- Provides the values of the ElementWidth enum for data binding -->
-		<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="WidthValues">
-			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="data:ElementWidth" />
-			</ObjectDataProvider.MethodParameters>
-		</ObjectDataProvider>
-		
-		<!-- Provides the values of the ElementHeight enum for data binding -->
-		<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="HeightValues">
-			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="data:ElementHeight" />
-			</ObjectDataProvider.MethodParameters>
-		</ObjectDataProvider>
-
-		<!-- Some converter -->
-		<vm:ElementWidthConverter x:Key="ElementWidthConverter" />
-		<vm:ElementHeightConverter x:Key="ElementHeightConverter" />
-		<vm:NumberOfShelfsConverter x:Key="NumberOfShelfsConverter" />
-
-		<ControlTemplate x:Key="ErrorTemplate">
-			<Grid>
-				<TextBlock Text="!" Foreground="Red" HorizontalAlignment="Left" />
-				<AdornedElementPlaceholder />
-			</Grid>
-		</ControlTemplate>
-
-		<ControlTemplate x:Key="ErrorTemplate2">
-			<Grid>
-				<Path Data="M0,0 H20 L0,20z" Fill="Red" ToolTip="{Binding Path=ErrorContent}" />
-				<AdornedElementPlaceholder />
-			</Grid>
-		</ControlTemplate>
+		<Style TargetType="{x:Type TextBlock}">
+			<Setter Property="Margin" Value="0,0,3,0" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
 	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -58,39 +30,23 @@
 			<Border DockPanel.Dock="Top" Background="LightGray">
 				<TextBlock Text="Elements" />
 			</Border>
-			<ListBox Name="ElementsSelector" ItemsSource="{Binding Path=Shelf.Elements, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
-					 HorizontalContentAlignment="Stretch">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<ContentControl DataContext="{Binding ValidatesOnNotifyDataErrors=True}"
-										Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
-							<ComboBox ItemsSource="{Binding Source={StaticResource WidthValues}}" HorizontalAlignment="Left" Margin="10,0,0,0"
-									  SelectedItem="{Binding Path=Width, ValidatesOnNotifyDataErrors=False}"/>
-						</ContentControl>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
+			<ListBox Name="ElementsSelector" ItemsSource="{Binding Path=Shelf.Elements}"
+					 HorizontalContentAlignment="Stretch" DisplayMemberPath="Width">
 			</ListBox>
 		</DockPanel>
 		<DockPanel Grid.Row="1"> 
 			<Border DockPanel.Dock="Top" Background="LightGray">
 				<TextBlock Text="Items" />
 			</Border>
-			<ListBox Name="ItemSelector" ItemsSource="{Binding ElementName=ElementsSelector, Path=SelectedItem.Items, ValidatesOnNotifyDataErrors=False}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<ContentControl DataContext="{Binding ValidatesOnDataErrors=True}"
-										Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
-							<TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" Text="{Binding Path=Height}"/>
-						</ContentControl>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
+			<ListBox Name="ItemSelector" ItemsSource="{Binding ElementName=ElementsSelector, Path=SelectedItem.Items}"
+					 DisplayMemberPath="Height">
 			</ListBox>
 		</DockPanel>
 		<DockPanel Grid.Row="2">
 			<Border DockPanel.Dock="Top" Background="LightGray">
 				<TextBlock Text="Items" />
 			</Border>
-			<Grid DataContext="{Binding ElementName=ItemSelector, Path=SelectedItem}">
+			<Grid DataContext="{Binding ElementName=ItemSelector, Path=SelectedItem}" Margin="3">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -103,21 +59,20 @@
 				</Grid.RowDefinitions>
 				
 				<TextBlock Text="Width:" />
-				<ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource WidthValues}}"
-						  SelectedItem="{Binding Path=Width, ValidatesOnNotifyDataErrors=True}"  />
+				<ComboBox Grid.Column="1" SelectedItem="{Binding Path=Width}"  />
 
 				<TextBlock Text="Height:" Grid.Row="1" />
-				<ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Source={StaticResource HeightValues}}"
-						  SelectedItem="{Binding Path=Height}" />
+				<ComboBox Grid.Column="1" Grid.Row="1" SelectedItem="{Binding Path=Height}" />
 				
 				<CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=HasDoor}">Has Door</CheckBox>
 
 				<TextBlock Text="Shelfs:" Grid.Row="3" />
-				<TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=NumberOfShelfs, ValidatesOnNotifyDataErrors=True}" />
+				<TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=NumberOfShelfs}" />
 			</Grid>
 		</DockPanel>
 		
-		<ItemsControl ItemsSource="{Binding Path=Shelf.Elements}" Grid.Column="1" Grid.RowSpan="3">
+		<ItemsControl ItemsSource="{Binding Path=Shelf.Elements}" Grid.Column="1" Grid.RowSpan="3"
+					  HorizontalAlignment="Center" VerticalAlignment="Center">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
 					<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" />
@@ -125,46 +80,7 @@
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<ItemsControl ItemsSource="{Binding Path=Items}" VerticalAlignment="Bottom"
-								  MinWidth="{Binding Path=Width, Converter={StaticResource ElementWidthConverter}, ConverterParameter=1}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Border Height="{Binding Path=Height, Converter={StaticResource ElementHeightConverter}, ConverterParameter=1}"
-										Width="{Binding Path=Width, Converter={StaticResource ElementWidthConverter}, ConverterParameter=1}"
-										Validation.ErrorTemplate="{StaticResource ErrorTemplate2}"
-										BorderBrush="Brown" BorderThickness="3" HorizontalAlignment="Center">
-									<Border.Style>
-										<Style TargetType="{x:Type Border}">
-											<Style.Triggers>
-												<Trigger Property="IsMouseOver" Value="True">
-													<Setter Property="Background" Value="Yellow" />
-												</Trigger>
-											</Style.Triggers>
-										</Style>
-									</Border.Style>
-									<Viewbox>
-										<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-											<TextBlock Margin="3" HorizontalAlignment="Center" >
-												<TextBlock.Style>
-													<Style TargetType="{x:Type TextBlock}">
-														<Style.Triggers>
-															<DataTrigger Binding="{Binding Path=HasDoor}" Value="False">
-																<Setter Property="Text" Value="No Door" />
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Path=HasDoor}" Value="True">
-																<Setter Property="Text" Value="With Door" />
-															</DataTrigger>
-														</Style.Triggers>
-													</Style>
-												</TextBlock.Style>
-											</TextBlock>
-											<TextBlock Text="{Binding Path=NumberOfShelfs, Converter={StaticResource NumberOfShelfsConverter}}" 
-														   HorizontalAlignment="Center"/>
-										</StackPanel>
-									</Viewbox>
-								</Border>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
+					<ItemsControl ItemsSource="{Binding Path=Items}" VerticalAlignment="Bottom">
 					</ItemsControl>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>

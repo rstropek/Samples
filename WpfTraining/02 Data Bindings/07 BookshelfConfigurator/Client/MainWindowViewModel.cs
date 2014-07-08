@@ -15,13 +15,25 @@ namespace BookshelfConfigurator
 
 			var element = new ShelfElement();
 			element.Width = ElementWidth.Narrow;
-			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 0, HasDoor = false });
-			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = true });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = false });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 0, HasDoor = true });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 0, HasDoor = true });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = false });
 			this.Shelf.Elements.Add(element);
 
 			element = new ShelfElement();
-			element.Width = ElementWidth.Medium;
-			element.Items.Add(new ShelfItem() { Width = ElementWidth.Medium, Height = ElementHeight.High, NumberOfShelfs = 2, HasDoor = false });
+			element.Width = ElementWidth.Wide;
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Wide, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = false });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Wide, Height = ElementHeight.High, NumberOfShelfs = 0, HasDoor = false });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Wide, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = false });
+			this.Shelf.Elements.Add(element);
+
+			element = new ShelfElement();
+			element.Width = ElementWidth.Narrow;
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = false });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 0, HasDoor = true });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 0, HasDoor = true });
+			element.Items.Add(new ShelfItem() { Width = ElementWidth.Narrow, Height = ElementHeight.Small, NumberOfShelfs = 1, HasDoor = false });
 			this.Shelf.Elements.Add(element);
 		}
 
@@ -34,20 +46,6 @@ namespace BookshelfConfigurator
 				if (this.ShelfValue != value)
 				{
 					this.ShelfValue = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		private object SelectedObjectValue;
-		public object SelectedObject
-		{
-			get { return this.SelectedObjectValue; }
-			set
-			{
-				if (this.SelectedObjectValue != value)
-				{
-					this.SelectedObjectValue = value;
 					this.RaisePropertyChanged();
 				}
 			}
