@@ -54,7 +54,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TreeVisualization.xaml.cs">
+      <DependentUpon>TreeVisualization.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemsControlVisualization.xaml.cs">
+      <DependentUpon>ItemsControlVisualization.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindowViewModel.cs" />
+    <Page Include="TreeVisualization.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ItemsControlVisualization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +110,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BookshelfConfigurator.Controls\BookshelfConfigurator.Controls.csproj">
+      <Project>{97a0da6a-e057-40fb-928b-593c9725591a}</Project>
+      <Name>BookshelfConfigurator.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library\BookshelfConfigurator.Data.csproj">
       <Project>{13f9bc5e-bd47-4f13-b31d-26b63b4d220c}</Project>
       <Name>BookshelfConfigurator.Data</Name>

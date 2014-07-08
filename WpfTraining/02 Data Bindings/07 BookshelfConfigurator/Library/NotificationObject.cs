@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace BookshelfConfigurator.Data
 {
-	public class NotificationObject : INotifyPropertyChanged
+	public abstract class NotificationObject : INotifyPropertyChanged
 	{
 		protected static string PropertyName<T>(Expression<Func<T>> ex)
 		{
