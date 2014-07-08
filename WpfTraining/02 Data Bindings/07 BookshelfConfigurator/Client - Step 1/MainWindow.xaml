@@ -5,18 +5,23 @@
 		xmlns:vm="clr-namespace:BookshelfConfigurator.ViewModel;assembly=BookshelfConfigurator.ViewModel"
 		xmlns:local="clr-namespace:BookshelfConfigurator"
 		xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="600" Width="800">
 	<Window.DataContext>
 		<local:MainWindowViewModel />
 	</Window.DataContext>
 	<Window.Resources>
+		<Style TargetType="{x:Type TextBlock}">
+			<Setter Property="Margin" Value="0,0,3,0" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		
 		<!-- Provides the values of the ElementWidth enum for data binding -->
 		<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="WidthValues">
 			<ObjectDataProvider.MethodParameters>
 				<x:Type TypeName="data:ElementWidth" />
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
-		
+
 		<!-- Provides the values of the ElementHeight enum for data binding -->
 		<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="HeightValues">
 			<ObjectDataProvider.MethodParameters>
@@ -71,7 +76,7 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</DockPanel>
-		<DockPanel Grid.Row="1"> 
+		<DockPanel Grid.Row="1">
 			<Border DockPanel.Dock="Top" Background="LightGray">
 				<TextBlock Text="Items" />
 			</Border>
@@ -101,7 +106,7 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
-				
+
 				<TextBlock Text="Width:" />
 				<ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource WidthValues}}"
 						  SelectedItem="{Binding Path=Width, ValidatesOnNotifyDataErrors=True}"  />
@@ -109,14 +114,14 @@
 				<TextBlock Text="Height:" Grid.Row="1" />
 				<ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Source={StaticResource HeightValues}}"
 						  SelectedItem="{Binding Path=Height}" />
-				
+
 				<CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=HasDoor}">Has Door</CheckBox>
 
 				<TextBlock Text="Shelfs:" Grid.Row="3" />
 				<TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=NumberOfShelfs, ValidatesOnNotifyDataErrors=True}" />
 			</Grid>
 		</DockPanel>
-		
+
 		<ItemsControl ItemsSource="{Binding Path=Shelf.Elements}" Grid.Column="1" Grid.RowSpan="3">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
