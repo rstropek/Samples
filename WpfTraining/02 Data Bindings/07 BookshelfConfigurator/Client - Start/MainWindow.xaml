@@ -114,6 +114,9 @@
 			<TabItem Header="ItemsControl">
 				<v:ItemsControlVisualization />
 			</TabItem>
+			<TabItem Header="ListBox">
+				<v:ListBoxVisualization />
+			</TabItem>
 			<TabItem Header="TreeView">
 				<v:TreeVisualization />
 			</TabItem>

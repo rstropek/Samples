@@ -50,5 +50,19 @@ namespace BookshelfConfigurator
 				}
 			}
 		}
+
+		private ShelfItem SelectedShelfItemValue;
+		public ShelfItem SelectedShelfItem
+		{
+			get { return this.SelectedShelfItemValue; }
+			set
+			{
+				if (this.SelectedShelfItemValue != value)
+				{
+					this.SelectedShelfItemValue = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
 	}
 }

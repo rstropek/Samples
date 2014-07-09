@@ -57,6 +57,9 @@
     <Compile Include="ShelfControl.xaml.cs">
       <DependentUpon>ShelfControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ListBoxVisualization.xaml.cs">
+      <DependentUpon>ListBoxVisualization.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreeVisualization.xaml.cs">
       <DependentUpon>TreeVisualization.xaml</DependentUpon>
     </Compile>
@@ -67,6 +70,10 @@
     <Page Include="ShelfControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListBoxVisualization.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TreeVisualization.xaml">
       <Generator>MSBuild:Compile</Generator>
