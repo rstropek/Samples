@@ -19,12 +19,12 @@ namespace BookshelfConfigurator.Data
 			return string.Empty;
 		}
 
-		protected void RaisePropertyChanged<T>(Expression<Func<T>> ex)
+		protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> ex)
 		{
 			this.RaisePropertyChanged(NotificationObject.PropertyName(ex));
 		}
 
-		protected void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+		protected virtual void RaisePropertyChanged([CallerMemberName]string propertyName = null)
 		{
 			if (this.PropertyChanged != null)
 			{

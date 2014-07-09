@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeepNotificationObject.cs" />
     <Compile Include="ElementDimension.cs" />
     <Compile Include="ElementHeight.cs" />
     <Compile Include="ElementWidth.cs" />

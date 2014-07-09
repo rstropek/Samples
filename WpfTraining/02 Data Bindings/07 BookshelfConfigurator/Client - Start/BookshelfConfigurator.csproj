@@ -54,6 +54,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ShelfControl.xaml.cs">
+      <DependentUpon>ShelfControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreeVisualization.xaml.cs">
       <DependentUpon>TreeVisualization.xaml</DependentUpon>
     </Compile>
@@ -61,6 +64,10 @@
       <DependentUpon>ItemsControlVisualization.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowViewModel.cs" />
+    <Page Include="ShelfControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TreeVisualization.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

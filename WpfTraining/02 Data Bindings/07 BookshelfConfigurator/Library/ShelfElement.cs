@@ -1,36 +1,22 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 
 namespace BookshelfConfigurator.Data
 {
-	public class ShelfElement : NotificationObject
+	public class ShelfElement : DeepNotificationObject
 	{
 		public ShelfElement()
 		{
 			this.Items = new ObservableCollection<ShelfItem>();
-			this.Items.CollectionChanged += this.OnItemsChanged;
+			this.Items.CollectionChanged += (_, e) => this.HandleCollectionChanged<ShelfItem>(
+				e,
+				item => item.Parent = this,
+				item => item.Parent = null);
 		}
-
-		private void OnItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if (e.NewItems != null)
-			{
-				foreach (var item in e.NewItems.Cast<ShelfItem>())
-				{
-					item.Parent = this;
-				}
-			}
-
-			if (e.OldItems != null)
-			{
-				foreach (var item in e.OldItems.Cast<ShelfItem>())
-				{
-					item.Parent = null;
-				}
-			}
-		}
-
+	
 		private ElementWidth WidthValue;
 		public ElementWidth Width
 		{

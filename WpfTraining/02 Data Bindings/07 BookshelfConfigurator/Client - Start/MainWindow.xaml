@@ -111,11 +111,14 @@
 					  Width="2" Background="LightGray" />
 
 		<TabControl Grid.Column="1" Grid.RowSpan="3" Margin="10">
-			<TabItem Header="Visualization with ItemsControl">
+			<TabItem Header="ItemsControl">
 				<v:ItemsControlVisualization />
 			</TabItem>
-			<TabItem Header="Visualization with TreeView">
+			<TabItem Header="TreeView">
 				<v:TreeVisualization />
+			</TabItem>
+			<TabItem Header="UserControl">
+				<local:ShelfControl Bookshelf="{Binding Path=Shelf}" />
 			</TabItem>
 		</TabControl>
 	</Grid>
