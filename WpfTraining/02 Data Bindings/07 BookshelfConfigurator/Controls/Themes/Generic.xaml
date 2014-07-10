@@ -10,12 +10,12 @@
 					<Grid Background="{TemplateBinding Background}">
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup Name="ValueStates">
-								<VisualState Name="Invalid">
+								<VisualState Name="InvalidValue">
 									<Storyboard>
 										<ColorAnimation To="Red" Storyboard.TargetName="TextBlock" Storyboard.TargetProperty="(Foreground).(Color)"/>
 									</Storyboard>
 								</VisualState>
-								<VisualState Name="Valid"/>
+								<VisualState Name="ValidValue"/>
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 

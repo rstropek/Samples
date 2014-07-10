@@ -6,8 +6,8 @@ namespace BookshelfConfigurator.Controls
 {
 	[TemplatePart(Name = "UpButtonElement", Type = typeof(RepeatButton))]
 	[TemplatePart(Name = "DownButtonElement", Type = typeof(RepeatButton))]
-	[TemplateVisualState(Name = "Valid", GroupName = "ValueStates")]
-	[TemplateVisualState(Name = "Invalid", GroupName = "ValueStates")]
+	[TemplateVisualState(Name = "ValidValue", GroupName = "ValueStates")]
+	[TemplateVisualState(Name = "InvalidValue", GroupName = "ValueStates")]
 	public class NumericUpDown : Control
 	{
 		public NumericUpDown()
@@ -100,11 +100,11 @@ namespace BookshelfConfigurator.Controls
 		{
 			if (Value >= 0 && Value <= Maximum)
 			{
-				VisualStateManager.GoToState(this, "Valid", useTransitions);
+				VisualStateManager.GoToState(this, "ValidValue", useTransitions);
 			}
 			else
 			{
-				VisualStateManager.GoToState(this, "Invalid", useTransitions);
+				VisualStateManager.GoToState(this, "InvalidValue", useTransitions);
 			}
 		}
 
