@@ -32,16 +32,30 @@ namespace ODataFaq.SelfHostService
 		{
 			// Setup routes
 			var config = new HttpConfiguration();
-			SetupWebApiRoutes(config);
-			SetupOdataRoutes(config);
 
 			// Removing XML formatter, we just want to support JSON
 			config.Formatters.Remove(config.Formatters.XmlFormatter);
+			SetupWebApiRoutes(config);
+			SetupOdataRoutes(config);
 
 			// Setup simple OAuth2 server for Resource Owner Password Credentials Grant
 			SetupOauthServer(app);
 
 			app.UseWebApi(config);
+		}
+
+		private static void SetupWebApiRoutes(HttpConfiguration config)
+		{
+			config.Routes.MapHttpRoute(
+				name: "Customer",
+				routeTemplate: "api/Customer/{id}",
+				defaults: new { controller = "CustomerWebApi", id = RouteParameter.Optional }
+			);
+			config.Routes.MapHttpRoute(
+				name: "CustomerByCountry",
+				routeTemplate: "api/CustomerByCountry/{countryIsoCode}",
+				defaults: new { controller = "CustomerByCountryWebApi" }
+			);
 		}
 
 		private static void SetupOdataRoutes(HttpConfiguration config)
@@ -57,20 +71,6 @@ namespace ODataFaq.SelfHostService
 				routeName: "odata",
 				routePrefix: "odata",
 				model: builder.GetEdmModel());
-		}
-
-		private static void SetupWebApiRoutes(HttpConfiguration config)
-		{
-			config.Routes.MapHttpRoute(
-				name: "Customer",
-				routeTemplate: "api/Customer/{id}",
-				defaults: new { controller = "CustomerWebApi", id = RouteParameter.Optional }
-			);
-			config.Routes.MapHttpRoute(
-				name: "CustomerByCountry",
-				routeTemplate: "api/CustomerByCountry/{countryIsoCode}",
-				defaults: new { controller = "CustomerByCountryWebApi" }
-			);
 		}
 
 		private static void SetupOauthServer(IAppBuilder app)

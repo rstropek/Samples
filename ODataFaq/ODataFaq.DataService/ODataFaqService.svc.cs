@@ -1,12 +1,7 @@
 using ODataFaq.DataModel;
-using System;
-using System.Collections.Generic;
 using System.Data.Services;
 using System.Data.Services.Common;
 using System.Data.Services.Providers;
-using System.Linq;
-using System.ServiceModel.Web;
-using System.Web;
 
 namespace ODataFaq.DataService
 {
@@ -15,6 +10,7 @@ namespace ODataFaq.DataService
         public static void InitializeService(DataServiceConfiguration config)
         {
 			config.SetEntitySetAccessRule("*", EntitySetRights.AllRead);
+			config.SetEntitySetAccessRule("Customers", EntitySetRights.AllRead | EntitySetRights.WriteAppend);
             config.DataServiceBehavior.MaxProtocolVersion = DataServiceProtocolVersion.V3;
         }
     }
