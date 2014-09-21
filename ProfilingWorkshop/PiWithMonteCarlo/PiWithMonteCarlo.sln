@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiWithMonteCarlo", "PiWithM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiWithMonteCarlo.TestDriver", "..\PiWithMonteCarlo.TestDriver\PiWithMonteCarlo.TestDriver.csproj", "{F655A80C-E9FB-46A0-AB71-4A082F47EE68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiWithMonteCarloUI", "..\PiWithMonteCarloUI\PiWithMonteCarloUI.csproj", "{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,16 @@ Global
 		{F655A80C-E9FB-46A0-AB71-4A082F47EE68}.Release|ARM.ActiveCfg = Release|Any CPU
 		{F655A80C-E9FB-46A0-AB71-4A082F47EE68}.Release|x64.ActiveCfg = Release|Any CPU
 		{F655A80C-E9FB-46A0-AB71-4A082F47EE68}.Release|x86.ActiveCfg = Release|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Release|x64.ActiveCfg = Release|Any CPU
+		{E58EE3C7-CA00-4945-AED8-5C8B9FFC1FBA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

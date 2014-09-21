@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,74 +8,91 @@ namespace PiWithMonteCarlo
 {
 	public class PiCalculatorIntermediateResult
 	{
-		public PiCalculatorIntermediateResult(int iterations, double resultPi)
+		public PiCalculatorIntermediateResult(long iterations, double resultPi)
 		{
 			this.Iterations = iterations;
 			this.ResultPi = resultPi;
 		}
 
 		public double ResultPi { get; private set; }
-		public int Iterations { get; private set; }
+		public long Iterations { get; private set; }
 	}
 
+	/// <summary>
+	/// Async version of <see cref="FastPiCalculator"/>.
+	/// </summary>
 	public class FastPiAsyncCalculator
 	{
-		public static Task CalculateAsync(CancellationToken cancellationToken, ConcurrentQueue<PiCalculatorIntermediateResult> resultQueue)
+		public static async Task CalculateAsync(CancellationToken cancellationToken, 
+			Func<PiCalculatorIntermediateResult, Task> reportIntermediateResultAsyncCallback,
+			Func<Task> stoppedCallback)
 		{
-			const int timerCheckInterval = 100000;
-			var procCount = Environment.ProcessorCount;
-			return Task.Run(() =>
+			// Number of iterations after which we check if it is time to report results back to caller
+			const long timerCheckInterval = 100000;
+
+			// Reserve one thread for UI
+			var procCount = Environment.ProcessorCount - 1;
+			do
+			{
+				var watch = new Stopwatch();
+				watch.Start();
+
+				// One array slot per processor
+				var inCircleArray = new long[procCount];
+				var iterationsArray = new long[procCount];
+				var tasksArray = new Task[procCount];
+				for (var proc = 0; proc < procCount; proc++)
 				{
-					do
+					var procIndex = proc; // Helper for closure
+
+					// Start one task per processor
+					tasksArray[proc] = Task.Run(() =>
 					{
-						var watch = new Stopwatch();
-						watch.Start();
-
-						var inCircleArray = new int[procCount];
-						var iterationsArray = new int[procCount];
-						var tasksArray = new Task[procCount];
-						for (var proc = 0; proc < procCount; proc++)
+						long inCircleLocalCounter = 0;
+						long iterationsLocalCounter = 0;
+						var random = new Random(procIndex);
+						for (var index = 0; true; index++)
 						{
-							var procIndex = proc;
-							tasksArray[proc] = Task.Run(() =>
+							iterationsLocalCounter++;
+							double a, b;
+							if (Math.Sqrt((a = random.NextDouble()) * a + (b = random.NextDouble()) * b) <= 1)
 							{
-								var inCircleLocalCounter = 0;
-								var random = new Random(procIndex);
-								for (var index = 0; true; index++)
-								{
-									var a = random.NextDouble();
-									var b = random.NextDouble();
-									var c = Math.Sqrt(a * a + b * b);
-									if (c <= 1)
-									{
-										inCircleLocalCounter++;
-									}
+								inCircleLocalCounter++;
+							}
 
-									if (index >= timerCheckInterval)
+							if (index >= timerCheckInterval)
+							{
+								index = 0;
+								lock (watch)
+								{
+									if (watch.ElapsedMilliseconds >= 1000)
 									{
-										index = 0;
-										lock (watch)
-										{
-											if (watch.ElapsedMilliseconds >= 10000)
-											{
-												break;
-											}
-										}
+										// Every second we stop calculating and report result back
+										break;
 									}
 								}
-
-								inCircleArray[procIndex] = inCircleLocalCounter;
-							});
+							}
 						}
 
-						Task.WaitAll(tasksArray);
+						// public local counters in result array
+						inCircleArray[procIndex] = inCircleLocalCounter;
+						iterationsArray[procIndex] = iterationsLocalCounter;
+					});
+				}
 
-						var inCircle = inCircleArray.Sum();
-						var iterations = iterationsArray.Sum();
-						resultQueue.Enqueue(new PiCalculatorIntermediateResult(iterations, ((double)inCircle / iterations) * 4));
-					}
-					while (!cancellationToken.IsCancellationRequested);
-				});
+				// Wait until all processing tasks are done
+				await Task.WhenAll(tasksArray).ConfigureAwait(false);
+
+				// Report result back
+				var inCircle = inCircleArray.Sum();
+				var iterations = iterationsArray.Sum();
+				await reportIntermediateResultAsyncCallback(
+					new PiCalculatorIntermediateResult(iterations, ((double)inCircle / iterations) * 4));
+			}
+			while (!cancellationToken.IsCancellationRequested);
+
+			// Report end of calculation back to caller
+			await stoppedCallback();
 		}
 	}
 }

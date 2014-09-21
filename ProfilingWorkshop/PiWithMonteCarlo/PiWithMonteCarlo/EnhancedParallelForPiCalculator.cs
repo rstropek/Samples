@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PiWithMonteCarlo
 {
+	/// <summary>
+	/// Enhanced version of <see cref="ParallelForPiCalculator"/>.
+	/// </summary>
 	public static class EnhancedParallelForPiCalculator
 	{
 		public static double Calculate(int iterations)
@@ -15,15 +18,13 @@ namespace PiWithMonteCarlo
 			int inCircle = 0;
 			var random = new ThreadSafeRandom();
 
-			Parallel.For(0, iterations, 
+			Parallel.For(0, iterations,
+				// doesn't make sense to use more threads than we have processors
 				new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, 
 				() => 0, (i, _, tLocal) =>
 					{
-						var a = random.NextDouble();
-						var b = random.NextDouble();
-						var c = Math.Sqrt(a * a + b * b);
-						tLocal += c <= 1 ? 1 : 0;
-						return tLocal;
+						double a, b;
+						return tLocal += Math.Sqrt((a = random.NextDouble()) * a + (b = random.NextDouble()) * b) <= 1 ? 1 : 0;
 					},
 				subTotal => Interlocked.Add(ref inCircle, subTotal));
 

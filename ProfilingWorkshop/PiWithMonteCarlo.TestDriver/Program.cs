@@ -10,10 +10,10 @@ namespace PiWithMonteCarlo.TestDriver
 			var iterations = 20000000 * Environment.ProcessorCount;
 
 			ExecuteAndPrint("Trivial PI Calculator", TrivialPiCalculator.Calculate, iterations);
-			ExecuteAndPrint("(Stupid) Parallel.For PI Calculator", ParallelForPiCalculator.Calculate, iterations);
-			ExecuteAndPrint("Parallel.For PI Calculator", EnhancedParallelForPiCalculator.Calculate, iterations);
-			ExecuteAndPrint("PLinq PI Calculator", PlinqPiCalculator.Calculate, iterations);
-			ExecuteAndPrint("Fast PI Calculator", FastPiCalculator.Calculate, iterations);
+			ExecuteAndPrint("\n(Stupid) Parallel.For PI Calculator", ParallelForPiCalculator.Calculate, iterations);
+			ExecuteAndPrint("\nParallel.For PI Calculator", EnhancedParallelForPiCalculator.Calculate, iterations);
+			ExecuteAndPrint("\nPLinq PI Calculator", PlinqPiCalculator.Calculate, iterations);
+			ExecuteAndPrint("\nFast PI Calculator", FastPiCalculator.Calculate, iterations);
 		}
 
 		private static void ExecuteAndPrint(string label, Func<int, double> calculation, int iterations)

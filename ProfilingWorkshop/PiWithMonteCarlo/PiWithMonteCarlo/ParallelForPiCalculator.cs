@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace PiWithMonteCarlo
 {
+	/// <summary>
+	/// Very simple implementation with Parallel.For
+	/// </summary>
 	public static class ParallelForPiCalculator
 	{
 		public static double Calculate(int iterations)

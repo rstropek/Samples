@@ -17,23 +17,25 @@ namespace PiWithMonteCarlo
 				throw new ArgumentException("Must be a multiple of Environment.ProcessorCount", "iterations");
 			}
 
+			// Distribute iterations evenly across processors
 			var iterPerProc = iterations / procCount;
 
+			// One array slot per processor
 			var inCircleLocal = new int[procCount];
 			var tasks = new Task[procCount];
 			for (var proc = 0; proc < procCount; proc++)
 			{
-				var procIndex = proc;
+				var procIndex = proc; // Helper for closure
+
+				// Start one task per processor
 				tasks[proc] = Task.Run(() =>
 					{
 						var inCircleLocalCounter = 0;
 						var random = new Random(procIndex);
 						for (var index = 0; index < iterPerProc; index++)
 						{
-							var a = random.NextDouble();
-							var b = random.NextDouble();
-							var c = Math.Sqrt(a * a + b * b);
-							if (c <= 1)
+							double a, b;
+							if (Math.Sqrt((a = random.NextDouble()) * a + (b = random.NextDouble()) * b) <= 1)
 							{
 								inCircleLocalCounter++;
 							}

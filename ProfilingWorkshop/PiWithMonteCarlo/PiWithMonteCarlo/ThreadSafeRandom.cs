@@ -8,7 +8,7 @@ namespace PiWithMonteCarlo
 		private static Random _seed = new Random();
 
 		[ThreadStatic]
-		private static Random _local = new Random();
+		private static Random _local = null;
 
 		public double NextDouble()
 		{

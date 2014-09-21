@@ -2,6 +2,9 @@
 
 namespace PiWithMonteCarlo
 {
+	/// <summary>
+	/// Trivial, synchronous calculation algorithm
+	/// </summary>
     public static class TrivialPiCalculator
     {
 		public static double Calculate(int iterations)
@@ -12,6 +15,10 @@ namespace PiWithMonteCarlo
 			{
 				var a = random.NextDouble();
 				var b = random.NextDouble();
+
+				// Strictly speaking, we do not need Sqrt here. We could simply drop it and still get the
+				// same result. However, this sample should demonstrate some perf topics, too. Therefore
+				// it stays there just so the program has to do some math.
 				var c = Math.Sqrt(a * a + b * b);
 				if (c <= 1)
 				{
