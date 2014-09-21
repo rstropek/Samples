@@ -5,6 +5,7 @@
 PRINT 'Execution start time: <#= DateTime.UtcNow.ToString("O") #>';
 
 SELECT	p.LastName, p.FirstName, a.AddressLine1, a.AddressLine2, a.City, cr.Name as CountryRegionName
+		-- UPPER(p.LastName) AS UpperLastName, UPPER(p.FirstName) AS UpperFirstName
 FROM	Person.Person p
 		INNER JOIN Person.BusinessEntityContact bec on p.BusinessEntityID = bec.PersonID
 		INNER JOIN Person.BusinessEntity be on bec.BusinessEntityID = be.BusinessEntityID

@@ -37,6 +37,7 @@ namespace AdoNetPerfProfiling.DataAccess
             this.Write(@"';
 
 SELECT	p.LastName, p.FirstName, a.AddressLine1, a.AddressLine2, a.City, cr.Name as CountryRegionName
+		-- UPPER(p.LastName) AS UpperLastName, UPPER(p.FirstName) AS UpperFirstName
 FROM	Person.Person p
 		INNER JOIN Person.BusinessEntityContact bec on p.BusinessEntityID = bec.PersonID
 		INNER JOIN Person.BusinessEntity be on bec.BusinessEntityID = be.BusinessEntityID
@@ -47,7 +48,7 @@ FROM	Person.Person p
 		LEFT JOIN Person.CountryRegion cr on sp.CountryRegionCode = cr.CountryRegionCode
 WHERE	");
             
-            #line 16 "C:\Code\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 17 "C:\Code\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
  if (this.IncludeNameFilter) { 
             
             #line default
@@ -55,7 +56,7 @@ WHERE	");
             this.Write("p.FirstName LIKE \'%\' + @customerName + \'%\' OR p.LastName LIKE \'%\' + @customerName" +
                     " + \'%\' AND ");
             
-            #line 16 "C:\Code\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 17 "C:\Code\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
  } 
             
             #line default
@@ -70,7 +71,7 @@ ORDER BY p.LastName, p.FirstName, cr.Name, a.City;
 
 PRINT 'Execution start time: ");
             
-            #line 25 "C:\Code\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 26 "C:\Code\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DateTime.UtcNow.ToString("O")));
             
             #line default

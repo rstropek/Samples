@@ -9,9 +9,12 @@ using System.Web.Http;
 
 namespace AdoNetPerfProfiling.Controller
 {
+	/// <summary>
+	/// Trying to enhance performance by caching query result
+	/// </summary>
 	public class CachingSearchController : ApiController
 	{
-		private static DataTable cache = null;
+		private static DataTable customerCache = null;
 		private static object cacheLockObject = new object();
 
 		[HttpGet]
@@ -19,7 +22,7 @@ namespace AdoNetPerfProfiling.Controller
 		{
 			lock (cacheLockObject)
 			{
-				if (cache == null)
+				if (customerCache == null)
 				{
 					using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AdventureWorks"].ConnectionString))
 					{
@@ -27,28 +30,42 @@ namespace AdoNetPerfProfiling.Controller
 
 						var addressTypePrimary = BasicSearchController.FetchMainOfficeAddressTypeID(connection);
 
-						cache = new DataTable();
-						BasicSearchController.QueryCustomers(connection, customerName, addressTypePrimary, false, cache);
+						CachingSearchController.customerCache = new DataTable();
+						BasicSearchController.QueryCustomers(connection, customerName, addressTypePrimary, false, customerCache);
 					}
 				}
 			}
 
-			//var view = new DataView(cache);
-			//view.RowFilter = "LastName LIKE '%" + customerName + "%' OR FirstName LIKE '%" + customerName + "%'";
-			//return Ok(CachingSearchController.ConvertToJson(view.Cast<DataRowView>(), (row, colName) => row[colName]));
+			// This approach uses an ADO.NET DataView to query the cache.
+			var view = new DataView(CachingSearchController.customerCache);
+			view.RowFilter = "LastName LIKE '%" + customerName + "%' OR FirstName LIKE '%" + customerName + "%'";
+			return Ok(CachingSearchController.ConvertToJson(view.Cast<DataRowView>(), (row, colName) => row[colName]));
 
-			//var rows = cache.Rows.Cast<DataRow>();
-			//var tempResult = rows.Where(r => r["LastName"].ToString().ToUpper().Contains(customerName.ToUpper()) || r["FirstName"].ToString().ToUpper().Contains(customerName.ToUpper()));
+			// This approach replaces ADO.NET DataView with (stupid) LINQ.
+			//var rows = CachingSearchController.customerCache.Rows.Cast<DataRow>().ToArray();
+			//var tempResult = rows.Where(
+			//	r => r["LastName"].ToString().ToUpper().Contains(customerName.ToUpper())
+			//		|| r["FirstName"].ToString().ToUpper().Contains(customerName.ToUpper())).ToArray();
 			//return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
 
-			var upperCustomerName = customerName.ToUpper();
-			var tempResult = cache.Rows
-				.Cast<DataRow>()
-				.Where(r => r["LastName"].ToString().ToUpper().Contains(upperCustomerName) || r["FirstName"].ToString().ToUpper().Contains(upperCustomerName));
-			return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
-
+			// And now with less stupid LINQ.
+			//var customerNameUppercase = customerName.ToUpper();
+			//var lastNameOrdinal = CachingSearchController.customerCache.Columns.IndexOf("UpperLastName");
+			//var firstNameOrdinal = CachingSearchController.customerCache.Columns.IndexOf("UpperFirstName");
+			//var tempResult = CachingSearchController.customerCache
+			//	.Rows
+			//	.Cast<DataRow>()
+			//	.Where(r => r[lastNameOrdinal].ToString().Contains(customerNameUppercase)
+			//			|| r[firstNameOrdinal].ToString().Contains(customerNameUppercase));
+			//return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
 		}
 
+		/// <summary>
+		/// Helper function to convert a collection of data rows into JSON result
+		/// </summary>
+		/// <remarks>
+		/// Much better implementation than in BasicSearch. Uses functional program to make algorithm general.
+		/// </remarks>
 		internal static JToken ConvertToJson<T>(IEnumerable<T> rows, Func<T, string, object> getColumn)
 		{
 			var jsonResult = new JArray();

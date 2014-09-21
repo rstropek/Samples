@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\BasicSearch.cs" />
+    <Compile Include="Controller\CachingPocoSearch.cs" />
     <Compile Include="Controller\CachingSearch.cs" />
     <Compile Include="DataAccess\SelectBuilder.cs">
       <AutoGen>True</AutoGen>
@@ -93,6 +94,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\SampleDataCustomerQueryService.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="DataAccess\SelectBuilder.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SelectBuilder.cs</LastGenOutput>

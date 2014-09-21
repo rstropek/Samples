@@ -27,7 +27,6 @@ namespace AdoNetPerfProfiling.Controller
 		{
 			try
 			{
-				// Open connection to database
 				using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AdventureWorks"].ConnectionString))
 				{
 					connection.Open();
@@ -72,7 +71,8 @@ namespace AdoNetPerfProfiling.Controller
 
 				// The following line is a problem. It does not specify size for NVARCHAR -> SQL Server cannot reuse exec plan.
 				command.Parameters.AddWithValue("@customerName", customerName);
-				command.Parameters.Add("@customerName", SqlDbType.NVarChar, 50).Value = customerName;
+				// command.Parameters.Add("@customerName", SqlDbType.NVarChar, 50).Value = customerName;
+
 				command.Parameters.AddWithValue("@AddressTypeID", addressTypeID);
 				using (var adapter = new SqlDataAdapter(command))
 				{

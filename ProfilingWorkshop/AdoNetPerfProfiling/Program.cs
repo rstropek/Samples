@@ -28,6 +28,10 @@ namespace AdoNetPerfProfiling
 		{
 			// Setup routes
 			var config = new HttpConfiguration();
+
+			// Removing XML formatter, we just want to support JSON
+			config.Formatters.Remove(config.Formatters.XmlFormatter);
+
 			Startup.SetupWebApiRoutes(config);
 			app.UseWebApi(config);
 		}
