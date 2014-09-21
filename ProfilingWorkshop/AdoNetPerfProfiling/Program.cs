@@ -14,15 +14,10 @@ namespace AdoNetPerfProfiling
 	{
 		static void Main(string[] args)
 		{
-			//using (WebApp.Start<Startup>("http://localhost:12345"))
-			//{
-			//	Console.WriteLine("Listening on port 12345. Press any key to quit.");
-			//	Console.ReadLine();
-			//}
-
-			for (var i = 0; i < 2000; i++)
+			using (WebApp.Start<Startup>("http://localhost:12345"))
 			{
-				var result = new CachingSearchController().Get("Lee");
+				Console.WriteLine("Listening on port 12345. Press any key to quit.");
+				Console.ReadLine();
 			}
 		}
 	}
@@ -33,17 +28,6 @@ namespace AdoNetPerfProfiling
 		{
 			// Setup routes
 			var config = new HttpConfiguration();
-
-			// Removing XML formatter, we just want to support JSON
-			config.Formatters.Remove(config.Formatters.XmlFormatter);
-
-			app.UseFileServer(new FileServerOptions()
-			{
-				FileSystem = new PhysicalFileSystem(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "WebUI")),
-				EnableDirectoryBrowsing = true,
-				EnableDefaultFiles = true
-			});
-
 			Startup.SetupWebApiRoutes(config);
 			app.UseWebApi(config);
 		}

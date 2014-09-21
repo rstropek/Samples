@@ -1,5 +1,7 @@
 ﻿<#@ template language="C#" #>
 
+-- The following line is a problem. It changes during every SQL execution. Therefore, SQL Server
+-- cannot do proper exec plan caching.
 PRINT 'Execution start time: <#= DateTime.UtcNow.ToString("O") #>';
 
 SELECT	p.LastName, p.FirstName, a.AddressLine1, a.AddressLine2, a.City, cr.Name as CountryRegionName
