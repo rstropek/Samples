@@ -1,13 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using AdoNetPerfProfiling.DataAccess;
+using Dapper;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
-using Dapper;
-using AdoNetPerfProfiling.DataAccess;
 
 namespace AdoNetPerfProfiling.Controller
 {
