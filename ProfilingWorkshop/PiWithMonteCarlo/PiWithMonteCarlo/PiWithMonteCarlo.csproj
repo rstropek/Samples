@@ -38,6 +38,7 @@
     <None Include="Assets\Nuget Command Line.cmd" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FastPiAsyncCalculator.cs" />
     <Compile Include="FastPiCalculator.cs" />
     <Compile Include="PlinqPiCalculator.cs" />
     <Compile Include="EnhancedParallelForPiCalculator.cs" />
