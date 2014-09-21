@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 
 namespace PiWithMonteCarlo
 {
+#if LANG_EXPERIMENTAL
+    /// <summary>
+    /// Note C# 6 primay constructor and auto-property initializer here
+    /// </summary>
+	public class PiCalculatorIntermediateResult(long iterations, double resultPi)
+    {
+		public double ResultPi { get; } = resultPi;
+		public long Iterations { get; } = iterations;
+	}
+#else
 	public class PiCalculatorIntermediateResult
 	{
-		public PiCalculatorIntermediateResult(long iterations, double resultPi)
+        public PiCalculatorIntermediateResult(long iterations, double resultPi)
 		{
 			this.Iterations = iterations;
 			this.ResultPi = resultPi;
@@ -17,11 +27,12 @@ namespace PiWithMonteCarlo
 		public double ResultPi { get; private set; }
 		public long Iterations { get; private set; }
 	}
+#endif
 
-	/// <summary>
-	/// Async version of <see cref="FastPiCalculator"/>.
-	/// </summary>
-	public class FastPiAsyncCalculator
+    /// <summary>
+    /// Async version of <see cref="FastPiCalculator"/>.
+    /// </summary>
+    public class FastPiAsyncCalculator
 	{
 		public static async Task CalculateAsync(CancellationToken cancellationToken, 
 			Func<PiCalculatorIntermediateResult, Task> reportIntermediateResultAsyncCallback,

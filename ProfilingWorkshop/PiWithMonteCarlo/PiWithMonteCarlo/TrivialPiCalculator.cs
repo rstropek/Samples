@@ -1,4 +1,8 @@
 ﻿using System;
+#if LANG_EXPERIMENTAL
+// Note c# 6 using static here
+using System.Math;
+#endif
 
 namespace PiWithMonteCarlo
 {
@@ -19,7 +23,7 @@ namespace PiWithMonteCarlo
 				// Strictly speaking, we do not need Sqrt here. We could simply drop it and still get the
 				// same result. However, this sample should demonstrate some perf topics, too. Therefore
 				// it stays there just so the program has to do some math.
-				var c = Math.Sqrt(a * a + b * b);
+				var c = Sqrt(a * a + b * b);
 				if (c <= 1)
 				{
 					inCircle++;

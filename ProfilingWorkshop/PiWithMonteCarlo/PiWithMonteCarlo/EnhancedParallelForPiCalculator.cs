@@ -23,9 +23,15 @@ namespace PiWithMonteCarlo
 				new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, 
 				() => 0, (i, _, tLocal) =>
 					{
+#if LANG_EXPERIMENTAL
+                        // Note C# 6 declarating expression here
+                        return tLocal += Math.Sqrt((var a = random.NextDouble()) * a 
+                            + (var b = random.NextDouble()) * b) <= 1 ? 1 : 0;
+#else
 						double a, b;
-						return tLocal += Math.Sqrt((a = random.NextDouble()) * a + (b = random.NextDouble()) * b) <= 1 ? 1 : 0;
-					},
+                        return tLocal += Math.Sqrt((a = random.NextDouble()) * a + (b = random.NextDouble()) * b) <= 1 ? 1 : 0;
+#endif
+                    },
 				subTotal => Interlocked.Add(ref inCircle, subTotal));
 
 			return ((double)inCircle / iterations) * 4;
