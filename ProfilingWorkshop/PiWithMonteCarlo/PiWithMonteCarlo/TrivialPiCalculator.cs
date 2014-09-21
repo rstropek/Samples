@@ -23,7 +23,11 @@ namespace PiWithMonteCarlo
 				// Strictly speaking, we do not need Sqrt here. We could simply drop it and still get the
 				// same result. However, this sample should demonstrate some perf topics, too. Therefore
 				// it stays there just so the program has to do some math.
+#if LANG_EXPERIMENTAL
 				var c = Sqrt(a * a + b * b);
+#else
+				var c = Math.Sqrt(a * a + b * b);
+#endif
 				if (c <= 1)
 				{
 					inCircle++;
