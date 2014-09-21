@@ -44,7 +44,7 @@ namespace WpfApplication19
 		public void OnImportsSatisfied()
 		{
 			// Connect to click event in main menu to "print" this item.
-			this.PrintMenuItem.Click += (s, ea) => Debug.WriteLine("Printing {0} ...", this.ToString());
+			this.PrintMenuItem.Click += (s, ea) => Debug.WriteLine("Printing {0} ...", this);
 		}
 
 		// Implementation of IDisposable

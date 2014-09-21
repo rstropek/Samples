@@ -48,7 +48,7 @@ namespace WpfApplication19
 
 		private void Print(object sender, RoutedEventArgs ea)
 		{
-			Debug.WriteLine("Printing {0} ...", this.ToString());
+			Debug.WriteLine("Printing {0} ...", this);
 		}
 
 		// Implementation of IDisposable
