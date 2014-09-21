@@ -25,14 +25,15 @@ namespace AdoNetPerfProfiling.DataAccess
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("PRINT \'Execution Time: ");
+            this.Write("\r\nPRINT \'Execution start time: ");
             
-            #line 2 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 3 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DateTime.UtcNow.ToString("O")));
             
             #line default
             #line hidden
             this.Write(@"';
+
 SELECT	p.LastName, p.FirstName, a.AddressLine1, a.AddressLine2, a.City, cr.Name as CountryRegionName
 FROM	Person.Person p
 		INNER JOIN Person.BusinessEntityContact bec on p.BusinessEntityID = bec.PersonID
@@ -44,7 +45,7 @@ FROM	Person.Person p
 		LEFT JOIN Person.CountryRegion cr on sp.CountryRegionCode = cr.CountryRegionCode
 WHERE	");
             
-            #line 12 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 14 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
  if (this.IncludeNameFilter) { 
             
             #line default
@@ -52,7 +53,7 @@ WHERE	");
             this.Write("p.FirstName LIKE \'%\' + @customerName + \'%\' OR p.LastName LIKE \'%\' + @customerName" +
                     " + \'%\' AND ");
             
-            #line 12 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 14 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
  } 
             
             #line default
@@ -64,7 +65,15 @@ WHERE	");
 					INNER JOIN Sales.SalesOrderDetail sod on soh.SalesOrderID = sod.SalesOrderID
 			WHERE	c.PersonID = p.BusinessEntityID)
 ORDER BY p.LastName, p.FirstName, cr.Name, a.City;
-");
+
+PRINT 'Execution start time: ");
+            
+            #line 23 "C:\Code\GitHubSamples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DateTime.UtcNow.ToString("O")));
+            
+            #line default
+            #line hidden
+            this.Write("\';\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

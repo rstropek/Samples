@@ -1,6 +1,10 @@
-﻿<#@ template language="C#" #>
+﻿DECLARE @customerName NVARCHAR(50)
+SET @customername = 'Smith'
 
-PRINT 'Execution start time: <#= DateTime.UtcNow.ToString("O") #>';
+DECLARE @AddressTypeID INT
+SELECT @AddressTypeID = AddressTypeID FROM Person.AddressType WHERE Name = 'Main Office';
+
+PRINT 'Execution start time: ' + CAST(GETDATE() AS VARCHAR(50));
 
 SELECT	p.LastName, p.FirstName, a.AddressLine1, a.AddressLine2, a.City, cr.Name as CountryRegionName
 FROM	Person.Person p
@@ -11,7 +15,7 @@ FROM	Person.Person p
 		LEFT JOIN Person.Address a on bea.AddressID = a.AddressID
 		LEFT JOIN Person.StateProvince sp on a.StateProvinceID = sp.StateProvinceID
 		LEFT JOIN Person.CountryRegion cr on sp.CountryRegionCode = cr.CountryRegionCode
-WHERE	<# if (this.IncludeNameFilter) { #>p.FirstName LIKE '%' + @customerName + '%' OR p.LastName LIKE '%' + @customerName + '%' AND <# } #>
+WHERE	p.FirstName LIKE '%' + @customerName + '%' OR p.LastName LIKE '%' + @customerName + '%' AND
 		5000 < (
 			SELECT	SUM(sod.OrderQty * sod.UnitPrice * (1 - sod.UnitPriceDiscount)) AS Revenue
 			FROM	Sales.Customer c
@@ -20,4 +24,4 @@ WHERE	<# if (this.IncludeNameFilter) { #>p.FirstName LIKE '%' + @customerName + 
 			WHERE	c.PersonID = p.BusinessEntityID)
 ORDER BY p.LastName, p.FirstName, cr.Name, a.City;
 
-PRINT 'Execution start time: <#= DateTime.UtcNow.ToString("O") #>';
+PRINT 'Execution start time: ' + CAST(GETDATE() AS VARCHAR(50));
