@@ -66,6 +66,7 @@ namespace AdoNetPerfProfiling.Controller
 		{
 			using (var command = connection.CreateCommand())
 			{
+				// Note that we use T4 to generate SQL
 				command.CommandText = new SelectBuilder() { IncludeNameFilter = includeNameFilter }.TransformText();
 				command.Parameters.AddWithValue("@customerName", customerName);
 				command.Parameters.AddWithValue("@AddressTypeID", addressTypeID);
