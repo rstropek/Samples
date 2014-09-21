@@ -1,7 +1,5 @@
 ﻿using AdoNetPerfProfiling.Controller;
-using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.Hosting;
-using Microsoft.Owin.StaticFiles;
 using Owin;
 using System;
 using System.IO;

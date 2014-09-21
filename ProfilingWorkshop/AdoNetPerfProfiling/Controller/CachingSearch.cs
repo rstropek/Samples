@@ -20,18 +20,21 @@ namespace AdoNetPerfProfiling.Controller
 		[HttpGet]
 		public IHttpActionResult Get([FromUri]string customerName)
 		{
-			lock (cacheLockObject)
+			if (customerCache == null)
 			{
-				if (customerCache == null)
+				lock (cacheLockObject)
 				{
-					using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AdventureWorks"].ConnectionString))
+					if (customerCache == null)
 					{
-						connection.Open();
+						using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AdventureWorks"].ConnectionString))
+						{
+							connection.Open();
 
-						var addressTypePrimary = BasicSearchController.FetchMainOfficeAddressTypeID(connection);
+							var addressTypePrimary = BasicSearchController.FetchMainOfficeAddressTypeID(connection);
 
-						CachingSearchController.customerCache = new DataTable();
-						BasicSearchController.QueryCustomers(connection, customerName, addressTypePrimary, false, customerCache);
+							CachingSearchController.customerCache = new DataTable();
+							BasicSearchController.QueryCustomers(connection, customerName, addressTypePrimary, false, customerCache);
+						}
 					}
 				}
 			}
