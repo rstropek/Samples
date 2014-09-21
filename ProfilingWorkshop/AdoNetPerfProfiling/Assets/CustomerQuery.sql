@@ -1,6 +1,6 @@
 ﻿DECLARE @customerName NVARCHAR(50)
 SET @customername = 'Smith'
-
+ 
 DECLARE @AddressTypeID INT
 SELECT @AddressTypeID = AddressTypeID FROM Person.AddressType WHERE Name = 'Main Office';
 
