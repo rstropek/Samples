@@ -68,7 +68,11 @@ namespace AdoNetPerfProfiling.Controller
 			{
 				// Note that we use T4 to generate SQL
 				command.CommandText = new SelectBuilder() { IncludeNameFilter = includeNameFilter }.TransformText();
+				command.CommandTimeout = 600;
+
+				// The following line is a problem. It does not specify size for NVARCHAR -> SQL Server cannot reuse exec plan.
 				command.Parameters.AddWithValue("@customerName", customerName);
+				command.Parameters.Add("@customerName", SqlDbType.NVarChar, 50).Value = customerName;
 				command.Parameters.AddWithValue("@AddressTypeID", addressTypeID);
 				using (var adapter = new SqlDataAdapter(command))
 				{
