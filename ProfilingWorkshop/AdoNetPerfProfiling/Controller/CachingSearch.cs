@@ -20,6 +20,7 @@ namespace AdoNetPerfProfiling.Controller
 		[HttpGet]
 		public IHttpActionResult Get([FromUri]string customerName)
 		{
+			// Note double null-checking here. Reason: null-check is much faster than locking.
 			if (customerCache == null)
 			{
 				lock (cacheLockObject)
