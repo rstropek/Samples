@@ -13,7 +13,7 @@
     <RootNamespace>Samples.Sudoku.Documentation</RootNamespace>
     <Name>Samples.Sudoku.Documentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5.1</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>Samples.Sudoku.Documentation</HtmlHelpName>
     <Language>en-US</Language>
