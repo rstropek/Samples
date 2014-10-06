@@ -1,0 +1,25 @@
+﻿<Window x:Class="CompositeWpfApp.Shell.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:CompositeWpfApp.Shell"
+        Title="MainWindow" Height="350" Width="525">
+	<Window.Resources>
+		<local:TypeNameConverter x:Key="TypeNameConverter" />
+	</Window.Resources>
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+
+		<ListBox Name="ModulesListBox" ItemsSource="{Binding Path=Modules, Mode=OneWay}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Converter={StaticResource TypeNameConverter}}" />
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+		<ContentControl Grid.Column="1" Content="{Binding ElementName=ModulesListBox, Path=SelectedItem, Mode=OneWay}" />
+    </Grid>
+</Window>

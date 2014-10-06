@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="4e805159-41bd-45c5-ab4d-ff70150e6cfd" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>This is a sample documentation for Windows Installer XML Training.</para>
+		</introduction>
+
+		<section>
+			<title>Getting Started</title>
+			<content>
+				<para>Lorem ipsum ...</para>
+			</content>
+		</section>
+	</developerConceptualDocument>
+</topic>

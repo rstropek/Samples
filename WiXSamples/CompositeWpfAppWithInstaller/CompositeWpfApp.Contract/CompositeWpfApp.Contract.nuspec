@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>CompositeWpfApp.SDK</id>
+    <version>$version$</version>
+    <title>Composite WPF App SDK</title>
+    <authors>Rainer Stropek</authors>
+    <owners>Rainer Stropek</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Composite WPF App SDK (sample for WiX training)</description>
+    <tags>WiX</tags>
+  </metadata>
+</package>

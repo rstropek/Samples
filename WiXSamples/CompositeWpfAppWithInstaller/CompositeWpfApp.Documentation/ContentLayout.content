@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="4e805159-41bd-45c5-ab4d-ff70150e6cfd" visible="True" isDefault="true" isSelected="true" title="Welcome to the WiX sample CompositeWpfApp">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Welcome" />
+    </HelpKeywords>
+  </Topic>
+</Topics>
