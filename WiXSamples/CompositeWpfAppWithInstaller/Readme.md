@@ -123,4 +123,4 @@ be installed if the SDK feature is installed
 
 ## Solution
 
-See *CompositeWpfApp.Install/Product.wxs*.
+See [CompositeWpfApp.Install/Product.wxs](CompositeWpfApp.Install/Product.wxs).
