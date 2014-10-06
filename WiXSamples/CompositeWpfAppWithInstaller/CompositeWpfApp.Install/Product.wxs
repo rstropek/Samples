@@ -82,7 +82,7 @@
 			<Component Id="CMP_SDK_ContractNuGet" >
 				<File Id="FILE_SDK_ContractNuGet" KeyPath="yes" Source="..\CompositeWpfApp.Contract\bin\Debug\CompositeWpfApp.SDK.1.0.0.0.nupkg" />
 			</Component>
-			<Component Id="CMP_SDK_Documentation" >
+			<Component Id="CMP_SDK_Documentation" > 
 				<File Id="FILE_SDK_Documentation" KeyPath="yes" Source="..\CompositeWpfApp.Documentation\Help\CompositeWpfApp.Documentation.chm" />
 			</Component>
 			<Component Id="CMP_SDK_Contract">
@@ -113,7 +113,7 @@
 			<ComponentRef Id="CMP_SDK_Documentation"/>
 			<ComponentRef Id="CMP_SDK_Shortcuts"/>
 		</Feature>
-		<Feature Id="Extension" Title="Extension Module" Level="0" InstallDefault="local">
+		<Feature Id="Extension" Title="Extension Module" Level="2" InstallDefault="local">
 			<!-- Extensibility feature -->
 			<ComponentRef Id="CMP_Modules_Extension"/>
 		</Feature>
