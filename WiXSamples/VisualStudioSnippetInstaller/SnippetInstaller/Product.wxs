@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*"
+			 Name="Snippet Installer"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="Rainer Stropek"
+			 UpgradeCode="e3f8858e-3a66-4b5d-8146-694f587439b8">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- Include custom action DLL -->
+		<Binary Id="CAVisualStudioLCID" SourceFile="..\CAVisualStudioLCID\bin\Debug\CAVisualStudioLCID.dll" />
+
+		<!-- Add custom action -->
+		<CustomAction Id="VisualStudioLCID"
+					  BinaryKey="CAVisualStudioLCID"
+					  DllEntry="GetVisualStudioLCID"
+					  Execute="firstSequence"
+					  HideTarget="no" />
+		
+		<InstallUISequence>
+			<!-- Schedule custom action to run before AppSearch (important because 
+			     resulting property is used in a DirectorySearch) -->
+			<Custom Action="VisualStudioLCID" Before="AppSearch" />
+		</InstallUISequence>
+
+		<Property Id="VISUALSTUDIOSNIPPETDIR">
+			<DirectorySearch Id="VisualStudioSnippetDirSearch1" Path="[ProgramFilesFolder]Microsoft Visual Studio 12.0\Xml\[VSLCID]\Snippets" Depth="0" AssignToProperty="yes"/>
+		</Property>
+
+		<!-- Add a launch condition that makes sure that VS LCID has been found -->
+		<Condition Message="Visual Studio LCID not found">
+			<![CDATA[Installed OR VSLCID]]>
+		</Condition>
+
+		<!-- Add a launch condition that makes sure that VS snippets directory has been found -->
+		<Condition Message="Visual Studio 2013 snippets directory not found">
+			<![CDATA[Installed OR VISUALSTUDIOSNIPPETDIR]]>
+		</Condition>
+
+		<!-- Set directory based on property pointing to VS snippet directory -->
+		<SetDirectory Id="INSTALLDIR" Sequence="first" Value="[VISUALSTUDIOSNIPPETDIR]" />
+		
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="INSTALLDIR">
+				<Component Id="CMP_Snippet" Guid="F8AEF5BA-C776-4578-9B87-F7E229CE2DB6">
+					<File Id="FILE_WixAddShortcut" Source="WixAddShortcut.snippet" KeyPath="yes" />
+				</Component>
+			</Directory>
+		</Directory>
+
+		<Feature Id="ProductFeature" Title="SetupProject3" Level="1">
+			<ComponentRef Id="CMP_Snippet"/>
+		</Feature>
+	</Product>
+</Wix>

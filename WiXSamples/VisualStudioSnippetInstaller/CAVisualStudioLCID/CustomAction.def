@@ -1,0 +1,5 @@
+LIBRARY "CAVisualStudioLCID"
+
+EXPORTS
+
+GetVisualStudioLCID

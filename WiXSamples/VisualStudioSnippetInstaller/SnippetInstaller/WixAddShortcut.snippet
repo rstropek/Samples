@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <Title>WiX Add Shortcut</Title>
+    <Author>Rainer Stropek</Author>
+    <Shortcut>WixAddShortcut</Shortcut>
+    <Description>XML snippet for a WiX shortcut</Description>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal>
+        <ID>componentId</ID>
+        <ToolTip>ID of the component.</ToolTip>
+        <Default>CMP_Shortcut</Default>
+      </Literal>
+		<Literal>
+			<ID>componentName</ID>
+			<ToolTip>Name of the component.</ToolTip>
+			<Default>My Shortcut</Default>
+		</Literal>
+		<Literal>
+			<ID>target</ID>
+			<ToolTip>Target for the component.</ToolTip>
+			<Default>[INSTALLFOLDER]MyProgram.exe</Default>
+		</Literal>
+		<Literal>
+			<ID>regKey</ID>
+			<ToolTip>RegistryKey.</ToolTip>
+			<Default>Software\MyCompany\MyProject</Default>
+		</Literal>
+	</Declarations>
+    <Code Language="XML">
+		<![CDATA[<Component Id="CMP_$componentId$">
+	<Shortcut Id="SHORTCUT_$componentId$" 
+			  Name="$componentName$" 
+			  Target="$target$" />
+	<RemoveFolder Id="REMOVE_$componentId$" On="uninstall" />
+	<RegistryValue Root="HKCU"
+					Key="$regKey$"
+					Name="installed$componentId$"
+					Type="integer"
+					Value="1"
+					KeyPath="yes" />
+</Component>]]></Code>
+  </Snippet>
+</CodeSnippet>
