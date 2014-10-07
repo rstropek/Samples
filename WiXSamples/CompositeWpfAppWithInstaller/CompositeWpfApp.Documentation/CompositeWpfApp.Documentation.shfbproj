@@ -13,7 +13,7 @@
     <RootNamespace>CompositeWpfApp.Documentation</RootNamespace>
     <Name>CompositeWpfApp.Documentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>CompositeWpfApp.Documentation</HtmlHelpName>
     <Language>en-US</Language>

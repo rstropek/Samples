@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" RequiredVersion="3.8.1128.0">
+	<Product Id="*"
+			 Name="Composite WPF App Sample"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="Rainer Stropek"
+			 UpgradeCode="7d113495-749a-4046-a247-c0c1a146662e">
+
+		<Package InstallerVersion="450"
+				 Compressed="yes"
+				 InstallScope="perMachine" />
+
+		<!-- Note that this variant of the sample splits installer into multiple CAB files -->
+		<Media Id="1" Cabinet="Disk1.cab" EmbedCab="no" CompressionLevel="high" />
+		<Media Id="2" Cabinet="Disk2.cab" EmbedCab="no" CompressionLevel="high" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Composite WPF App">
+					<Directory Id="DIR_Modules" Name="Modules" />
+					<Directory Id="DIR_SDK" Name="lib" />
+				</Directory>
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="DIR_Shortcuts" Name="WiX Training" />
+			</Directory>
+		</Directory>
+
+		<DirectoryRef Id="INSTALLFOLDER">
+			<!-- Components/files necessary to run the shell -->
+			<!-- Note that all components for the shell are stored in CAB file 1 -->
+			<Component Id="CMP_INSTALLFOLDER_Shell">
+				<File Id="FILE_INSTALLFOLDER_Shell" KeyPath="yes" Source="..\CompositeWpfApp.Shell\bin\debug\CompositeWpfApp.Shell.exe" 
+					  DiskId="1" />
+			</Component>
+			<Component Id="CMP_INSTALLFOLDER_Contract">
+				<File Id="FILE_INSTALLFOLDER_Contract" KeyPath="yes" Source="..\CompositeWpfApp.Contract\bin\Debug\CompositeWpfApp.Contract.dll" 
+					  DiskId="1" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DIR_Modules">
+			<!-- Note that all components for the extension are stored in CAB file 2 -->
+			
+			<!-- Extension modules -->
+			<Component Id="CMP_Modules" Guid="38970050-C110-4A3D-9012-400D5F84CBF8" KeyPath="yes">
+				<!-- Make sure Modules directory is created even if no files are installed into it -->
+				<CreateFolder />
+			</Component>
+			<Component Id="CMP_Modules_Extension">
+				<File Id="FILE_Modules_Extension" KeyPath="yes" Source="..\CompositeWpfApp.Extension\bin\Debug\CompositeWpfApp.Extension.dll" DiskId="2" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DIR_Shortcuts">
+			<!-- Shortcuts -->
+			<Component Id="CMP_Shortcuts">
+				<!-- Shortcuts for the shell -->
+				<Shortcut Id="SCUT_Shortcuts_Shell" Name="Composite WPF App" Target="[INSTALLFOLDER]CompositeWpfApp.Shell.exe" />
+				<!-- Uninstall shortcut -->
+				<Shortcut Id="SCUT_Shortcuts_Uninstall"
+						  Name="Uninstall Composite WPF App"
+						  Target="[System64Folder]msiexec.exe"
+						  Arguments="/x [ProductCode]"/>
+				<RemoveFolder Id="REMOVE_Shortcuts" On="uninstall" />
+				<RegistryValue Root="HKCU"
+							   Key="Software\WiXTraining\RainerStropek"
+							   Name="installedShortcut"
+							   Type="integer"
+							   Value="1"
+							   KeyPath="yes" />
+			</Component>
+			<Component Id="CMP_SDK_Shortcuts">
+				<!-- Shortcuts for the SDK documentation -->
+				<Shortcut Id="SCUT_SDK_Shortcuts_Documentation" Name="Composite WPF App SDK Documentation" Target="[DIR_SDK]CompositeWpfApp.Documentation.chm" />
+				<RemoveFolder Id="REMOVE_SDK_Shortcuts" On="uninstall" />
+				<RegistryValue Root="HKCU"
+							   Key="Software\WiXTraining\RainerStropek"
+							   Name="installedSdkShortcut"
+							   Type="integer"
+							   Value="1"
+							   KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DIR_SDK">
+			<!-- Note that all components for the SDK are stored in CAB file 2 -->
+
+			<!-- SDK components/files -->
+			<Component Id="CMP_SDK_ContractNuGet" >
+				<File Id="FILE_SDK_ContractNuGet" KeyPath="yes" Source="..\CompositeWpfApp.Contract\bin\Debug\CompositeWpfApp.SDK.1.0.0.0.nupkg" DiskId="2" />
+			</Component>
+			<Component Id="CMP_SDK_Documentation" >
+				<File Id="FILE_SDK_Documentation" KeyPath="yes" Source="..\CompositeWpfApp.Documentation\Help\CompositeWpfApp.Documentation.chm" DiskId="2" />
+			</Component>
+			<Component Id="CMP_SDK_Contract">
+				<!-- Copy contract assembly to SDK -->
+				<CopyFile Id="COPY_SDK_Contract" FileId="FILE_INSTALLFOLDER_Contract" DestinationDirectory="DIR_SDK" />
+				<RegistryValue Root="HKCU"
+							   Key="Software\WiXTraining\RainerStropek"
+							   Name="contractCopied"
+							   Type="integer"
+							   Value="1"
+							   KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<!-- Mandatory shell feature -->
+		<Feature Id="Shell" Title="Shell" Level="1" InstallDefault="local" Absent="disallow">
+			<ComponentRef Id="CMP_INSTALLFOLDER_Shell"/>
+			<ComponentRef Id="CMP_INSTALLFOLDER_Contract"/>
+			<ComponentRef Id="CMP_Modules"/>
+			<ComponentRef Id="CMP_Shortcuts"/>
+		</Feature>
+
+		<!-- Optional features -->
+		<Feature Id="SDK" Title="SDK" Level="1" InstallDefault="local">
+			<!-- SDK -->
+			<ComponentRef Id="CMP_SDK_ContractNuGet"/>
+			<ComponentRef Id="CMP_SDK_Contract"/>
+			<ComponentRef Id="CMP_SDK_Documentation"/>
+			<ComponentRef Id="CMP_SDK_Shortcuts"/>
+		</Feature>
+		<Feature Id="Extension" Title="Extension Module" Level="2" InstallDefault="local">
+			<!-- Extensibility feature -->
+			<ComponentRef Id="CMP_Modules_Extension"/>
+		</Feature>
+	</Product>
+</Wix>

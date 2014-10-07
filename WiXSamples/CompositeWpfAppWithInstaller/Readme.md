@@ -121,6 +121,32 @@ be installed if the SDK feature is installed
 5. Check if *Uninstall* shortcut correctly uninstalles the program
 
 
+## Exercise 6 (15 minutes): External CAB files
+
+1. Copy your installer project into a new project called *CompositeWpfApp.InstallCab*
+
+2. Delete existing *MediaTemplate ...* tag
+
+3. Add two *Media* tags for two different, external CAB files
+
+4. Assign all files (*.exe* and *.dll*) for the shell-feature to CAB 1 and all other
+files (extension dll, SDK) to CAB 2
+
+5. Build your new installer project and test it
+
+6. Copy MSI and two CAB files to a web server (if you do not have a web server available,
+you could use [Microsoft Azure](http://azure.microsoft.com))
+
+7. Install the product with http-Source (*msiexec /i http://yourserver/.../yourinstaller.msi*)
+
+8. Try to install a second time without extension and SDK features. Use a web debugger like
+[Fiddler](http://www.telerik.com/fiddler) to verify that only CAB 1 is downloaded from the web.
+
+
 ## Solution
 
-See [CompositeWpfApp.Install/Product.wxs](CompositeWpfApp.Install/Product.wxs).
+1. Solution with single MSI file (exercises 3-5) 
+see [CompositeWpfApp.Install/Product.wxs](CompositeWpfApp.Install/Product.wxs)
+
+2. Solution with external CAB files (exercises 6) 
+see [CompositeWpfApp.InstallCab/Product.wxs](CompositeWpfApp.InstallCab/Product.wxs).

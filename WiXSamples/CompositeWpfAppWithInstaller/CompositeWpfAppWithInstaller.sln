@@ -13,6 +13,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "CompositeWpfApp.Documentati
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "CompositeWpfApp.Install", "CompositeWpfApp.Install\CompositeWpfApp.Install.wixproj", "{21B8AE41-E5FF-4D42-BE33-B7AC859FF810}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "CompositeWpfApp.InstallCab", "CompositeWpfApp.InstallCab\CompositeWpfApp.InstallCab.wixproj", "{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,16 @@ Global
 		{21B8AE41-E5FF-4D42-BE33-B7AC859FF810}.Release|Mixed Platforms.Build.0 = Release|x86
 		{21B8AE41-E5FF-4D42-BE33-B7AC859FF810}.Release|x86.ActiveCfg = Release|x86
 		{21B8AE41-E5FF-4D42-BE33-B7AC859FF810}.Release|x86.Build.0 = Release|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Debug|x86.ActiveCfg = Debug|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Debug|x86.Build.0 = Debug|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Release|Any CPU.ActiveCfg = Release|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Release|x86.ActiveCfg = Release|x86
+		{6D1266C0-2B65-4CDC-B6EA-7618183DBE79}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
