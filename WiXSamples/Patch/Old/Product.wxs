@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="7905686A-0CEC-4F5F-B14F-55C96A9B80EC"
+			 Name="Patching"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="software architects"
+			 UpgradeCode="BC8DDC04-CD32-42F0-AD15-520D302E57FA">
+
+		<Package Compressed="yes"
+				 InstallScope="perMachine"
+				 Manufacturer="software architects"
+				 Description="Demo for patching."
+				 Comments="(c) 2014 software architects" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<!--Directory structure-->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="DIR_MyProgram" Name="WiX Basics" />
+			</Directory>
+		</Directory>
+
+		<!--Components-->
+		<DirectoryRef Id="DIR_MyProgram">
+			<Component Id="CMP_FileToInstallTxt"
+					   Guid="78E59E62-ECC3-4C5E-8A92-2B0AA35BB1B3">
+				<File Id="FILE_FileToInstallTxt"
+					  Source="FileToInstall.txt"
+					  KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<!--Features-->
+		<Feature Id="FileToInstallFeature"
+				 Title="Wix Basics Feature"
+				 Level="1">
+			<ComponentRef Id="CMP_FileToInstallTxt" />
+		</Feature>
+	</Product>
+</Wix>

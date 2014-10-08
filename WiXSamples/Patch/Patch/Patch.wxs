@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Patch 
+        AllowRemoval="yes"
+        Manufacturer="software architects" 
+        MoreInfoURL="http://www.timecockpit.com/"
+        DisplayName="Sample Patch" 
+        Description="Small Update Patch" 
+        Classification="Update">
+
+        <Media Id="5000" Cabinet="RTM.cab">
+            <PatchBaseline Id="RTM"/>
+        </Media>
+
+        <PatchFamily Id='SamplePatchFamily' 
+                     Version='0.0.1.0' 
+                     Supersede='yes'>
+        </PatchFamily>
+    </Patch>
+</Wix>
