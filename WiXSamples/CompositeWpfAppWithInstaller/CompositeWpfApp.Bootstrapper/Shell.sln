@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Shell", "Shell\Shell.wixproj", "{F8E40AD5-76AD-4511-B79B-3A4E4CBB4C44}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Extension", "Extension\Extension.wixproj", "{0E06BC7D-07F5-44C7-AE14-FF7AA0331FE5}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Bootstrapper", "Bootstrapper\Bootstrapper.wixproj", "{1DF9E3B2-D6A5-4E06-B289-078C5A0720AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8E40AD5-76AD-4511-B79B-3A4E4CBB4C44}.Debug|x86.ActiveCfg = Debug|x86
+		{F8E40AD5-76AD-4511-B79B-3A4E4CBB4C44}.Debug|x86.Build.0 = Debug|x86
+		{F8E40AD5-76AD-4511-B79B-3A4E4CBB4C44}.Release|x86.ActiveCfg = Release|x86
+		{F8E40AD5-76AD-4511-B79B-3A4E4CBB4C44}.Release|x86.Build.0 = Release|x86
+		{0E06BC7D-07F5-44C7-AE14-FF7AA0331FE5}.Debug|x86.ActiveCfg = Debug|x86
+		{0E06BC7D-07F5-44C7-AE14-FF7AA0331FE5}.Debug|x86.Build.0 = Debug|x86
+		{0E06BC7D-07F5-44C7-AE14-FF7AA0331FE5}.Release|x86.ActiveCfg = Release|x86
+		{0E06BC7D-07F5-44C7-AE14-FF7AA0331FE5}.Release|x86.Build.0 = Release|x86
+		{1DF9E3B2-D6A5-4E06-B289-078C5A0720AC}.Debug|x86.ActiveCfg = Debug|x86
+		{1DF9E3B2-D6A5-4E06-B289-078C5A0720AC}.Debug|x86.Build.0 = Debug|x86
+		{1DF9E3B2-D6A5-4E06-B289-078C5A0720AC}.Release|x86.ActiveCfg = Release|x86
+		{1DF9E3B2-D6A5-4E06-B289-078C5A0720AC}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" RequiredVersion="3.8.1128.0">
+	<Product Id="*"
+			 Name="Extension"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="Rainer Stropek"
+			 UpgradeCode="E95DE29A-CDD9-47DE-BC48-0877BA802A6A">
+
+		<Package InstallerVersion="450"
+				 Compressed="yes"
+				 InstallScope="perMachine" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Composite WPF App">
+					<Directory Id="DIR_Modules" Name="Modules" />
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<DirectoryRef Id="DIR_Modules">
+			<!-- Extension modules -->
+			<Component Id="CMP_Modules_Extension">
+				<File Id="FILE_Modules_Extension" KeyPath="yes" Source="..\..\CompositeWpfApp.Extension\bin\Debug\CompositeWpfApp.Extension.dll" />
+			</Component>
+		</DirectoryRef>
+
+		<Feature Id="Extension" Title="Extension Module" Level="1" InstallDefault="local">
+			<!-- Extensibility feature -->
+			<ComponentRef Id="CMP_Modules_Extension"/>
+		</Feature>
+	</Product>
+</Wix>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" RequiredVersion="3.8.1128.0">
+	<Product Id="*"
+			 Name="Shell"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="Rainer Stropek"
+			 UpgradeCode="B02A275F-AD87-4A40-BF45-B506637ED5C2">
+
+		<Package InstallerVersion="450"
+				 Compressed="yes"
+				 InstallScope="perMachine" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Composite WPF App">
+					<Directory Id="DIR_Modules" Name="Modules" />
+					<Directory Id="DIR_SDK" Name="lib" />
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<DirectoryRef Id="INSTALLFOLDER">
+			<!-- Components/files necessary to run the shell -->
+			<Component Id="CMP_INSTALLFOLDER_Shell">
+				<File Id="FILE_INSTALLFOLDER_Shell" KeyPath="yes" Source="..\..\CompositeWpfApp.Shell\bin\debug\CompositeWpfApp.Shell.exe" />
+			</Component>
+			<Component Id="CMP_INSTALLFOLDER_Contract">
+				<File Id="FILE_INSTALLFOLDER_Contract" KeyPath="yes" Source="..\..\CompositeWpfApp.Contract\bin\Debug\CompositeWpfApp.Contract.dll" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DIR_SDK">
+			<!-- SDK components/files -->
+			<Component Id="CMP_SDK_ContractNuGet" >
+				<File Id="FILE_SDK_ContractNuGet" KeyPath="yes" Source="..\..\CompositeWpfApp.Contract\bin\Debug\CompositeWpfApp.SDK.1.0.0.0.nupkg" />
+			</Component>
+			<Component Id="CMP_SDK_Documentation" >
+				<File Id="FILE_SDK_Documentation" KeyPath="yes" Source="..\..\CompositeWpfApp.Documentation\Help\CompositeWpfApp.Documentation.chm" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DIR_Modules">
+			<!-- Extension modules -->
+			<Component Id="CMP_Modules" Guid="579610ED-B0B3-4282-9C7E-28B0F5792CA7" KeyPath="yes">
+				<!-- Make sure Modules directory is created even if no files are installed into it -->
+				<CreateFolder />
+			</Component>
+		</DirectoryRef>
+
+		<Property Id="INSTALLSDK" />
+		
+		<!-- Mandatory shell feature -->
+		<Feature Id="Shell" Title="Shell" Level="1" InstallDefault="local" Absent="disallow">
+			<ComponentRef Id="CMP_INSTALLFOLDER_Shell"/>
+			<ComponentRef Id="CMP_INSTALLFOLDER_Contract"/>
+			<ComponentRef Id="CMP_Modules"/>
+		</Feature>
+		<Feature Id="SDK" Title="SDK" Level="0" InstallDefault="local">
+			<Condition Level="1">
+				<![CDATA[Installed OR INSTALLSDK]]>
+			</Condition>
+			<!-- SDK -->
+			<ComponentRef Id="CMP_SDK_ContractNuGet"/>
+			<ComponentRef Id="CMP_SDK_Documentation"/>
+		</Feature>
+	</Product>
+</Wix>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+	<Bundle Name="Composite App (with Bootstrapper)"
+			Version="1.0.0.0"
+			Manufacturer="software architects"
+			UpgradeCode="1df9e3b2-d6a5-4e06-b289-078c5a0720ac">
+
+		<!-- Bundle can only be installed on Windows >= 7 
+  	         (see http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx) -->
+		<bal:Condition Message="Requires Windows >= 7">
+			<![CDATA[VersionNT >= v6.1]]>       
+		</bal:Condition>
+
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+			<bal:WixStandardBootstrapperApplication LicenseFile="License.rtf"/>
+		</BootstrapperApplicationRef>
+
+		<Chain>
+			<MsiPackage Id="Shell" SourceFile="$(var.Shell.TargetDir)Shell.msi">
+				<!-- Pass a property value to Shell installer to install SDK, too -->
+				<MsiProperty Name="INSTALLSDK" Value="1" />
+			</MsiPackage>
+			<RollbackBoundary />
+			<MsiPackage Id="Extension" 
+						After="Shell"
+						SourceFile="$(var.Extension.TargetDir)Extension.msi" />
+		</Chain>
+	</Bundle>
+</Wix>
