@@ -28,6 +28,7 @@
     <Content Include="Content\css\select2x2.png" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-grid.min.css" />
+    <TypeScriptCompile Include="samples\forms\angularForm.ts" />
     <TypeScriptCompile Include="samples\hello-world\helloWorldWithController\helloWorldWithController.ts" />
     <TypeScriptCompile Include="samples\communication\httpService\app.ts" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -52,6 +53,7 @@
     <Content Include="samples\communication\httpService\NotificationsArchiveSpec.js">
       <DependentUpon>MobileServicesTableSpec.ts</DependentUpon>
     </Content>
+    <Content Include="samples\forms\angularForm.html" />
     <Content Include="samples\hello-world\helloWorldWithController\code.js">
       <DependentUpon>helloWorldWithController.ts</DependentUpon>
     </Content>

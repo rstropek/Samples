@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular.js Samples Using TypeScript</title>
+
+	<link href="../../Content/bootstrap.css" rel="stylesheet" />
+
+	<script src="../../Scripts/jquery-2.1.0.js"></script>
+	<script src="../../Scripts/bootstrap.js"></script>
+	<script src="../../Scripts/angular.js"></script>
+	<script src="angularForm.js"></script>
+</head>
+<body ng-app="applicationApp" ng-controller="applicationForm">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-2">
+				<h1>Application Form</h1>
+				<form role="form" name="applicationForm">
+					<div class="alert alert-warning"
+						 ng-show="applicationForm.$dirty">
+						Don't forget to save!
+					</div>
+					<div class="form-group" ng-class="getCssClasses(applicationForm.firstName)">
+						<label for="firstName">First Name:</label>
+						<input id="firstName" name="firstName" type="text" class="form-control" placeholder="Your first name ..."
+							   required
+							   ng-model="application.person.firstName" />
+					</div>
+					<div class="form-group">
+						<label for="lastName">Last Name:</label>
+						<input id="lastName" type="text" class="form-control" placeholder="Your last name ..."
+							   required
+							   ng-model="application.person.lastName" />
+					</div>
+					<div class="form-group">
+						<label>Sex:</label>
+						<div class="radio">
+							<label>
+								<input id="sex" type="radio" value="male"
+									   ng-model="application.person.sex" /> Male
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input id="sex" type="radio" value="female"
+									   ng-model="application.person.sex" /> Female
+							</label>
+						</div>
+						<select class="form-control" ng-model="application.person.sex">
+							<option value="male" ng-selected="application.person.sex=='male'">Male</option>
+							<option value="female" ng-selected="application.person.sex=='female'">Female</option>
+						</select>
+						<select class="form-control"
+								ng-options="so.code as so.description for so in sexOptions"
+								ng-model="application.person.sex"></select>
+					</div>
+					<div class="form-group" ng-class="getCssClasses(applicationForm.email)">
+						<label for="email">Email:</label>
+						<input id="email" name="email" type="email" class="form-control" placeholder="Your email ..."
+							   required
+							   ng-model="application.person.email"
+							   ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" />
+						<p>{{application.person.email}}</p>
+					</div>
+					<div class="form-group">
+						<label for="shortBio">Describe yourself in one sentence (max. 50 characters):</label>
+						<input id="shortBio" type="text" class="form-control" placeholder="Some words about you ..."
+							   ng-maxlength="50"
+							   ng-model="application.person.shortBio" />
+						<p>{{application.person.shortBio}}</p>
+					</div>
+					<div class="form-group">
+						<label for="firstJob">Is this your first job?</label>
+						<input id="firstJob" type="checkbox"
+							   ng-model="application.person.firstJob" />
+						<div class="alert alert-danger"
+							 ng-show="application.person.firstJob">
+							If this is your first job, you have to fill out form ABC!
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="driverLicense">Do you have a B driver license?</label>
+						<input id="driverLicense" type="checkbox"
+							   ng-true-value="'B'" ng-false-value="'None'"
+							   ng-model="application.person.driverLicense" />
+						<p>{{application.person.driverLicense}}</p>
+					</div>
+
+					<div ng-repeat="language in application.person.languages">
+						<div class="row">
+							<div class="col-sm-5">
+								<select class="form-control" ng-model="language.language">
+									<option value="en" ng-selected="language.language=='en'">English</option>
+									<option value="de" ng-selected="language.language=='de'">Deutsch</option>
+								</select>
+							</div>
+							<div class="col-sm-5">
+								<select class="form-control" ng-model="language.knowledge">
+									<option value="fluent" ng-selected="language.knowledge=='fluent'">Fluent</option>
+									<option value="native" ng-selected="language.knowledge=='native'">Native</option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<button class="btn" ng-click="removeLanguage($index)">X</button>
+							</div>
+						</div>
+					</div>
+
+					<p>&nbsp;</p>
+
+					<button type="button" class="btn btn-primary btn-large"
+							ng-disabled="!canSave(applicationForm)">
+						Save
+					</button>
+
+					<p>&nbsp;</p>
+
+					<div class="alert alert-danger"
+						 ng-show="applicationForm.$invalid">
+						Form contains invalid data!
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
