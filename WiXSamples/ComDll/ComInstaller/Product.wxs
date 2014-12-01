@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="ComInstaller" Language="1033" Version="1.0.0.0" Manufacturer="Rainer Stropek" 
+			 UpgradeCode="e146767c-7eda-4a20-8382-be93c7494d66">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<MediaTemplate EmbedCab="yes" />
+		<Feature Id="ProductFeature" Title="ComInstaller" Level="1">
+			<ComponentGroupRef Id="ComDll" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="ComInstaller" />
+			</Directory>
+		</Directory>
+	</Fragment>
+</Wix>
