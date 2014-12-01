@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" 
+			 Name="ServiceInstaller" 
+			 Language="1033" 
+			 Version="1.0.0.0" 
+			 Manufacturer="Rainer Stropek" 
+			 UpgradeCode="7e018a5a-6b25-4b68-9580-d40d61ffff08">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="WiX EventLoggingService Sample" />
+			</Directory>
+		</Directory>
+
+		<Component Id="CMP_Service" Directory="INSTALLFOLDER">
+			<!-- Install service executable -->
+			<File Id="FILE_EventLoggingService" 
+				  Source="$(var.ServiceToInstall.TargetPath)"
+				  KeyPath="yes" />
+			<!-- Install service -->
+			<ServiceInstall Id="InstallELS"
+							Name="WiXEventLoggingService"
+							Description="WiX EventLoggingService Sample"
+							Start="auto"
+							ErrorControl="normal"
+							Type="ownProcess"/>
+			<!-- Set start/stop/remove options -->
+			<ServiceControl Id="ControllELS"
+							Name="WiXEventLoggingService"
+							Start="install"
+							Stop="both"
+							Remove="uninstall"
+							Wait="yes" />
+		</Component>
+		
+		<Feature Id="Service" Title="ServiceInstaller" Level="1">
+			<ComponentRef Id="CMP_Service" />
+		</Feature>
+	</Product>
+</Wix>
