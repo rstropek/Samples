@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="CustomUIWithSQL" Language="1033" Version="1.0.0.0" 
+			 Manufacturer="Rainer Stropek" UpgradeCode="{7D0B7059-FFB2-4151-9113-4687FBADB6A8}">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<Binary Id="CustomActionDll"
+				SourceFile="$(var.ValidateSqlServerNameAction.TargetDir)ValidateSqlServerNameAction.CA.dll" />
+
+		<CustomAction Id="ValidateServerName"
+					  Return="check"
+					  Execute="firstSequence"
+					  BinaryKey="CustomActionDll"
+					  DllEntry="ValidateSqlServerName"
+					  HideTarget="no" />
+		
+		<Feature Id="ProductFeature" Title="CustomUserInterface" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+
+		<UIRef Id="MyCustomDlgSequence"/>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="CustomUserInterface" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+		</ComponentGroup>
+	</Fragment>
+
+	<Fragment>
+		<UI Id="MyCustomDlgSequence">
+			<TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+			<TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+			<TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+			<Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+			<Property Id="WixUI_Mode" Value="InstallDir" />
+
+			<DialogRef Id="BrowseDlg" />
+			<DialogRef Id="DiskCostDlg" />
+			<DialogRef Id="ErrorDlg" />
+			<DialogRef Id="FatalError" />
+			<DialogRef Id="FilesInUse" />
+			<DialogRef Id="MsiRMFilesInUse" />
+			<DialogRef Id="PrepareDlg" />
+			<DialogRef Id="ProgressDlg" />
+			<DialogRef Id="ResumeDlg" />
+			<DialogRef Id="UserExit" />
+
+			<Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+			<Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+			<Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+			<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="SQLServerNameDlg">1</Publish>
+
+			<Publish Dialog="SQLServerNameDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">NOT SQLEXCEPTION</Publish>
+			<Publish Dialog="SQLServerNameDlg" Control="Next" Event="NewDialog" Value="SQLServerError">SQLEXCEPTION</Publish>
+			<Publish Dialog="SQLServerNameDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+
+			<Publish Dialog="SQLServerError" Control="Back" Event="NewDialog" Value="SQLServerNameDlg">1</Publish>
+
+			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="1">NOT Installed</Publish>
+			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed AND NOT PATCH</Publish>
+			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">Installed AND PATCH</Publish>
+
+			<Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+			<Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+			<Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+			<Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+			<Property Id="ARPNOMODIFY" Value="1" />
+		</UI>
+
+		<UIRef Id="WixUI_Common" />
+	</Fragment>
+</Wix>
