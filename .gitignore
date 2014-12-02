@@ -14,6 +14,14 @@ packages
 # Fakes
 *fakes*
 
+# Installer
+.wixpdb
+.wixobj
+.wixmsp
+.msi
+.msp
+.wixmst
+
 #node
 node_modules/
 
