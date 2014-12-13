@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+	<Bundle Name="Bootstrapper" Version="1.0.0.0" Manufacturer="Rainer Stropek" UpgradeCode="a9ecec1d-4b9e-485f-ad4b-2c8dd2b75848">
+		<BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
+			<Payload Name='BootstrapperCore.config' SourceFile='$(var.InstallerUI.TargetDir)InstallerUI.BootstrapperCore.config' />
+		</BootstrapperApplicationRef>
+
+		<!-- Variables modified by custom WPF UI -->
+		<Variable bal:Overridable="yes" Name="Prerequisite" Value=""/>
+		<Variable bal:Overridable="yes" Name="InstallLevel" Value="1"/>
+
+		<Chain>
+			<PackageGroupRef Id='NetFx45Web' />
+			<MsiPackage Id="FirstInstaller" SourceFile="$(var.FirstInstaller.TargetPath)">
+				<MsiProperty Name="PREREQUISITE" Value="[Prerequisite]"/>
+				<MsiProperty Name="INSTALLLEVEL" Value="[InstallLevel]"/>
+			</MsiPackage>
+			<MsiPackage Id="SecondInstaller" SourceFile="$(var.SecondInstaller.TargetPath)">
+				<MsiProperty Name="PREREQUISITE" Value="[Prerequisite]"/>
+				<MsiProperty Name="INSTALLLEVEL" Value="[InstallLevel]"/>
+			</MsiPackage>
+		</Chain>
+	</Bundle>
+</Wix>
