@@ -29,6 +29,7 @@ namespace InstallerUI
 			this.engine = engine;
 
 			engine.StringVariables["Prerequisite"] = "1";
+			engine.StringVariables["InstallLevel"] = "100";
 
 			this.InstallCommandValue = new DelegateCommand(
 				() => engine.Plan(LaunchAction.Install),
@@ -73,17 +74,40 @@ namespace InstallerUI
 				};
 
 			bootstrapper.ApplyBegin += (_, ea) => this.LogEvent("ApplyBegin");
-			bootstrapper.ApplyComplete += (_, ea) => this.LogEvent("ApplyComplete", ea);
+			bootstrapper.ApplyComplete += (_, ea) =>
+			{
+				this.LogEvent("ApplyComplete", ea);
+
+				// Everything is done, let's close the installer
+				this.interactionService.ShowMessageBox(string.Format("Installation complete, Status = {0}", ea.Status));
+				this.interactionService.CloseUIAndExit();
+			};
 			bootstrapper.Elevate += (_, ea) => this.LogEvent("Elevate", ea);
 			bootstrapper.Error += (_, ea) => this.LogEvent("Error", ea);
 			bootstrapper.ExecuteBegin += (_, ea) => this.LogEvent("ExecuteBegin", ea);
 			bootstrapper.ExecuteComplete += (_, ea) => this.LogEvent("ExecuteComplete", ea);
 			bootstrapper.ExecuteFilesInUse += (_, ea) => this.LogEvent("ExecuteFilesInUse", ea);
 			bootstrapper.ExecuteMsiMessage += (_, ea) => this.LogEvent("ExecuteMsiMessage", ea);
-			bootstrapper.ExecutePackageBegin += (_, ea) => this.LogEvent("ExecutePackageBegin", ea);
-			bootstrapper.ExecutePackageComplete += (_, ea) => this.LogEvent("ExecutePackageComplete", ea);
+			bootstrapper.ExecutePackageBegin += (_, ea) =>
+			{
+				this.LogEvent("ExecutePackageBegin", ea);
+				this.interactionService.RunOnUIThread(() => this.CurrentPackage = ea.PackageId);
+			};
+			bootstrapper.ExecutePackageComplete += (_, ea) =>
+			{
+				this.LogEvent("ExecutePackageComplete", ea);
+				this.interactionService.RunOnUIThread(() => this.CurrentPackage = string.Empty);
+			};
 			bootstrapper.ExecutePatchTarget += (_, ea) => this.LogEvent("ExecutePatchTarget", ea);
-			bootstrapper.ExecuteProgress += (_, ea) => this.LogEvent("ExecuteProgress", ea);
+			bootstrapper.ExecuteProgress += (_, ea) =>
+			{
+				this.LogEvent("ExecuteProgress", ea);
+				this.interactionService.RunOnUIThread(() =>
+				{
+					this.LocalProgress = ea.ProgressPercentage;
+					this.GlobalProgress = ea.OverallPercentage;
+				});
+			};
 			bootstrapper.LaunchApprovedExeBegin += (_, ea) => this.LogEvent("LaunchApprovedExeBegin");
 			bootstrapper.LaunchApprovedExeComplete += (_, ea) => this.LogEvent("LaunchApprovedExeComplete", ea);
 			bootstrapper.PlanBegin += (_, ea) => this.LogEvent("PlanBegin", ea);
@@ -97,7 +121,7 @@ namespace InstallerUI
 					}
 				};
 			bootstrapper.PlanMsiFeature += (_, ea) => this.LogEvent("PlanMsiFeature", ea);
-			bootstrapper.PlanPackageBegin += (_, ea) => this.LogEvent("PlanPackageBegin", ea);
+			bootstrapper.PlanPackageBegin += (_, ea) =>this.LogEvent("PlanPackageBegin", ea);
 			bootstrapper.PlanPackageComplete += (_, ea) => this.LogEvent("PlanPackageComplete", ea);
 			bootstrapper.PlanRelatedBundle += (_, ea) => this.LogEvent("PlanRelatedBundle", ea);
 			bootstrapper.PlanTargetMsiPackage += (_, ea) => this.LogEvent("PlanTargetMsiPackage", ea);
@@ -132,6 +156,7 @@ namespace InstallerUI
 			{
 				this.SetProperty(ref this.StateValue, value);
 				this.InstallCommandValue.RaiseCanExecuteChanged();
+				this.UninstallCommandValue.RaiseCanExecuteChanged();
 			}
 		}
 
@@ -140,6 +165,27 @@ namespace InstallerUI
 		{
 			get { return this.DowngradeValue; }
 			set { this.SetProperty(ref this.DowngradeValue, value); }
+		}
+
+		private int LocalProgressValue;
+		public int LocalProgress
+		{
+			get { return this.LocalProgressValue; }
+			set { this.SetProperty(ref this.LocalProgressValue, value); }
+		}
+
+		private int GlobalProgressValue;
+		public int GlobalProgress
+		{
+			get { return this.GlobalProgressValue; }
+			set { this.SetProperty(ref this.GlobalProgressValue, value); }
+		}
+
+		private string CurrentPackageValue;
+		public string CurrentPackage
+		{
+			get { return this.CurrentPackageValue; }
+			set { this.SetProperty(ref this.CurrentPackageValue, value); }
 		}
 		#endregion
 

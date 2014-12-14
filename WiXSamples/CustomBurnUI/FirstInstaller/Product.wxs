@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product Id="*" Name="FirstInstaller" Language="1033" Version="1.0.0.0"
-			 Manufacturer="Rainer Stropek" UpgradeCode="ce7f79b7-1a57-48ce-9be2-0311c87a10a3">
+			 Manufacturer="Rainer Stropek" UpgradeCode="6995B9B1-7AA6-4AAF-A633-048508C13FDE">
 		<Package InstallerVersion="400" Compressed="yes" InstallScope="perMachine" />
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes" />
