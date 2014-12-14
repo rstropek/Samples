@@ -1,5 +1,4 @@
 ﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using System;
 using System.ComponentModel.Composition;
 using System.Windows;
 
@@ -18,8 +17,6 @@ namespace InstallerUI
 			this.Closed += (sender, e) => this.Dispatcher.InvokeShutdown(); // shutdown dispatcher when the window is closed.
 
 			this.InitializeComponent();
-
-			//viewModel.ViewWindowHandle = new WindowInteropHelper(this).EnsureHandle();
 		}
 	}
 }

@@ -1,17 +1,11 @@
 ﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Threading;
-using System.Windows.Threading;
 using Newtonsoft.Json;
+using System;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Interop;
 
 namespace InstallerUI
