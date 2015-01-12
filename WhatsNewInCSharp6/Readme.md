@@ -51,7 +51,7 @@ private static void DoSomethingWithCSharp6()
 
 New code ([CSharpInfotagFinish/Program.cs](CSharpInfotagFinish/Program.cs)):
 
-```
+```C#
 private static void DoSomethingWithCSharp6()
 {
 	// Read theme from application settings and look it up in theme directory.
@@ -79,7 +79,7 @@ private static void DoSomethingWithCSharp6()
 
 Old code ([CSharpInfotagStart/Theme.cs](CSharpInfotagStart/Theme.cs)):
 
-```
+```C#
 public string Name
 {
 	get { return NameValue; }
@@ -100,7 +100,7 @@ public string Name
 
 New code ([CSharpInfotagFinish/Theme.cs](CSharpInfotagFinish/Theme.cs)):
 
-```
+```C#
 public string Name
 {
 	get { return NameValue; }
@@ -122,7 +122,7 @@ Also note the new `nameof` Operator in the sample code above.
 
 ## Index Initializers
 
-```
+```C#
 // Collection Initializers
 themes = new List<Theme>
 {
@@ -146,7 +146,7 @@ themesIndex = new Dictionary<string, Theme>
 
 Old code ([CSharpInfotagStart/Theme.cs](CSharpInfotagStart/Theme.cs)):
 
-```
+```C#
 // Note that we cannot make BackgroundColor readonly if we use 
 // auto-implemented properties. Also note that prior to C# 6 we
 // could not initialize value of BackgroundColor here.
@@ -173,7 +173,7 @@ public Theme()
 
 New code ([CSharpInfotagFinish/Theme.cs](CSharpInfotagFinish/Theme.cs)):
 
-```
+```C#
 // Note the use of a getter-only property with initializer here.
 public ConsoleColor BackgroundColor { get; } = ConsoleColor.White;
 
@@ -196,7 +196,7 @@ public Theme()
 
 Old code ([CSharpInfotagStart/Theme.cs](CSharpInfotagStart/Theme.cs)):
 
-```
+```C#
 public string FullName
 {
 	get
@@ -214,7 +214,7 @@ public Theme Clone()
 
 New code ([CSharpInfotagFinish/Theme.cs](CSharpInfotagFinish/Theme.cs)):
 
-```
+```C#
 // Note the use of Lambda bodied property here.
 // The exact syntax of string interpolations will change until RTM of VS2015.
 public string FullName => 
@@ -230,7 +230,7 @@ Also note the new string interpolation feature in the sample code above.
 
 Old code ([CSharpInfotagStart/Program.cs](CSharpInfotagStart/Program.cs)):
 
-```
+```C#
 private static async Task InitializeThemesAsync()
 {
 	var exceptionMessage = string.Empty;
@@ -260,7 +260,7 @@ private static async Task InitializeThemesAsync()
 
 New code ([CSharpInfotagFinish/Program.cs](CSharpInfotagFinish/Program.cs)):
 
-```
+```C#
 private static async Task InitializeThemesAsync()
 {
 	var exceptionMessage = string.Empty;
