@@ -1,7 +1,10 @@
 # What's New in C# 6?
 
-This lab demonstrates new feature of C# 6. I have used it
-in multiple magazine articles and workshops. **Additionally,
+This lab demonstrates new feature of C# 6. I have used similar examples
+in multiple magazine articles (e.g. [Windows Developer Magazine](https://windowsdeveloper.de/Windows-Developer/Windows-Developer-614-173207),
+[Informatik Aktuell](http://www.informatik-aktuell.de/), etc.) 
+and workshops (e.g. C# workshops at [BASTA](https://basta.net), 
+[IT-Visions](http://www.it-visions.at/) Infoday, etc.). **Additionally,
 I have written a [blog article](http://www.software-architects.com/devblog/2014/12/04/NET-Infoday-Whats-New-in-C-6)
 containing additional information on the topic**.
 
