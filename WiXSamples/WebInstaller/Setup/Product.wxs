@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	<Product Id="*" Name="Setup" Language="1033" Version="1.0.0.0" Manufacturer="Rainer Stropek"
+			 UpgradeCode="e465099d-02b8-42a9-901d-5ce014213876">
+
+		<Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- This sample has been developed and tested on Windows 8/2012 -->
+		<Condition Message="OS must be Windows 8 or Windows 2012">
+			<![CDATA[Installed OR VersionNT >= 602]]>
+		</Condition>
+
+		<!-- Pull in properties of IIS Utils and check if IIS is present -->
+		<PropertyRef Id="IISMAJORVERSION" />
+		<Condition Message="IIS must be installed. Use a bootstrapper to chain IIS installation.">
+			<![CDATA[Installed OR IISMAJORVERSION]]>
+		</Condition>
+
+		<!-- Pull in properties of NetFx extension and check if .NET is present -->
+		<PropertyRef Id="NETFRAMEWORK45" />
+		<Condition Message=".NET must be installed. Use a bootstrapper to chain .NET installation.">
+			<![CDATA[Installed OR NETFRAMEWORK45]]>
+		</Condition>
+		
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="INSTALLFOLDER" Name="Setup of Web Application Sample">
+					<Directory Id="BinFolder" Name="bin" />
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<!-- Files for web application -->
+		<ComponentGroup Id="WebApplicationFiles" Directory="BinFolder">
+			<Component Id="CMP_Microsoft.Owin.dll" Guid="*">
+				<File Id="FILE_Microsoft.Owin.dll" Source="$(var.WebHelloWorld.TargetDir)Microsoft.Owin.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CMP_Microsoft.Owin.Host.SystemWeb.dll" Guid="*">
+				<File Id="FILE_Microsoft.Owin.Host.SystemWeb.dll" Source="$(var.WebHelloWorld.TargetDir)Microsoft.Owin.Host.SystemWeb.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CMP_Owin.dll" Guid="*">
+				<File Id="FILE_Owin.dll" Source="$(var.WebHelloWorld.TargetDir)Owin.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CMP_WebHelloWorld.dll" Guid="*">
+				<File Id="FILE_WebHelloWorld.dll" Source="$(var.WebHelloWorld.TargetDir)WebHelloWorld.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CMP_WebHelloWorld.pdb" Guid="*">
+				<File Id="FILE_WebHelloWorld.pdb" Source="$(var.WebHelloWorld.TargetDir)WebHelloWorld.pdb" KeyPath="yes" />
+			</Component>
+			<Component Id="CMP_Web.config" Guid="*">
+				<File Id="FILE_Web.config" Source="$(var.WebHelloWorld.TargetDir)WebHelloWorld.dll.config" KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+
+		<DirectoryRef Id="BinFolder">
+			<!-- Create website.
+				 (if you want to know how to let the user interactively choose the website, 
+				 check e.g. http://blog.torresdal.net/2008/10/24/#CustomActions_GetWebSites) -->
+			<Component Id="HelloWorldWebSite" Guid="*">
+				<iis:WebSite Id="HelloWorldWebSite" Description="Hello World" ConfigureIfExists="yes" Directory="INSTALLFOLDER">
+					<iis:WebAddress Id="AllUnassigned" Port="8081" />
+					<iis:WebDirProperties Id="HelloWorldRootWebSiteProperties"
+					                      AnonymousAccess="yes" BasicAuthentication="no"
+										  WindowsAuthentication="no" />
+					<iis:WebApplication Id="HelloWorldRootWebApplication" Name="HelloWorld"
+										WebAppPool="HelloWorldAppPool"/>
+				</iis:WebSite>
+				<RegistryValue Root="HKCU" Key="Software\WixTraing\WebInstaller\HelloWorldWebsite"
+					   Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+			
+			<!-- Create app pool -->
+			<Component Id="HelloWorldAppPool" Guid="*">
+				<iis:WebAppPool Id="HelloWorldAppPool" ManagedPipelineMode="integrated" ManagedRuntimeVersion="v4.0"
+                                Name="Hello World App Pool" Identity="networkService" />
+				<RegistryValue Root="HKCU" Key="Software\WixTraing\WebInstaller\HelloWorldAppPool"
+					   Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+
+			<!-- Create virtual directory -->
+			<Component Id="HelloWorldVirtDir"
+                   Guid="*">
+				<iis:WebVirtualDir Id="HelloWorldVirtDir" Alias="HelloWorld" Directory="INSTALLFOLDER"
+                          WebSite="HelloWorldWebSite">
+					<iis:WebDirProperties Id="HelloWorldWebSiteProperties"
+										  AnonymousAccess="yes" BasicAuthentication="no"
+										  WindowsAuthentication="no" />
+					<iis:WebApplication Id="HelloWorldWebApplication" Name="HelloWorld"
+										WebAppPool="HelloWorldAppPool"/>
+				</iis:WebVirtualDir>
+				<RegistryValue Root="HKCU" Key="Software\WixTraing\WebInstaller\HelloWorldVirtualDir"
+					   Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<Feature Id="ProductFeature" Title="Setup" Level="1">
+			<ComponentGroupRef Id="WebApplicationFiles" />
+			<ComponentRef Id="HelloWorldAppPool"/>
+			<ComponentRef Id="HelloWorldVirtDir"/>
+			<ComponentRef Id="HelloWorldWebSite"/>
+		</Feature>
+	</Product>
+</Wix>

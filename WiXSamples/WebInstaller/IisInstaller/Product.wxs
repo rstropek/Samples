@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This installer enables IIS and ASP.NET 4.5 on Windows 8/2012 64bit -->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="IisInstaller" Language="1033" Version="1.0.0.0" Manufacturer="Rainer Stropek"
+			 UpgradeCode="da4abb19-915e-4fb0-8367-0e9a7b91d7a9">
+
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- This sample has been developed and tested on Windows 8/2012 -->
+		<Condition Message="OS must be Windows 8 or Windows 2012">
+			<![CDATA[Installed OR VersionNT >= 602]]>
+		</Condition>
+
+		<!-- Pull in properties of IIS Utils and check if IIS is present -->
+		<PropertyRef Id="IISMAJORVERSION" />
+		<Condition Message="IIS already installed">
+			<![CDATA[Installed OR NOT IISMAJORVERSION]]>
+		</Condition>
+
+		<!-- Don't create any directory for this package -->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder" />
+		</Directory>
+
+		<!-- Write a registry value so that we can detect that this installer set up IIS -->
+		<Component Id="CMP_Iis" Guid="*" Directory="ProgramFiles64Folder">
+			<RegistryValue Root="HKCU" Key="Software\WixTraing\WebInstaller"
+                   Name="installed" Type="integer" Value="1" KeyPath="yes" />
+		</Component>
+
+		<!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
+		<!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
+		<CustomAction Id="InstallIISSetProperty" Property="InstallIIS" Execute="immediate"
+		              Value="&quot;[System64Folder]dism.exe&quot; /Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-ISAPIExtensions /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45" />
+		<!-- Call dism.exe quietly (without showing command prompt).
+		     (see also http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html) -->
+		<CustomAction Id="InstallIIS" BinaryKey="WixCA" DllEntry="CAQuietExec64"
+					Execute="deferred" HideTarget="no" Return="ignore" Impersonate="no"/>
+		<!-- Schedule custom actions -->
+		<InstallExecuteSequence>
+			<Custom Action="InstallIISSetProperty" After="CostFinalize">
+				<![CDATA[NOT Installed AND NOT IISMAJORVERSION]]>
+			</Custom>
+			<Custom Action="InstallIIS" Before="WriteRegistryValues">
+				<![CDATA[NOT Installed AND NOT IISMAJORVERSION]]>
+			</Custom>
+		</InstallExecuteSequence>
+
+		<Feature Id="ProductFeature" Title="IisInstaller" Level="1">
+			<ComponentRef Id="CMP_Iis" />
+		</Feature>
+	</Product>
+</Wix>
