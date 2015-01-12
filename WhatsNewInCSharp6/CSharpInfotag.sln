@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpInfotag", "CSharpInfotag\CSharpInfotag.csproj", "{FD9134F3-06C7-4B3D-B27B-AD446F765028}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpInfotagStart", "CSharpInfotagStart\CSharpInfotagStart.csproj", "{FD9134F3-06C7-4B3D-B27B-AD446F765028}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpInfotagFinish", "CSharpInfotagFinish\CSharpInfotagFinish.csproj", "{E3B1744C-0BB0-487C-BF81-8C6AD07D4297}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FD9134F3-06C7-4B3D-B27B-AD446F765028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD9134F3-06C7-4B3D-B27B-AD446F765028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD9134F3-06C7-4B3D-B27B-AD446F765028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3B1744C-0BB0-487C-BF81-8C6AD07D4297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3B1744C-0BB0-487C-BF81-8C6AD07D4297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3B1744C-0BB0-487C-BF81-8C6AD07D4297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3B1744C-0BB0-487C-BF81-8C6AD07D4297}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
