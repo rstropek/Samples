@@ -2,8 +2,8 @@
 
 This lab demonstrates new feature of C# 6. I have used it
 in multiple magazine articles and workshops. Additionally,
-I have written a [blog article](http://www.software-architects.com/devblog/2014/12/04/NET-Infoday-Whats-New-in-C-6)
-on the topic.
+**I have written a [blog article](http://www.software-architects.com/devblog/2014/12/04/NET-Infoday-Whats-New-in-C-6)
+containing additional information on the topic**.
 
 Kudos for this sample to [Roman Schacherl from softaware](http://www.softaware.at/About/Unser-Team)
 (MVP for Windows Platform Development). We developed this sample together and
@@ -74,6 +74,10 @@ private static void DoSomethingWithCSharp6()
 	Console.BackgroundColor = theme?.BackgroundColor ?? defaultBackgroundColor;
 }
 ```
+
+Interested what happens behind the scenes? Here is the IL-Code of the sample shown above:
+
+![IL-Code Screenshot](Images/ILDasm.png)
 
 ### Null-Conditional Operator and Events
 
