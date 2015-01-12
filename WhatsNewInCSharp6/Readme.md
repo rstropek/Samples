@@ -13,7 +13,7 @@ did conference sessions on the topic together, too.
 
 Old code ([CSharpInfotagStart/Program.cs](CSharpInfotagStart/Program.cs)):
 
-```
+```C#
 private static void DoSomethingWithCSharp6()
 {
 	// Read theme from application settings and look it up in theme directory.
