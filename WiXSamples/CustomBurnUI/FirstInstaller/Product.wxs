@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="FirstInstaller" Language="1033" Version="1.0.0.0"
+			 Manufacturer="Rainer Stropek" UpgradeCode="6995B9B1-7AA6-4AAF-A633-048508C13FDE">
+		<Package InstallerVersion="400" Compressed="yes" InstallScope="perMachine" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- For demo purposes, the variable PREREQUISITE has to be set -->
+		<Condition Message="Variable not set">
+			Installed Or PREREQUISITE
+		</Condition>
+
+		<PropertyRef Id="NETFRAMEWORK45" />
+		<Condition Message=".NET 4.5 has to be installed">
+			Installed Or NETFRAMEWORK45
+		</Condition>
+		
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="CustomBurnUISample">
+					<Directory Id="FirstInstaller" Name="First Installer" />
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<DirectoryRef Id="FirstInstaller">
+			<Component Guid="*" Id="CMP_FirstInstallerReadMe">
+				<File Id="FILE_FirstInstallerReadMe" Source="FirstInstallerReadMe.txt" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<Feature Id="ProductFeature" Title="FirstInstaller" Level="1">
+			<ComponentRef Id="CMP_FirstInstallerReadMe"/>
+		</Feature>
+	</Product>
+</Wix>

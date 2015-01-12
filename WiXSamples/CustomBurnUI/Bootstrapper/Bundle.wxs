@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+	<Bundle Name="Bootstrapper" Version="1.0.0.0" Manufacturer="Rainer Stropek" UpgradeCode="06A19F6F-688C-44A6-B3D3-26F72DE50689"
+			DisableModify="no">
+		<BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
+			<Payload Name="BootstrapperCore.config" SourceFile="$(var.InstallerUI.TargetDir)InstallerUI.BootstrapperCore.config" />
+			<Payload SourceFile="$(var.InstallerUI.TargetPath)" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.dll" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.Desktop.dll" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.SharedInterfaces.dll" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
+			<PayloadGroupRef Id="LicensePayload"/>
+		</BootstrapperApplicationRef>
+
+		<!-- Variables modified by custom WPF UI -->
+		<Variable bal:Overridable="yes" Name="Prerequisite" Value=""/>
+		<Variable bal:Overridable="yes" Name="InstallLevel" Value="1"/>
+
+		<Chain>
+			<PackageGroupRef Id='NetFx45Web' />
+			<MsiPackage Id="FirstInstaller" SourceFile="$(var.FirstInstaller.TargetPath)" Visible="yes">
+				<MsiProperty Name="PREREQUISITE" Value="[Prerequisite]"/>
+				<MsiProperty Name="INSTALLLEVEL" Value="[InstallLevel]"/>
+			</MsiPackage>
+			<MsiPackage Id="SecondInstaller" SourceFile="$(var.SecondInstaller.TargetPath)" Visible="yes">
+				<MsiProperty Name="PREREQUISITE" Value="[Prerequisite]"/>
+				<MsiProperty Name="INSTALLLEVEL" Value="[InstallLevel]"/>
+			</MsiPackage>
+		</Chain>
+	</Bundle>
+
+	<!-- License data -->
+	<Fragment>
+		<!-- Payload for license file -->
+		<PayloadGroup Id="LicensePayload"> 
+             <Payload SourceFile="License.txt" /> 
+         </PayloadGroup> 
+
+		<!-- Add custom table with reference to license file -->
+		<CustomTable Id='LicenseInformation'>
+			<Row>
+				<Data Column='LicenseFile'>License.txt</Data>
+			</Row>
+		</CustomTable>
+	</Fragment>
+
+	<!-- Custom table definition for license file data -->
+	<Fragment>
+		<CustomTable Id='LicenseInformation' BootstrapperApplicationData='yes'>
+			<Column Id='LicenseFile' Category='Text' Type='string' Width='0' Nullable='yes' PrimaryKey='yes' />
+		</CustomTable>
+	</Fragment>
+</Wix>

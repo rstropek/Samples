@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="SecondInstaller" Language="1033" Version="1.0.0.0"
+			 Manufacturer="Rainer Stropek" UpgradeCode="4416E184-28F4-4465-A889-04CA2CED1B6F">
+		<Package InstallerVersion="400" Compressed="yes" InstallScope="perMachine" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<PropertyRef Id="NETFRAMEWORK45" />
+		<Condition Message=".NET 4.5 has to be installed">
+			Installed Or NETFRAMEWORK45
+		</Condition>
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="CustomBurnUISample">
+					<Directory Id="SecondInstaller" Name="Second Installer" />
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<DirectoryRef Id="SecondInstaller">
+			<Component Guid="*" Id="CMP_SecondInstallerReadMe">
+				<File Id="FILE_SecondInstallerReadMe" Source="SecondInstallerReadMe.txt" KeyPath="yes" />
+			</Component>
+			<Component Guid="*" Id="CMP_SecondInstallerOptionalReadMe">
+				<File Id="FILE_SecondInstallerOptionalReadMe" Source="SecondInstallerOptionalReadMe.txt" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<Feature Id="ProductFeature" Title="FirstInstaller" Level="1">
+			<ComponentRef Id="CMP_SecondInstallerReadMe"/>
+			<Feature Id="OptionalFeature" Title="OptionalFeature" Level="2">
+				<ComponentRef Id="CMP_SecondInstallerOptionalReadMe"/>
+			</Feature>
+		</Feature>
+	</Product>
+</Wix>

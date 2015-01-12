@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpInfotag
 {
-    public class Theme : INotifyPropertyChanged
+	public class Theme : INotifyPropertyChanged
     {
         private string NameValue;
 
@@ -21,28 +17,26 @@ namespace CSharpInfotag
                 if (NameValue != value)
                 {
                     NameValue = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+
+					// Note the use of the null conditional and nameof Operators here
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Theme.Name)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FullName)));
                 }
             }
         }
 
-        public string FullName
-        {
-            get
-            {
-                return string.Format("Theme: {0}, Background: {1}, Foreground: {2}",
-                    this.Name, this.BackgroundColor, this.ForegroundColor);
-            }
-        }
-
-        // Note that the exact syntax of string interpolations will change until RTM of VS2015
-        public string FullNameNew => 
+		// Note the use of Lambda bodied property here.
+        // The exact syntax of string interpolations will change until RTM of VS2015.
+        public string FullName => 
             "Theme: \{Name}, Background: \{BackgroundColor}, Foreground: \{ForegroundColor}";
 
-        public ConsoleColor BackgroundColor { get; } = ConsoleColor.Yellow;
+		// Note the use of Lambda bodied function here.
+		public Theme Clone() => new Theme(this.Name, this.BackgroundColor, this.ForegroundColor);
 
-        public ConsoleColor ForegroundColor { get; } = ConsoleColor.Red;
+		// Note the use of a getter-only property with initializer here.
+		public ConsoleColor BackgroundColor { get; } = ConsoleColor.White;
+
+        public ConsoleColor ForegroundColor { get; } = ConsoleColor.Black;
 
         public Theme(string name, ConsoleColor backgroundColor, ConsoleColor foregroundColor)
         {
@@ -56,5 +50,10 @@ namespace CSharpInfotag
             this.BackgroundColor = backgroundColor;
             this.ForegroundColor = foregroundColor;
         }
+
+		public Theme()
+		{
+			// No need to set default values any more.
+		}
     }
 }
