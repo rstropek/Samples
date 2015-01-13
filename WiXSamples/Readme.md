@@ -45,7 +45,11 @@ Another demo for learning WiX basics. In addition to [WiX Basics](WixBasics) it 
 
 * Preprocessor (see [Product.wxs](DotNetToolWithInstaller\DotNetToolInstaller\Product.wxs)): `<?if $(var.ProcessorArchitecture)=x64 ?> ... <?else ?> ... <?endif ?>`
 
-* 
+
+### Registry Searches
+
+Another demo for learning WiX basics. In addition to [WiX Basics](WixBasics) it covers registry 
+searches (see [Product.wxs](RegistrySearch\RegistrySearch\Product.wxs)).
 
 
 ### [Composite WPF Application With Installer](CompositeWpfAppWithInstaller)
@@ -90,4 +94,34 @@ quite simple.
 ```XML
 
 
-### 
+### Installing Windows Services
+
+I have created this sample to demonstrate the creation of MSI packages for installing *Windows Services*.
+
+The sample contains a [simple demo service written in C#](WindowsService\ServiceToInstall). This demo service
+just writes into *Windows Eventlog* on a regular basis (see [EventLoggingService.cs](WindowsService\ServiceToInstall\EventLoggingService.cs)).
+
+The installer used to install the demo service is shown in [Product.wxs](WindowsService\ServiceInstaller\Product.wxs).
+
+```XML
+<Component Id="CMP_Service" Directory="INSTALLFOLDER">
+	<!-- Install service executable -->
+	<File Id="FILE_EventLoggingService" 
+			Source="$(var.ServiceToInstall.TargetPath)"
+			KeyPath="yes" />
+	<!-- Install service -->
+	<ServiceInstall Id="InstallELS"
+					Name="WiXEventLoggingService"
+					Description="WiX EventLoggingService Sample"
+					Start="auto"
+					ErrorControl="normal"
+					Type="ownProcess"/>
+	<!-- Set start/stop/remove options -->
+	<ServiceControl Id="ControllELS"
+					Name="WiXEventLoggingService"
+					Start="install"
+					Stop="both"
+					Remove="uninstall"
+					Wait="yes" />
+</Component>
+```
