@@ -33,7 +33,8 @@ SDK documentation.
 
 The sample contains two setup
 projects. [CompositeWpfAppWithInstaller/CompositeWpfApp.Install](CompositeWpfAppWithInstaller/CompositeWpfApp.Install)
-generates a single installer. [CompositeWpfAppWithInstaller/CompositeWpfApp.InstallCab](CompositeWpfAppWithInstaller/CompositeWpfApp.InstallCab)
+generates a single installer. 
+[CompositeWpfAppWithInstaller/CompositeWpfApp.InstallCab](CompositeWpfAppWithInstaller/CompositeWpfApp.InstallCab)
 generates an installer with multiple CAB files.
 
 The sample also contains a BURN bootstrapper sample in 
@@ -41,5 +42,15 @@ The sample also contains a BURN bootstrapper sample in
 It create two separate MSI files (one for the application, one for the extension) and chains
 them into a single installer exe.
 
+
+
+### [Harvesting and installing COM DLLs](ComDll)
+
+This sample demonstrate how to create a WiX setup installing a COM DLL. It also comes
+with a [simple COM server](ComDll/ComDllToRegister) written in C# that can be used for experiments.
+
+The sample harvests the COM DLL during compilation. Check [project file](ComDll/ComInstaller/ComInstaller.wixproj)
+if you want to see how this is done. The [installer](ComDll/ComInstaller/Product.wxs) itself is therefore 
+quite simple.
 
 
