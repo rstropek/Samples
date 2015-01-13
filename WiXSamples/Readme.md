@@ -91,7 +91,7 @@ quite simple.
 		<SuppressRootDirectory>true</SuppressRootDirectory>
 	</HarvestFile>
 </ItemGroup>
-```XML
+```
 
 
 ### Installing Windows Services
