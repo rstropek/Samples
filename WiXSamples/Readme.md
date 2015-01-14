@@ -29,14 +29,10 @@ Feel free to download my [WiX slidedeck](Slides).
 ## Resources
 
 * [Homepage of the WiX Toolset](http://wixtoolset.org/)
-
 * [WiX Docs (v3.x)](http://wixtoolset.org/documentation/manual/v3/)
-
 * [Windows Installer Docs on MSDN](http://msdn.microsoft.com/en-us/library/cc185688.aspx)
-
 * Great Book: Ramirez, Nick: WiX 3.6: A Developer's Guide to Windows Installer XML, Packt Publishing
   ([Sponsored Amazon Link](https://www.amazon.de/dp/B009YW82A0?tag=timecockpit-21&camp=2906&creative=19474&linkCode=as4&creativeASIN=B009YW82A0&adid=1EG5FPDE5WHXHGTSAK7A&))
-
 * [Windows Dev Center (Desktop Development)](http://msdn.microsoft.com/en-US/windows/desktop/aa904949.aspx)
 
 
@@ -50,7 +46,6 @@ Demo installer for learning WiX basics. It covers:
 * Basic structure of WiX files in [Product.wxs](WixBasics\WiXBasicsSample\Product.wxs)
   (e.g. `Product`, `Package`, `MediaTemplate`, `Directory` structure, Components, Shortcuts, Registry Values, 
   Features, references to built-in UI, etc.)
-
 * Signing of MSI packages including generation of dev certificates in 
   [SignMSI.cmd](WixBasics\WiXBasicsSample\SignMSI.cmd)
 
@@ -61,9 +56,7 @@ Another demo for learning WiX basics. In addition to [WiX Basics](WixBasics) it 
 
 * Usage of project references in WiX projects (see [Product.wxs](DotNetToolWithInstaller\DotNetToolInstaller\Product.wxs)): 
   `<File Id="FILE_DotNetToolExe" Source="$(var.DotNetTool.TargetPath)" KeyPath="yes" />`
-
 * Binder variables (see [Product.wxs](DotNetToolWithInstaller\DotNetToolInstaller\Product.wxs)): `Version="!(bind.fileVersion.FILE_DotNetToolExe)"`
-
 * Preprocessor (see [Product.wxs](DotNetToolWithInstaller\DotNetToolInstaller\Product.wxs)): `<?if $(var.ProcessorArchitecture)=x64 ?> ... <?else ?> ... <?endif ?>`
 
 
@@ -188,14 +181,10 @@ For that, the sample contains a very simple web site in [Startup.cs](WebInstalle
 The installer [Product.wxs](WebInstaller\Setup\Product.wxs) performs the following tasks:
 
 * Install the files necessary for the OWIN web site
-
 * Create a new website in IIS (`iis:WebSite`)
-
 * Create a new virtual directory in the website (`iis:WebDirProperties`)
-
 * Creates a new application pool for the application (`iis:WebAppPool`). Note that the pool is configured to
   use the *v4.0 integrated pipeline* so that OWIN will work.
-
 * Creates a new application in the website (`iis:WebApplication`) and makes it using the new application pool
 
 
@@ -211,15 +200,12 @@ UI using WiX Burn. It consists of the following parts:
 
 * Two installers ([FirstInstaller](CustomBurnUI\FirstInstaller) and [SecondInstaller](CustomBurnUI\SecondInstaller))
   that are chained together in a bootstrapper (see [Bundle.wxs](CustomBurnUI\Bootstrapper\Bundle.wxs)).
-
 * A WPF UI for the bootstrapper (see [InstallerUI](CustomBurnUI\InstallerUI)).
 
 Note that:
 
 * The WPF UI uses MEF (*Managed Extensibility Framework*) for dependency injection
-
 * The WPF UI is built based on the MVVM (*Model View ViewModel*) design principle using the *Microsoft Prism* framework
-
 * For demo purposes, the WPF UI handles (nearly) all Burn events and writes them into the log (including parameter
   values, see [InstallerMainWindowViewModel.cs](CustomBurnUI\InstallerUI\InstallerMainWindowViewModel.cs)). If you want to learn about custom bootstrapper UIs, you can run the sample and generate a log file
   (`Bootstrapper.exe /log log.txt`). Afterwards take a look at the log file. You will see the order and parameters
