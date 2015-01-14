@@ -50,7 +50,7 @@ Demo installer for learning WiX basics. It covers:
   [SignMSI.cmd](WixBasics\WiXBasicsSample\SignMSI.cmd)
 
 
-### .NET Project and Installer in a Single Solution
+### [.NET Project and Installer in a Single Solution](DotNetToolWithInstaller)
 
 Another demo for learning WiX basics. In addition to [WiX Basics](WixBasics) it covers:
 
@@ -108,7 +108,7 @@ quite simple.
 ```
 
 
-### Installing Windows Services
+### [Installing Windows Services](WindowsService)
 
 I have created this sample to demonstrate the creation of MSI packages for installing *Windows Services*.
 
@@ -141,7 +141,7 @@ The installer used to install the demo service is shown in [Product.wxs](Windows
 ```
 
 
-### C++ Custom Actions
+### [C++ Custom Actions](VisualStudioSnippetInstaller)
 
 This is a more advanced WiX sample. It demonstrates the development of a custom action written in C++. 
 The scenario of the sample is a MSI package for installing a *Visual Studio Snippet*. The target directory
@@ -150,7 +150,7 @@ is determined by a combination of different custom actions.
 A detailed description of the sample can be found at [VisualStudioSnippetInstaller](VisualStudioSnippetInstaller).
 
 
-### .NET Custom Actions and Custom MSI UIs
+### [.NET Custom Actions and Custom MSI UIs](CustomUIWithSql)
 
 This is a more advanced WiX sample. It demonstrates the development of a custom action written in C# to validate
 a given SQL Server name (see [CustomAction.cs](CustomUIWithSql\ValidateSqlServerNameAction\CustomAction.cs)). 
@@ -167,7 +167,7 @@ this installer has a custom WiX UI in [AdditionalDialog.wxs](CustomUIWithSql\Ins
 calls into the C# custom action.
 
 
-### Adding the IIS Server Role, installing ASP.NET web applications
+### [Adding the IIS Server Role, installing ASP.NET web applications](WebInstaller)
 
 This sample consists of two parts. First, [Product.wxs](WebInstaller\IisInstaller\Product.wxs) 
 contains an installer that makes a *Windows Server 2012*
@@ -188,12 +188,12 @@ The installer [Product.wxs](WebInstaller\Setup\Product.wxs) performs the followi
 * Creates a new application in the website (`iis:WebApplication`) and makes it using the new application pool
 
 
-### Creating Patches
+### [Creating Patches](Patch)
 
 This sample ([Patch](Patch)) just demonstrates the basics of patch creation with WiX. 
 
 
-### Custom *Burn* Bootstrapper UI
+### [Custom *Burn* Bootstrapper UI](CustomBurnUI)
 
 This sample demonstrates how to use WPF (*Windows Presentation Foundation*) to create a custom bootrapper
 UI using WiX Burn. It consists of the following parts:
