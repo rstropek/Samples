@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOwinDatabaseSample", "SimpleOwinDatabaseSample\SimpleOwinDatabaseSample.csproj", "{98CAD857-28FF-4DC2-96CE-A5774D609B73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOwinDatabaseSample.Test", "SimpleOwinDatabaseSample.Test\SimpleOwinDatabaseSample.Test.csproj", "{13CC7ECE-2314-4B67-9AE0-15BCE2296282}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98CAD857-28FF-4DC2-96CE-A5774D609B73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CAD857-28FF-4DC2-96CE-A5774D609B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CAD857-28FF-4DC2-96CE-A5774D609B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CAD857-28FF-4DC2-96CE-A5774D609B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13CC7ECE-2314-4B67-9AE0-15BCE2296282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13CC7ECE-2314-4B67-9AE0-15BCE2296282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13CC7ECE-2314-4B67-9AE0-15BCE2296282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13CC7ECE-2314-4B67-9AE0-15BCE2296282}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
