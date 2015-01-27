@@ -38,10 +38,10 @@ namespace JiraWebhook
 
 					// For details about VSO REST API 
 					// see http://www.visualstudio.com/en-us/integrate/reference/reference-vso-overview-vsi
-					const string tenant = "rainerdemotfs-westeu.visualstudio.com";
-					const string project = "oop";
+					var tenant = ConfigurationManager.AppSettings["VSOTenant"];
+					var project = ConfigurationManager.AppSettings["VSOProject"];
 					const string workItemType = "Product Backlog Item";
-					const string url = "https://" + tenant + "/defaultcollection/" + project + "/_apis/wit/workitems/$" + workItemType + "?api-version=1.0";
+					var url = "https://" + tenant + "/defaultcollection/" + project + "/_apis/wit/workitems/$" + workItemType + "?api-version=1.0";
 					const string fieldOperation = "add";
 
 					// Build payload for creating a new product backlog item
