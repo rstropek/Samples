@@ -58,7 +58,8 @@ Do you want to play with the sample yourself? Here is what you have to do:
 Do you want to try the Jira Webhook, too?
 
 * Deploy the JiraWebook sample into a new Azure website. Don't forget to set the
-  website configuration settings accordingly.
+  website configuration settings accordingly (especially the *TfsConnection*
+  with VSO credentials in the form *user:password*).
 
 * Configure the webhook in Jira ([details](https://developer.atlassian.com/display/JIRADEV/JIRA+Webhooks+Overview))
 

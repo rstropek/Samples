@@ -40,7 +40,7 @@ namespace JiraWebhook
 					// see http://www.visualstudio.com/en-us/integrate/reference/reference-vso-overview-vsi
 					var tenant = ConfigurationManager.AppSettings["VSOTenant"];
 					var project = ConfigurationManager.AppSettings["VSOProject"];
-					const string workItemType = "Product Backlog Item";
+					const string workItemType = "Product%20Backlog%20Item";
 					var url = "https://" + tenant + "/defaultcollection/" + project + "/_apis/wit/workitems/$" + workItemType + "?api-version=1.0";
 					const string fieldOperation = "add";
 
