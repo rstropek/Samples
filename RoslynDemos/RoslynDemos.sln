@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22512.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoslynDemos.SyntaxTree", "RoslynDemos.SyntaxTree\RoslynDemos.SyntaxTree.csproj", "{A06D2073-58B4-4767-97D6-5D8C9EA484AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A06D2073-58B4-4767-97D6-5D8C9EA484AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A06D2073-58B4-4767-97D6-5D8C9EA484AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A06D2073-58B4-4767-97D6-5D8C9EA484AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A06D2073-58B4-4767-97D6-5D8C9EA484AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
