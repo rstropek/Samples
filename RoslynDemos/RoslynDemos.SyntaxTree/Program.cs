@@ -77,6 +77,7 @@ namespace RoslynDemos.SyntaxTree
 			Console.WriteLine(root.GetText());
 		}
 
+		#region SyntaxTreeVisitor
 		static void SyntaxTreeVisitor()
 		{
 			const string text = @"class Basta2015 { void CSharpWorkshop(int numberOfAttendees) { } 
@@ -96,5 +97,6 @@ namespace RoslynDemos.SyntaxTree
 				return base.VisitMethodDeclaration(node);
 			}
 		}
+		#endregion
 	}
 }
