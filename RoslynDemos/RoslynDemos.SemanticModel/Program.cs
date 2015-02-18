@@ -46,10 +46,27 @@ namespace RoslynDemos.SemanticModel
 					.ValueText == "greeting")
 				.Type;
 
-			// Get the semantic information for variable declarator
+			// Get the semantic information for variable declarator and print its type
 			var semanticInfo = semanticModel.GetTypeInfo(varNode);
-
 			Console.WriteLine(semanticInfo.Type.Name);
+
+			// Here is an alternative: Find symbol by name based on cursor position
+			// Find span of body of main method
+			var mainStart = syntaxTree.GetRoot()
+				.DescendantNodes()
+				.OfType<MethodDeclarationSyntax>()
+				.Single(m => m.Identifier.ValueText == "Main")
+				.ChildNodes()
+				.OfType<BlockSyntax>()
+				.Single()
+				.Span
+				.Start;
+
+			// Look for symbol 'greeting' based on location inside source
+			var symbol = semanticModel
+				.LookupSymbols(mainStart, name: "greeting")
+				.First() as ILocalSymbol;
+			Console.WriteLine(symbol.Type.Name);
 		}
 	}
 }
