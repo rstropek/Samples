@@ -53,12 +53,13 @@ namespace ProductionPlanning.Logic
 			#region Check preconditions
 			if (productRepository == null)
 			{
-				throw new ArgumentNullException("productRepository");
+				// Note the new nameof operator here
+				throw new ArgumentNullException(nameof(productRepository));
 			}
 
 			if (parts == null)
 			{
-				throw new ArgumentNullException("parts");
+				throw new ArgumentNullException(nameof(parts));
 			}
 
 			if (parts.Count() == 0)
@@ -66,7 +67,7 @@ namespace ProductionPlanning.Logic
 				throw new ArgumentException(
 					@"Parts must not be empty for an immutable composite product. 
 Create a product if it does not have parts.",
-					"parts");
+					nameof(parts));
 			}
 			#endregion
 
@@ -112,7 +113,7 @@ Create a product if it does not have parts.",
 			#region Check preconditions
 			if (productRepository == null)
 			{
-				throw new ArgumentNullException("productRepository");
+				throw new ArgumentNullException(nameof(productRepository));
 			}
 			#endregion
 
@@ -124,7 +125,7 @@ Create a product if it does not have parts.",
 			if (this.Part == null)
 			{
 				// Note string interpolation here
-				throw new ArgumentException($"Could not find product with ID {productID} in repository", "productID");
+				throw new ArgumentException($"Could not find product with ID {productID} in repository", nameof(productID));
 			}
 		}
 
