@@ -24,10 +24,8 @@ namespace ProductionPlanning.Logic
 		#endregion
 
 		// Note read-only static property with initialization
-		public static ImmutableProductRepository Empty
-		{ get; }
-		=
-			new ImmutableProductRepository();
+		public static ImmutableProductRepository Empty { get; }
+			= new ImmutableProductRepository();
 
 		public ImmutableList<ImmutableProduct> Products { get; }
 
@@ -70,7 +68,7 @@ namespace ProductionPlanning.Logic
 
 		public TResult Visit(ImmutableProductRepository repository) =>
 			// Aggregate values of all products in repository
-			repository.Products.Aggregate(default(TResult), (interimResult, p) => 
+			repository.Products.Aggregate(default(TResult), (interimResult, p) =>
 				AggregateInterimResults(interimResult, this.Visit(p)));
 
 		/// <summary>

@@ -12,6 +12,9 @@ namespace ProductionPlanning.Logic
 	/// </summary>
 	public class ImmutableProduct : IProduct
 	{
+		// QUIZ: How would you implement ImmutableProduct without the new
+		//       read-only properties?
+
 		public ImmutableProduct(IProduct source)
 			: this(source.ProductID, source.Description, source.CostsPerItem)
 		{ }

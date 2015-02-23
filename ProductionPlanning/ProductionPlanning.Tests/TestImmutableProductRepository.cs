@@ -14,9 +14,11 @@ namespace ProductionPlanning.Tests
 		{
 			// Note function-bodied syntax here
 
-			public override decimal AggregateInterimResults(decimal a, decimal b) => a + b;
+			public override decimal AggregateInterimResults(decimal a, decimal b) => 
+				a + b;
 
-			public override decimal VisitProduct(ImmutableProduct product) => product.CostsPerItem;
+			public override decimal VisitProduct(ImmutableProduct product) => 
+				product.CostsPerItem;
 
 			public override decimal VisitPart(ImmutablePart part) => 
 				// Price of part * number of parts

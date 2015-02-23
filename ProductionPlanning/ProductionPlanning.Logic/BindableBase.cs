@@ -24,6 +24,7 @@ namespace ProductionPlanning.Logic
 			[CallerMemberName]string propertyName = null)
 		{
 			// Note the use of Equals here instead of "backingValue == value"
+			// QUIZ: Why is Object.Equals important when it comes to value types and boxing?
 			if (!object.Equals(backingValue, value))
 			{
 				backingValue = value;

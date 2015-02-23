@@ -16,16 +16,22 @@ namespace ProductionPlanning.Tests
 		public interface IRaisedPropertyChanges
 		{
 			IRaisedPropertyChanges Raised(string propertyName);
-			IRaisedPropertyChanges DidNotRaise(string propertyName);
-        }
+            IRaisedPropertyChanges DidNotRaise(string propertyName);
+
+			IRaisedPropertyChanges RaisedErrorsChanged(string propertyName);
+			IRaisedPropertyChanges DidNotRaiseErrorsChanged(string propertyName);
+		}
 
 		private class RaisedPropertyChanges : IRaisedPropertyChanges
 		{
-			public HashSet<string> events = new HashSet<string>();
+			// Note the use of readonly here
+			public readonly HashSet<string> changeEvents = new HashSet<string>();
+			public readonly HashSet<string> errorsChangedEvents = new HashSet<string>();
 
+			#region Property changed handling
 			public IRaisedPropertyChanges Raised(string propertyName)
 			{
-				if (!events.Contains(propertyName))
+				if (!changeEvents.Contains(propertyName))
 				{
 					// Note string interpolation here
 					Assert.Fail($"PropertChanged event was not raised for property {propertyName}");
@@ -36,7 +42,7 @@ namespace ProductionPlanning.Tests
 
 			public IRaisedPropertyChanges DidNotRaise(string propertyName)
 			{
-				if (events.Contains(propertyName))
+				if (changeEvents.Contains(propertyName))
 				{
 					// Note string interpolation here
 					Assert.Fail($"PropertChanged event was raised for property {propertyName}");
@@ -44,6 +50,31 @@ namespace ProductionPlanning.Tests
 
 				return this;
 			}
+			#endregion
+
+			#region Errors changed handling
+			public IRaisedPropertyChanges RaisedErrorsChanged(string propertyName)
+			{
+				if (!errorsChangedEvents.Contains(propertyName))
+				{
+					// Note string interpolation here
+					Assert.Fail($"ErrorsChanged event was not raised for property {propertyName}");
+				}
+
+				return this;
+			}
+
+			public IRaisedPropertyChanges DidNotRaiseErrorsChanged(string propertyName)
+			{
+				if (errorsChangedEvents.Contains(propertyName))
+				{
+					// Note string interpolation here
+					Assert.Fail($"ErrorsChanged event was raised for property {propertyName}");
+				}
+
+				return this;
+			}
+			#endregion
 		}
 
 		/// <summary>
@@ -54,10 +85,27 @@ namespace ProductionPlanning.Tests
 		{
 			var rpc = new RaisedPropertyChanges();
 
-			PropertyChangedEventHandler handler = (_, ea) => rpc.events.Add(ea.PropertyName);
+			// Add handler for INotifyDataErrorInfo
+			EventHandler<DataErrorsChangedEventArgs> errorsHandler = 
+				(_, ea) => rpc.errorsChangedEvents.Add(ea.PropertyName);
+			var notifyErrors = obj as INotifyDataErrorInfo;
+			if (notifyErrors != null)
+			{
+				notifyErrors.ErrorsChanged += errorsHandler;
+			}
+
+			// Add handler for INotifyPropertyChanged
+			PropertyChangedEventHandler handler = (_, ea) => rpc.changeEvents.Add(ea.PropertyName);
             obj.PropertyChanged += handler;
+
 			body(obj);
+
+			// Remove handlers
 			obj.PropertyChanged -= handler;
+			if (notifyErrors != null)
+			{
+				notifyErrors.ErrorsChanged -= errorsHandler;
+			}
 
 			return rpc;
 		}
