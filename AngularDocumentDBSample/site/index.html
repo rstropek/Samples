@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<title>Leondinger Bienen - Imkerverein Leonding i.G.</title>
+
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="index.css" rel="stylesheet" />
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+	<script type="text/javascript">
+		var captachWidget;
+		
+		// function to render captcha
+		var onloadCallback = function() {
+	        captachWidget = grecaptcha.render('captcha', {
+	          'sitekey' : '6LdwZQMTAAAAAMV51zHXP-wu-C1YiLKZxta6e3re'
+	        });
+		};
+		
+		angular.module("register", [])
+			.controller("registerController", ["$scope", "$http", function($scope, $http) {
+				$scope.user = {};
+				$scope.registerSuccess = false;
+				
+				$scope.canSave = function(ngModelController) { 
+					return ngModelController.$dirty && ngModelController.$valid; 
+				};
+				
+				$scope.register = function() {
+					var grecaptchaResponse = grecaptcha.getResponse(captachWidget);
+					if (grecaptchaResponse) {
+						// trigger server-side registration
+						$http.post(
+							"/api/register", 
+							JSON.stringify({ 
+								firstName: $scope.user.firstName,
+								lastName: $scope.user.lastName,
+								email: $scope.user.email,
+								recaptchaResponse: grecaptchaResponse
+							})).then(function(data) {
+								$scope.registerSuccess = true;
+							});
+					}
+				};
+			}]);
+	</script>
+</head>
+<body ng-app="register">
+	<div class="container">
+		<div class="row heroImage">
+			<img src="images/LeondingerBienenGesucht.jpg" alt="Mutige Frauen und M&auml;nner gesucht" />
+		</div>
+		<div class="row introText">
+			<h2>Leondinger ImkerInnen gesucht</h2>
+			<p>
+				Spaziert man durch Leonding, entdeckt man an vielen Stellen Bienenst&ouml;cke. Es gibt
+				offenbar in Leonding eine Menge Bienen-begeisterte Imker. Zum Erfahrungsaustausch
+				mussten diese jedoch bisher in die umliegenden Gemeinden ausweichen, da es in Leonding
+				keinen eigenen Imkerverein gibt. Das m&ouml;chten wir &auml;ndern.
+			</p>
+			<p>
+				In den letzten Wochen haben sich einige Leondinger Imker getroffen und beschlossen, einen eigenen
+				gemeinn&uuml;tzigen Verein zu gr&uuml;nden. Daher suchen wir nach Personen, die in Leonding Bienen 
+				halten und sich mit gleichgesinnten austauschen möchten. Egal, ob
+				Sie schon Erfahrung mit Bienen haben oder erst damit starten, wenn Sie &uuml;ber den in Gr&uuml;ndung befindlichen
+				Leondinger Imkerverein auf dem Laufenden gehalten werden möchten, registrieren Sie sich bitte
+				im Formular unten.
+			</p>
+			<p>
+				Wir freuen uns schon auf Ihre Nachricht! 
+			</p>
+		</div>
+		<div class="row registerForm" ng-controller="registerController">
+			<h2>Registrieren</h2>
+			<form name="registerForm" ng-show="!registerSuccess">
+				<div class="form-group">
+					<label for="firstName">Vorname</label>
+					<input type="text" class="form-control" id="firstName" placeholder="Ihr Vorname" 
+						   ng-model="user.firstName" ng-model-options="{ updateOn: 'blur' }" required>
+				</div>
+				<div class="form-group">
+					<label for="lastName">Nachname</label>
+					<input type="text" class="form-control" id="lastName" placeholder="Ihr Nachname" 
+						   ng-model="user.lastName" ng-model-options="{ updateOn: 'blur' }" required>
+				</div>
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input type="email" class="form-control" id="email" placeholder="Ihre Email Adresse" 
+						   ng-model="user.email" ng-model-options="{ updateOn: 'blur' }" required>
+				</div>
+				<p>
+					Durch Klick auf "Registrieren" stimmen Sie zu, dass wir Sie per Email &uuml;ber
+					Fortschritte bei der Gr&uuml;ndung eines Leondinger Imkervereins informieren d&uuml;rfen.
+				</p>
+				<div id="captcha"></div>
+				<p class="text-success" ng-show="registerSuccess">
+					Danke! Ihre Registrierung wurde gespeichert. Wir kommen auf Sie zu sobald es
+					Neuigkeiten bzgl. Imkerverein Leonding gibt.
+				</p>
+				<button type="button" class="btn btn-default" ng-disabled="!canSave(registerForm)"
+						ng-click="register()">Registrieren</button>
+			</form>
+			<p class="text-success" ng-show="registerSuccess">
+				Danke! Ihre Registrierung wurde gespeichert. Wir kommen auf Sie zu sobald es
+				Neuigkeiten bzgl. Imkerverein Leonding gibt.
+			</p>
+		</div>
+		<div class="row">
+			<p class="impressum">
+				Medieninhaber: Rainer Stropek, Birkenweg 16, 4060 Leonding
+ 				f&uuml;r den in Vorbereitung befindlichen Leondinger Imkerverein.
+			</p>
+		</div>
+	</div>
+	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=de-AT" async defer></script>
+</body>
+</html>

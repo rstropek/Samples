@@ -1,0 +1,41 @@
+body {
+	max-width: 750px;
+}
+
+.container {
+	max-width: 550px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.heroImage {
+	margin-bottom: 15px;
+}
+
+.heroImage img {
+	width: 100%;
+	height: auto;
+	max-width: 500px;
+	max-height: 100%;
+}
+
+.introText {
+	max-width: 1024px;
+	margin-right: 15px;
+}
+
+.registerForm {
+	max-width: 500px;
+	margin-right: 15px;
+}
+
+.impressum {
+	font-size: xx-small;
+	margin-top: 30px;
+}
+
+#captcha {
+	margin-bottom: 15px;
+}
