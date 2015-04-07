@@ -1,0 +1,1 @@
+ilasm HelloWorld.il
