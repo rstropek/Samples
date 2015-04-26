@@ -1,0 +1,48 @@
+﻿<div ng-controller="FeedbackController">
+	<h1>Konferenzfeedback</h1>
+
+	<p ng-show="loadingTicket">
+		<span class="glyphicon glyphicon-cloud-download"></span> Bitte kurz um Geduld,
+		wir laden Ihre Ticketdaten ...
+	</p>
+
+	<p ng-show="loadingError" class="alert alert-danger">
+		<span class="glyphicon glyphicon-flash"></span> Fehler beim Laden der Daten!
+	</p>
+
+	<div ng-show="!loadingTicket && !loadingError">
+		<p>
+			Danke f&uuml;r Ihre Teilnahme, {{ticket.firstName}} {{ticket.lastName}}!
+		</p>
+		<p>
+			Bitte bewerten Sie in der folgenden Tabelle die Sessions:
+		</p>
+		<table class="table-striped table-bordered rating-table">
+			<thead>
+				<tr>
+					<th class="title">Sessiontitel</th>
+					<th class="rating">Ihre Bewertung</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rating in ratings">
+					<td class="title"><span ng-bind="getSessionTitle(rating.sessionId)"></span></td>
+					<td class="rating">
+						<select class="form-control" ng-model="rating.rating">
+							<option value="0" ng-selected="rating.rating==0">k.A.</option>
+							<option value="1" ng-selected="rating.rating==1">Super</option>
+							<option value="3" ng-selected="rating.rating==3">Geht so</option>
+							<option value="5" ng-selected="rating.rating==5">Schlecht</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<button type="button" class="btn btn-default" ng-click="save()" ng-show="!successfullySaved">Speichern</button>
+
+		<p class="success-msg" ng-show="successfullySaved">
+			<span class="glyphicon glyphicon-ok"></span> Ihre Angaben wurden gespeichert.
+		</p>
+	</div>
+</div>

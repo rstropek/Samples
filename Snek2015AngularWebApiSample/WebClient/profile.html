@@ -1,0 +1,20 @@
+﻿<div ng-controller="ProfileController">
+	<h1>Ihr Profil</h1>
+
+	<form>
+		<div class="form-group">
+			<label for="firstName">Vorname</label>
+			<input type="text" class="form-control" id="firstName" placeholder="Ihr Vorname" ng-model="ticket.firstName">
+		</div>
+		<div class="form-group">
+			<label for="lastName">Nachname</label>
+			<input type="text" class="form-control" id="lastName" placeholder="Ihr Nachname" ng-model="ticket.lastName">
+		</div>
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="email" class="form-control" id="email" placeholder="Email-Adresse" ng-model="ticket.email">
+		</div>
+
+		<button type="button" class="btn btn-default" ng-click="save()">Speichern</button>
+	</form>
+</div>
