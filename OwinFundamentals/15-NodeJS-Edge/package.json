@@ -1,0 +1,13 @@
+{
+  "name": "Node-with-Express-Web-Server",
+  "version": "1.0.0",
+  "description": "OWIN Fundamentals Samples - Node.JS Web Server with Express",
+  "main": "app.js",
+  "author": {
+    "name": "Rainer Stropek",
+    "email": "rainer@timecockpit.com"
+  },
+  "dependencies": {
+    "express": "^4.12.3"
+  }
+}

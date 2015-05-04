@@ -1,0 +1,10 @@
+{
+  "name": "Simple-Node-Web-Server",
+  "version": "1.0.0",
+  "description": "OWIN Fundamentals Samples - Simple Node.JS Web Server",
+  "main": "app.js",
+  "author": {
+    "name": "Rainer Stropek",
+    "email": "rainer@timecockpit.com"
+  }
+}
