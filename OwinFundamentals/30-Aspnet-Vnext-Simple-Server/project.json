@@ -7,11 +7,13 @@
 		"Microsoft.AspNet.Server.WebListener": "1.0.0-beta4",
 		"Microsoft.AspNet.Mvc": "6.0.0-beta4",
 		"Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
-		"Microsoft.AspNet.FileProviders": "1.0.0-beta4"
+		"Microsoft.AspNet.FileProviders": "1.0.0-beta4",
+		"Kestrel": "1.0.0-beta4"
 	},
 
 	"commands": {
-		"web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:1337"
+		"web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:1337",
+		"kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://localhost:1337"
 	},
 
 	"frameworks": {
