@@ -1,0 +1,12 @@
+﻿{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "sourceMap": false,
+		"target": "ES5",
+        "module": "commonjs",
+        "removeComments": true
+    },
+    "files": [
+        "app.ts"
+    ]
+}

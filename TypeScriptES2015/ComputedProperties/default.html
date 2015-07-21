@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular.js Samples Using TypeScript</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+	<script src="app.js"></script>
+	
+	<link rel="stylesheet" href="app.css">
+</head>
+<body ng-app="demo" ng-controller="demo as vm">
+	<h1>TypeScript 1.5 Sample</h1>
+	<form>
+		<label for="value">
+			Please enter a value lower than 10:
+		</label><br/>
+		<input id="value" type="number" 
+			   ng-model="vm.value" 
+			   ng-class="vm.getClass()" />
+	</form>
+</body>
+</html>
