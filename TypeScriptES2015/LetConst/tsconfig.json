@@ -1,0 +1,10 @@
+﻿{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "sourceMap": false,
+		"target": "ES5"
+    },
+    "files": [
+        "app.ts"
+    ]
+}
