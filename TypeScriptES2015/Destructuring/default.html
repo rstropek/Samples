@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular.js Samples Using TypeScript</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+	<script src="app.js"></script>
+</head>
+<body ng-app="demo" ng-controller="demo as vm">
+	<h1>TypeScript 1.5 Sample</h1>
+	<form>
+		<label for="firstName">First Name:</label><br/>
+		<input id="firstName" type="text" ng-model="vm.person.firstName" /><br/>
+		<br/>
+		<label for="lastName">Last Name:</label><br/>
+		<input id="lastName" type="text" ng-model="vm.person.lastName" />
+		
+		<h2>Welcome, {{ vm.getFullName() }}</h2>
+		<p>{{ vm.getColleagues() }}</p>
+	</form>
+</body>
+</html>
