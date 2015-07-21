@@ -1,0 +1,12 @@
+﻿{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "sourceMap": false,
+		"target": "ES5",
+        "module": "commonjs"
+    },
+    "files": [
+        "app.ts",
+        "module.ts"
+    ]
+}
