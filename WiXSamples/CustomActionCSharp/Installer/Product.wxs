@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Installer" Language="1033" Version="1.0.0.0" Manufacturer="Rainer Stropek" 
+			 UpgradeCode="bf30dbee-b8d6-486f-85ff-9bc912fd948f">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="CustomActionCSharpDemo" />
+			</Directory>
+		</Directory>
+		
+		<Binary Id="CustomActionDll"
+			SourceFile="$(var.CustomAction.TargetDir)CustomAction.CA.dll" />
+
+		<InstallUISequence>
+			<Custom Action="GetRandomNumberCA" Before="ExecuteAction" />
+			<Custom Action="SetInstallFolder" After="GetRandomNumberCA" />
+		</InstallUISequence>
+		
+		<CustomAction Id="GetRandomNumberCA"
+					  Return="check"
+					  Execute="firstSequence"
+					  BinaryKey="CustomActionDll"
+					  DllEntry="GetRandomNumber"
+					  HideTarget="no" />
+
+		<CustomAction Id="SetInstallFolder"
+					  Directory="INSTALLFOLDER"
+					  Value="[ProgramFilesFolder]DIR[RANDOM_NUMBER]\" />
+		
+		<Feature Id="ProductFeature" Title="Installer" Level="1">
+			<Component Id="CMP_MyFile" Directory="INSTALLFOLDER">
+				<File Source="MyFile.txt" Id="FILE_MyFile" KeyPath="yes" />
+			</Component>
+		</Feature>
+	</Product>
+</Wix>
