@@ -1,0 +1,26 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly Name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<# 
+	string fileName = this.Host.ResolvePath("Classes.xml");
+	var xmlDoc = XDocument.Load(fileName);
+#>
+using System;
+
+namespace GeneratedClasses
+{
+	<#  foreach (var item in xmlDoc.Element("Classes")
+			.Elements()
+			.Select(e => e.Attribute("name").Value))
+		{ #>class <#= item #>
+	{
+	}
+
+	<# } #>
+}

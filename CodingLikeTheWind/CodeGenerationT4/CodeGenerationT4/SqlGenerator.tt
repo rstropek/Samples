@@ -1,0 +1,14 @@
+﻿<#@ template language="C#" #>
+<#@ import namespace="System.Linq" #>
+
+CREATE TABLE <#= this.Schema #> (
+	<#= this.TableName #>_ID UNIQUEIDENTIFIER PRIMARY KEY
+	<# 
+		foreach ( var property in this.Properties )
+		{
+			#>, <#= property.Code #> <#= property.DBDataType #><#
+			this.WriteLine(string.Empty);
+		}
+	#>
+);
+GO
