@@ -1,0 +1,12 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        SizeToContent="WidthAndHeight">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="We have " />
+            <TextBlock Text="{Binding Path=numberOfSpeakers}" />
+            <TextBlock Text=" Speakers." />
+        </StackPanel>
+        <Button Name="CloseButton" Content="Close" />
+    </StackPanel>
+</Window>

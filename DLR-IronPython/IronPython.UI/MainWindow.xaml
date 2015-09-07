@@ -1,0 +1,102 @@
+﻿<r:RibbonWindow x:Class="IronPython.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
+        xmlns:vm="clr-namespace:IronPython.UI.ViewModel"
+        Title="MainWindow" Height="350" Width="525">
+    <DockPanel LastChildFill="True">
+        <r:Ribbon DockPanel.Dock="Top" 
+				  Title="Test"
+				  ContextMenu="{x:Null}">
+            <r:Ribbon.QuickAccessToolBar>
+                <r:RibbonQuickAccessToolBar Visibility="Collapsed" />
+            </r:Ribbon.QuickAccessToolBar>
+            <r:Ribbon.ApplicationMenu>
+                <r:RibbonApplicationMenu Visibility="Collapsed" />
+            </r:Ribbon.ApplicationMenu>
+
+            <r:RibbonTab Header="Main Menu">
+                <r:RibbonGroup Header="Content">
+                    <r:RibbonButton SmallImageSource="{StaticResource ResourceKey=BusinessPeople16}"
+                                    LargeImageSource="{StaticResource ResourceKey=BusinessPeople32}"
+                                    Label="Speaker"
+                                    ToolTipTitle="Speaker"
+                                    ToolTipDescription="Click here to display speakers."
+                                    Command="{Binding Path=ShowSpeakersCommand}" />
+                    <r:RibbonButton SmallImageSource="{StaticResource ResourceKey=Gantt16}"
+                                    LargeImageSource="{StaticResource ResourceKey=Gantt32}"
+                                    Label="Sessions"
+                                    ToolTipTitle="Sessions"
+                                    ToolTipDescription="Click here to display sessions."
+                                    Command="{Binding Path=ShowSessionsCommand}" />
+                </r:RibbonGroup>
+                <r:RibbonGroup Header="Scripting">
+                    <r:RibbonButton SmallImageSource="{StaticResource ResourceKey=Eraser16}"
+                                    LargeImageSource="{StaticResource ResourceKey=Eraser32}"
+                                    Label="Erase Output"
+                                    ToolTipTitle="Erase Output"
+                                    ToolTipDescription="Click here to erase all script output."
+                                    Command="{Binding Path=EraseOutputCommand}" />
+                    <r:RibbonButton SmallImageSource="{StaticResource ResourceKey=Document16}"
+                                    LargeImageSource="{StaticResource ResourceKey=Document32}"
+                                    Label="Run File"
+                                    ToolTipTitle="Run File"
+                                    ToolTipDescription="Click here to run a python script file."
+                                    Command="{Binding Path=RunScriptCommand}" />
+                    <r:RibbonButton SmallImageSource="{StaticResource ResourceKey=Script16}"
+                                    LargeImageSource="{StaticResource ResourceKey=Script32}"
+                                    Label="Approve Session"
+                                    ToolTipTitle="Approve Session"
+                                    ToolTipDescription="Click here to approve the selected sessions."
+                                    Command="{Binding Path=ApproveSessionCommand}" />
+                    <r:RibbonButton SmallImageSource="{StaticResource ResourceKey=Export16}"
+                                    LargeImageSource="{StaticResource ResourceKey=Export32}"
+                                    Label="Export Speakers"
+                                    ToolTipTitle="Export Speakers"
+                                    ToolTipDescription="Click here to export all speakers to Excel."
+                                    Command="{Binding Path=SpeakerExportCommand}" />
+                </r:RibbonGroup>
+            </r:RibbonTab>
+        </r:Ribbon>
+
+        <TabControl>
+            <TabItem Header="Database">
+                <Grid>
+                    <DataGrid Visibility="{Binding Path=WindowContent, Converter={StaticResource ResourceKey=WindowContentVisibilityConverter}, ConverterParameter=Speakers}"
+                              ItemsSource="{Binding Path=Speakers}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=FirstName}" Header="First Name" />
+                            <DataGridTextColumn Binding="{Binding Path=LastName}" Header="Last Name" />
+                            <DataGridTextColumn Binding="{Binding Path=Company}" Header="Company" />
+                            <DataGridTextColumn Binding="{Binding Path=FullName}" Header="Full Name" />
+                            <DataGridTextColumn Binding="{Binding Path=NumberOfApprovedSessions}" Header="Number of approved Sessions" />
+							<DataGridTemplateColumn  Header="Number of approved Sessions">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Border Background="{Binding Path=NumberOfApprovedSessions, Converter={StaticResource ResourceKey=IronPythonExpressionConverter}, ConverterParameter='&quot;Red&quot; if Value == 0 else &quot;Green&quot;'}">
+											<TextBlock Text="{Binding Path=NumberOfApprovedSessions}" />
+										</Border>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+                    </DataGrid>
+
+                    <DataGrid Visibility="{Binding Path=WindowContent, Converter={StaticResource ResourceKey=WindowContentVisibilityConverter}, ConverterParameter=Sessions}"
+                              ItemsSource="{Binding Path=Sessions}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                              SelectedItem="{Binding Path=SelectedSession, Mode=TwoWay}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=Title}" Header="Title" />
+                            <DataGridCheckBoxColumn Binding="{Binding Path=Approved}" Header="Approved" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Script Output">
+                <TextBox IsReadOnly="True" FontFamily="Courier New" FontSize="12" AcceptsReturn="True" AcceptsTab="True"
+                         Text="{Binding Path=ScriptOutput, Mode=OneWay}" VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</r:RibbonWindow>

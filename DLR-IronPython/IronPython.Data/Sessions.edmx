@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SessionsModel.Store" Alias="Self" Provider="System.Data.SqlServer" ProviderManifestToken="3.5" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="SessionsModelStoreContainer">
+          <EntitySet Name="Session" EntityType="SessionsModel.Store.Session" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Speaker" EntityType="SessionsModel.Store.Speaker" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <AssociationSet Name="FK_Session_Speaker" Association="SessionsModel.Store.FK_Session_Speaker">
+            <End Role="Speaker" EntitySet="Speaker" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="SessionID" />
+          </Key>
+          <Property Name="SessionID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SpeakerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Approved" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Speaker">
+          <Key>
+            <PropertyRef Name="SpeakerID" />
+          </Key>
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="SpeakerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Company" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <Association Name="FK_Session_Speaker">
+          <End Role="Speaker" Type="SessionsModel.Store.Speaker" Multiplicity="1" />
+          <End Role="Session" Type="SessionsModel.Store.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Speaker">
+              <PropertyRef Name="SpeakerID" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="SpeakerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SessionsModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="SamplesEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="Sessions" EntityType="SessionsModel.Session" />
+          <EntitySet Name="Speakers" EntityType="SessionsModel.Speaker" />
+          <AssociationSet Name="FK_Session_Speaker" Association="SessionsModel.FK_Session_Speaker">
+            <End Role="Speaker" EntitySet="Speakers" />
+            <End Role="Session" EntitySet="Sessions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="SessionID" />
+          </Key>
+          <Property Name="SessionID" Type="Guid" Nullable="false" />
+          <Property Name="SpeakerID" Type="Guid" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Approved" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Speaker" Relationship="SessionsModel.FK_Session_Speaker" FromRole="Session" ToRole="Speaker" />
+        </EntityType>
+        <EntityType Name="Speaker">
+          <Key>
+            <PropertyRef Name="SpeakerID" />
+          </Key>
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="SpeakerID" Type="Guid" Nullable="false" />
+          <Property Name="Company" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Sessions" Relationship="SessionsModel.FK_Session_Speaker" FromRole="Speaker" ToRole="Session" />
+        </EntityType>
+        <Association Name="FK_Session_Speaker">
+          <End Role="Speaker" Type="SessionsModel.Speaker" Multiplicity="1" />
+          <End Role="Session" Type="SessionsModel.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Speaker">
+              <PropertyRef Name="SpeakerID" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="SpeakerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SessionsModelStoreContainer" CdmEntityContainer="SamplesEntities">
+          <EntitySetMapping Name="Sessions"><EntityTypeMapping TypeName="SessionsModel.Session"><MappingFragment StoreEntitySet="Session">
+            <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+            <ScalarProperty Name="SpeakerID" ColumnName="SpeakerID" />
+            <ScalarProperty Name="Title" ColumnName="Title" />
+            <ScalarProperty Name="Approved" ColumnName="Approved" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Speakers"><EntityTypeMapping TypeName="SessionsModel.Speaker"><MappingFragment StoreEntitySet="Speaker">
+            <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+            <ScalarProperty Name="LastName" ColumnName="LastName" />
+            <ScalarProperty Name="SpeakerID" ColumnName="SpeakerID" />
+            <ScalarProperty Name="Company" ColumnName="Company" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Sessions">
+        <EntityTypeShape EntityType="SessionsModel.Session" Width="1.5" PointX="3" PointY="1" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="SessionsModel.Speaker" Width="1.5" PointX="0.75" PointY="0.875" Height="2.1725878906249996" IsExpanded="true" />
+        <AssociationConnector Association="SessionsModel.FK_Session_Speaker" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="1.9901432291666668" />
+          <ConnectorPoint PointX="3" PointY="1.9901432291666668" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
