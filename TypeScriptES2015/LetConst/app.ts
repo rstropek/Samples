@@ -29,5 +29,11 @@ function doSomethingWithLet(num: number) {
 	return isEven;
 }
 
-console.log(doSomething(2));
-console.log(doSomethingWithLet(2));
+const numberToCheck: number = 2;
+
+console.log(doSomething(numberToCheck));
+
+// The following line would result in a syntax error.
+//numberToCheck = 3;
+
+console.log(doSomethingWithLet(numberToCheck));

@@ -23,8 +23,12 @@ class DemoController {
 	getColleagues() {
 		// Note destructuring of an array in local variables p1 and p2
 		var [ p1, p2 ] = this.personList;
+		
+		// Swap p1 and p2 by using destructuring
+		[p1, p2] = [p2, p1];
 
-		// Note using the new template string 
+		// Note using the new template string
+		// Output: "Your colleagues are Max and Tom"
 		return `Your colleagues are ${p1.firstName} and ${p2.firstName}`;
 	}
 }

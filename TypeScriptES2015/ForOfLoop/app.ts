@@ -10,10 +10,7 @@ for (var n of numbers) {
 var numberObjects = [
 	{ value: 0, isEven: true },
 	{ value: 1, isEven: false },
-	{ value: 2, isEven: true },
-	{ value: 3, isEven: false },
-	{ value: 4, isEven: true },
-	{ value: 5, isEven: false }];
+	{ value: 2, isEven: true }];
 for (var { value, isEven } of numberObjects) {
 	if (value % 2 == 0) {
 		console.log(value.toString());
