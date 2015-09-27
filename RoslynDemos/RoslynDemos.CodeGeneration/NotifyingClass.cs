@@ -29,18 +29,18 @@ namespace RoslynDemos
 		}
 
 		private double 
-			AccuracyValue;
+			Accuracy2Value;
 		double 
-			Accuracy
+			Accuracy2
 		{
-			get { return this.AccuracyValue; }
+			get { return this.Accuracy2Value; }
 			set
 			{
-				if (this.AccuracyValue != value)
+				if (this.Accuracy2Value != value)
 				{
-					this.AccuracyValue = value;
+					this.Accuracy2Value = value;
 					this.RaisePropertyChanged(
-						"Accuracy");
+						"Accuracy2");
 				}
 			}
 		}
@@ -50,7 +50,7 @@ namespace RoslynDemos
 		{
 			get 
 			{ 
-				return new TemperatureSensorSettings(MeasureFrequency, Accuracy);
+				return new TemperatureSensorSettings(MeasureFrequency, Accuracy2);
 			}
 		}
 

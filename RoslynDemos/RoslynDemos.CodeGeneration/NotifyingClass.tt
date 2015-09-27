@@ -1,9 +1,9 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ output extension=".cs" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(SolutionDir)\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll" #>
-<#@ assembly name="$(SolutionDir)\packages\Microsoft.CodeAnalysis.Common.1.0.0.0-beta2\lib\portable-net45+win8\Microsoft.CodeAnalysis.dll" #>
-<#@ assembly name="$(SolutionDir)\packages\Microsoft.CodeAnalysis.CSharp.1.0.0.0-beta2\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.dll" #>
+<#@ assembly name="$(SolutionDir)\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.dll" #>
 <#@ assembly name="System.Runtime" #>
 <#@ assembly name="System.Text.Encoding" #>
 <#@ assembly name="System.Threading.Tasks" #>

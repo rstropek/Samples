@@ -31,7 +31,7 @@ namespace RoslynDemos.SemanticModel
 			var semanticModel = CSharpCompilation.Create("selfInspection")
 				.AddSyntaxTrees(syntaxTree)
 				.AddReferences(	// Add reference to mscorlib
-					MetadataReference.CreateFromAssembly(typeof(object).Assembly))
+					MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
 				.GetSemanticModel(syntaxTree);
 
 			// Look for variable declarator of 'greeting'

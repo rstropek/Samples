@@ -40,7 +40,7 @@ namespace RoslynDemos.Compilation
 					"calc.dll",
 					options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
 					syntaxTrees: new[] { tree },
-					references: new[] { MetadataReference.CreateFromAssembly(typeof(object).Assembly) });
+					references: new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) });
 
 				// Check for errors
 				var diagnostics = compilation.GetDiagnostics();
