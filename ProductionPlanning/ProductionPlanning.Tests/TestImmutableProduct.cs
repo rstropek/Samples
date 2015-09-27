@@ -16,7 +16,7 @@ namespace ProductionPlanning.Tests
 			var ip = new ImmutableProduct(Guid.NewGuid(), "Test", 1M);
 			Assert.IsNotNull(ip);
 
-			// Create an immutable composite product. Not that both parts
+			// Create an immutable composite product. Note that both parts
 			// refer to the same product. Therefore the ImmutableProduct
 			// object has to be reused.
 			var icp = new ImmutableCompositeProduct(
@@ -67,6 +67,18 @@ namespace ProductionPlanning.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void TestCompositeProductWithoutPartsException()
 		{
+			// Try to create a composite product without parts
+			new ImmutableCompositeProduct(Guid.NewGuid(), "Test", 1M,
+				new List<Part>(), new List<ImmutableProduct>());
+		}
+
+		[TestMethod]
+		public void TestCompositeProductWithoutPartsWithoutException()
+		{
+			// Opt-in to support of composite products without parts
+			AppContext.SetSwitch("Switch.ProductionPlanning.SupportCompositeProductsWithouthParts", true);
+
+			// Try to create a composite product without parts
 			new ImmutableCompositeProduct(Guid.NewGuid(), "Test", 1M,
 				new List<Part>(), new List<ImmutableProduct>());
 		}

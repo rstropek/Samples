@@ -18,7 +18,7 @@ namespace ProductionPlanning.Tests
 				new ImmutablePart(productID, 5, new List<ImmutableProduct>());
 			}
 			// Note new exception handling condition here
-			catch (ArgumentException ex) if (!ex.Message.Contains(productID.ToString()))
+			catch (ArgumentException ex) when (!ex.Message.Contains(productID.ToString()))
 			{
 				// Suppress exception if message is not correct
 			}

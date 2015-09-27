@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C66C4B17-01B2-49B2-862B-5CFDB9B9BCEC}</ProjectGuid>
+    <ProjectGuid>{62EA1918-C621-4814-8624-3E1CFF424F2D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProductionPlanning.Tests</RootNamespace>
     <AssemblyName>ProductionPlanning.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -36,9 +36,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.33.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Collections.Immutable.1.1.33-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -55,20 +55,20 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AssertNotification.cs" />
-    <Compile Include="TestImmutablePart.cs" />
-    <Compile Include="TestImmutableProductRepository.cs" />
-    <Compile Include="TestImmutableProduct.cs" />
-    <Compile Include="TestProduct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ProductionPlanning.Logic\ProductionPlanning.Logic.csproj">
-      <Project>{d8208b65-b17b-4310-a284-b19c1b1c8e09}</Project>
-      <Name>ProductionPlanning.Logic</Name>
-    </ProjectReference>
+    <Compile Include="TestImmutablePart.cs" />
+    <Compile Include="TestImmutableProduct.cs" />
+    <Compile Include="TestImmutableProductRepository.cs" />
+    <Compile Include="TestProduct.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProductionPlanning.Logic\ProductionPlanning.Logic.csproj">
+      <Project>{89c33f23-58e7-49eb-acf1-5cddff96ef81}</Project>
+      <Name>ProductionPlanning.Logic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

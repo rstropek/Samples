@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ProductionPlanning.Logic
 {
-	using ProductRepository = IEnumerable<ImmutableProduct>;
+	using IProductRepository = IEnumerable<ImmutableProduct>;
 
 	/// <summary>
 	/// Implements an immutable product
@@ -43,14 +43,14 @@ namespace ProductionPlanning.Logic
 	/// </summary>
 	public class ImmutableCompositeProduct : ImmutableProduct, ICompositeProduct
 	{
-		public ImmutableCompositeProduct(ICompositeProduct source, ProductRepository productRepository)
+		public ImmutableCompositeProduct(ICompositeProduct source, IProductRepository productRepository)
 			: this(source.ProductID, source.Description, source.CostsPerItem,
 				  source.Parts, productRepository)
 		{ }
 
 		public ImmutableCompositeProduct(Guid productID, string description,
 			decimal costsPerItem, IEnumerable<IPart> parts,
-			ProductRepository productRepository)
+			IProductRepository productRepository)
 			: base(productID, description, costsPerItem)
 		{
 			#region Check preconditions
@@ -65,7 +65,15 @@ namespace ProductionPlanning.Logic
 				throw new ArgumentNullException(nameof(parts));
 			}
 
-			if (parts.Count() == 0)
+			// Note the use of .NET 4.6's new AppContext class.
+			bool supportsCompositeProductsWithouthParts;
+			if (!AppContext.TryGetSwitch("Switch.ProductionPlanning.SupportCompositeProductsWithouthParts", out supportsCompositeProductsWithouthParts))
+			{
+				// If no opt-in -> do not support composite products without parts
+				supportsCompositeProductsWithouthParts = false;
+			}
+
+			if (parts.Count() == 0 && !supportsCompositeProductsWithouthParts)
 			{
 				throw new ArgumentException(
 					@"Parts must not be empty for an immutable composite product. 
@@ -111,7 +119,7 @@ Create a product if it does not have parts.",
 	/// </summary>
 	public class ImmutablePart : IPart
 	{
-		public ImmutablePart(Guid productID, int amount, ProductRepository productRepository)
+		public ImmutablePart(Guid productID, int amount, IProductRepository productRepository)
 		{
 			#region Check preconditions
 			if (productRepository == null)
@@ -134,8 +142,8 @@ Create a product if it does not have parts.",
 
 		public ImmutableProduct Part { get; }
 
-		// Note implicit interface implementation with function-bodied property
-		Guid IPart.ComponentProductID => this.Part.ProductID;
+		// Note interface implementation with function-bodied property
+		public Guid ComponentProductID => this.Part.ProductID;
 
 		public int Amount { get; }
 	}
