@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ConsoleApplication3
@@ -30,8 +32,14 @@ namespace ConsoleApplication3
 		static void Main(string[] args)
 		{
 			DoSimpleQuery();
+			Debug.WriteLine("Done with simple query");
+
 			DoSimpleQueryAsync().Wait();
+
+			Debug.WriteLine("Starting complex query");
 			DoComplexQuery();
+			Debug.WriteLine("Complex query done!");
+
 			var dt = FillDataTable(dataTableQuery);
 		}
 
@@ -46,8 +54,8 @@ namespace ConsoleApplication3
 				conn.Open();
 				using (var cmd = conn.CreateCommand())
 				{
-					cmd.CommandText = query;
-					using (var reader = cmd.ExecuteReader())
+					cmd.CommandText = $"-- Query start: {DateTime.Now}\n{query}";
+                    using (var reader = cmd.ExecuteReader())
 					{
 						while (reader.Read()) ;
 					}
