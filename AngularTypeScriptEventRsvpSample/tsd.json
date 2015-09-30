@@ -1,0 +1,36 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "angularjs/angular.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "angularjs/angular-route.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "node/node.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "express/express.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "mime/mime.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "jasmine/jasmine.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "angularjs/angular-mocks.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    }
+  }
+}

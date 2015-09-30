@@ -1,0 +1,30 @@
+{
+  "name": "AngularJS-TypeScript-EventRSVP-Sample",
+  "version": "1.0.0",
+  "description": "Sample for programming AngularJS with TypeScript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.4.6",
+    "angular-mocks": "^1.4.6",
+    "angular-route": "^1.4.6",
+    "bootstrap": "^3.3.5",
+    "express": "^4.13.3",
+    "jquery": "^2.1.4"
+  },
+  "devDependencies": {
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-changed": "^1.3.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-newer": "^0.5.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.8.2",
+    "jasmine-core": "^2.3.4",
+    "typescript": "^1.5.3"
+  }
+}

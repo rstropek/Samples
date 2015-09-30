@@ -1,0 +1,29 @@
+<h1>Register for the PARTY!</h1>
+
+<form name="registerForm">
+  <div class="form-group" ng-class="vm.getValidationState(registerForm.firstNameInput)">
+    <label for="firstNameInput">First Name:</label>
+    <input type="text" class="form-control" id="firstNameInput" name="firstNameInput"
+           placeholder="Your first name ..." ng-model="vm.firstName" required>
+  </div>
+  <div class="form-group" ng-class="vm.getValidationState(registerForm.lastNameInput)">
+    <label for="lastNameInput">Last Name:</label>
+    <input type="test" class="form-control" id="lastNameInput" name="lastNameInput"
+           placeholder="Your last name ..." ng-model="vm.lastName" required>
+  </div>
+  <div class="form-group" ng-class="vm.getValidationState(registerForm.email)">
+    <label for="email">Email Address:</label>
+    <input type="email" class="form-control" id="email"  ng-model="vm.email" name="email"
+           placeholder="Your email address so we can contact you ..." required>
+  </div>
+  
+  <p ng-show="vm.showIncompleteDataError" class="text-warning">
+    Incomplete data!
+  </p>
+  
+  <p ng-show="vm.showSuccess" class="text-success">
+    Successfully registered!
+  </p>
+  
+  <button type="submit" class="btn btn-default" ng-click="vm.saveRegistration()">Submit</button>
+</form>
