@@ -1,32 +1,28 @@
-/// <reference path="../../../../typings/tsd.d.ts" />
-/// <reference path="../../../../app/client/register/mobileServicesTableService.ts" />
+/// <reference path="../../../typings/tsd.d.ts" />
+/// <reference path="../../../app/client/mobileServicesTableService.ts" />
 
 interface IDummyRow extends MobileServicesDataAccess.ITableRow {
 }
 
 describe("Mobile Services Table Test", function () {
-    var $http: ng.IHttpService;
+    var dummyResult: IDummyRow[] = [{ id: 1 }, { id: 2 }];
     var $httpBackend: ng.IHttpBackendService;
-    var table: MobileServicesDataAccess.ITable<IDummyRow>;
+    var table: MobileServicesDataAccess.Table<IDummyRow>;
     beforeEach(inject((_$http_: ng.IHttpService, _$httpBackend_: ng.IHttpBackendService) => {
-        $http = _$http_;
+        var $http = _$http_;
         $httpBackend = _$httpBackend_;
         table = new MobileServicesDataAccess.Table<IDummyRow>($http, "dummyService", "dummyTable");
     }));
-    var dummyResult: MobileServicesDataAccess.IQueryResult<IDummyRow> = { results: [{ id: 1 }, { id: 2 }], count: 2 };
 
-    it(" should query Azure Mobile Service without paging", () => {
+    it(" should query Azure Mobile Service", () => {
         // We want to test the Table<T> class without any real web requests. Therefore we have to 
         // mock the web request and return test data.
-        $httpBackend.whenGET("https://dummyService.azure-mobile.net/tables/dummyTable?$inlinecount=allpages&$orderby=id")
+        $httpBackend.whenGET("https://dummyService.azure-mobile.net/tables/dummyTable?$orderby=id")
             .respond(dummyResult);
 
         // Run the query
         var result: IDummyRow[];
-        table.query().then((r: ng.IHttpPromiseCallbackArg<MobileServicesDataAccess.IQueryResult<IDummyRow>>) => {
-            console.log(r);
-            result = r.data.results;
-        });
+        table.query().success(r => result = r);
         $httpBackend.flush();
 
         // Check if query method returned correct data

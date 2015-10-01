@@ -1,4 +1,6 @@
-/// <reference path="../../../typings/tsd.d.ts" />
+/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="mobileServicesTableService.ts" />
+
 module Registration {
 	interface IValidationState {
 		'has-error': boolean;
@@ -40,7 +42,7 @@ module Registration {
 			}
 			else {
 				this.reservationTable.insert({ firstName: this.firstName, lastName: this.lastName, email: this.email})
-					.then(() => this.showSuccess = true);
+					.success(() => this.showSuccess = true);
 			}
 		}
 	}
