@@ -1,0 +1,9 @@
+<h1>List of Registrations</h1>
+
+<ul>
+	<li ng-repeat="registration in vm.registrations">
+		{{ registration.email }}
+	</li>
+</ul>
+
+<button class="btn" ng-click="vm.refreshList()">Refresh</button>

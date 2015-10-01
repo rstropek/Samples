@@ -3,7 +3,7 @@
 /// <reference path="../../../app/client/mobileServicesTableService.ts" />
 
 angular.module("EventRSVPTest", [])
-	.factory("reservationTable", ["$http", ($http: ng.IHttpService) =>
+	.factory("registrationTable", ["$http", ($http: ng.IHttpService) =>
         new MobileServicesDataAccess.Table($http, "dummyService", "dummyTable")])
 	.controller("RegisterController", Registration.RegisterController);
   

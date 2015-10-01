@@ -17,9 +17,9 @@ module Registration {
     }
 	
 	export class RegisterController {
-		public static $inject = ['$scope', 'reservationTable'];
+		public static $inject = ['$scope', 'registrationTable'];
 
-		constructor($scope: IRegisterControllerScope, private reservationTable: MobileServicesDataAccess.Table<IRegistration>) {
+		constructor($scope: IRegisterControllerScope, private registrationTable: MobileServicesDataAccess.Table<IRegistration>) {
 			$scope.$watch("registerForm.$valid",
 				() => this.showIncompleteDataError = this.showIncompleteDataError && $scope.registerForm.$invalid);
 		}
@@ -41,7 +41,7 @@ module Registration {
 				this.showIncompleteDataError = true;
 			}
 			else {
-				this.reservationTable.insert({ firstName: this.firstName, lastName: this.lastName, email: this.email})
+				this.registrationTable.insert({ firstName: this.firstName, lastName: this.lastName, email: this.email})
 					.success(() => this.showSuccess = true);
 			}
 		}
