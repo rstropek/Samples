@@ -28,17 +28,21 @@ namespace SimpleCpuProfiling
 
 		static void GetSomeDates()
 		{
+			var tickSum = 0L;
 			for(var i=0; i<1000; i++)
 			{
 				var dt = DateTime.Now;
+				unchecked { tickSum += dt.Ticks; }
 			}
 		}
 
 		static void GetSomeUTCDates()
 		{
+			var tickSum = 0L;
 			for (var i = 0; i < 1000; i++)
 			{
 				var dt = DateTime.UtcNow;
+				unchecked { tickSum += dt.Ticks; }
 			}
 		}
 
@@ -54,7 +58,7 @@ namespace SimpleCpuProfiling
 		{
 			for (var i = 0; i<1000; i++)
 			{
-				Thread.SpinWait(500000);
+				for (var j = 0; j < 500000; j++) ;
 			}
 		}
 	}
