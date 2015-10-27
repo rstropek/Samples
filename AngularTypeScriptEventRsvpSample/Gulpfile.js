@@ -7,7 +7,12 @@ var sourcemaps = require("gulp-sourcemaps");
 var appDependencyScripts = ["node_modules/jquery/dist/jquery.min.js", "node_modules/angular/angular.min.js", "node_modules/angular-route/angular-route.min.js", "node_modules/bootstrap/dist/js/bootstrap.min.js"];
 var appDependencyStylesheets = ["node_modules/bootstrap/dist/css/bootstrap.min.css"];
 
-var testsDependencyScripts = ["node_modules/jasmine-core/lib/jasmine-core/jasmine.js", "node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js", "node_modules/jasmine-core/lib/jasmine-core/boot.js", "node_modules/jquery/dist/jquery.min.js", "node_modules/angular/angular.min.js", "node_modules/angular-mocks/angular-mocks.js"]
+var testsDependencyScripts = [
+	// Remove the following line if tests should run with Karma as
+	// Karma includes Jasmine by default 
+	"node_modules/jasmine-core/lib/jasmine-core/jasmine.js", "node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js", "node_modules/jasmine-core/lib/jasmine-core/boot.js",
+	"node_modules/jquery/dist/jquery.min.js", 
+	"node_modules/angular/angular.min.js", "node_modules/angular-mocks/angular-mocks.js"]
 var testsDepencencyStylesheets = ["node_modules/jasmine-core/lib/jasmine-core/jasmine.css"]
 
 var appPath = "app/";
@@ -21,6 +26,7 @@ var appStylesDependenciesName = "appDependencies.min.css";
 var testsScriptDependenciesName = "testsDependencies.min.js";
 var testsStylesDependenciesName = "testsDependencies.min.css";
 var appScriptName = "app.js";
+var testsScriptName = "app.spec.js";
 
 var tsServerProject = ts.createProject({
 	module: "commonjs",
@@ -39,7 +45,7 @@ var tsTestProject = ts.createProject({
 	noImplicitAny: true,
 	sourceMap: true,
 	target: "ES5",
-	out: appScriptName
+	out: testsScriptName
 });
 
 // Cleanup by deleting target directory

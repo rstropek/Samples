@@ -21,7 +21,7 @@ module Registration {
 
 		constructor($scope: IRegisterControllerScope, private registrationTable: MobileServicesDataAccess.Table<IRegistration>) {
 			$scope.$watch("registerForm.$valid",
-				() => this.showIncompleteDataError = this.showIncompleteDataError && $scope.registerForm.$invalid);
+				() => this.showIncompleteDataError = this.showIncompleteDataError && $scope.registerForm && $scope.registerForm.$invalid);
 		}
 
 		public firstName: string;
@@ -32,7 +32,7 @@ module Registration {
 
 		public getValidationState(formController: ng.IFormController): IValidationState {
 			return {
-				'has-error': formController.$invalid
+				'has-error': !formController || formController.$invalid
 			};
 		}
 
