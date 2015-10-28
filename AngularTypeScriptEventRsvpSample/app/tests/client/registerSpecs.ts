@@ -7,7 +7,7 @@ angular.module("EventRSVPTest", [])
         new MobileServicesDataAccess.Table($http, "dummyService", "dummyTable")])
 	.controller("RegisterController", Registration.RegisterController);
   
-describe('RegisterController', function() {
+describe('RegisterController', () => {
   beforeEach(angular.mock.module('EventRSVPTest'));
 
   var controller : Registration.RegisterController;
@@ -18,18 +18,18 @@ describe('RegisterController', function() {
     controller = <Registration.RegisterController>_$controller_('RegisterController', { $scope: $scope });
   }));
   
-  describe('showIncompleteDataError', function() {
-    it(' is orginally false', function() {
+  describe('showIncompleteDataError', () => {
+    it(' is orginally false', () => {
       expect(controller.showIncompleteDataError).toBeFalsy();
     });
-    it(' turns true if tried to submit incomplete data', function() {
+    it(' turns true if tried to submit incomplete data', () => {
       controller.saveRegistration();
       expect(controller.showIncompleteDataError).toBeTruthy();
     });
   });
   
-  describe('Registration data', function() {
-    it(' is is stored if data is complete', function() {
+  describe('Registration data', () => {
+    it(' is is stored if data is complete', () => {
       // Fill form with valid data
       controller.firstName = controller.lastName = "dummy";
       controller.email = "dummy@dummy.com";
