@@ -9,6 +9,8 @@
         "node_modules", "lib"
     ],
     "files": [
-        "app.spec.ts"
+        "app.spec.ts",
+        "angular.spec.ts",
+        "demoController.ts"
     ]
 }

@@ -11,9 +11,34 @@
   <script src="lib/jasmine-2.3.4/jasmine-html.js"></script>
   <script src="lib/jasmine-2.3.4/boot.js"></script>
 
+  <script src="node_modules/jquery/dist/jquery.js""></script>
+  <script src="node_modules/angular/angular.js""></script>
+  <script src="node_modules/angular-mocks/angular-mocks.js""></script>
+  
+  <script src="demoController.js"></script>
+
   <script src="app.spec.js"></script>
+  <script src="angular.spec.js"></script>
+  
+  <script>
+    angular.module("DemoApp", [])
+      .constant("InvalidLastName", "Muster")
+      .controller("DemoController", DemoController);
+  </script>
 </head>
 
-<body>
+<body ng-app="DemoApp" ng-controller="DemoController as vm">
+  <h1>Angular Demo App</h1>
+  <p>
+    First Name: <input type="input" ng-model="vm.firstName" /><br/>
+    Last Name: <input type="input" ng-model="vm.lastName" /><br/>
+    Details: {{ vm.details.address }} <button type="button" ng-click="vm.getDetails()">Get Details</button>
+  </p>
+  <p ng-show="!vm.isValid">
+    The values you entered are invalid!
+  </p>
+  <p ng-show="vm.restApiError">
+    Server cannot be reached!
+  </p>
 </body>
 </html>
