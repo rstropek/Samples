@@ -1,29 +1,29 @@
 ﻿namespace Samples.Sudoku.Test
 {
-	using Microsoft.QualityTools.Testing.Fakes;
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
-	using Microsoft.WindowsAzure.Storage;
-	using Microsoft.WindowsAzure.Storage.Auth;
-	using Microsoft.WindowsAzure.Storage.Blob;
-	using Microsoft.WindowsAzure.Storage.Blob.Fakes;
-	using System;
-	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Fakes;
-	using System.Globalization;
-	using System.IO;
-	using System.IO.Fakes;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Fakes;
-	using System.Security.Cryptography;
-	using System.Threading;
-	using System.Threading.Tasks;
+    using Microsoft.QualityTools.Testing.Fakes;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.WindowsAzure.Storage;
+    using Microsoft.WindowsAzure.Storage.Auth;
+    using Microsoft.WindowsAzure.Storage.Blob;
+    using Microsoft.WindowsAzure.Storage.Blob.Fakes;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Fakes;
+    using System.Globalization;
+    using System.IO;
+    using System.IO.Fakes;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Fakes;
+    using System.Security.Cryptography;
+    using System.Threading;
+    using System.Threading.Tasks;
 
-	/// <summary>
-	/// Tests for stream manager classes
-	/// </summary>
-	[TestClass]
+    /// <summary>
+    /// Tests for stream manager classes
+    /// </summary>
+    [TestClass]
 	public class StreamManagerTest
 	{
 		private const string dummyContainerName = "dummycontainer";
@@ -86,7 +86,7 @@
 						Assert.AreEqual(dummyBoardName, blobName);
 						return new CloudBlockBlob(new Uri(dummyContainerUri));
 					};
-				ShimCloudBlockBlob.AllInstances.OpenReadAsync = (blob) =>
+				ShimCloudBlob.AllInstances.OpenReadAsync = (blob) =>
 					Task.FromResult(new MemoryStream(BoardSampleData.sampleBoard) as Stream);
 
 				// Execute

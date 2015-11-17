@@ -1,16 +1,16 @@
 ﻿namespace Samples.Sudoku.Test
 {
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
-	using Samples.Sudoku.Fakes;
-	using System;
-	using System.IO;
-	using System.Linq;
-	using System.Threading.Tasks;
+    using Fakes;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	/// <summary>
-	/// Tests for <see cref="Samples.Sudoku.BoardStreamRepository"/>
-	/// </summary>
-	[TestClass]
+    /// <summary>
+    /// Tests for <see cref="Samples.Sudoku.BoardStreamRepository"/>
+    /// </summary>
+    [TestClass]
 	public class BoardStreamRepositoryTest
 	{
 		[TestMethod]
