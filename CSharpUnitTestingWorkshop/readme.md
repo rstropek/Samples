@@ -204,7 +204,7 @@ Note how we use the unit test as a code example
 for our API. See also [Sudoku sample](https://github.com/rstropek/Samples/blob/master/SudokuBoard/Samples.Sudoku/Board.cs) for larger example
 including *Sandcastle Help File Builder*.
 
-![Unit Test as Part of Docs](/images/Unit-Test-as-Example-in-Docs.png)
+![Unit Test as Part of Docs](https://raw.githubusercontent.com/rstropek/Samples/master/CSharpUnitTestingWorkshop/images/Unit-Test-as-Example-in-Docs.png)
 
 ## Part 2: Async Unit Tests
 
@@ -248,7 +248,7 @@ Microsoft Fakes is a great tool for unit testing. It can save you tons of code y
 
 Shims are helpful if you need a (partly) implementation of an interface or an abstract base class. Take a look at the following example. We have a class `BoardStreamRepository`. It can load an save content of a Sudoku board from/to a stream. Our class library defined an interface `IStreamManager` that `BoardStreamRepository` uses to get the `Stream` it should use. The class library contains two implementation. One for files (`FileStreamManager`) and one for Azure Blob Storage (`CloudBlobStreamManager`).
 
-![Class Diagram for Sudoku Sample](/images/Class-Diagram-for-Sudoku-Sample.png)
+![Class Diagram for Sudoku Sample](https://raw.githubusercontent.com/rstropek/Samples/master/CSharpUnitTestingWorkshop/images/Class-Diagram-for-Sudoku-Sample.png)
 
 ```csharp
 /// <summary>
@@ -289,7 +289,7 @@ public class BoardStreamRepository
 
 In order to test `BoardStreamRepository` with a mockup version of `IStreamManager`, we add a fake assembly:
 
-![Add Fakes Assembly](/images/Add-Fakes-Assembly.png)
+![Add Fakes Assembly](https://raw.githubusercontent.com/rstropek/Samples/master/CSharpUnitTestingWorkshop/images/Add-Fakes-Assembly.png)
 
 ```xml
 <Fakes xmlns="http://schemas.microsoft.com/fakes/2011/">
