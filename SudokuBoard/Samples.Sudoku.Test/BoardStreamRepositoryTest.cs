@@ -2,9 +2,7 @@
 {
     using Fakes;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -27,29 +25,34 @@
 			var board = await repository.LoadAsync("DummyBoardName");
 
 			// Assert
-			Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual((byte[])board));
+            CollectionAssert.AreEqual(BoardSampleData.sampleBoard, (byte[])board);
 		}
 
 		[TestMethod]
 		[TestCategory("With fakes")]
+        [ExpectedException(typeof(BoardException))]
 		public async Task TestLoadBoardFailures()
 		{
+            // Prepare
 			var repository = BoardStreamRepositoryTest.SetupBoardStreamRepository(new byte[] { 1, 2 });
 
-			await AssertExtensions.ThrowsExceptionAsync<Exception>(
-				async () => await repository.LoadAsync("DummyBoardName"));
+            // Execute
+			await repository.LoadAsync("DummyBoardName");
 		}
 
 		[TestMethod]
 		[TestCategory("With fakes")]
 		public async Task TestSaveBoard()
 		{
+            // Prepare
 			var buffer = new byte[9 * 9];
 			var repository = BoardStreamRepositoryTest.SetupBoardStreamRepository(buffer);
 
+            // Execute
 			await repository.SaveAsync("DummyBoardName", (Board)BoardSampleData.sampleBoard);
 
-			Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual(buffer));
+            // Assert
+			CollectionAssert.AreEqual(BoardSampleData.sampleBoard, buffer);
 		}
 
 		private static BoardStreamRepository SetupBoardStreamRepository(byte[] buffer)

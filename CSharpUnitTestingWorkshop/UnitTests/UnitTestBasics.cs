@@ -60,8 +60,6 @@ namespace UnitTests
             // Check type of an object
             var someObjects = new object[] { 1, "Test", 5.0 };
             Assert.IsInstanceOfType(someObjects[0], typeof(int));
-
-
         }
 
         private class Person { }

@@ -27,7 +27,7 @@
 	public class StreamManagerTest
 	{
 		private const string dummyContainerName = "dummycontainer";
-		private static readonly string dummyContainerUri = string.Format("http://dummystorage.blob.core.windows.net/{0}", dummyContainerName);
+        private static readonly string dummyContainerUri = $"http://dummystorage.blob.core.windows.net/{dummyContainerName}";
 		private const string dummyBoardName = "Dummyboard";
 		private const string dummyStorageName = "dummystorage";
 
@@ -69,7 +69,7 @@
 				new CloudBlobStreamManager(GetContainerReference(storageName, storageKey, containerName)));
 			var board = await repository.LoadAsync(boardName);
 
-			Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual((byte[])board));
+			CollectionAssert.AreEqual(BoardSampleData.sampleBoard, (byte[])board);
 		}
 
 		[TestMethod]
@@ -95,7 +95,7 @@
 				var result = await repository.LoadAsync(dummyBoardName);
 
 				// Check result
-				Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual((byte[])result));
+				CollectionAssert.AreEqual(BoardSampleData.sampleBoard, (byte[])result);
 			}
 		}
 
@@ -122,7 +122,7 @@
 				var repository = new BoardStreamRepository(new FileStreamManager());
 				var result = await repository.LoadAsync(dummyBoardName);
 
-				Assert.IsTrue(BoardSampleData.sampleBoard.SequenceEqual((byte[])result));
+				CollectionAssert.AreEqual(BoardSampleData.sampleBoard, (byte[])result);
 			}
 		}
 
@@ -132,11 +132,11 @@
 		{
 			// Setup blob to simulate
 			var simulatedBlobs = new Dictionary<string, byte[]>();
-			simulatedBlobs.Add(string.Format("/{0}/{1}", dummyContainerName, dummyBoardName), BoardSampleData.sampleBoard);
+			simulatedBlobs.Add($"/{dummyContainerName}/{dummyBoardName}", BoardSampleData.sampleBoard);
 
 			await this.ExecuteWithShimmedWebRequestForBlockBlobsAsync(simulatedBlobs, async () =>
 				{
-					var storageKey = ConfigurationManager.AppSettings["StorageKey"];
+                    var storageKey = "asdf"; // ConfigurationManager.AppSettings["StorageKey"];
 
 					// Execute existing unit test, but this time with shims instead of real web requests
 					await this.AzureStorageIntegrationTestInternal(dummyStorageName, storageKey, dummyContainerName, dummyBoardName);

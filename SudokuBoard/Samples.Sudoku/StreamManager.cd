@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Uses IStreamManager to open a stream from/to which the board content has to be read from/written to.">
+    <Position X="0.508" Y="4.592" Height="0.842" Width="2.358" />
+  </Comment>
+  <Comment CommentText="Implements IStreamManager based on a file.">
+    <Position X="3.5" Y="4.592" Height="0.75" Width="2.242" />
+  </Comment>
+  <Comment CommentText="Implements IStreamManager based on a Azure Blob Storage.">
+    <Position X="6.25" Y="4.4" Height="0.767" Width="2.242" />
+  </Comment>
+  <Class Name="Samples.Sudoku.FileStreamManager">
+    <Position X="3.5" Y="2.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAA=</HashCode>
+      <FileName>FileStreamManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Samples.Sudoku.CloudBlobStreamManager">
+    <Position X="6.25" Y="2.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CloudBlobStreamManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Samples.Sudoku.BoardStreamRepository">
+    <Position X="0.5" Y="2.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAACAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BoardStreamRepository.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Samples.Sudoku.IStreamManager">
+    <Position X="3.5" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IStreamManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
