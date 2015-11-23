@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "value": "devopscon15demosite"
+    },
+    "hostingPlanName": {
+      "value": "NewServiceAppPlan"
+    },
+    "siteLocation": {
+      "value": "northeurope"
+    },
+    "serverName": {
+      "value": "devopscon15demoserver"
+    },
+    "serverLocation": {
+      "value": "northeurope"
+    },
+    "administratorLogin": {
+      "value": "rainer"
+    },
+    "administratorLoginPassword": {
+      "value": "P@zzw0rd!"
+    },
+    "databaseName": {
+      "value": "DevOpsConDB"
+    }
+  }
+}
