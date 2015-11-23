@@ -57,7 +57,7 @@
     "publicIPAddressName": "myPublicIP",
     "publicIPAddressType": "Dynamic",
     "vmStorageAccountContainerName": "vhds",
-    "dockerVmName": "BattleshipDockerVM",
+    "dockerVmName": "devopscon15-docker",
     "nginxVmName": "NginxVM",
     "vmSize": "Standard_A1",
     "virtualNetworkName": "MyVNET",
@@ -332,7 +332,7 @@
         "typeHandlerVersion": "1.2",
         "settings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/rstropek/Battleship/master/AzureEnvironment/setupReverseProxy.sh"
+            "https://raw.githubusercontent.com/rstropek/Samples/master/ArmWorkshop/02-Docker/setupReverseProxy.sh"
           ],
           "commandToExecute": "sh setupReverseProxy.sh"
         }
@@ -352,7 +352,7 @@
         "typeHandlerVersion": "1.2",
         "settings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/rstropek/Battleship/master/AzureEnvironment/setupDocker.sh"
+            "https://raw.githubusercontent.com/rstropek/Samples/master/ArmWorkshop/02-Docker/setupDocker.sh"
           ],
           "commandToExecute": "sh setupDocker.sh"
         }
