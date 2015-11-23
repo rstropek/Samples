@@ -41,43 +41,22 @@ configuration IisDSC
       Ensure = "Present" 
       Name = "Web-Mgmt-Service"
     }
-    Script DownloadPlatformHandler
-    {
-        SetScript = { 
-            Invoke-WebRequest http://download.microsoft.com/download/8/1/3/813AC4E6-9203-4F7A-8DD5-F3D54D10C5CD/httpPlatformHandler_amd64.msi -OutFile C:\Download\HttpPlatformHandler.msi
-        }
-        TestScript = { Test-Path "C:\Download\HttpPlatformHandler.msi" }
-        GetScript = { <# This must return a hash table #> }          
-        DependsOn = "[File]DownloadDirectory"
-    }    
-    Script DownloadWebDeploy
-    {
-        SetScript = { 
-            Invoke-WebRequest http://download.microsoft.com/download/D/4/4/D446D154-2232-49A1-9D64-F5A9429913A4/WebDeploy_amd64_en-US.msi -OutFile C:\Download\WebDeploy.msi
-        }
-        TestScript = { Test-Path "C:\Download\WebDeploy.msi" }
-        GetScript = { <# This must return a hash table #> }          
-        DependsOn = "[File]DownloadDirectory"
-    }
-    
     Package PlatformHandlerPackage
     {
         Ensure = "Present"
-        Path  = "C:\Download\HttpPlatformHandler.msi"
+        Path  = "http://download.microsoft.com/download/8/1/3/813AC4E6-9203-4F7A-8DD5-F3D54D10C5CD/httpPlatformHandler_amd64.msi -OutFile C:\Download\HttpPlatformHandler.msi"
         Name = "Microsoft HTTP Platform Handler 1.2"
         Arguments = "ADDLOCAL=all"
         ProductId = "49FE726A-F8A3-426F-9448-337D47E355FA"
-        DependsOn = "[Script]DownloadPlatformHandler"
     } 
 
     Package WebDeployPackage
     {
         Ensure = "Present"
-        Path  = "C:\Download\WebDeploy.msi"
+        Path  = "http://download.microsoft.com/download/D/4/4/D446D154-2232-49A1-9D64-F5A9429913A4/WebDeploy_amd64_en-US.msi -OutFile C:\Download\WebDeploy.msi"
         Name = "Microsoft Web Deploy 3.5"
         Arguments = "ADDLOCAL=all"
         ProductId = "1A81DA24-AF0B-4406-970E-54400D6EC118"
-        DependsOn = "[Script]DownloadWebDeploy"
     } 
 
     Script SetupDefaultWebsiteWebDeploy

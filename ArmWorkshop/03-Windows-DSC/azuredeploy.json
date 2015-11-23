@@ -190,8 +190,8 @@
         "type": "DSC",
         "typeHandlerVersion": "2.8",
         "settings": {
-          "ModulesUrl": "https://raw.githubusercontent.com/rstropek/Samples/master/ArmWorkshop/03-Windows-DSC/winServerDsc.zip",
-          "ConfigurationFunction": "winServerDsc.ps1\\IisDSC"
+          "ModulesUrl": "https://raw.githubusercontent.com/rstropek/Samples/master/ArmWorkshop/03-Windows-DSC/IisDSC.zip",
+          "ConfigurationFunction": "IisDSC.ps1\\IisDSC"
         }
       }
     }
