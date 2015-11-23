@@ -191,13 +191,7 @@
         "typeHandlerVersion": "2.8",
         "settings": {
           "ModulesUrl": "https://raw.githubusercontent.com/rstropek/Samples/master/ArmWorkshop/03-Windows-DSC/winServerDsc.zip",
-          "ConfigurationFunction": "winServerDsc.ps1\\IisDSC",
-          "Properties": {
-            "credentials": {
-              "UserName": "[parameters('adminUsername')]",
-              "Password": "[parameters('adminPassword')]"
-            }
-          }
+          "ConfigurationFunction": "winServerDsc.ps1\\IisDSC"
         }
       }
     }
