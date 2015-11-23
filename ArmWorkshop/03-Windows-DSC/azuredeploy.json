@@ -119,7 +119,10 @@
               "privateIPAddress": "[variables('windowsPrivateIPAddress')]",
               "subnet": {
                 "id": "[variables('subnetRef')]"
-              }
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+              }            
             }
           }
         ]
@@ -185,9 +188,9 @@
       "properties": {
         "publisher": "Microsoft.Powershell",
         "type": "DSC",
-        "typeHandlerVersion": "2.2",
+        "typeHandlerVersion": "2.8",
         "settings": {
-          "ModulesUrl": "https://raw.githubusercontent.com/rstropek/Battleship/master/AzureEnvironment/winServerDsc.ps1",
+          "ModulesUrl": "https://raw.githubusercontent.com/rstropek/Samples/master/ArmWorkshop/03-Windows-DSC/winServerDsc.zip",
           "ConfigurationFunction": "winServerDsc.ps1\\IisDSC",
           "Properties": {
             "credentials": {
