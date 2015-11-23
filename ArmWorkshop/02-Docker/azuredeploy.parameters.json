@@ -1,0 +1,21 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "newStorageAccountName": {
+      "value": "devopscon15"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "adminUsername": {
+      "value": "rainer"
+    },
+    "adminPassword": {
+      "value": "P@zzw0rd!"
+    },
+    "dnsNameForPublicIP": {
+      "value": "devopscon-docker"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html;
+
+	server_name _;
+
+	location / {
+		proxy_pass http://10.0.0.6;
+	}
+}
