@@ -66,9 +66,9 @@ configuration IisDSC
             $wdscripts = "$Env:PROGRAMFILES\IIS\Microsoft Web Deploy V3\Scripts";
             cd $wdscripts
             .\SetupSiteForPublish.ps1 -siteName "Default Web Site" -deploymentUserName deploy -deploymentUserPassword P@zzw0rd! -publishSettingSavePath C:\temp -publishSettingFileName rainer.PublishSettings -sitePort 80
-            New-Item -Path C:\Download -Name "WebDeployEnabled.txt" -ItemType File
+            New-Item -Path C:\ -Name "WebDeployEnabled.txt" -ItemType File
         }
-        TestScript = { Test-Path "C:\Download\WebDeployEnabled.txt" }
+        TestScript = { Test-Path "C:\WebDeployEnabled.txt" }
         GetScript = { <# This must return a hash table #> }          
         DependsOn = "[Package]WebDeployPackage"
     }
