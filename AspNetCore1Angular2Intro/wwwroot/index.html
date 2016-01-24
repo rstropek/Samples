@@ -1,0 +1,46 @@
+﻿<html>
+
+<head>
+    <title>Sample</title>
+
+    <!-- Load Angular2 from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.1/angular2-polyfills.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.17/system.src.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.1/Rx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.1/angular2.dev.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.1/http.dev.js"></script>
+    
+    <!-- Load Bootstrap from CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" >
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+        }
+    </style>
+
+    <!-- Configure SystemJS -->
+    <script>
+        // For more details about configuring SystemJS, see 
+        // https://github.com/systemjs/systemjs/blob/master/docs/config-api.md
+        System.config({
+            packages: {
+                app: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            }
+        });
+
+        // Import the boot file which contains Angular's bootstrap function.
+        // For details see https://angular.io/docs/ts/latest/quickstart.html
+        System.import('app/boot')
+              .then(null, console.error.bind(console));
+    </script>
+
+</head>
+
+<body>
+    <my-app>Loading...</my-app>
+</body>
+
+</html>
