@@ -4,14 +4,17 @@ using System.Threading;
 
 namespace AspNetCore1Angular2Intro.Services
 {
+    /// <summary>
+    /// Implements a generator for dummy book names
+    /// </summary>
     public class NameGenerator : INameGenerator
     {
         #region Demo data
         private readonly string[][] parts = new[]
         {
             new [] { "The", "A", "One Hell of a", "Yesterday's", "Rising of", "In Love With" },
-            new [] { "Dark", "Light", "Cruel", "Funny", "Beatiful", "Charming" },
-            new [] { "Street", "Road", "Guy", "Knight", "Women", "Man" }
+            new [] { "Dark", "Light", "Cruel", "Funny", "Beatiful", "Charming", "Red" },
+            new [] { "Street", "Road", "Guy", "Knight", "Women", "Man", "Hero", "Car", "Underwear" }
         };
         #endregion
 

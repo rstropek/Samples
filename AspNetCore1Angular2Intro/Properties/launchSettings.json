@@ -12,6 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
+        "booksDemoDataOptions:minimumNumberOfBooks": "6",
         "Hosting:Environment": "Development"
       }
     },
