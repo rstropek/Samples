@@ -43,7 +43,7 @@ namespace ConsoleApplication3
 			var dt = FillDataTable(dataTableQuery);
 		}
 
-		static void DoSimpleQuery() => ExecuteQuery(simpleQuery);
+		static void DoSimpleQuery() { ExecuteQuery(simpleQuery); }
 		static async Task DoSimpleQueryAsync() => await ExecuteQueryAsync(simpleQuery);
 		static void DoComplexQuery() => ExecuteQuery(complexQuery);
 

@@ -48,7 +48,7 @@ namespace SimpleCpuProfiling
 
 		static void Sleep()
 		{
-			for (var i=0; i<1000; i++)
+			for (var i=0; i<5000; i++)
 			{
 				Thread.Sleep(1);
 			}
@@ -56,7 +56,7 @@ namespace SimpleCpuProfiling
 
 		static void BurnCpuCycles()
 		{
-			for (var i = 0; i<1000; i++)
+			for (var i = 0; i<500; i++)
 			{
 				for (var j = 0; j < 500000; j++) ;
 			}
