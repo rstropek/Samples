@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace AdoNetPerfProfiling.DataAccess
+namespace AdoNetProfiling.Common.DataAccess
 {
     using System;
     
@@ -15,7 +15,7 @@ namespace AdoNetPerfProfiling.DataAccess
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+    #line 1 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetProfiling.Common\DataAccess\SelectBuilder.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class SelectBuilder : SelectBuilderBase
     {
@@ -29,7 +29,7 @@ namespace AdoNetPerfProfiling.DataAccess
                     "efore, SQL Server\r\n-- cannot do proper exec plan caching.\r\nPRINT \'Execution star" +
                     "t time: ");
             
-            #line 5 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 5 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetProfiling.Common\DataAccess\SelectBuilder.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DateTime.UtcNow.ToString("O")));
             
             #line default
@@ -48,7 +48,7 @@ FROM	Person.Person p
 		LEFT JOIN Person.CountryRegion cr on sp.CountryRegionCode = cr.CountryRegionCode
 WHERE	");
             
-            #line 17 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 17 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetProfiling.Common\DataAccess\SelectBuilder.tt"
  if (this.IncludeNameFilter) { 
             
             #line default
@@ -56,7 +56,7 @@ WHERE	");
             this.Write("p.FirstName LIKE \'%\' + @customerName + \'%\' OR p.LastName LIKE \'%\' + @customerName" +
                     " + \'%\' AND ");
             
-            #line 17 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 17 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetProfiling.Common\DataAccess\SelectBuilder.tt"
  } 
             
             #line default
@@ -71,7 +71,7 @@ ORDER BY p.LastName, p.FirstName, cr.Name, a.City;
 
 PRINT 'Execution start time: ");
             
-            #line 26 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetPerfProfiling\DataAccess\SelectBuilder.tt"
+            #line 26 "C:\Code\Github\Samples\ProfilingWorkshop\AdoNetProfiling.Common\DataAccess\SelectBuilder.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DateTime.UtcNow.ToString("O")));
             
             #line default

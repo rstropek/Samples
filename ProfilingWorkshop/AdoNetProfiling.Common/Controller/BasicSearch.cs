@@ -1,4 +1,4 @@
-﻿using AdoNetPerfProfiling.DataAccess;
+﻿using AdoNetProfiling.Common.DataAccess;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

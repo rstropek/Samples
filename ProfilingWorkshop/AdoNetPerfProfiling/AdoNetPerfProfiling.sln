@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoNetPerfProfiling", "AdoNetPerfProfiling.csproj", "{435391FD-4216-4316-9201-3092BD4182DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLoadTest", "..\WebLoadTest\WebLoadTest.csproj", "{3D90D923-C647-4096-8ADD-90EA336CA162}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoNetProfiling.Common", "..\AdoNetProfiling.Common\AdoNetProfiling.Common.csproj", "{6E351073-2B51-42AC-B6DA-AA771208727C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoNetPerfProfiling.Web", "..\AdoNetPerfProfiling.Web\AdoNetPerfProfiling.Web.csproj", "{8E0EA150-73A0-4A86-8256-F4AB039444B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{3D90D923-C647-4096-8ADD-90EA336CA162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D90D923-C647-4096-8ADD-90EA336CA162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D90D923-C647-4096-8ADD-90EA336CA162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E351073-2B51-42AC-B6DA-AA771208727C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E351073-2B51-42AC-B6DA-AA771208727C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E351073-2B51-42AC-B6DA-AA771208727C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E351073-2B51-42AC-B6DA-AA771208727C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E0EA150-73A0-4A86-8256-F4AB039444B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E0EA150-73A0-4A86-8256-F4AB039444B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E0EA150-73A0-4A86-8256-F4AB039444B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E0EA150-73A0-4A86-8256-F4AB039444B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

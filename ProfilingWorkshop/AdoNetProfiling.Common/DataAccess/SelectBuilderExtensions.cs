@@ -1,4 +1,4 @@
-﻿namespace AdoNetPerfProfiling.DataAccess
+﻿namespace AdoNetProfiling.Common.DataAccess
 {
 	public partial class SelectBuilder
 	{

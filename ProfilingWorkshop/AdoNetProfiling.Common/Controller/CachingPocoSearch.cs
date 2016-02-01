@@ -1,4 +1,4 @@
-﻿using AdoNetPerfProfiling.DataAccess;
+﻿using AdoNetProfiling.Common.DataAccess;
 using Dapper;
 using System.Configuration;
 using System.Data.SqlClient;

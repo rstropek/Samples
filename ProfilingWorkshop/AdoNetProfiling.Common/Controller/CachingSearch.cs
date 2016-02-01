@@ -40,29 +40,29 @@ namespace AdoNetPerfProfiling.Controller
 				}
 			}
 
-			// This approach uses an ADO.NET DataView to query the cache.
-			var view = new DataView(CachingSearchController.customerCache);
-			view.RowFilter = "LastName LIKE '%" + customerName + "%' OR FirstName LIKE '%" + customerName + "%'";
-			return Ok(CachingSearchController.ConvertToJson(view.Cast<DataRowView>(), (row, colName) => row[colName]));
+            // This approach uses an ADO.NET DataView to query the cache.
+            //var view = new DataView(CachingSearchController.customerCache);
+            //view.RowFilter = "LastName LIKE '%" + customerName + "%' OR FirstName LIKE '%" + customerName + "%'";
+            //return Ok(CachingSearchController.ConvertToJson(view.Cast<DataRowView>(), (row, colName) => row[colName]));
 
-			// This approach replaces ADO.NET DataView with (stupid) LINQ.
-			//var rows = CachingSearchController.customerCache.Rows.Cast<DataRow>().ToArray();
-			//var tempResult = rows.Where(
-			//	r => r["LastName"].ToString().ToUpper().Contains(customerName.ToUpper())
-			//		|| r["FirstName"].ToString().ToUpper().Contains(customerName.ToUpper())).ToArray();
-			//return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
+            // This approach replaces ADO.NET DataView with (stupid) LINQ.
+            var rows = CachingSearchController.customerCache.Rows.Cast<DataRow>().ToArray();
+            var tempResult = rows.Where(
+                r => r["LastName"].ToString().ToUpper().Contains(customerName.ToUpper())
+                    || r["FirstName"].ToString().ToUpper().Contains(customerName.ToUpper())).ToArray();
+            return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
 
-			// And now with less stupid LINQ.
-			//var customerNameUppercase = customerName.ToUpper();
-			//var lastNameOrdinal = CachingSearchController.customerCache.Columns.IndexOf("UpperLastName");
-			//var firstNameOrdinal = CachingSearchController.customerCache.Columns.IndexOf("UpperFirstName");
-			//var tempResult = CachingSearchController.customerCache
-			//	.Rows
-			//	.Cast<DataRow>()
-			//	.Where(r => r[lastNameOrdinal].ToString().Contains(customerNameUppercase)
-			//			|| r[firstNameOrdinal].ToString().Contains(customerNameUppercase));
-			//return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
-		}
+            // And now with less stupid LINQ.
+            //var customerNameUppercase = customerName.ToUpper();
+            //var lastNameOrdinal = CachingSearchController.customerCache.Columns.IndexOf("UpperLastName");
+            //var firstNameOrdinal = CachingSearchController.customerCache.Columns.IndexOf("UpperFirstName");
+            //var tempResult = CachingSearchController.customerCache
+            //	.Rows
+            //	.Cast<DataRow>()
+            //	.Where(r => r[lastNameOrdinal].ToString().Contains(customerNameUppercase)
+            //			|| r[firstNameOrdinal].ToString().Contains(customerNameUppercase));
+            //return Ok(CachingSearchController.ConvertToJson(tempResult, (row, col) => row[col]));
+        }
 
 		/// <summary>
 		/// Helper function to convert a collection of data rows into JSON result

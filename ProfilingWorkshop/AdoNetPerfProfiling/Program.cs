@@ -1,4 +1,5 @@
 ﻿using AdoNetPerfProfiling.Controller;
+using AdoNetProfiling.Common;
 using Microsoft.Owin.Hosting;
 using Owin;
 using System;
@@ -17,30 +18,6 @@ namespace AdoNetPerfProfiling
 				Console.WriteLine("Listening on port 12345. Press any key to quit.");
 				Console.ReadLine();
 			}
-		}
-	}
-
-	public class Startup
-	{
-		public void Configuration(IAppBuilder app)
-		{
-			// Setup routes
-			var config = new HttpConfiguration();
-
-			// Removing XML formatter, we just want to support JSON
-			config.Formatters.Remove(config.Formatters.XmlFormatter);
-
-			Startup.SetupWebApiRoutes(config);
-			app.UseWebApi(config);
-		}
-
-		private static void SetupWebApiRoutes(HttpConfiguration config)
-		{
-			config.Routes.MapHttpRoute(
-				name: "webapi",
-				routeTemplate: "api/{controller}",
-				defaults: new { customerName = RouteParameter.Optional }
-			);
 		}
 	}
 }
