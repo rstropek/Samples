@@ -1,0 +1,18 @@
+{
+    "title": ".NET Core Demo",
+    "authors": [ "Rainer Stropek" ],
+    "version": "1.0.0",
+    "copyright": "MIT License",
+    "description": "This is small sample for .NET Core",
+    
+    "dependencies": {
+        "lib": "",
+        "System.Console": "4.0.0-beta-23516"
+    },
+    "frameworks": {
+        "dnxcore50": {}
+    },
+    "commands": {
+        "run": "consumer"
+    }
+}
