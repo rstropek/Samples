@@ -81,18 +81,49 @@
                 </section>
                 
                 <section>
+                    <h2>What is .NET</i></h2>
+                    
+                    <p>New to .NET? Need to introduce someone to .NET?<br/>
+                    <small><a href="http://dotnet.github.io/docs/concepts/primer.html#key-net-concepts" target="_blank">Quick overview</a></small></p>
+
+                    <p>Different implementations</p>
+                    <ul>
+                        <li>
+                            <p>.NET Core<br/>
+                            <small>New, redesigned, cross-platform, open-source, ...</small></p>
+                        </li>
+                        <li>
+                            <p>.NET Native<br/>
+                            <small>.NET adhead-of-time compiled</small></p>
+                        </li>
+                        <li>
+                            <p>.NET Framework<br/>
+                            <small>Server, client, just Windows; huge .NET Framework Class Library incl. WCF, WPF, etc.</small></p>
+                        </li>
+                        <li>
+                            <p>Mono<br/>
+                            <small>Community-driven, cross-platform, open-source; follows .NET Framework, not .NET Core</small></p>
+                        </li>
+                    </ul>
+                </section>
+                
+                <section>
                     <h2>What is <i>.NET Core?</i></h2>
                     
-                    <p class="fragment">.NET Runtime and framework<br/>
+                    <p>.NET Runtime and framework<br/>
                         <small><a href="https://github.com/dotnet/coreclr/blob/master/Documentation/project-docs/dotnet-standards.md" target="_blank">ECMA 335</a> implementation</small>
                     </p>
-                    <p class="fragment">Cross-platform<br/>
+                    <p>Cross-platform<br/>
                         <small>Windows, Linux and MacOS</small>
                     </p>
+                    <p>Open-source</p>
+                    <p>Delivered by package manager (NuGet, APT, etc.) or Docker</p>
+                    <p>"A-la-carte" framework (take just what you need)</p>
                 </section>
 
                 <section>
                     <h2>Installation</h2>
+                    
                     <ul>
                         <li>
                             Install <a href="https://go.microsoft.com/fwlink/?LinkId=532606" target="_blank">Visual Studio 2015</a> 
@@ -148,14 +179,17 @@
                 
                 <section>
                     <h2>DNX</h2>
-                    <small>Note: This will change, see <a href="https://github.com/dotnet/cli" target="_blank">.NET CLI</a></small>
                     
                     <p>.NET Execution Environment</p>
+                    
                     <ul>
                         <li>Cross-Platform</li>
                         <li>Build for ASP.NET web apps</li>
                         <li>Can run cross-platform console apps</li>
                     </ul>
+                    
+                    <p>Note: DNX will be replaced by <a href="http://dotnet.github.io/getting-started/" target="_blank">.NET CLI</a>
+                    (<a href="http://dotnet.github.io/docs/libraries/libraries-with-cli.html#prerequisites" target="_blank">details</a>)</p>
                 </section>
                 
                 <section>
@@ -357,9 +391,52 @@ public static void Main(string[] args)
 }
                     </code></pre>
                     
+                    <img src="img/nuget-shared.png" />
+                    
                     <p>See sample <code>30-shared-project</code></p>
                 </section>
 
+                <section>
+                    <h2>Libraries</h2>
+                    
+                    <p>Projects are just folders with files in them</p>
+                    <p><code>global.json</code> at the top level needs the names of each project (folder name)</p>
+                    
+                    <pre><code class="hljson" data-trim contenteditable>
+{
+    "projects":[
+        "consumer",
+        "lib"
+    ]
+}
+                    </code></pre>
+
+                    <p><code>project.json</code> includes a reference</p>
+
+                    <pre><code class="hljson" data-trim contenteditable>
+{
+    "dependencies": {
+        "lib": "",
+        ...
+    },
+    ...
+}
+                    </code></pre>      
+                    
+                    <small>See sample <code>40-library</code></small>                    
+                </section>
+
+                <section>
+                    <h2>Creating NuGet Packages</h2>
+                    
+                    <p>Create NuGet package with DNU<br/>
+                    <small><code>dnu pack [ --configuration ... ]</code></small></p>
+                    
+                    <img src="img/nuget-lib.png" />
+                    
+                    <p>See sample <code>40-library</code></p>                    
+                </section>
+                
                 <section>
                     <h2>Package Metadata</h2>
                     
@@ -407,11 +484,28 @@ public static void Main(string[] args)
                     <ul>
                         <li><a href="https://docs.asp.net/en/latest/dnx/projects.html" target="_blank">Working with DNX Projects</a></li>
                         <li><a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">Glob patterns</a></li>
+                        <li><a href="http://dotnet.github.io/docs/" target="_blank">.NET Core documentation</a></li>
+                        <li><a href="http://www.hanselman.com/blog/ExploringTheNewNETDotnetCommandLineInterfaceCLI.aspx" target="_blank">Scott Hanselman about dotnet CLI</a></li>
                     </ul>
                 </section>
             </section>
-        </div>
 
+            <section data-background="img/basta-background.jpg">
+                <section data-background="img/basta-title.jpg">
+                    <h2 style="margin-top: 300px;">ASP.NET Fundamentals</h2>
+                </section>
+                
+                <section>
+                    
+                </section>
+            </section>
+
+            <section data-background="img/basta-background.jpg">
+                <section data-background="img/basta-title.jpg">
+                    <h2 style="margin-top: 300px;">Testing</h2>
+                </section>
+            </section>
+        </div>
     </div>
 
     <script src="lib/js/head.min.js"></script>
