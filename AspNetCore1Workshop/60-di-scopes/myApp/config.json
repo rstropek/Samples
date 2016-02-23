@@ -1,8 +1,0 @@
-{
-    "text": { "color": "Red" },
-    "circle": { "color": "Blue" },
-    "paintOptions": {
-        "foreground": "Red",
-        "background": "White"
-    }
-}

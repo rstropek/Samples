@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "System.Console": "4.0.0-beta-23516",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+    "Microsoft.CodeAnalysis.CSharp.Scripting": "1.1.1"
+  },
+  "frameworks": {
+    "dnxcore50": { }
+  },
+  "commands": {
+    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:5000"
+  }
+}
