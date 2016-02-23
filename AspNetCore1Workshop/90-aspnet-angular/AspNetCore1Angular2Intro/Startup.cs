@@ -2,9 +2,12 @@
 using AspNetCore1Angular2Intro.Services;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.SwaggerGen;
+using System;
 
 namespace AspNetCore1Angular2Intro
 {
@@ -45,8 +48,29 @@ namespace AspNetCore1Angular2Intro
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            if (env.IsDevelopment())
+            {
+                // Running in development mode
+                app.UseDeveloperExceptionPage();
+                app.UseRuntimeInfoPage();
+            }
+
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Query.ContainsKey("exception"))
+                {
+                    throw new InvalidOperationException("Something bad happened ...");
+                }
+
+                await next();
+            });
+
+            // Add logging
+            loggerFactory.MinimumLevel = LogLevel.Error;
+            loggerFactory.AddConsole(true);
+
             // Use IIS platform handle to run ASP.NET in IIS
             app.UseIISPlatformHandler();
 
@@ -66,6 +90,11 @@ namespace AspNetCore1Angular2Intro
             // http://damienbod.com/2015/12/13/asp-net-5-mvc-6-api-documentation-using-swagger/
             app.UseSwaggerGen();
             app.UseSwaggerUi();
+
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("asdf");
+            });
         }
 
         // Entry point for the application.
