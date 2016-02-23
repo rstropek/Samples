@@ -3,6 +3,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace myApp
 {
@@ -34,6 +35,14 @@ namespace myApp
         // Note that when using "dnx web", startup class is detected based
         // on conventions (see https://github.com/aspnet/Hosting/blob/1.0.0-rc1/src/Microsoft.AspNet.Hosting/Startup/StartupLoader.cs#L41-L89).
         
+        // Note constructor injection here
+        // (list of services see https://docs.asp.net/en/latest/fundamentals/startup.html#services-available-in-startup) 
+        public Startup(IApplicationEnvironment appEnv, IHostingEnvironment env)
+        {
+            Console.WriteLine($"App name: {appEnv.ApplicationName}");
+            Console.WriteLine($"Root path: {env.WebRootPath}");
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             Console.WriteLine("In ConfigureServices ...");
@@ -46,16 +55,13 @@ namespace myApp
             // Build pipeline
             
             app.Use(async (context, next) => {
-                await context.Response.WriteAsync(">>>");
+                await context.Response.WriteAsync(">>> Hello ");
                 await next();
+                await context.Response.WriteAsync("World <<<");
             });
             
-            app.Use(async (context, next) => {
-                await context.Response.WriteAsync("Hello World!");
-                await next();
-            });
-            
-            app.Run(async (context) => await context.Response.WriteAsync("<<<"));
+            app.Map("/beautiful", beautifulApp => beautifulApp.Run(
+                async context => await context.Response.WriteAsync("beautiful ")));
         }
     }
 }

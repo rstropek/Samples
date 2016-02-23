@@ -7,7 +7,7 @@
     "dnxcore50": {}
   },
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel",
-    "assert": "myApp --server Microsoft.AspNet.Server.Kestrel" 
+    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:5000",
+    "assert": "myApp --server Microsoft.AspNet.Server.Kestrel --server.urls http://*:5000" 
   }
 }
