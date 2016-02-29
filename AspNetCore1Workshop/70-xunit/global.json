@@ -1,0 +1,7 @@
+{
+    "projects":[
+        "src/client",
+        "src/math-library",
+        "test/lib-test"
+    ]
+}
