@@ -1,5 +1,4 @@
-﻿/// <reference path="../../node_modules/angular2/typings/tsd.d.ts" />
-import {Component} from 'angular2/core';
+﻿import {Component} from 'angular2/core';
 import {Http, HTTP_PROVIDERS} from 'angular2/http';
 
 interface IBook {

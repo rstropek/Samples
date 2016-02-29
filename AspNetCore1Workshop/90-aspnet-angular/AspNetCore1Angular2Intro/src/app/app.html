@@ -1,0 +1,48 @@
+﻿<div class="jumbotron">
+    <div class="container">
+        <h1>Books</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- The following div should be repeated for each available book -->
+            <div *ngFor="#book of books">
+                <h3>{{ book.title }}</h3> <!-- Book title -->
+                <p>{{ book.description }}</p> <!-- Book description -->
+                <div class="pull-right">
+                    <button (click)="addToShoppingCart(book)" class="btn btn-default">Buy</button>
+                </div>
+                <p>Price: {{ book.price }}</p> <!-- Price -->
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron">
+                <h3>Shopping Cart</h3>
+                <!--
+                    Next line should say:
+                    "You have 0 items in your shopping cart." or
+                    "You have 1 item in your shopping cart." or
+                    "You have n items in your shopping cart."
+                -->
+                <p>You have {{ cart.length }} item<span *ngIf="cart.length != 1">s</span> in your shopping cart.</p>
+                <table class="table">
+                    <tr>
+                        <th>Title</th>
+                        <th class="text-right">Quantity</th>
+                    </tr>
+                    <!-- Next tr should be repeated for all items in the shopping cart -->
+                    <tr *ngFor="#item of cart">
+                        <td>{{ item.book.title }}</td> <!-- Book title -->
+                        <td class="text-right">{{ item.quantity }}</td> <!-- Quantity -->
+                    </tr>
+                    <!-- Next tr should only be displayed if shopping cart is empty -->
+                    <tr *ngIf="cart.length == 0">
+                        <td colspan="2">Your shopping cart is empty.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

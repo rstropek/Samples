@@ -1,13 +1,16 @@
 ﻿using AspNetCore1Angular2Intro.Controllers;
 using AspNetCore1Angular2Intro.Services;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.FileProviders;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNet.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.SwaggerGen;
 using System;
+using System.IO;
 
 namespace AspNetCore1Angular2Intro
 {
@@ -48,15 +51,18 @@ namespace AspNetCore1Angular2Intro
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, IApplicationEnvironment appEnv)
         {
             if (env.IsDevelopment())
             {
-                // Running in development mode
+                // Running in development mode -> add some dev tools
                 app.UseDeveloperExceptionPage();
                 app.UseRuntimeInfoPage();
             }
 
+            // Just for demo purposes throw an exception if
+            // query string contains "exception"
             app.Use(async (context, next) =>
             {
                 if (context.Request.Query.ContainsKey("exception"))
@@ -90,11 +96,6 @@ namespace AspNetCore1Angular2Intro
             // http://damienbod.com/2015/12/13/asp-net-5-mvc-6-api-documentation-using-swagger/
             app.UseSwaggerGen();
             app.UseSwaggerUi();
-
-            app.Use(async (context, next) =>
-            {
-                await context.Response.WriteAsync("asdf");
-            });
         }
 
         // Entry point for the application.
