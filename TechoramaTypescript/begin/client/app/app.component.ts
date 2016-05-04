@@ -7,8 +7,10 @@ import {Component} from '@angular/core';
 export class AppComponent { 
     public events: any[];
     
-    constructor(private http: Http) {
-		this.events = [];
+    constructor() {
+		this.events = [
+            { location: "Mechelen", date: new Date() }
+        ];
     }
     
     getDetails(item: any) : void {
