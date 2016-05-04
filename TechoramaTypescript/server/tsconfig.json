@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2015",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "moduleResolution": "node"
+    },
+    "exclude": [
+        "node_modules",
+        "typings/browser.d.ts",
+        "typings/browser"
+    ]
+}

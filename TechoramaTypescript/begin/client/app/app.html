@@ -1,0 +1,16 @@
+﻿<div class="jumbotron">
+    <div class="container">
+        <h1>Techorama TypeScript</h1>
+    </div>
+</div>
+
+<div class="container">
+    <!-- The following div should be repeated for each available event -->
+    <div *ngFor="let event of events">
+        <h3>{{ event.location }}</h3>
+        <p>{{ event.date | date }}</p>
+        <div class="pull-right">
+            <button (click)="getDetails(event)" class="btn btn-default">Details</button>
+        </div>
+    </div>
+</div>

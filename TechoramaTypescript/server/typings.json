@@ -1,0 +1,17 @@
+{
+  "name": "participants-management-service",
+  "dependencies": {},
+  "devDependencies": {
+    "mongodb": "registry:npm/mongodb#2.1.0+20160422172506"
+  },
+  "ambientDevDependencies": {
+    "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
+    "cors": "registry:dt/cors#0.0.0+20160317120654",
+    "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160412134438",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "node": "registry:dt/node#4.0.0+20160501135006",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160501131543"
+  }
+}
