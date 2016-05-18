@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalFunction", "LocalFunct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternMatching", "PatternMatching\PatternMatching.csproj", "{1B9F1A6B-B044-455E-BEF7-DC8066E8A09C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefReturns", "RefReturns\RefReturns.csproj", "{3153CA14-72FC-4E69-813E-804796748254}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1B9F1A6B-B044-455E-BEF7-DC8066E8A09C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B9F1A6B-B044-455E-BEF7-DC8066E8A09C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B9F1A6B-B044-455E-BEF7-DC8066E8A09C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3153CA14-72FC-4E69-813E-804796748254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3153CA14-72FC-4E69-813E-804796748254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3153CA14-72FC-4E69-813E-804796748254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3153CA14-72FC-4E69-813E-804796748254}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

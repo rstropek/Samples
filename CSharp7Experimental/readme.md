@@ -20,6 +20,9 @@ C# interactive with some experimental features enabled, run `csi /features:patte
 * [PatternMatching](PatternMatching) contains samples for the new *Pattern Matching*
   feature of C#.
 
+* [RefReturns](RefReturns) contains a sample demonstrating the new ref return Feature
+  of C# 7. During demos, I use `ILDasm` to dig deeper into the implementation details.
+
 
 ## Considerations
 
