@@ -20,7 +20,8 @@ namespace PatternMatching
                 Console.WriteLine($"o is a string with value {name}");
             }
 
-            IEnumerable<int> numbers = new List<int> { 1, 2, 3 };
+            // Note the use of separators in the following collection initializer
+            IEnumerable<int> numbers = new List<int> { 1_024, 0b1000_0000_0000, 0x10_00 };
             if (numbers is IList<int> numberList)
             {
                 Console.WriteLine("We have a list of ints");
