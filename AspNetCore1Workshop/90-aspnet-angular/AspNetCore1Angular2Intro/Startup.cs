@@ -1,14 +1,10 @@
 ﻿using AspNetCore1Angular2Intro.Controllers;
 using AspNetCore1Angular2Intro.Services;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.StaticFiles;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.SwaggerGen;
 using System;
 using System.IO;
 
@@ -16,19 +12,25 @@ namespace AspNetCore1Angular2Intro
 {
     public class Startup
     {
+        private string contentRootPath;
+
+        public Startup(IHostingEnvironment env)
+        {
+            this.contentRootPath = env.ContentRootPath;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configure swagger. For more details see e.g.
-            // http://damienbod.com/2015/12/13/asp-net-5-mvc-6-api-documentation-using-swagger/
-            services.AddSwaggerGen();
-            services.ConfigureSwaggerDocument(options => options.SingleApiVersion(
-                new Info { Version = "v1", Title = "Demo" }));
+            // Note that this sample does currently not contain Swashbuckle as it
+            // has not been updated to RC2 (see https://github.com/domaindrivendev/Swashbuckle/issues/768
+            // for status).
 
             // Use the new configuration model here. Note the use of 
             // different configuration sources (json, env. variables,
             // middleware-specific configuration).
             services.AddOptions();
             var builder = new ConfigurationBuilder()
+                .SetBasePath(this.contentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables()
                 .AddApplicationInsightsSettings(developerMode: true);
@@ -37,8 +39,10 @@ namespace AspNetCore1Angular2Intro
             // Publish options read from configuration file. With that,
             // controllers can use ASP.NET DI to get options (see 
             // BooksController).
-            services.Configure<BooksDemoDataOptions>(
-                configuration.GetSection("booksDemoDataOptions"));
+            services.Configure<BooksDemoDataOptions>(o => {
+                o.MinimumNumberOfBooks = Int32.Parse(configuration.GetSection("booksDemoDataOptions:minimumNumberOfBooks").Value);
+                o.MaximumNumberOfBooks = Int32.Parse(configuration.GetSection("booksDemoDataOptions:maximumNumberOfBooks").Value);
+            });
 
             // Add AI configuration
             services.AddApplicationInsightsTelemetry(configuration);
@@ -51,8 +55,7 @@ namespace AspNetCore1Angular2Intro
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
-            ILoggerFactory loggerFactory, IApplicationEnvironment appEnv)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -74,11 +77,7 @@ namespace AspNetCore1Angular2Intro
             });
 
             // Add logging
-            loggerFactory.MinimumLevel = LogLevel.Error;
-            loggerFactory.AddConsole(true);
-
-            // Use IIS platform handle to run ASP.NET in IIS
-            app.UseIISPlatformHandler();
+            loggerFactory.AddConsole(LogLevel.Error, true);
 
             // Use file server to serve static files
             app.UseDefaultFiles();
@@ -91,15 +90,19 @@ namespace AspNetCore1Angular2Intro
             // Add middlewares (CORS and MVC)
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseMvc();
-
-            // Configure swagger. For more details see e.g.
-            // http://damienbod.com/2015/12/13/asp-net-5-mvc-6-api-documentation-using-swagger/
-            app.UseSwaggerGen();
-            app.UseSwaggerUi();
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => 
-            WebApplication.Run<Startup>(args);
+        public static void Main(string[] args)
+        {
+            var host = new WebHostBuilder()
+              .UseKestrel()
+              .UseContentRoot(Directory.GetCurrentDirectory())
+              .UseIISIntegration()
+              .UseStartup<Startup>()
+              .Build();
+
+            host.Run();
+        }
     }
 }
