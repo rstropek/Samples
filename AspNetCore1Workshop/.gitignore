@@ -2,3 +2,4 @@ helloWorld
 *.lock.json
 *.pubxml
 *-publish.ps1
+.vs

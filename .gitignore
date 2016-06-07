@@ -2,6 +2,9 @@
 [Bb]in/
 [Oo]bj/
 
+#VS Code settings
+.vs
+
 # mstest test results
 TestResults
 
