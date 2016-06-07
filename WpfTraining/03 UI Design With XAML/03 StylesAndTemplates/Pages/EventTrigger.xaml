@@ -1,0 +1,56 @@
+﻿<Page x:Class="StylesAndTemplates.Pages.EventTrigger"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:sysio="clr-namespace:System.IO;assembly=mscorlib"
+xmlns:sys="clr-namespace:System;assembly=mscorlib"
+Title="FileList8">
+<Page.Resources>
+	<ObjectDataProvider
+	  ObjectType="{x:Type sysio:DirectoryInfo}"
+	  MethodName="GetFileSystemInfos" x:Key="Files">
+		<ObjectDataProvider.ConstructorParameters>
+			<sys:String>c:\temp</sys:String>
+		</ObjectDataProvider.ConstructorParameters>
+	</ObjectDataProvider>
+
+	<Style TargetType="ListBoxItem">
+		<Style.Triggers>
+			<EventTrigger RoutedEvent="MouseEnter">
+				<BeginStoryboard>
+					<Storyboard>
+						<DoubleAnimation Storyboard.TargetProperty="FontSize" To="20" Duration="0:0:1" />
+						<ColorAnimation Storyboard.TargetProperty="Background.Color" To="LightGray" Duration="0:0:1" />
+					</Storyboard>
+				</BeginStoryboard>
+			</EventTrigger>
+			<EventTrigger RoutedEvent="MouseLeave">
+				<BeginStoryboard>
+					<Storyboard>
+						<DoubleAnimation Storyboard.TargetProperty="FontSize" Duration="0:0:1" />
+						<ColorAnimation Storyboard.TargetProperty="Background.Color" Duration="0:0:1" />
+					</Storyboard>
+				</BeginStoryboard>
+			</EventTrigger>
+		</Style.Triggers>
+	</Style>
+</Page.Resources>
+
+<Grid Margin="10">
+	<Grid.ColumnDefinitions>
+		<ColumnDefinition Width="*" />
+	</Grid.ColumnDefinitions>
+	<Grid.RowDefinitions>
+		<RowDefinition Height="Auto" />
+		<RowDefinition Height="*" />
+	</Grid.RowDefinitions>
+
+	<TextBox Grid.Column="0" Grid.Row="0"
+	Text="{Binding 
+	Source={StaticResource Files}, 
+    Path=ConstructorParameters[0], 
+    BindsDirectlyToSource=true}" />
+
+	<ListBox Grid.Column="0" Grid.Row="1"
+	ItemsSource="{Binding Source={StaticResource Files}}" />
+</Grid>
+</Page>

@@ -1,0 +1,63 @@
+﻿<Page x:Class="StylesAndTemplates.Pages.InheritedStyles"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:sysio="clr-namespace:System.IO;assembly=mscorlib"
+xmlns:sys="clr-namespace:System;assembly=mscorlib"
+Title="FileList4">
+<Page.Resources>
+	<ObjectDataProvider
+	  ObjectType="{x:Type sysio:DirectoryInfo}"
+	  MethodName="GetFileSystemInfos" x:Key="Files">
+		<ObjectDataProvider.ConstructorParameters>
+			<sys:String>c:\temp</sys:String>
+		</ObjectDataProvider.ConstructorParameters>
+	</ObjectDataProvider>
+
+	<Style TargetType="ListBox">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="Margin" Value="2" />
+	</Style>
+
+	<Style x:Key="ListBoxStyle1" BasedOn="{StaticResource {x:Type ListBox}}" TargetType="ListBox">
+		<Setter Property="BorderThickness" Value="3" />
+	</Style>
+
+	<Style x:Key="ListBoxStyle2" BasedOn="{StaticResource ListBoxStyle1}" TargetType="ListBox">
+		<Setter Property="Background" Value="LightGray" />
+	</Style>
+
+	<Style x:Key="ListBoxStyle3" BasedOn="{StaticResource {x:Type ListBox}}" TargetType="ListBox">
+		<Setter Property="HorizontalAlignment" Value="Left" />
+	</Style>
+</Page.Resources>
+
+<Grid Margin="10">
+	<Grid.ColumnDefinitions>
+		<ColumnDefinition Width="*" />
+	</Grid.ColumnDefinitions>
+	<Grid.RowDefinitions>
+		<RowDefinition Height="Auto" />
+		<RowDefinition Height="*" />
+		<RowDefinition Height="*" />
+		<RowDefinition Height="*" />
+	</Grid.RowDefinitions>
+
+	<TextBox Grid.Column="0" Grid.Row="0"
+	Text="{Binding 
+	Source={StaticResource Files}, 
+    Path=ConstructorParameters[0], 
+    BindsDirectlyToSource=true}" />
+
+	<ListBox Grid.Column="0" Grid.Row="1"
+	ItemsSource="{Binding Source={StaticResource Files}}"
+	Style="{StaticResource ListBoxStyle1}" />
+
+	<ListBox Grid.Column="0" Grid.Row="2"
+	ItemsSource="{Binding Source={StaticResource Files}}"
+	Style="{StaticResource ListBoxStyle2}" />
+
+	<ListBox Grid.Column="0" Grid.Row="3"
+	ItemsSource="{Binding Source={StaticResource Files}}"
+	Style="{StaticResource ListBoxStyle3}" />
+</Grid>
+</Page>

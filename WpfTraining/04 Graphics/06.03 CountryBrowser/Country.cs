@@ -11,6 +11,7 @@ namespace Samples
 			get { return (string)GetValue(IsoCodeProperty); }
 			set { SetValue(IsoCodeProperty, value); }
 		}
+
 		public static readonly DependencyProperty IsoCodeProperty =
 			DependencyProperty.Register("IsoCode", typeof(string), typeof(Country),
 			new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsRender|

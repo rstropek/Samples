@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -15,7 +15,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -85,109 +85,109 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList18.xaml">
+    <Page Include="Pages\EventSetter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList17.xaml">
+    <Page Include="Pages\FileListItemsPanelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList16.xaml">
+    <Page Include="Pages\FileListDataTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList15.xaml">
+    <Page Include="Pages\ButtonTemplateBinding.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList13.xaml">
+    <Page Include="Pages\ButtonDataTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList12.xaml">
+    <Page Include="Pages\DataTemplateSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList11.xaml">
+    <Page Include="Pages\DataTemplateSelectedItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList10.xaml">
+    <Page Include="Pages\DataTemplateTrigger.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList14.xaml">
+    <Page Include="Pages\ButtonControlTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList9.xaml">
+    <Page Include="Pages\DataTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList8.xaml">
+    <Page Include="Pages\EventTrigger.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList7.xaml">
+    <Page Include="Pages\TriggerAnimations.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList6.xaml">
+    <Page Include="Pages\DataTrigger.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList5.xaml">
+    <Page Include="Pages\Trigger.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList4.xaml">
+    <Page Include="Pages\InheritedStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList3.xaml">
+    <Page Include="Pages\NamedStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList2.xaml">
+    <Page Include="Pages\StylesPerType.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\FileList1.xaml">
+    <Page Include="Pages\SimpleFileList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -203,60 +203,60 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\FileList18.xaml.cs">
-      <DependentUpon>FileList18.xaml</DependentUpon>
+    <Compile Include="Pages\EventSetter.xaml.cs">
+      <DependentUpon>EventSetter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList17.xaml.cs">
-      <DependentUpon>FileList17.xaml</DependentUpon>
+    <Compile Include="Pages\FileListItemsPanelTemplate.xaml.cs">
+      <DependentUpon>FileListItemsPanelTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList16.xaml.cs">
-      <DependentUpon>FileList16.xaml</DependentUpon>
+    <Compile Include="Pages\FileListDataTemplate.xaml.cs">
+      <DependentUpon>FileListDataTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList15.xaml.cs">
-      <DependentUpon>FileList15.xaml</DependentUpon>
+    <Compile Include="Pages\ButtonTemplateBinding.xaml.cs">
+      <DependentUpon>ButtonTemplateBinding.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList13.xaml.cs">
-      <DependentUpon>FileList13.xaml</DependentUpon>
+    <Compile Include="Pages\ButtonDataTemplate.xaml.cs">
+      <DependentUpon>ButtonDataTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList12.xaml.cs">
-      <DependentUpon>FileList12.xaml</DependentUpon>
+    <Compile Include="Pages\DataTemplateSelector.xaml.cs">
+      <DependentUpon>DataTemplateSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList11.xaml.cs">
-      <DependentUpon>FileList11.xaml</DependentUpon>
+    <Compile Include="Pages\DataTemplateSelectedItem.xaml.cs">
+      <DependentUpon>DataTemplateSelectedItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList10.xaml.cs">
-      <DependentUpon>FileList10.xaml</DependentUpon>
+    <Compile Include="Pages\DataTemplateTrigger.xaml.cs">
+      <DependentUpon>DataTemplateTrigger.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList14.xaml.cs">
-      <DependentUpon>FileList14.xaml</DependentUpon>
+    <Compile Include="Pages\ButtonControlTemplate.xaml.cs">
+      <DependentUpon>ButtonControlTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList9.xaml.cs">
-      <DependentUpon>FileList9.xaml</DependentUpon>
+    <Compile Include="Pages\DataTemplate.xaml.cs">
+      <DependentUpon>DataTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList8.xaml.cs">
-      <DependentUpon>FileList8.xaml</DependentUpon>
+    <Compile Include="Pages\EventTrigger.xaml.cs">
+      <DependentUpon>EventTrigger.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList7.xaml.cs">
-      <DependentUpon>FileList7.xaml</DependentUpon>
+    <Compile Include="Pages\TriggerAnimations.xaml.cs">
+      <DependentUpon>TriggerAnimations.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList6.xaml.cs">
-      <DependentUpon>FileList6.xaml</DependentUpon>
+    <Compile Include="Pages\DataTrigger.xaml.cs">
+      <DependentUpon>DataTrigger.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList5.xaml.cs">
-      <DependentUpon>FileList5.xaml</DependentUpon>
+    <Compile Include="Pages\Trigger.xaml.cs">
+      <DependentUpon>Trigger.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList4.xaml.cs">
-      <DependentUpon>FileList4.xaml</DependentUpon>
+    <Compile Include="Pages\InheritedStyles.xaml.cs">
+      <DependentUpon>InheritedStyles.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList3.xaml.cs">
-      <DependentUpon>FileList3.xaml</DependentUpon>
+    <Compile Include="Pages\NamedStyles.xaml.cs">
+      <DependentUpon>NamedStyles.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList2.xaml.cs">
-      <DependentUpon>FileList2.xaml</DependentUpon>
+    <Compile Include="Pages\StylesPerType.xaml.cs">
+      <DependentUpon>StylesPerType.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FileList1.xaml.cs">
+    <Compile Include="Pages\SimpleFileList.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>FileList1.xaml</DependentUpon>
+      <DependentUpon>SimpleFileList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

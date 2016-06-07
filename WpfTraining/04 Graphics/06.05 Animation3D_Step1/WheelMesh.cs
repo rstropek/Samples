@@ -46,10 +46,10 @@ namespace Samples
 				new PropertyChangedCallback(OnNumberOfSidesChanged)));
 		private static void OnNumberOfSidesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			WheelMesh wheel = (WheelMesh)d;
+			var wheel = (WheelMesh)d;
 
-			Point3DCollection points = new Point3DCollection(3 + wheel.NumberOfSides - 2);
-			Int32Collection triangles = new Int32Collection(wheel.NumberOfSides);
+			var points = new Point3DCollection(3 + wheel.NumberOfSides - 2);
+			var triangles = new Int32Collection(wheel.NumberOfSides);
 
 			// Center
 			points.Add(new Point3D(wheel.Radius, wheel.Radius, wheel.Height));
@@ -70,6 +70,7 @@ namespace Samples
 				triangles.Add(i);
 				triangles.Add(i+1);
 			}
+
 			triangles.Add(0);
 			triangles.Add(wheel.NumberOfSides);
 			triangles.Add(1);
