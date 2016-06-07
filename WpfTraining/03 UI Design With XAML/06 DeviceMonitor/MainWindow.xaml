@@ -1,0 +1,73 @@
+﻿<Window x:Class="DeviceMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:sensor="clr-namespace:DeviceMonitor"
+		xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        Title="MainWindow" Height="350" Width="525">
+	<Window.Resources>
+		<CollectionViewSource Source="{Binding}" x:Key="MyView">
+			<CollectionViewSource.SortDescriptions>
+				<scm:SortDescription PropertyName="Timestamp"
+									 Direction="Ascending"/>
+			</CollectionViewSource.SortDescriptions>
+		</CollectionViewSource>
+			
+		<sensor:ScaleMeasurementConverter Factor="500" x:Key="Scaler" />
+		<sensor:IsMeasurementCriticalConverter
+			CriticalFactor="0.8"
+			CriticalValueBrush="Red"
+			NormalValueBrush="DarkGray"
+			x:Key="IsMeasurementCriticalConverter" />
+		
+		<DataTemplate DataType="{x:Type sensor:Measurement}"
+					  x:Key="GraphicMeasurement">
+			<Rectangle Height="{Binding Value, Converter={StaticResource Scaler}}" 
+					   Fill="{Binding Value, Converter={StaticResource IsMeasurementCriticalConverter}}"
+					   Width="25" Name="ValueRectangle">
+				<Rectangle.Triggers>
+					<EventTrigger RoutedEvent="Loaded">
+						<BeginStoryboard>
+							<Storyboard>
+								<DoubleAnimation Storyboard.TargetProperty="Height"
+												 Storyboard.TargetName="ValueRectangle"
+												 From="0" 
+												 Duration="00:00:00.25" />
+								<DoubleAnimation Storyboard.TargetProperty="Width"
+												 Storyboard.TargetName="ValueRectangle"
+												 From="0" 
+												 Duration="00:00:00.25" />
+							</Storyboard>
+						</BeginStoryboard>
+					</EventTrigger>
+				</Rectangle.Triggers>
+			</Rectangle>
+		</DataTemplate>
+	</Window.Resources>
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<DataGrid Margin="5" AutoGenerateColumns="False"
+				  ItemsSource="{Binding}" IsReadOnly="True">
+			<DataGrid.Columns>
+				<DataGridTextColumn Binding="{Binding Path=Timestamp}"
+									Header="Timestamp" />
+				<DataGridTextColumn Binding="{Binding Path=Value}"
+									Header="Measured Value" />
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<ListBox Grid.Column="1" Margin="5" ItemsSource="{Binding Source={StaticResource MyView}}"
+				 ItemTemplate="{StaticResource GraphicMeasurement}"
+				 VerticalContentAlignment="Bottom">
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+		</ListBox>
+
+	</Grid>
+</Window>
