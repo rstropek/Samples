@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace BookshelfConfigurator.Data
 {
-	public class ShelfItem : NotificationObject/*, IDataErrorInfo*/, INotifyDataErrorInfo
+    public class ShelfItem : NotificationObject/*, IDataErrorInfo*/, INotifyDataErrorInfo
 	{
 		private ElementHeight HeightValue;
 		public ElementHeight Height
@@ -94,7 +93,7 @@ namespace BookshelfConfigurator.Data
 
 		private void OnParentChanged(object _, PropertyChangedEventArgs ea)
 		{
-			this.RaiseErrorsChanged(NotificationObject.PropertyName(() => this.Width));
+			this.RaiseErrorsChanged(nameof(this.Width));
 		}
 
 		#region IDataErrorInfo implementation
@@ -108,14 +107,14 @@ namespace BookshelfConfigurator.Data
 			get
 			{
 				var maxNumberOfShelfs = ElementDimension.MaximumNumberOfShelfs(this.Height);
-				if (columnName == NotificationObject.PropertyName(() => this.NumberOfShelfs))
+				if (columnName == nameof(this.NumberOfShelfs))
 				{
 					if (this.NumberOfShelfs > maxNumberOfShelfs)
 					{
 						return string.Format("Too many shelfs; maximum for this height is {0}", maxNumberOfShelfs);
 					}
 				}
-				else if (columnName == NotificationObject.PropertyName(() => this.Width))
+				else if (columnName == nameof(this.Width))
 				{
 					if (this.Width != this.Parent.Width)
 					{
@@ -148,14 +147,14 @@ namespace BookshelfConfigurator.Data
 		{
 			var result = new List<string>();
 			var maxNumberOfShelfs = ElementDimension.MaximumNumberOfShelfs(this.Height);
-			if (propertyName == NotificationObject.PropertyName(() => this.NumberOfShelfs))
+			if (propertyName == nameof(this.NumberOfShelfs))
 			{
 				if (this.NumberOfShelfs > maxNumberOfShelfs)
 				{
 					result.Add(string.Format("Too many shelfs; maximum for this height is {0}", maxNumberOfShelfs));
 				}
 			}
-			else if (propertyName == NotificationObject.PropertyName(() => this.Width))
+			else if (propertyName == nameof(this.Width))
 			{
 				if (this.Width != this.Parent.Width)
 				{
@@ -170,8 +169,8 @@ namespace BookshelfConfigurator.Data
 		{
 			get
 			{
-				return this.GetErrorsImpl(NotificationObject.PropertyName(() => this.Width)).Count != 0
-					|| this.GetErrorsImpl(NotificationObject.PropertyName(() => this.NumberOfShelfs)).Count != 0;
+				return this.GetErrorsImpl(nameof(this.Width)).Count != 0
+					|| this.GetErrorsImpl(nameof(this.NumberOfShelfs)).Count != 0;
 			}
 		}
 		#endregion

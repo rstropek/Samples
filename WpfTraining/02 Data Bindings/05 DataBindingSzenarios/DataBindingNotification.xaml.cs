@@ -14,7 +14,7 @@ namespace Samples
 		{
 			InitializeComponent();
 
-			Person newPerson = new Person();
+			var newPerson = new Person();
 			newPerson.FirstName = "Rainer";
 			newPerson.LastName = "Stropek";
 			personList.Add(newPerson);
@@ -36,21 +36,21 @@ namespace Samples
 
 		void ChangeNotifyingPerson_Click(object sender, RoutedEventArgs e)
 		{
-			NotifyingPerson person = FindResource("NotifyingPerson") as NotifyingPerson;
+			var person = FindResource("NotifyingPerson") as NotifyingPerson;
 			person.FirstName = person.FirstName + " 2";
 			person.LastName = person.LastName + " 2";
 		}
 
 		void ChangePerson_Click(object sender, RoutedEventArgs e)
 		{
-			Person person = FindResource("Person") as Person;
+			var person = FindResource("Person") as Person;
 			person.FirstName = person.FirstName + " 2";
 			person.LastName = person.LastName + " 2";
 		}
 
 		void AddPersonObservableListListbox_Click(object sender, RoutedEventArgs e)
 		{
-			Person newPerson = new Person();
+			var newPerson = new Person();
 			newPerson.FirstName = "Rainer";
 			newPerson.LastName = "Stropek";
 			personObservableList.Add(newPerson);
@@ -58,7 +58,7 @@ namespace Samples
 
 		void AddPersonListListbox_Click(object sender, RoutedEventArgs e)
 		{
-			Person newPerson = new Person();
+			var newPerson = new Person();
 			newPerson.FirstName = "Karin";
 			newPerson.LastName = "Huber";
 			personList.Add(newPerson);

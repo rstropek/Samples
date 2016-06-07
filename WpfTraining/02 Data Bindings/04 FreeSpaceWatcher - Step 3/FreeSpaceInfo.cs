@@ -1,12 +1,11 @@
 using System;
 using System.IO;
 using System.Windows;
-using System.ComponentModel;
 using System.Windows.Threading;
 
 namespace Samples
 {
-	public class FreeSpaceInfo : DependencyObject
+    public class FreeSpaceInfo : DependencyObject
 	{
 		private DispatcherTimer monitorFreeSpaceTimer;
 		private DriveInfo currentDriveInfo = null;
@@ -29,11 +28,14 @@ namespace Samples
 			if (currentDriveInfo != null)
 			{
 				// calculate the free space ratio
-				double newRatio = Convert.ToDouble(currentDriveInfo.TotalFreeSpace) / currentDriveInfo.TotalSize;
-				// check if free space ratio has changed
-				if (newRatio != FreeSpaceRatio)
-					// set dependency property
-					SetValue(FreeSpaceRatioProperty, newRatio);
+				var newRatio = Convert.ToDouble(currentDriveInfo.TotalFreeSpace) / currentDriveInfo.TotalSize;
+
+                // check if free space ratio has changed
+                if (newRatio != FreeSpaceRatio)
+                {
+                    // set dependency property
+                    SetValue(FreeSpaceRatioProperty, newRatio);
+                }
 			}
 
 			// start timer after processing
@@ -51,12 +53,14 @@ namespace Samples
 		}
 		public static void OnDriveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			FreeSpaceInfo o = (FreeSpaceInfo)d;
+			var o = (FreeSpaceInfo)d;
+
 			// check if the drive property is empty
 			if (((string)e.NewValue).Length > 0)
 			{
 				// get data about the drive
 				o.currentDriveInfo = new DriveInfo((string)e.NewValue);
+
 				// set dependency property
 				d.SetValue(FreeSpaceRatioProperty, 
 					Convert.ToDouble(o.currentDriveInfo.TotalFreeSpace) / o.currentDriveInfo.TotalSize);
@@ -73,6 +77,7 @@ namespace Samples
 			// this property is read only -> no set is implemented
 			get { return (double)GetValue(FreeSpaceRatioProperty); }
 		}
+
 		public static readonly DependencyProperty FreeSpaceRatioProperty =
 			DependencyProperty.Register("FreeSpaceRatio", typeof(double), typeof(FreeSpaceInfo));
 		#endregion

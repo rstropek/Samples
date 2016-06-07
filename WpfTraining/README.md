@@ -94,6 +94,17 @@ This sample contains various small examples for data bindings. It covers:
 * Use of `CompositeCollection`
 * Binding and notification (`INotifyPropertyChanged`, `ObservableCollection`, etc.)
 
+## Validation
+
+This sample contains a typical data entry form covering various
+validation aspects. Examples of topics in this sample:
+
+* Custom binding `ValidationRule`
+* Tooltips with error messages
+* Error indicators with `AdornedElementPlaceholder`
+* Validation in converters
+* Implenenting `IDataErrorInfo`
+
 # UI Design With WPF and XAML
 
 ## Simple XAML Sources

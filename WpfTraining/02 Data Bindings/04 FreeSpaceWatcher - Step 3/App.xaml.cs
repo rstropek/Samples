@@ -16,6 +16,7 @@ namespace FreeSpaceWatcher
 			queueThread = new Thread(new ParameterizedThreadStart(QueueThreadProc));
 			queueThread.SetApartmentState(ApartmentState.STA);
 			queueThread.IsBackground = true;
+
 			// pass the dispatcher of the main window as a parameter to the new thread
 			queueThread.Start(Dispatcher);
 		}
@@ -25,6 +26,7 @@ namespace FreeSpaceWatcher
 			// start window in new thread
 			dispatcherQueueForm = new DispatcherQueue((System.Windows.Threading.Dispatcher)dispatcher);
 			dispatcherQueueForm.Show();
+
 			// a dispatcher is automatically created by WPF
 			System.Windows.Threading.Dispatcher.Run();
 		}

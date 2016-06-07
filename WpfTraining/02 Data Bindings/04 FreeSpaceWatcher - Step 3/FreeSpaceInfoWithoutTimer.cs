@@ -23,12 +23,16 @@ namespace Samples
 			if (currentDriveInfo != null)
 			{
 				// calculate the free space ratio
-				double newRatio = Convert.ToDouble(currentDriveInfo.TotalFreeSpace) / currentDriveInfo.TotalSize;
-				// check if free space ratio has changed
-				if (newRatio != FreeSpaceRatio)
-					// set dependency property
-					SetValue(FreeSpaceRatioProperty, newRatio);
+				var newRatio = Convert.ToDouble(currentDriveInfo.TotalFreeSpace) / currentDriveInfo.TotalSize;
+
+                // check if free space ratio has changed
+                if (newRatio != FreeSpaceRatio)
+                {
+                    // set dependency property
+                    SetValue(FreeSpaceRatioProperty, newRatio);
+                }
 			}
+
 			Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle,
 				new UpdateFreeSpaceDelegate(UpdateFreeSpace));
 		}
@@ -42,21 +46,26 @@ namespace Samples
 			get { return (string)GetValue(DriveProperty); }
 			set { SetValue(DriveProperty, value); }
 		}
+
 		public static void OnDriveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			FreeSpaceInfoWithoutTimer o = (FreeSpaceInfoWithoutTimer)d;
-			// check if the drive property is empty
-			if (((string)e.NewValue).Length > 0)
-			{
-				// get data about the drive
-				o.currentDriveInfo = new DriveInfo((string)e.NewValue);
-				// set dependency property
-				d.SetValue(FreeSpaceRatioProperty, 
-					Convert.ToDouble(o.currentDriveInfo.TotalFreeSpace) / o.currentDriveInfo.TotalSize);
-			}
-			else
-				// no drive has been selected -> set free space ratio to zero
-				d.SetValue(FreeSpaceRatioProperty, 0.0);
+			var o = (FreeSpaceInfoWithoutTimer)d;
+
+            // check if the drive property is empty
+            if (((string)e.NewValue).Length > 0)
+            {
+                // get data about the drive
+                o.currentDriveInfo = new DriveInfo((string)e.NewValue);
+
+                // set dependency property
+                d.SetValue(FreeSpaceRatioProperty,
+                    Convert.ToDouble(o.currentDriveInfo.TotalFreeSpace) / o.currentDriveInfo.TotalSize);
+            }
+            else
+            {
+                // no drive has been selected -> set free space ratio to zero
+                d.SetValue(FreeSpaceRatioProperty, 0.0);
+            }
 		}
 		#endregion
 
@@ -66,6 +75,7 @@ namespace Samples
 			// this property is read only -> no set is implemented
 			get { return (double)GetValue(FreeSpaceRatioProperty); }
 		}
+
 		public static readonly DependencyProperty FreeSpaceRatioProperty =
 			DependencyProperty.Register("FreeSpaceRatio", typeof(double), typeof(FreeSpaceInfo));
 		#endregion

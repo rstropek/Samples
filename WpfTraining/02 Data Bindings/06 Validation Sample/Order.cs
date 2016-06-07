@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Linq;
 
 namespace ValidationSample
 {
-	public class Order : INotifyPropertyChanged, IDataErrorInfo
+    public class Order : INotifyPropertyChanged, IDataErrorInfo
 	{
 		private string CustomerNameValue;
 		public string CustomerName
@@ -47,7 +46,7 @@ namespace ValidationSample
 				{
 					this.RebateCodeValue = value;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged(PropertyName(() => this.OrderQuantity));
+					this.RaisePropertyChanged(nameof(this.OrderQuantity));
 				}
 			}
 		}
@@ -62,19 +61,14 @@ namespace ValidationSample
 				{
 					this.OrderQuantityValue = value;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged(PropertyName(() => this.RebateCode));
+					this.RaisePropertyChanged(nameof(this.RebateCode));
 				}
 			}
 		}
 
 		#region INotifyPropertyChanged implementation
-		private void RaisePropertyChanged([CallerMemberName]string propertyName = null)
-		{
-			if (this.PropertyChanged != null)
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
+		private void RaisePropertyChanged([CallerMemberName]string propertyName = null) =>
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		#endregion
@@ -85,10 +79,10 @@ namespace ValidationSample
 			get
 			{
 				return new[] {
-					this[PropertyName(() => CustomerName)], 
-					this[PropertyName(() => ProductName)],
-					this[PropertyName(() => RebateCode)], 
-					this[PropertyName(() => OrderQuantity)]
+					this[nameof(CustomerName)], 
+					this[nameof(ProductName)],
+					this[nameof(RebateCode)], 
+					this[nameof(OrderQuantity)]
 				}
 				.Distinct()
 				.Aggregate<string, StringBuilder, string>(
@@ -96,21 +90,6 @@ namespace ValidationSample
 					(builder, next) => { builder.AppendSeparatedIfNotEmpty('\n', next); return builder; },
 					builder => builder.ToString());
 			}
-		}
-
-		private static string PropertyName<T>(Expression<Func<T>> ex)
-		{
-			var lambda = ex as LambdaExpression;
-			if (lambda != null)
-			{
-				var memberAccess = lambda.Body as MemberExpression;
-				if (memberAccess != null)
-				{
-					return memberAccess.Member.Name;
-				}
-			}
-
-			return string.Empty;
 		}
 
 		public string this[string columnName]
@@ -126,19 +105,19 @@ namespace ValidationSample
 
 					return string.Empty;
 				};
-				if (columnName == PropertyName(() => this.CustomerName)
+				if (columnName == nameof(this.CustomerName)
 					&& string.IsNullOrWhiteSpace(this.CustomerName))
 				{
 					return "Customer name is mandatory";
 				}
 
-				if (columnName == PropertyName(() => this.ProductName)
+				if (columnName == nameof(this.ProductName)
 					&& string.IsNullOrWhiteSpace(this.ProductName))
 				{
 					return "Product name is mandatory";
 				}
 
-				if (columnName == PropertyName(() => this.OrderQuantity))
+				if (columnName == nameof(this.OrderQuantity))
 				{
 					if (this.OrderQuantity <= 0)
 					{
@@ -147,7 +126,8 @@ namespace ValidationSample
 
 					return checkRebateCode();
 				}
-				if (columnName == PropertyName(() => this.RebateCode))
+
+				if (columnName == nameof(this.RebateCode))
 				{
 					return checkRebateCode();
 				}

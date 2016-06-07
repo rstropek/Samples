@@ -1,11 +1,10 @@
 using System;
 using System.Windows;
-using System.ComponentModel;
 using System.Windows.Threading;
 
 namespace FreeSpaceWatcher
 {
-	public partial class DispatcherQueue : Window
+    public partial class DispatcherQueue : Window
 	{
 		private delegate void QueueEventsDelegate();
 		private DispatcherTimer perSecondTimer;
@@ -27,6 +26,7 @@ namespace FreeSpaceWatcher
 
 			// remember the dispatcher that should be monitored
 			this.dispatcher = dispatcher;
+
 			// add a hook to the dispatcher that is monitored
 			dispatcher.Hooks.OperationPosted += new System.Windows.Threading.DispatcherHookEventHandler(Hooks_OperationPosted);
 		}
@@ -35,6 +35,7 @@ namespace FreeSpaceWatcher
 		{
 			// set the dependency property
 			SetValue(OperationsPerSecondCounterProperty, TotalOperationsCounter - lastCounterValue);
+
 			// remember the last value for next second
 			lastCounterValue = TotalOperationsCounter;
 		}
@@ -59,6 +60,7 @@ namespace FreeSpaceWatcher
 		{
 			get { return (int)GetValue(TotalOperationsCounterProperty); }
 		}
+
 		public static readonly DependencyProperty TotalOperationsCounterProperty =
 			DependencyProperty.Register("TotalOperationsCounter", typeof(int), typeof(DispatcherQueue),
 			new PropertyMetadata(0));
@@ -69,6 +71,7 @@ namespace FreeSpaceWatcher
 		{
 			get { return (int)GetValue(OperationsPerSecondCounterProperty); }
 		}
+
 		public static readonly DependencyProperty OperationsPerSecondCounterProperty =
 			DependencyProperty.Register("OperationsPerSecondCounter", typeof(int), typeof(DispatcherQueue),
 			new PropertyMetadata(0));

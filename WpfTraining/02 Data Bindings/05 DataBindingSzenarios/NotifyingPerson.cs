@@ -12,8 +12,7 @@ namespace Samples
 			set
 			{
 				base.FirstName = value;
-				if (PropertyChanged != null)
-					PropertyChanged(this, new PropertyChangedEventArgs("FirstName"));
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FirstName)));
 			}
 		}
 
@@ -23,8 +22,7 @@ namespace Samples
 			set
 			{
 				base.LastName = value;
-				if (PropertyChanged != null)
-					PropertyChanged(this, new PropertyChangedEventArgs("LastName"));
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastName)));
 			}
 		}
 	}
