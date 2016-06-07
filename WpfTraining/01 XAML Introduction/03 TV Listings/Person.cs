@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 
 namespace Samples
 {
-	public class Person : DependencyObject
+    public class Person : DependencyObject
 	{
 		// Dependency Property FirstName
 		public string FirstName

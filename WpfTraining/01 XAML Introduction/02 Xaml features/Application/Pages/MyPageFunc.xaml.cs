@@ -16,7 +16,7 @@ namespace NamespaceSample.Pages
 		{
 			base.OnInitialized(e);
 
-			btnReturn.Click += new RoutedEventHandler(BtnReturn_Click);
+			btnReturn.Click += BtnReturn_Click;
 		}
 
 		private void BtnReturn_Click(object sender, RoutedEventArgs e)

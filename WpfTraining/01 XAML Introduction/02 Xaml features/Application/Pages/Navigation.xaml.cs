@@ -11,19 +11,17 @@ namespace NamespaceSample.Pages
 			InitializeComponent();
 		}
 
-		protected override void OnInitialized(EventArgs e)
-		{
-			base.OnInitialized(e);
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
 
-			btnNavigate.Click += new RoutedEventHandler(BtnNavigate_Click);
-		}
-
-		private void BtnNavigate_Click(object sender, RoutedEventArgs e)
-		{
-			PageFunction<string> pageFunction = new MyPageFunc();
-			pageFunction.Return += new ReturnEventHandler<string>(PageFunction_Return);
-			this.NavigationService.Navigate(pageFunction);
-		}
+            btnNavigate.Click += (_, ea) =>
+            {
+                var pageFunction = new MyPageFunc();
+                pageFunction.Return += new ReturnEventHandler<string>(PageFunction_Return);
+                this.NavigationService.Navigate(pageFunction);
+            };
+        }
 
 		private void PageFunction_Return(object sender, ReturnEventArgs<string> e)
 		{

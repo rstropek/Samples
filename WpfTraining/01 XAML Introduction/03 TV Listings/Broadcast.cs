@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using System.Windows;
-using System.Windows.Markup;
 
 namespace Samples
 {
-	public class Broadcast : DependencyObject
+    public class Broadcast : DependencyObject
 	{
 		public Broadcast()
 		{

@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows;
 using System.Windows.Markup;
 
 namespace Samples
 {
-	[ContentProperty("Channels")]
+    [ContentProperty("Channels")]
 	public class TVListings : DependencyObject
 	{
 		public TVListings()

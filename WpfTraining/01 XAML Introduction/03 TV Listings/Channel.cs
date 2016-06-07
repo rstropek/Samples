@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows;
 using System.Windows.Markup;
 
 namespace Samples
 {
-	[ContentProperty("Broadcasts")]
+    [ContentProperty("Broadcasts")]
 	public class Channel : DependencyObject
 	{
 		public Channel()

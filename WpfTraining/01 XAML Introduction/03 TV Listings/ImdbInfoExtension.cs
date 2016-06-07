@@ -1,34 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
 using System.Windows.Markup;
 using System.Xml;
 
 namespace Samples
 {
-	[MarkupExtensionReturnType(typeof(XmlDocument))]
+    [MarkupExtensionReturnType(typeof(XmlDocument))]
 	public class ImdbInfoExtension : MarkupExtension
 	{
-		private string motionPictureID = "";
-
 		public ImdbInfoExtension(string motionPictureID)
 		{
-			this.motionPictureID = motionPictureID;
+			this.MotionPictureID = motionPictureID;
 		}
 
-		public string MotionPictureID
-		{
-			get
-			{
-				return motionPictureID;
-			}
-			set
-			{
-				motionPictureID = value;
-			}
-		}
+        public string MotionPictureID { get; } = string.Empty;
 
 		public override object ProvideValue(IServiceProvider serviceProvider)
 		{
@@ -42,8 +26,8 @@ namespace Samples
 			stream.Close();
 			response.Close();
             */
-            string content = "<?xml version='1.0' encoding='utf-8'?><trynt><movie-imdb><title>TitlePlaceholder</title><aka></aka><year>2004</year></movie-imdb></trynt>";
-			XmlDocument ImdbInfo = new XmlDocument();
+            const string content = "<?xml version='1.0' encoding='utf-8'?><trynt><movie-imdb><title>TitlePlaceholder</title><aka></aka><year>2004</year></movie-imdb></trynt>";
+			var ImdbInfo = new XmlDocument();
 			ImdbInfo.LoadXml(content);
 			return ImdbInfo;
 		}
