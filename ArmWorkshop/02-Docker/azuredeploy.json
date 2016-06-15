@@ -34,7 +34,7 @@
     },
     "ubuntuOSVersion": {
       "type": "string",
-      "defaultValue": "15.04",
+      "defaultValue": "15.10",
       "metadata": {
         "description": "The Ubuntu version for deploying the Docker containers. This will pick a fully patched image of this given Ubuntu version. Allowed values: 14.04.2-LTS, 14.04-DAILY, 15.04"
       }
@@ -57,7 +57,7 @@
     "publicIPAddressName": "myPublicIP",
     "publicIPAddressType": "Dynamic",
     "vmStorageAccountContainerName": "vhds",
-    "dockerVmName": "devopscon15-docker",
+    "dockerVmName": "devopscon16-docker",
     "nginxVmName": "NginxVM",
     "vmSize": "Standard_A1",
     "virtualNetworkName": "MyVNET",
