@@ -23,13 +23,15 @@ C# interactive with some experimental features enabled, run `csi /features:patte
 * [RefReturns](RefReturns) contains a sample demonstrating the new ref return Feature
   of C# 7. During demos, I use `ILDasm` to dig deeper into the implementation details.
 
+* [Tuples](Tuples) contains a sample demonstrating tuples in C# 7. At the time of writing,
+  tuples are not part of VS "15" Preview. I use this sample to show how you can clone
+  the Roslyn GitHub repository, build the sources and run an experimental version of `csc`.
+
 
 ## Considerations
 
-The samples do not contain code for tuples as tuples are not part of VS "15". You can
-easily play with tuples by building the corresponding Roslyn branch. However, conference
-sessions are always time-limited, so I cannot cover everything. I decided to focus on
-the features that are included in VS "15" preview.
+Conference sessions are always time-limited, so I cannot cover everything. I decided 
+to focus on the features that are included in VS "15" preview.
 
 C# 7 is still under development. Therefore, the features might be changed, extended,
 or removed until the final version of VS "15" comes out. Take a look at

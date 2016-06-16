@@ -10,13 +10,13 @@ namespace RefReturns
             var desiredDeliveryDate = new DateTime(2016, 5, 1);
 
             // This is "old-style". Passing DateTime values around means
-            // copying memory (Ldloc and Ldobj IL statement).
+            // copying memory (Ldloc IL statement).
             Console.WriteLine(GetDeliveryDateByValue(
                 calculatedDeliveryDate, 
                 desiredDeliveryDate));
 
             // This is "new-style". Passing and returning DateTime values 
-            // by reference does not need to copy memory (Ldloc IL statement).
+            // by reference does not need to copy memory (Ldloca IL statement).
             Console.WriteLine(GetDeliveryDateByRef(
                 ref calculatedDeliveryDate, 
                 ref desiredDeliveryDate));
