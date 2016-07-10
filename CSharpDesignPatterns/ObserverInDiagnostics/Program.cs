@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System;
-using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace ObserverInDiagnostics
 {
@@ -17,8 +16,6 @@ namespace ObserverInDiagnostics
 
     public class Startup : IObserver<KeyValuePair<string, object>>
     {
-        private readonly byte[] message = Encoding.UTF8.GetBytes("Hello World");
-
         public void ConfigureServices(IServiceCollection services)
         {
             // Note how the Observable pattern is used in DiagnosticListener. It implements
@@ -35,7 +32,7 @@ namespace ObserverInDiagnostics
                 // Throw exception for demo purposes
                 errorApp.Run(h => { throw new DivideByZeroException(); }));
 
-            app.Run(h => h.Response.Body.WriteAsync(message, 0, message.Length));
+            app.Run(async h => await h.Response.WriteAsync("Hello World"));
         }
 
         #region Implementation of IObserver<T>

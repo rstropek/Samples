@@ -1,18 +1,18 @@
 {
-    "title": ".NET Core Demo",
-    "authors": [ "Rainer Stropek" ],
-    "version": "1.0.0",
-    "copyright": "MIT License",
-    "description": "This is small sample for .NET Core",
-    
-    "dependencies": {
-        "lib": "",
-        "System.Console": "4.0.0-beta-23516"
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
     },
-    "frameworks": {
-        "dnxcore50": {}
-    },
-    "commands": {
-        "run": "consumer"
-    }
+    "lib": "1.0.0-*"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": { }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  }
 }
