@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>SignalR Hello World Sample</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.js"></script>
+
+    <script src="/signalr/hubs"></script>
+    <script src="index.js"></script>
+</head>
+<body>
+    <h1>SignalR Sample</h1>
+
+    <div id="menu">
+        <div>
+            <button id="startGame">Start Game</button>
+        </div>
+        <div>
+            <input id="gameId" type="number" placeholder="Game ID">
+            <button id="joinGame">Join Game</button>
+        </div>
+    </div>
+
+    <div id="game" class="hidden">
+        <h2>Welcome to Game <span id="runningGameId"></span>!</h2>
+        <p id="partnerMsg" class="hidden">
+            Your partner is <span id="partnerId"></span>.
+        </p>
+        <button class="hidden" id="fire">Fire!</button>
+        <ul id="log"></ul>
+    </div>
+</body>
+</html>
