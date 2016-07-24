@@ -1,7 +1,7 @@
 {
-    "projects":[
-        "src/client",
-        "src/math-library",
-        "test/lib-test"
+    "projects": [
+        "src",
+        "src",
+        "test"
     ]
 }

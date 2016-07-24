@@ -1,11 +1,17 @@
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using System.Threading.Tasks;
 
 namespace myApp
 {
+    public class Program
+    {
+        public static void Main(string[] args) =>
+            new WebHostBuilder().UseKestrel().UseStartup<Startup>().Build().Run();
+    }
     
     public class Startup
     {
