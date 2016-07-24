@@ -5,7 +5,7 @@ $rg = "RG-Simple-VM"
 $dep = "Simple-Windows-VM-Deployment"
 $path = "C:\Code\Github\Samples\ArmWorkshop\01-Simple-Windows-VM"
 
-$group = Get-AzureRmResourceGroup -Name $rg
+$group = Get-AzureRmResourceGroup -Name $rg -ErrorAction SilentlyContinue
 if (!$group) {
     New-AzureRmResourceGroup -Name $rg -Location "northeurope"
 }
