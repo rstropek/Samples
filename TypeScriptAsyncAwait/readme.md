@@ -31,9 +31,13 @@ nearly 1:1 into TypeScript. It is easy to write and easy to read. Tip: Compile
 the TypeScript code into JavaScript and make yourself familiar with the
 generated code. 
 
+Last but not least, [async-await-basics](async-await-basics/app.ts) covers some
+async/await fundamentals like *Promises* async parallel execution of async.
+operations.
+
 ## Running the Code
 
-The examples uses MongoDB as its underlying data store. If you do not
+The examples use MongoDB as their underlying data store. If you do not
 have MongoDB installed on your machine, you can use MongoDB's ready-made 
 [Docker image](https://hub.docker.com/_/mongo/). Here is the command you have to run to start a MongoDB
 container locally: `docker run -d -p 27017:27017 mongo`. To interactively work
