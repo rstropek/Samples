@@ -21,12 +21,16 @@ namespace PrismUnityDemo
         {
             base.ConfigureContainer();
 
-            this.Container.RegisterType<MainWindowNavigationController>(
-                new ContainerControlledLifetimeManager());
-            this.Container.RegisterType(typeof(ProductMaintenanceViewModel));
-            this.Container.RegisterTypeForNavigation<ProductDetailView>(nameof(ProductDetailView));
-            this.Container.RegisterType(typeof(ProductDetailViewModel));
+            // Singletons -> use ContainerControlledLifetimeManager
+            this.Container.RegisterType<MainWindowNavigationController>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<GlobalCommands>(new ContainerControlledLifetimeManager());
+
+            // Register view that is used for Prism navigation
+            this.Container.RegisterTypeForNavigation<ProductDetailView>(nameof(ProductDetailView));
+
+            // Register view models
+            this.Container.RegisterType<ProductMaintenanceViewModel>();
+            this.Container.RegisterType<ProductDetailViewModel>();
         }
 
         protected override void ConfigureModuleCatalog()

@@ -19,7 +19,7 @@ namespace PrismUnityDemo.Data
 			// Add some code to configure appropriate repository implementation
 			var memRepo = new MemoryRepository();
 
-            this.container.RegisterInstance<Repository>(new MemoryRepository());
+            this.container.RegisterInstance<IRepository>(new MemoryRepository());
 		}
 	}
 }

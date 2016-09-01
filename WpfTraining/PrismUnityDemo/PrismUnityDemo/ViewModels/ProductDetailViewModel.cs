@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace PrismUnityDemo.ViewModel
 {
-    public class ProductDetailViewModel : BindableBase, INavigationAware, IActiveAware, IProductDetailViewModel
+    public class ProductDetailViewModel : BindableBase, INavigationAware, IActiveAware, IProductDetailViewModel, IDisposable
     {
         public ProductDetailViewModel()
         {
@@ -37,7 +37,7 @@ namespace PrismUnityDemo.ViewModel
 
         public IRegionManager SubRegionManager { get; private set; }
 
-        private Repository repository { get; set; }
+        private IRepository repository { get; set; }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
@@ -83,7 +83,7 @@ namespace PrismUnityDemo.ViewModel
 
         [InjectionMethod]
         public void OnInitialization(IEventAggregator eventAggregator, GlobalCommands globalCommands,
-            Repository repository)
+            IRepository repository)
         {
             this.eventAggregator = eventAggregator;
             this.globalCommands = globalCommands;
@@ -92,6 +92,41 @@ namespace PrismUnityDemo.ViewModel
             this.globalCommands.Print.RegisterCommand(this.PrintCommand);
             this.globalCommands.PrintAll.RegisterCommand(this.PrintCommand);
             this.globalCommands.Close.RegisterCommand(this.CloseCommand);
+        }
+
+        private bool disposed = false;
+
+        public void Dispose()
+        {
+            // TODO: Check this.disposed in all public, protected, and protected internal members!
+
+            this.Dispose(true);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                // Cleanup unmanaged resources here
+
+                // Cleanup commands
+                this.globalCommands.Print.UnregisterCommand(this.PrintCommand);
+                this.globalCommands.PrintAll.UnregisterCommand(this.PrintCommand);
+                this.globalCommands.Close.UnregisterCommand(this.CloseCommand);
+
+                if (disposing)
+                {
+                    // Cleanup managed resources
+                }
+
+                GC.SuppressFinalize(this);
+                this.disposed = true;
+            }
+        }
+
+        ~ProductDetailViewModel()
+        {
+            this.Dispose(false);
         }
     }
 }

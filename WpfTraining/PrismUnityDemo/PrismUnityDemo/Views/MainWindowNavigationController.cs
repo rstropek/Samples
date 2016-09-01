@@ -2,6 +2,7 @@
 using Prism.Events;
 using Prism.Regions;
 using PrismUnityDemo.Contracts;
+using PrismUnityDemo.ViewModel;
 using PrismUnityDemo.Views;
 using System;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace PrismUnityDemo.Views
             this.container = container;
         }
 
-		public /*override*/ void ActivateProductDetailViewInjection(Product product)
+		public void ActivateProductDetailViewInjection(Product product)
 		{
 			var detailRegion = this.regionManager.Regions[RegionNames.DetailRegion];
 			var existingView = detailRegion.Views
@@ -34,12 +35,11 @@ namespace PrismUnityDemo.Views
 			else
 			{
                 var pdv = this.container.Resolve<ProductDetailView>();
-                pdv.DataContext = product;
+                ((ProductDetailViewModel)pdv.DataContext).Product = product;
 				var rm = detailRegion.Add(
 					pdv,
 					string.Format("ProductDetailView{0}", product.ProductNumber),
 					true);
-				var rm2 = RegionManager.GetRegionManager(pdv);
 				detailRegion.Activate(pdv);
 			}
 		}

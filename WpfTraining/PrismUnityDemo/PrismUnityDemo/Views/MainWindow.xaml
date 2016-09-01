@@ -1,12 +1,9 @@
-﻿<!-- Note the use of auto-wiring of view model here. For more details
-     see e.g. http://brianlagunas.com/getting-started-prisms-new-viewmodellocator/ -->
-<Window x:Class="PrismUnityDemo.Views.MainWindow"
+﻿<Window x:Class="PrismUnityDemo.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:v="clr-namespace:PrismUnityDemo.Views"
-        prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="350" Width="525">
+        Title="Simple Prism Sample" Height="350" Width="525">
     <DockPanel>
         <Border Margin="5" Background="Orange" Height="25"
 				CornerRadius="3" DockPanel.Dock="Top">

@@ -11,13 +11,13 @@ namespace PrismUnityDemo.ViewModel
 {
     public class ProductMaintenanceViewModel : BindableBase
 	{
-		private readonly Repository repository = null;
+		private readonly IRepository repository = null;
 		private readonly DelegateCommand refreshProductListCommand = null;
 
 		//[Import]
 		//private NavigationController navigationController = null;
 
-		public ProductMaintenanceViewModel(Repository repository, IEventAggregator eventAggregator)
+		public ProductMaintenanceViewModel(IRepository repository, IEventAggregator eventAggregator)
 		{
             this.repository = repository;
             this.eventAggregator = eventAggregator;

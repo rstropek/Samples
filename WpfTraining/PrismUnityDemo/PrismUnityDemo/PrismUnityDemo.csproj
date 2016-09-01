@@ -105,11 +105,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Contracts\CloseProductEvent.cs" />
+    <Compile Include="Contracts\PubSubEvents.cs" />
     <Compile Include="Contracts\GlobalCommands.cs" />
     <Compile Include="Contracts\IProductDetailView.cs" />
     <Compile Include="Contracts\Product.cs" />
-    <Compile Include="Contracts\ProductSelectionChangedEvent.cs" />
     <Compile Include="Contracts\Repository.cs" />
     <Compile Include="Modules\ProductMaintenanceModule.cs" />
     <Compile Include="Data\MemoryRepository.cs" />

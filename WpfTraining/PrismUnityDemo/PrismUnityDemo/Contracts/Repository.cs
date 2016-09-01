@@ -3,8 +3,8 @@ using System.Linq;
 
 namespace PrismUnityDemo.Contracts
 {
-	public abstract class Repository
+	public interface IRepository
 	{
-		public abstract IQueryable<Product> SelectAllProducts();
+		IQueryable<Product> SelectAllProducts();
 	}
 }
