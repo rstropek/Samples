@@ -33,6 +33,12 @@ namespace myApp
         [HttpGet]
         public async Task<string> Get(string formula)
         {
+            // Try the following URLs:
+            // http://localhost:5000/calc?formula=5
+            // http://localhost:5000/calc?formula="Hello".ToUpper()
+            // http://localhost:5000/calc?formula="Hello"+5 -> crashes!
+            // http://localhost:5000/calc?formula="Hello"%2B5
+
             var result = await CSharpScript.EvaluateAsync(formula);
             return result.ToString();
         }

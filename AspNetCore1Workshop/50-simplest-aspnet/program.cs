@@ -3,13 +3,19 @@ using Microsoft.AspNetCore.Builder;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace myApp
 {
     public class Program
     {
         public static void Main(string[] args) =>
-            new WebHostBuilder().UseKestrel().UseStartup<Startup>().Build().Run();
+            new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseStartup<Startup>()
+                .Build()
+                .Run();
     }
     
     public class Startup
@@ -19,7 +25,6 @@ namespace myApp
         public Startup(IHostingEnvironment env)
         {
             Console.WriteLine($"App name: {env.ApplicationName}");
-            Console.WriteLine($"Root path: {env.WebRootPath}");
         }
         
         public void ConfigureServices(IServiceCollection services)
@@ -33,14 +38,12 @@ namespace myApp
             
             // Build pipeline
             
-            app.Use(async (context, next) => {
-                await context.Response.WriteAsync(">>> Hello ");
-                await next();
-                await context.Response.WriteAsync("World <<<");
-            });
-            
             app.Map("/beautiful", beautifulApp => beautifulApp.Run(
-                async context => await context.Response.WriteAsync("beautiful ")));
+                async context => await context.Response.WriteAsync("Hello beautiful world!")));
+
+            app.Run(async context => {
+                await context.Response.WriteAsync("Hello world");
+            });
         }
     }
 }

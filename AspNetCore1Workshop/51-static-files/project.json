@@ -4,14 +4,15 @@
       "version": "1.0.1",
       "type": "platform"
     },
-    "Microsoft.AspNetCore.Server.Kestrel": "1.0.1"
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+    "Microsoft.Extensions.Logging.Console": "1.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {}
   },
   "buildOptions": {
     "emitEntryPoint": true,
-    "preserveCompilationContext": true,
     "debugType": "portable"
   }
 }

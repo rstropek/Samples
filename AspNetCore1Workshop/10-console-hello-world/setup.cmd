@@ -8,9 +8,19 @@ REM https://docs.microsoft.com/en-us/dotnet/articles/core/tools/dotnet
 REM Generate a console app called "helloWorld"
 mkdir helloworld
 cd helloWorld
-dotnet new
+dotnet new --type console --lang C#
+
+REM Generate a library called "superutils"
+REM Goal: Compare project.json from console app and library
+cd ..
+mkdir superutils
+cd superutils
+dotnet new --type lib --lang C#
+cd ..
 
 REM Have fun with dotnet CLI
+cd helloworld
+
 REM Restore dependencies
 dotnet restore
 REM Look at what has changed in C:\Users\<user>\.nuget\packages
