@@ -68,6 +68,12 @@ namespace PatternMatching
             {
                 Console.WriteLine("Something is 42");
             }
+
+            // Pattern with out variable
+            if (something is int someNumber || int.TryParse(something.ToString(), out someNumber))
+            {
+                Console.WriteLine($"I got the number {someNumber}");
+            }
             #endregion
 
             #region Var Pattern

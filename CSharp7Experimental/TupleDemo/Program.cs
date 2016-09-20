@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+// Note that you have to install System.ValueTuple for this sample (Preview 4)
+
 namespace ConsoleApplication
 {
     public class Program
@@ -21,10 +23,21 @@ namespace ConsoleApplication
             // New syntax
             var result = Analyze(numbers);
             Console.WriteLine($"Sum: {result.sum}, Count: {result.count}");
+            var result2 = Analyze2(numbers);
+            Console.WriteLine($"Sum: {result.Item1}, Count: {result.Item2}");
+
+            // Deconstruction
+            (var mySum, var myCount) = Analyze(numbers);
+            // Alternate syntaxes:
+            // (int mySum, int myCount) = Analyze(numbers);
+            // var (mySum, myCount) = Analyze(numbers);
+            // int mySum, myCount; (mySum, myCount) = Analyze(numbers);
+            Console.WriteLine($"Sum: {mySum}, Count: {myCount}");
 
             // Tuple literals
             var literal = new (int sum, int count) { sum = 0, count = 1 };
             literal = (1, 2);
+            (int, int) literalWithoutElementNames = (2, 3);
             Console.WriteLine($"Sum: {literal.sum}, Count: {literal.count}");
             result = literal; // Note that you can assign tuples
             Console.WriteLine($"Sum: {result.sum}, Count: {result.count}");
@@ -50,6 +63,13 @@ namespace ConsoleApplication
             {
                 Console.Write($"{item}\t");
             }
+
+            Console.WriteLine();
+
+            // Deconstructors
+            var p = new Point(1, 2);
+            var (x, y) = p;
+            Console.WriteLine($"p.x={x}, p.y={y}");
         }
 
         public static void Analyze(IEnumerable<int> numbers, out int sum, out int count)
@@ -60,5 +80,19 @@ namespace ConsoleApplication
 
         public static (int sum, int count) Analyze(IEnumerable<int> numbers) =>
             (numbers.Sum(), numbers.Count());
+
+        public static (int, int) Analyze2(IEnumerable<int> numbers) =>
+            (numbers.Sum(), numbers.Count());
+    }
+
+    class Point
+    {
+        public int X { get; }
+        public int Y { get; }
+
+        public Point(int x, int y) { X = x; Y = y; }
+
+        // Note deconstructor function here
+        public void Deconstruct(out int x, out int y) { x = X; y = Y; }
     }
 }
