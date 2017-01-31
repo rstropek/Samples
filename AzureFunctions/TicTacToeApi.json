@@ -1,0 +1,57 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v1",
+        "title": "TicTacToe API"
+    },
+    "basePath": "/api",
+    "host": "oopfunctions.azurewebsites.net",
+    "paths": {
+        "/TicTacToe": {
+            "post": {
+                "operationId": "GetTicTacToeWinner",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "board",
+                        "in": "body",
+                        "description": "TicTacToe board",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/board"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Winner",
+                        "schema": {
+                            "$ref": "#/definitions/winner"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "board": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "winner": {
+            "type": "object",
+            "required": [
+                "winner"
+            ],
+            "properties": {
+                "winner": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
