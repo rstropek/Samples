@@ -138,6 +138,36 @@
   }
   ```
 
+* See how workflow has been triggered and executed
 
+## Create Node.js Function (GitHub WebHook)
 
+* Create Node.js function called `TicTacToeNode`. Output is the same queue as above.
+  ```
+  module.exports = function (context, data) {
+    context.log('GitHub Webhook triggered!', data.comment.body);
 
+    // Parse request body
+    var board = JSON.parse(data.comment.body);
+
+    // Make sure that body is a properly formed array
+    if (Array.isArray(board) && board.length == 9) {
+      // Body is ok -> send message to trigger analysis
+      context.bindings.outputSbMsg = JSON.stringify({ Message: board });
+
+      // Send OK result to caller
+      context.res = { status: 200 };
+      context.done();
+    }
+    else {
+      // Body is malformed -> send Bad Request to caller
+      context.res = { status: 400, body: "No valid tic-tac-toe board" };
+      context.done();
+    }
+  };
+  ```
+
+* Add GitHub Webhook
+
+* Add issue comment and show how functions are executed
+  * Add invalid board and show webhook log
