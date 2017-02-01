@@ -1,0 +1,15 @@
+POST https://oopfunctions.azurewebsites.net/api/TicTacToe
+Content-Type: application/json
+
+[ " ", "X", " ",
+  " ", "X", " ",
+  " ", "X", " " ]
+
+---
+
+POST https://oopfunctions.azurewebsites.net/api/TicTacToeNode
+Content-Type: application/json
+
+[ " ", "X", " ",
+  " ", "X", " ",
+  " ", "X", " " ]
