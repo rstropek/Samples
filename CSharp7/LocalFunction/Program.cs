@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace LocalFunctionLambda
+namespace LocalFunction
 {
     delegate int MathOp(int a, int b);
 
@@ -11,6 +11,7 @@ namespace LocalFunctionLambda
         static void Main(string[] args)
         {
             BasicLocalFunction();
+            SumFromZeroTo100();
             AsyncLocalFunction();
             Closure();
             Console.WriteLine($"The result is {ReturnClosure()(1, 2)}\n");
@@ -22,8 +23,19 @@ namespace LocalFunctionLambda
         /// </summary>
         static void BasicLocalFunction()
         {
-            MathOp add = (x, y) => x + y;
-            Console.WriteLine($"The result is {add(1, 2)}\n");
+            int Add(int x, int y) => x + y;
+            Console.WriteLine($"The result is {Add(1, 2)}\n");
+        }
+
+        /// <summary>
+        /// Local function defined after being called
+        /// </summary>
+        static void SumFromZeroTo100()
+        {
+            Console.WriteLine($"The sum is {LocalSum(100)}\n");
+
+            // Note that function is defined after being called
+            int LocalSum(int value) => value == 1 ? 1 : value + LocalSum(value - 1);
         }
 
         /// <summary>
@@ -31,12 +43,12 @@ namespace LocalFunctionLambda
         /// </summary>
         static void AsyncLocalFunction()
         {
-            Func<int, int, Task<int>> addAsync = async (x, y) =>
+            async Task<int> AddAsync(int x, int y)
             {
                 await Task.Delay(1);
                 return x + y;
             };
-            Console.WriteLine($"The result is {addAsync(1, 2).Result}\n");
+            Console.WriteLine($"The result is {AddAsync(1, 2).Result}\n");
         }
 
         /// <summary>
@@ -48,11 +60,11 @@ namespace LocalFunctionLambda
             var randomValue = rand.Next(0, 10);
 
             // Note how add is using the local variable "randomValue"
-            MathOp add = (x, y) => x + y + randomValue;
-            Console.WriteLine($"The result is {add(1, 2)}");
+            int Add(int x, int y) => x + y + randomValue;
+            Console.WriteLine($"The result is {Add(1, 2)}");
 
             randomValue = rand.Next(0, 10);
-            Console.WriteLine($"The second result is {add(1, 2)}\n");
+            Console.WriteLine($"The second result is {Add(1, 2)}\n");
         }
 
         /// <summary>
@@ -63,8 +75,9 @@ namespace LocalFunctionLambda
             var rand = new Random();
             var randomValue = rand.Next(0, 10);
 
-            // Note how the following lambda is using the local variable "randomValue"
-            return (x, y) => x + y + randomValue;
+            // Note how the following function is using the local variable "randomValue"
+            int Add(int x, int y) => x + y + randomValue;
+            return Add;
         }
 
         private int factor = 42;
@@ -80,9 +93,9 @@ namespace LocalFunctionLambda
             watch.Start();
             while (watch.Elapsed < TimeSpan.FromSeconds(seconds))
             {
-                // Note that add uses "factor"
-                MathOp add = (x, y) => x + y + factor;
-                var result = add(rand.Next(0, 100), rand.Next(0, 100));
+                // Note that Add uses "factor"
+                int Add(int x, int y) => x + y + factor;
+                var result = Add(rand.Next(0, 100), rand.Next(0, 100));
                 counter++;
             }
 
