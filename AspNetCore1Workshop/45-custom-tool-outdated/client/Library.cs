@@ -15,4 +15,11 @@ namespace ClassLibrary
         {    
         }
     }
+
+    public static class Program
+    {
+        public static void Main() {
+
+        }
+    }
 }

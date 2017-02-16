@@ -21,7 +21,7 @@ namespace myApp
     public class Startup
     {
         // Note constructor injection here
-        // (list of services see https://docs.asp.net/en/latest/fundamentals/startup.html#services-available-in-startup) 
+        // (list of services see https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup#services-available-in-startup) 
         public Startup(IHostingEnvironment env)
         {
             Console.WriteLine($"App name: {env.ApplicationName}");
