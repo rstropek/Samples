@@ -28,12 +28,12 @@ namespace myApp
         public void Configure(IApplicationBuilder app, ILoggerFactory log)
         {
             // Note that we add a simple console logger here.
-            // Details: https://docs.asp.net/en/latest/fundamentals/logging.html
+            // Details: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging
             log.AddConsole();
 
             // Note that static files middleware will use the "wwwroot" folder in
             // the content root automatically. We do not have to specify that explicitly.
-            // Details: https://docs.asp.net/en/latest/intro.html#content-root
+            // Details: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/#content-root
             app.UseStaticFiles();
 
             // Just for demo purposes we add a second middleware after static files.
