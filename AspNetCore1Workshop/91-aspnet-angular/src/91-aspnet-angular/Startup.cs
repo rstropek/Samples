@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AspNetCore1Angular2Intro.Controllers;
 using AspNetCore1Angular2Intro.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace AspNetCore1Angular2Intro
 {
@@ -58,7 +59,10 @@ namespace AspNetCore1Angular2Intro
             services.AddMvc();
 
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,19 +71,10 @@ namespace AspNetCore1Angular2Intro
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // Add Application Insights Telemetry (see 
-            // https://github.com/Microsoft/ApplicationInsights-aspnetcore/wiki/Getting-Started
-            // for details).
-            app.UseApplicationInsightsRequestTelemetry();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            // Note that it is important to add exception telemetry after
-            // exception page.
-            app.UseApplicationInsightsExceptionTelemetry();
 
             // Just for demo purposes throw an exception if query string contains "exception"
             app.Use(async (context, next) =>
@@ -99,7 +94,10 @@ namespace AspNetCore1Angular2Intro
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUi();
+            app.UseSwaggerUi(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace AspNetCore1Angular2Intro.Controllers
 {
     [Route("api/[controller]")]
-    public class BooksController : Controller
+    public class BooksController : ControllerBase
     {
         private ILogger<BooksController> logger;
         private INameGenerator nameGenerator;
@@ -51,7 +51,7 @@ rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor 
         }
 
         [HttpPost]
-        public IActionResult Post(Book newBook)
+        public IActionResult Post([FromBody]Book newBook)
         {
             this.logger.LogError("Illegal POST!");
             return new StatusCodeResult(500);
