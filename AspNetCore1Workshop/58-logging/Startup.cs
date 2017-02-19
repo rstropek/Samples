@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace WebApplication
 {
@@ -57,13 +58,13 @@ namespace WebApplication
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             // Add console logger. For other loggers see
-            // https://docs.asp.net/en/latest/fundamentals/logging.html
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             // Here we are creating the logger manually.
             // Use ILogger<T> in controllers instead. For details see
-            // https://docs.asp.net/en/latest/fundamentals/logging.html
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging
             var startupLogger = loggerFactory.CreateLogger("Startup");
             startupLogger.LogInformation("Building pipeline");
             if (env.IsDevelopment())
@@ -72,9 +73,6 @@ namespace WebApplication
                 // set ASPNETCORE_ENVIRONMENT=development
                 startupLogger.LogInformation("Using dev settings");
             }
-
-            app.UseApplicationInsightsRequestTelemetry();
-            app.UseApplicationInsightsExceptionTelemetry();
 
             app.Map("/works", ab => ab.Run(ctx => ctx.Response.WriteAsync("This works")));
             app.Map("/worksAlso", ab => ab.Run(ctx => ctx.Response.WriteAsync("This works, too")));
