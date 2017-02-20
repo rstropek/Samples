@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
 
 namespace _27_self_contained
 {
@@ -6,7 +8,12 @@ namespace _27_self_contained
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            if (File.Exists("greet.json"))
+            {
+                var greetingJson = File.ReadAllText("greet.json");
+                dynamic greeting = JsonConvert.DeserializeObject(greetingJson);
+                Console.WriteLine(greeting.hello);
+            }
         }
     }
 }
