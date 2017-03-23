@@ -1,5 +1,4 @@
-﻿using Microsoft.OData.Core.UriParser.Semantic;
-using Microsoft.OData.Core.UriParser.TreeNodeKinds;
+﻿using Microsoft.OData.UriParser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,7 @@ namespace CustomODataProvider.Provider.Controller
 
 		private const int pageSize = 100;
 
-		[EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Filter | AllowedQueryOptions.Top | AllowedQueryOptions.Skip | AllowedQueryOptions.OrderBy)]
+		[EnableQuery]
 		[ODataRoute]
 		public IHttpActionResult Get(ODataQueryOptions<Customer> options)
 		{

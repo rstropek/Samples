@@ -16,6 +16,7 @@ namespace CustomODataProvider.Provider
 
 			var routeConventions = ODataRoutingConventions.CreateDefault();
 			config.MapODataServiceRoute("odata", "odata", GetModel());
+            config.Select().Filter().OrderBy().MaxTop(null);
 		}
 
 		private static IEdmModel GetModel()
