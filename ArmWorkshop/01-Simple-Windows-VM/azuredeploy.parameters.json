@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "newStorageAccountName": {
-      "value": "devopscon15"
+      "value": "devopslt17"
     },
     "adminUsername": {
       "value": "rainer"
@@ -12,7 +12,7 @@
       "value": "P@zzw0rd!"
     },
     "dnsNameForPublicIP": {
-      "value": "devopscon-simple-vm"
+      "value": "devopslt17-simple-vm"
     }
   }
 }

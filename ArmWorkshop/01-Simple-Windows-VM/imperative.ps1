@@ -1,12 +1,12 @@
 ﻿# Login-AzureRmAccount
-Get-AzureRmSubscription | where { $_.SubscriptionName -like "*Sponsorship*" } | Select-AzureRmSubscription
+Get-AzureRmSubscription | where { $_.SubscriptionName -like "*MVP*" } | Select-AzureRmSubscription
 
 $rg = "RG-Simple-VM-Imp"
 $location = "northeurope"
-$newStorageAccountName = "devopscon15imp"
+$newStorageAccountName = "devopslt17imp"
 $publicIPAddressName = "SimpleVMPublicIP"
 $publicIPAddressType = "Dynamic"
-$dnsNameForPublicIP = "devopscon-simple-vm-imp"
+$dnsNameForPublicIP = "devopslt17-simple-vm-imp"
 $virtualNetworkName = "SimpleVMVNet"
 $addressPrefix = "10.0.0.0/16"
 $subnetName = "Subnet"
