@@ -1,5 +1,5 @@
 ﻿# Login-AzureRmAccount
-Get-AzureRmSubscription | where { $_.SubscriptionName -like "*Sponsorship*" } | Select-AzureRmSubscription
+Get-AzureRmSubscription | where { $_.SubscriptionName -like "*MVP*" } | Select-AzureRmSubscription
 
 $rg = "RG-Docker"
 $dep = "Simple-Docker-Deployment"
