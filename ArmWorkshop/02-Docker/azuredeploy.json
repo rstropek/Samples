@@ -57,7 +57,7 @@
     "publicIPAddressName": "myPublicIP",
     "publicIPAddressType": "Dynamic",
     "vmStorageAccountContainerName": "vhds",
-    "dockerVmName": "devopscon16-docker",
+    "dockerVmName": "devopslt17-docker",
     "nginxVmName": "NginxVM",
     "vmSize": "Standard_A1",
     "virtualNetworkName": "MyVNET",

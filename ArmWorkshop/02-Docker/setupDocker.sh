@@ -1,7 +1,7 @@
 docker pull nginx
 
 mkdir static-html-directory
-echo DevOpsCon16 > static-html-directory/test.html
+echo DevOpsLt17 > static-html-directory/test.html
 
 echo FROM nginx > Dockerfile
 echo COPY static-html-directory /usr/share/nginx/html >> Dockerfile
