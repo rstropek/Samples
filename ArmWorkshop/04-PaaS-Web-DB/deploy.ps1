@@ -1,5 +1,5 @@
 ﻿# Login-AzureRmAccount
-Get-AzureRmSubscription | where { $_.SubscriptionName -like "*Sponsorship*" } | Select-AzureRmSubscription
+Get-AzureRmSubscription | where { $_.SubscriptionName -like "*MVP*" } | Select-AzureRmSubscription
 
 $rg = "RG-PaaS-Web-DB"
 $dep = "PaaS-Deployment-" + [guid]::NewGuid()
@@ -10,6 +10,7 @@ if (!$group) {
     New-AzureRmResourceGroup -Name $rg -Location "northeurope"
 }
 
-New-AzureRmResourceGroupDeployment -ResourceGroupName $rg -TemplateFile "$path\azuredeploy.json" `    -TemplateParameterFile "$path\azuredeploy-parameters.json" -Name $dep
+New-AzureRmResourceGroupDeployment -ResourceGroupName $rg -TemplateFile "$path\azuredeploy.json" `
+    -TemplateParameterFile "$path\azuredeploy-parameters.json" -Name $dep
 
 # Get-AzureRmResourceGroup -Name $rg | Remove-AzureRmResourceGroup -Force

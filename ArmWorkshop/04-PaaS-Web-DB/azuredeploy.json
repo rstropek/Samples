@@ -168,7 +168,7 @@
         "name": "[parameters('hostingPlanName')]",
         "sku": "[parameters('sku')]",
         "workerSize": "[parameters('workerSize')]",
-        "numberOfWorkers": 1
+        "numberOfWorkers": 2
       }
     },
     {

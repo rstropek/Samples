@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "siteName": {
-      "value": "devopscon15demosite"
+      "value": "devopslt17demosite"
     },
     "hostingPlanName": {
       "value": "NewServiceAppPlan"
@@ -12,7 +12,7 @@
       "value": "northeurope"
     },
     "serverName": {
-      "value": "devopscon15demoserver"
+      "value": "devopslt17demoserver"
     },
     "serverLocation": {
       "value": "northeurope"
@@ -24,7 +24,7 @@
       "value": "P@zzw0rd!"
     },
     "databaseName": {
-      "value": "DevOpsConDB"
+      "value": "DevOpsLt17DB"
     }
   }
 }
