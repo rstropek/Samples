@@ -198,16 +198,16 @@ This sample ([Patch](Patch)) just demonstrates the basics of patch creation with
 This sample demonstrates how to use WPF (*Windows Presentation Foundation*) to create a custom bootrapper
 UI using WiX Burn. It consists of the following parts:
 
-* Two installers ([FirstInstaller](CustomBurnUI\FirstInstaller) and [SecondInstaller](CustomBurnUI\SecondInstaller))
-  that are chained together in a bootstrapper (see [Bundle.wxs](CustomBurnUI\Bootstrapper\Bundle.wxs)).
-* A WPF UI for the bootstrapper (see [InstallerUI](CustomBurnUI\InstallerUI)).
+* Two installers ([FirstInstaller](CustomBurnUI/FirstInstaller) and [SecondInstaller](CustomBurnUI/SecondInstaller))
+  that are chained together in a bootstrapper (see [Bundle.wxs](CustomBurnUI/Bootstrapper/Bundle.wxs)).
+* A WPF UI for the bootstrapper (see [InstallerUI](CustomBurnUI/InstallerUI)).
 
 Note that:
 
 * The WPF UI uses MEF (*Managed Extensibility Framework*) for dependency injection
 * The WPF UI is built based on the MVVM (*Model View ViewModel*) design principle using the *Microsoft Prism* framework
 * For demo purposes, the WPF UI handles (nearly) all Burn events and writes them into the log (including parameter
-  values, see [InstallerMainWindowViewModel.cs](CustomBurnUI\InstallerUI\InstallerMainWindowViewModel.cs)). If you want to learn about custom bootstrapper UIs, you can run the sample and generate a log file
+  values, see [InstallerMainWindowViewModel.cs](CustomBurnUI/InstallerUI/InstallerMainWindowViewModel.cs)). If you want to learn about custom bootstrapper UIs, you can run the sample and generate a log file
   (`Bootstrapper.exe /log log.txt`). Afterwards take a look at the log file. You will see the order and parameters
   of the Burn events. Play with different scenarios (e.g. install, uninstall, etc.) to understand how the events work.
 
