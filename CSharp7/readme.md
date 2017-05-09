@@ -1,4 +1,4 @@
-# C# 7 Experimental Code Samples
+# C# 7 Code Samples
 
 ## Introduction
 
