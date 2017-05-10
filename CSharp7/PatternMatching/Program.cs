@@ -137,6 +137,24 @@ namespace PatternMatching
                 Console.WriteLine(x); // prints "foobar"
             }
             #endregion
+
+            SwitchWithPatternDemo();
+        }
+
+        public static void SwitchWithPatternDemo()
+        {
+            object o = 42d;
+
+            switch (o)
+            {
+                case double d when d > 10:
+                    Console.WriteLine("It's greater 10");
+                    break;
+
+                case double d when d > 20:
+                    Console.WriteLine("It's greater 20");
+                    break;
+            }
         }
     }
 }
