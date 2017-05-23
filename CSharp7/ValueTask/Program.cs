@@ -91,12 +91,12 @@ namespace ValueTask
                 valueTaskCache[index] = new ValueTask<int>(index * index);
             }
 
-            await Measure("Task with await", GetResultTaskWithAwait);
+            //await Measure("Task with await", GetResultTaskWithAwait);
             await Measure("Task without await", GetResultTaskWithoutAwait);
-            await Measure("Task with Task cache", GetResultTaskWithTaskCache);
-            await Measure("ValueTask with await", GetResultValueTaskWithAwait);
+            //await Measure("Task with Task cache", GetResultTaskWithTaskCache);
+            //await Measure("ValueTask with await", GetResultValueTaskWithAwait);
             await Measure("ValueTask without await", GetResultValueTaskWithoutAwait);
-            await Measure("ValueTask with ValueTask cache", GetResultValueTaskWithValueTaskCache);
+            //await Measure("ValueTask with ValueTask cache", GetResultValueTaskWithValueTaskCache);
         }
 
         private static async Task<int> GetResultTaskWithAwait(int index) 

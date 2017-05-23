@@ -40,5 +40,21 @@ namespace OutVars
                 Console.WriteLine("Sorry, this is not a number");
             }
         }
+
+        static void ReturnSomeNumbers(out int val1, out int val2, out int val3) => val1 = val2 = val3 = 42;
+
+        static void ConsumeSomeNumbers()
+        {
+            // Note that use of `_` here to indicate that you are not interested in
+            // some of the out-variables.
+            ReturnSomeNumbers(out var val, out _, out _);
+            Console.WriteLine(val);
+        }
+
+        static void ConsumeSomeNumbers2()
+        {
+            ReturnSomeNumbers(out var val, out var dummy1, out var dummy2);
+            Console.WriteLine(val);
+        }
     }
 }

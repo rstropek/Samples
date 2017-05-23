@@ -26,11 +26,11 @@ namespace ExpressionBodiedMembers
 
         // Note throw expression.
         static int evenNumber = 2;
-        static void SetEvenNumber(int n) => evenNumber = (n % 2 == 0) ? n : throw new ArgumentException();
+        static void SetEvenNumber(int n) => 
+            evenNumber = (n % 2 == 0) ? n : throw new ArgumentException();
 
         static string someString = "abc";
-        static void SetNotNullString(string s) => someString = s ?? throw new ArgumentException();
-
-
+        static void SetNotNullString(string s) => 
+            someString = s ?? throw new ArgumentException();
     }
 }

@@ -30,10 +30,7 @@ namespace ConsoleApplication
             Console.WriteLine($"Sum: {localSum}, Count: {localCount}");
 
             // Note that `Tuple` is a reference type
-            Tuple<int, int> AnalyzeWithTuple()
-            {
-                return new Tuple<int, int>(numbers.Sum(), numbers.Count());
-            }
+            Tuple<int, int> AnalyzeWithTuple() => new Tuple<int, int>(numbers.Sum(), numbers.Count());
 
             var oldTupleResult = AnalyzeWithTuple();
             Console.WriteLine($"Sum: {oldTupleResult.Item1}, Count: {oldTupleResult.Item2}");
@@ -70,6 +67,9 @@ namespace ConsoleApplication
             // var (mySum, myCount) = Analyze(numbers);
             // int mySum, myCount; (mySum, myCount) = Analyze(numbers);
             Console.WriteLine($"Sum: {mySum}, Count: {myCount}");
+
+            // Use `_` if you are not interested in certain members
+            var (anotherSum, _) = Analyze();
 
             // Tuple literals
             (int sum, int count) literalExplicitType = (sum: 0, count: 1);

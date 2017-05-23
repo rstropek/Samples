@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 // Learn more about C# pattern matching at https://docs.microsoft.com/en-us/dotnet/articles/csharp/pattern-matching.
 
@@ -14,6 +15,8 @@ namespace PatternMatching
     {
         static void Main(string[] args)
         {
+            PerfTestIsPattern();
+
             #region Type Pattern
             object o = "foo";
 
@@ -155,6 +158,42 @@ namespace PatternMatching
                     Console.WriteLine("It's greater 20");
                     break;
             }
+        }
+
+        public static void PerfTestIsPattern()
+        {
+            string CheckClassic(object obj)
+            {
+                var name = obj as string;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return null;
+            }
+
+            string CheckCSharpSeven(object obj) => (obj is string name) ? name : null;
+
+            long RunAndCount(Action body)
+            {
+                var counter = 0L;
+                var stopRequested = false;
+                var timer = new Timer(_ => stopRequested = true, null, TimeSpan.FromSeconds(10), new TimeSpan(-1));
+                while (!stopRequested)
+                {
+                    body();
+                    counter++;
+                }
+
+                Console.WriteLine($"Executed {counter} times.");
+                return counter;
+            }
+
+            var rand = new Random();
+            var classicCounter = (double)RunAndCount(() => CheckClassic(rand.Next(2) == 0 ? "foo" : (object)rand));
+            var csharp7Counter = (double)RunAndCount(() => CheckCSharpSeven(rand.Next(2) == 0 ? "foo" : (object)rand));
+            Console.WriteLine($"Classic: {classicCounter}, C# 7: {csharp7Counter}, Advantage: {(csharp7Counter / classicCounter - 1) * 100}%");
         }
     }
 }
