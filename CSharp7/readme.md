@@ -9,4 +9,4 @@ I use these simple code samples to demonstrate new C# 7 language features in Vis
 
 ## Content
 
-Take a look at my [blog post](http://www.software-architects.com/devblog/2017/05/23/Deep-Dive-into-CSharp-7){:target="_blank"} to learn more about the samples and how to use them.
+Take a look at my [blog post](http://www.software-architects.com/devblog/2017/05/23/Deep-Dive-into-CSharp-7) to learn more about the samples and how to use them.
