@@ -13,7 +13,7 @@ configuration IisDSC
     }
     File HelloWorld {
       DestinationPath = "C:\inetpub\wwwroot\hello-devops.html"
-      Content = "<html><body><h1>Hello DevOps!</h1></body></html>"
+      Contents = "<html><body><h1>Hello DevOps!</h1></body></html>"
     }
   }
 }

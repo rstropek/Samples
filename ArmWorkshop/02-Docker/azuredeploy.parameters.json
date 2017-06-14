@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "newStorageAccountName": {
-      "value": "devopslt17docker"
+      "value": "devopsber17docker"
     },
     "location": {
       "value": "northeurope"
@@ -15,7 +15,7 @@
       "value": "P@zzw0rd!"
     },
     "dnsNameForPublicIP": {
-      "value": "devopslt17-docker"
+      "value": "devopsber17-docker"
     }
   }
 }
