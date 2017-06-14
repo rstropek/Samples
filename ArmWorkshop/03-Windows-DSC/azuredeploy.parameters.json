@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "newStorageAccountName": {
-      "value": "devopscon15windsc"
+      "value": "devopslt17windsc"
     },
     "location": {
       "value": "northeurope"
@@ -15,7 +15,7 @@
       "value": "P@zzw0rd!"
     },
     "dnsNameForPublicIP": {
-      "value": "devopscon-win-dsc"
+      "value": "devopslt17-win-dsc"
     }
   }
 }
