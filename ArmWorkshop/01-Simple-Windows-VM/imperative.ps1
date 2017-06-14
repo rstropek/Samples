@@ -3,10 +3,10 @@ Get-AzureRmSubscription | where { $_.SubscriptionName -like "*MVP*" } | Select-A
 
 $rg = "RG-Simple-VM-Imp"
 $location = "northeurope"
-$newStorageAccountName = "devopslt17imp"
+$newStorageAccountName = "devopsber17imp"
 $publicIPAddressName = "SimpleVMPublicIP"
 $publicIPAddressType = "Dynamic"
-$dnsNameForPublicIP = "devopslt17-simple-vm-imp"
+$dnsNameForPublicIP = "devopsber17-simple-vm-imp"
 $virtualNetworkName = "SimpleVMVNet"
 $addressPrefix = "10.0.0.0/16"
 $subnetName = "Subnet"

@@ -8,12 +8,6 @@
         "description": "Unique DNS Name for the Storage Account where the Virtual Machine's disks will be placed."
       }
     },
-    "dummyParameter": {
-      "type": "string",
-      "metadata": {
-        "description": "This is just a dummy parameter to demo warnings in VSCode"
-      }
-    },
     "adminUsername": {
       "type": "string",
       "metadata": {
