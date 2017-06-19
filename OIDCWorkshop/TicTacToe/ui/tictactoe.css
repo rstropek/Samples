@@ -1,0 +1,13 @@
+#board tr td {
+	width: 100px;
+	height: 100px;
+	border: solid black 2px;
+}
+
+#board .X {
+	background: red;
+}
+
+#board .O {
+	background: green;
+}

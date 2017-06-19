@@ -1,0 +1,25 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "Tic Tac Toe Client",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "tsc && cpx '*.{html,css}' ./dist && cpx ./node_modules/jquery/dist/jquery.min.js ./dist && cpx ./node_modules/oidc-client/dist/oidc-client.min.js ./dist",
+    "rebuild": "npm run clean && npm run build",
+    "start": "lite-server -c ./bs-config.json"
+  },
+  "author": "Rainer Stropek",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/applicationinsights-js": "^1.0.4",
+    "@types/jquery": "^3.2.1",
+    "cpx": "^1.5.0",
+    "lite-server": "^2.3.0",
+    "rimraf": "^2.6.1",
+    "typescript": "^2.3.4"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "oidc-client": "^1.3.0"
+  }
+}
