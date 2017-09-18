@@ -1,0 +1,12 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "System.Runtime": "4.1.0",
+    "Microsoft.NETCore.Platforms": "1.0.1"
+  },
+
+  "frameworks": {
+    "netstandard1.4": { }
+  }
+}
