@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace myApp
 {
@@ -12,7 +11,6 @@ namespace myApp
         public static void Main(string[] args) =>
             new WebHostBuilder()
                 .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
                 .Build()
                 .Run();

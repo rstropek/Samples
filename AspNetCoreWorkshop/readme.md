@@ -1,4 +1,4 @@
-# ASP.NET Core 1.0 Samples
+# ASP.NET Core Samples
 
 In this repository I collect samples I use during ASP.NET Core and .NET Core workshops.
 
