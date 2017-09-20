@@ -1,13 +1,28 @@
-POST https://oopfunctions.azurewebsites.net/api/TicTacToe
+POST https://apicon-functions-portal.azurewebsites.net/api/TicTacToe
 Content-Type: application/json
 
 [ " ", "X", " ",
   " ", "X", " ",
   " ", "X", " " ]
 
----
+###
+POST http://localhost:7071/api/TicTacToe
+Content-Type: application/json
 
-POST https://oopfunctions.azurewebsites.net/api/TicTacToeNode
+[ " ", "X", " ",
+  " ", "X", " ",
+  " ", "X", " " ]
+
+###
+POST http://localhost:7071/api/TicTacToeCli
+Content-Type: application/json
+
+[ " ", "X", " ",
+  " ", "X", " ",
+  " ", "X", " " ]
+
+###
+POST https://apicon-functions-git.azurewebsites.net/api/TicTacToeCli
 Content-Type: application/json
 
 [ " ", "X", " ",
