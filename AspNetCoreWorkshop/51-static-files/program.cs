@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 using Microsoft.Extensions.Logging;
 
 namespace myApp
@@ -10,10 +10,7 @@ namespace myApp
     public class Program
     {
         public static void Main(string[] args) =>
-            // Note that we set the content root here
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .Build()
                 .Run();
