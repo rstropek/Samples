@@ -1,0 +1,25 @@
+{
+  "name": "0030-restify-verbs",
+  "version": "1.0.0",
+  "description": "Sample for mobile computing course at HTL Perg",
+  "main": "app.ts",
+  "scripts": {
+    "start": "ts-node app.ts"
+  },
+  "author": "Rainer Stropek",
+  "license": "MIT",
+  "dependencies": {
+    "http-status-codes": "^1.3.0",
+    "restify": "^6.3.4",
+    "restify-cors-middleware": "^1.0.1",
+    "restify-errors": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/http-status-codes": "^1.0.29",
+    "@types/restify": "^5.0.6",
+    "@types/restify-cors-middleware": "^1.0.1",
+    "@types/restify-errors": "^4.3.2",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1"
+  }
+}

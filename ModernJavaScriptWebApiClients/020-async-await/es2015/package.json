@@ -1,0 +1,18 @@
+{
+  "name": "es5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "promises-intro.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "8.0.53",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1"
+  },
+  "scripts": {
+    "start": "ts-node promises-intro.ts",
+    "build": "tsc"
+  },
+  "author": "Rainer Stropek",
+  "license": "MIT"
+}

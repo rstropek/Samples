@@ -1,0 +1,16 @@
+{
+  "name": "030-interfaces",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node app.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^8.0.53",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1"
+  }
+}

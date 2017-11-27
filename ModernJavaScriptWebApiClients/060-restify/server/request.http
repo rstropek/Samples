@@ -1,0 +1,24 @@
+GET http://localhost:8080/api/customers HTTP/1.1
+Accept: application/json
+
+###
+GET http://localhost:8080/api/customers/abc HTTP/1.1
+Accept: application/json
+
+###
+GET http://localhost:8080/api/customers/1 HTTP/1.1
+Accept: application/json
+
+###
+POST http://localhost:8080/api/customers HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 1,
+    "firstName": "Foo",
+    "lastName": "Bar"
+}
+
+###
+DELETE http://localhost:8080/api/customers/1 HTTP/1.1
