@@ -1,4 +1,6 @@
-import * as Rx from '@reactivex/rxjs';
+import * as Rx from 'rxjs';
+import 'rxjs/add/observable/dom/ajax';
+import { Observable } from 'rxjs/Observable';
 
 // The basics
 (function () {
@@ -91,4 +93,17 @@ import * as Rx from '@reactivex/rxjs';
         .merge(Rx.Observable.timer(1000, 10).map(v => 2).take(5))
         .debounceTime(100)
         .forEach(v => console.log(v));
+}); //();
+
+interface IPokemon {
+    url: string;
+    name: string;
+}
+
+(function () {
+    Rx.Observable.ajax('https://pokeapi.co/api/v2/pokemon/')
+        .map(e => e.response)
+        .flatMap(e => <IPokemon[]>e.results)
+        .map(e => e.name)
+        .forEach(e => console.log(e));
 })();

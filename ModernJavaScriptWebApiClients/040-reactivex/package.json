@@ -8,7 +8,7 @@
     "start": "webpack-dev-server"
   },
   "dependencies": {
-    "@reactivex/rxjs": "^5.5.2"
+    "rxjs": "^5.5.2"
   },
   "devDependencies": {
     "html-webpack-plugin": "^2.30.1",
