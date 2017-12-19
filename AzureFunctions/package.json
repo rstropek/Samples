@@ -1,0 +1,11 @@
+{
+  "name": "request-demo",
+  "version": "1.0.0",
+  "description": "Sample",
+  "scripts": {},
+  "author": "Rainer Stropek",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.83.0"
+  }
+}

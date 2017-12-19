@@ -1,9 +1,51 @@
-POST https://apicon-functions-portal.azurewebsites.net/api/TicTacToe
+@host = https://htl-leo-serverless-test.azurewebsites.net
+
+###
+POST {{ host }}/api/TicTacToe
 Content-Type: application/json
 
 [ " ", "X", " ",
   " ", "X", " ",
   " ", "X", " " ]
+
+###
+POST {{ host }}/api/TicTacToe
+Content-Type: application/json
+
+[ " ", "X", " " ]
+
+###
+POST https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment
+content-type: application/json
+Ocp-Apim-Subscription-Key: 5594da2cda15478097b46e4bb27bd21a
+Accept: application/json
+
+{'documents': [{'id': '1', 'language': 'en', 'text': 'Hi! I am happy with your service!'}]}
+
+###
+POST https://api.github.com/repos/rstropek/basta-spring-2016/issues/1/comments
+Authorization: Basic cnN0cm9wZWs6MjYxMmRhMDA1MTA2Y2U1ZjczNzJlZWU4OTE1ZTE2M2QyNWE5ZjZhOQ==
+User-Agent: rstropek
+Content-Type: application/json
+
+{ "body": "Thank you!" }
+
+###
+POST http://localhost:7071/api/GitHub
+Content-Type: application/json
+
+{  
+   "action":"created",
+   "issue":{  
+      "url":"https://api.github.com/repos/rstropek/basta-spring-2016/issues/1",
+      "comments_url":"https://api.github.com/repos/rstropek/basta-spring-2016/issues/1/comments",
+      "body":"Hi! I am quite happy with your services."
+   },
+   "comment":{  
+      "url":"https://api.github.com/repos/rstropek/basta-spring-2016/issues/comments/352646149",
+      "body":"Hi! I am quite happy with your services."
+   }
+}
 
 ###
 POST http://localhost:7071/api/TicTacToe
