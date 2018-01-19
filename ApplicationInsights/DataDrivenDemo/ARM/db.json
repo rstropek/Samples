@@ -21,9 +21,6 @@
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2014-04-01",
             "location": "[variables('location')]",
-            "dependsOn": [
-                "[reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName')), '2014-04-01')]"
-            ],
             "tags": {
                 "Project": "[parameters('projectName')]",
                 "Tier": "Database"
