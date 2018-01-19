@@ -43,11 +43,11 @@
                     "appSettings": [
                         {
                             "name": "ApplicationInsights:InstrumentationKey",
-                            "value": "[parameters('appInsightsInstrumentationKey')]"
+                            "value": "[if(empty(parameters('appInsightsInstrumentationKey')), parameters('appInsightsInstrumentationKey'), json('null'))]"
                         },
                         {
                             "name": "ConnectionStrings:DB",
-                            "value": "[parameters('dbConnectionString')]"
+                            "value": "[if(empty(parameters('dbConnectionString')), parameters('dbConnectionString'), json('null'))]"
                         }
                     ],
                     "use32BitWorkerProcess": false,
