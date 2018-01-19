@@ -17,7 +17,7 @@
     },
     "resources": [
         {
-            "name": "[parameters('sqlDbName')]",
+            "name": "[concat(parameters('sqlServerName'), '/', parameters('sqlDbName'))]",
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2014-04-01",
             "location": "[variables('location')]",
