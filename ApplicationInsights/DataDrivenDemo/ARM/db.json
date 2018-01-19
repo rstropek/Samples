@@ -22,7 +22,7 @@
             "apiVersion": "2014-04-01",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[parameters('sqlServerName')]"
+                "[reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName')), '2014-04-01')]"
             ],
             "tags": {
                 "Project": "[parameters('projectName')]",
