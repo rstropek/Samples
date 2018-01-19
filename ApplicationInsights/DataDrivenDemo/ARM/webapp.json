@@ -1,0 +1,66 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webAppName": {
+            "type": "string"
+        },
+        "webFarmName": {
+            "type": "string"
+        },
+        "appInsightsInstrumentationKey": {
+            "type": "string"
+        },
+        "dbConnectionString": {
+            "type": "securestring"
+        },
+        "projectName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "webDeployUser": "rainer"
+    },
+    "resources": [
+        {
+            "name": "[parameters('webAppName')]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[parameters('projectName')]",
+                "Tier": "Web"
+            },
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('webFarmName'))]",
+                "siteConfig": {
+                    "defaultDocuments": [
+                        "default.html"
+                    ],
+                    "netFrameworkVersion": "v4.6",
+                    "publishingUsername": "[variables('webDeployUser')]",
+                    "appSettings": [
+                        {
+                            "name": "ApplicationInsights:InstrumentationKey",
+                            "value": "[parameters('appInsightsInstrumentationKey')]"
+                        },
+                        {
+                            "name": "ConnectionStrings:DB",
+                            "value": "[parameters('dbConnectionString')]"
+                        }
+                    ],
+                    "use32BitWorkerProcess": false,
+                    "webSocketsEnabled": true,
+                    "alwaysOn": true,
+                    "cors": {
+                        "allowedOrigins": [
+                            "*"
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
