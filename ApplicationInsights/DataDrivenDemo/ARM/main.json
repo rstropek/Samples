@@ -1,0 +1,238 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dbAdminUser": {
+            "type": "string",
+            "defaultValue": "demo",
+            "metadata": {
+                "description": "The administrator login for the created SQL Server."
+            }
+        },
+        "dbAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The SQL Server's administrator password."
+            }
+        }
+    },
+    "variables": {
+        "namePrefix": "aidd",
+        "sqlServerName": "[concat(variables('namePrefix'), '-sql', uniqueString(resourceGroup().id))]",
+        "productsDbName": "[concat(variables('namePrefix'), '-db-products')]",
+        "inventoryDbName": "[concat(variables('namePrefix'), '-db-inventory')]",
+        "webFarmName": "[concat(variables('namePrefix'), '-webfarm')]",
+        "appInsightsName": "[concat(variables('namePrefix'), '-ai')]",
+        "location": "[resourceGroup().location]",
+        "projectName": "Data-Driven Application Insights Demo"
+    },
+    "resources": [
+        {
+            "name": "[variables('sqlServerName')]",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2014-04-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[variables('projectName')]",
+                "Tier": "Database"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('dbAdminUser')]",
+                "administratorLoginPassword": "[parameters('dbAdminPassword')]"
+            },
+            "resources": [
+                {
+                    "name": "AllowAllIps",
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "255.255.255.255"
+                    }
+                },
+                {
+                    "name": "AllowAzureInternalIPs",
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                },
+                {
+                    "name": "[variables('productsDbName')]",
+                    "type": "databases",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[variables('sqlServerName')]"
+                    ],
+                    "location": "[variables('location')]",
+                    "tags": {
+                        "Project": "[variables('projectName')]",
+                        "Tier": "Database"
+                    },
+                    "properties": {
+                        "edition": "Standard"
+                    }
+                },
+                {
+                    "name": "[variables('inventoryDbName')]",
+                    "type": "databases",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[variables('sqlServerName')]"
+                    ],
+                    "location": "[variables('location')]",
+                    "tags": {
+                        "Project": "[variables('projectName')]",
+                        "Tier": "Database"
+                    },
+                    "properties": {
+                        "edition": "Standard"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "[variables('webFarmName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[variables('projectName')]",
+                "Tier": "Web"
+            },
+            "properties": {
+                "name": "[variables('webFarmName')]"
+            },
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            }
+        },
+        {
+            "name": "[variables('appInsightsName')]",
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[variables('projectName')]",
+                "Tier": "Web"
+            },
+            "properties": {
+                "Application_Type": "web"
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "linkedTemplate-web-frontend",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('appInsightsName')]",
+                "[variables('webFarmName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://rawgit.com/rstropek/Samples/master/ApplicationInsights/DataDrivenDemo/ARM/webapp.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "webAppName": {
+                        "value": "[concat(variables('namePrefix'), '-web-', uniqueString(resourceGroup().id))]"
+                    },
+                    "webFarmName": {
+                        "value": "[variables('webFarmName')]"
+                    },
+                    "appInsightsInstrumentationKey": {
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                    },
+                    "dbConnectionString": {
+                        "value": ""
+                    },
+                    "projectName": {
+                        "value": "[variables('projectName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "linkedTemplate-web-products",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('appInsightsName')]",
+                "[variables('webFarmName')]",
+                "[variables('sqlServerName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://rawgit.com/rstropek/Samples/master/ApplicationInsights/DataDrivenDemo/ARM/webapp.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "webAppName": {
+                        "value": "[concat(variables('namePrefix'), '-web-products-', uniqueString(resourceGroup().id))]"
+                    },
+                    "webFarmName": {
+                        "value": "[variables('webFarmName')]"
+                    },
+                    "appInsightsInstrumentationKey": {
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                    },
+                    "dbConnectionString": {
+                        "value": "[concat('Server=tcp:', variables('sqlServerName'),'.database.windows.net,1433;Initial Catalog=', variables('productsDbName'), ';Persist Security Info=False;User ID=', parameters('dbAdminUser'), ';Password=', parameters('dbAdminPassword'), ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]"
+                    },
+                    "projectName": {
+                        "value": "[variables('projectName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "linkedTemplate-web-inventory",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('appInsightsName')]",
+                "[variables('webFarmName')]",
+                "[variables('sqlServerName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://rawgit.com/rstropek/Samples/master/ApplicationInsights/DataDrivenDemo/ARM/webapp.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "webAppName": {
+                        "value": "[concat(variables('namePrefix'), '-web-inventory-', uniqueString(resourceGroup().id))]"
+                    },
+                    "webFarmName": {
+                        "value": "[variables('webFarmName')]"
+                    },
+                    "appInsightsInstrumentationKey": {
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                    },
+                    "dbConnectionString": {
+                        "value": "[concat('Server=tcp:', variables('sqlServerName'),'.database.windows.net,1433;Initial Catalog=', variables('inventoryDbName'), ';Persist Security Info=False;User ID=', parameters('dbAdminUser'), ';Password=', parameters('dbAdminPassword'), ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]"
+                    },
+                    "projectName": {
+                        "value": "[variables('projectName')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
