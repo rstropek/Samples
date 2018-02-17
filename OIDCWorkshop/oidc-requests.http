@@ -1,0 +1,53 @@
+// ===== BASICS
+// Get OpenID Connect Metadata
+GET https://login.microsoftonline.com/rainertimecockpit.onmicrosoft.com/v2.0/.well-known/openid-configuration
+
+// Get ID Token
+GET https://login.microsoftonline.com/022e4faf-c745-475a-be06-06b1e1c9e39d/oauth2/v2.0/authorize?client_id=4cc39076-555a-48f5-bdb8-c9fc8134a35f&response_type=id_token&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&response_mode=form_post&scope=openid&state=12345&nonce=678910
+
+
+// ===== CODE GRANT FLOW
+// Get Code (Code Grant Flow)
+GET https://rainerdemo.eu.auth0.com/authorize?client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&response_type=code&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&response_mode=query&scope=openid%20offline_access&state=12345
+
+// Get Token from Code
+POST https://rainerdemo.eu.auth0.com/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&scope=openid%20offline_access&code=DtoirWzOBAxXXqGO&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&grant_type=authorization_code&client_secret=-oAiMEyVXlmW_jQ9YYLdJwRZt7gppB7DZapNT2BRzEfafAyJ5Z2Lug-DdDGdCx50
+
+// Get Code with Scope
+GET https://rainerdemo.eu.auth0.com/authorize?client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&response_type=code&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&response_mode=query&audience=http%3A%2F%2Foidc-webapi%2F&scope=openid%20offline_access%20read:data&state=12345
+
+// Get Token from Code
+POST https://rainerdemo.eu.auth0.com/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&audience=http%3A%2F%2Foidc-webapi%2F&scope=openid%20offline_access%20read:data&code=X6A7HzN7aPKZPF-6&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&grant_type=authorization_code&client_secret=-oAiMEyVXlmW_jQ9YYLdJwRZt7gppB7DZapNT2BRzEfafAyJ5Z2Lug-DdDGdCx50
+
+// Try access token in C# Web API
+GET http://localhost:5000/api/values
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1FVTVSVGxGT1VRek5rUXhOVFE0T0RSRlFVWXpSVEE0TXpnMk9ETXhOalJDUkRoRlFrTTRNQSJ9.eyJpc3MiOiJodHRwczovL3JhaW5lcmRlbW8uZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDU5NDYzNTFjOGMzNjZiMGQxODEzNGNkMiIsImF1ZCI6WyJodHRwOi8vb2lkYy13ZWJhcGkvIiwiaHR0cHM6Ly9yYWluZXJkZW1vLmV1LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJhenAiOiJ3REVmczdxZUZ0QnhvN3BzU216cGVKN3FEdXRKWUk0QSIsImV4cCI6MTQ5Nzg2MzA3NCwiaWF0IjoxNDk3Nzc2Njc0LCJzY29wZSI6Im9wZW5pZCBvZmZsaW5lX2FjY2VzcyByZWFkOmRhdGEifQ.lS-wfMGaiSiAHC272mE8QBIfc_VArEvKJ8DKxzMM0m3H-M-Y_AByW3pJoj6Ow9rTGdLB28hKvpzydRgKRQ10u8FhV2-9MAKOCFibk4GvUzeIWCztc22SA82fW7KLH4dA0EC-zbAV_IdX-EXj6G8slPvWDrQKcyAGa2acmzOpeGYpDdHQAFur8oYcVEE4vpb04MeFFOdjcoWITJHnSvoEnZ6jjLn8wc38Ot8R09jqiNU8b4vmh2YXIij2lg6s6LEtcx1qRh18Q4U6Muezy9e1gSg8n1KVbswSlKeKOZfZLbhiWwMkaPfBEuMPrch02XIeGp8dlrKx4Hs8mxX619NNSQ
+
+
+// ===== IMPLICIT FLOW
+// Get Code with Scope
+GET https://rainerdemo.eu.auth0.com/authorize?client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&response_type=token&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&response_mode=fragment&audience=http%3A%2F%2Foidc-webapi%2F&scope=openid%20offline_access%20read:data&state=12345
+
+// Try access token in Node.js Web API
+GET http://localhost:5001/api/values
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1FVTVSVGxGT1VRek5rUXhOVFE0T0RSRlFVWXpSVEE0TXpnMk9ETXhOalJDUkRoRlFrTTRNQSJ9.eyJpc3MiOiJodHRwczovL3JhaW5lcmRlbW8uZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDU5NDYzNTFjOGMzNjZiMGQxODEzNGNkMiIsImF1ZCI6WyJodHRwOi8vb2lkYy13ZWJhcGkvIiwiaHR0cHM6Ly9yYWluZXJkZW1vLmV1LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJhenAiOiJ3REVmczdxZUZ0QnhvN3BzU216cGVKN3FEdXRKWUk0QSIsImV4cCI6MTQ5Nzc5NjU4NCwiaWF0IjoxNDk3Nzg5Mzg0LCJzY29wZSI6Im9wZW5pZCBvZmZsaW5lX2FjY2VzcyByZWFkOmRhdGEifQ.jGjUYRTlzo9bLgn4jdq4-QTkIa4Zb-Lhm7-d-b_11DmQl-nOJoUBZXmqHoGTtziIYp3UVwu_KB9TNuB1e8falanduOUlQlWqfwFxdsW4wDnOB_WII8XQZrHxBCa3TKODPjZ6ATUgp0m5vnK1KV9Ibk71Tjely8qLnLHcx3XOxyFq4GCXyJl0HFOzXgWMabUL1ujoen2gwEjzcxbUfkcUfAsQpyXsol7niZZcCh0czO3Q2X88pNuam0AERjpx3W005s5QrvzOKu0mqxA6OMEWY1eOLESVI1xI-lyfqmXYqcYwPV0X6z_CjYLOAsy586QYgjT88P8PoiWGL_1GgvTX-A
+
+
+// ===== HYBRID FLOW
+// Get Code with Scope
+GET https://rainerdemo.eu.auth0.com/authorize?client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&response_type=code%20id_token&redirect_uri=https%3A%2F%2Flocalhost:5000%2Flogin&response_mode=form_post&audience=http%3A%2F%2Foidc-webapi%2F&scope=openid%20email%20offline_access%20read:data&state=12345&nonce=67890
+
+
+// ===== CLIENT CREDENTIALS
+// Get Tokens
+POST https://rainerdemo.eu.auth0.com/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&audience=http%3A%2F%2Foidc-webapi%2F&client_id=wDEfs7qeFtBxo7psSmzpeJ7qDutJYI4A&client_secret=-oAiMEyVXlmW_jQ9YYLdJwRZt7gppB7DZapNT2BRzEfafAyJ5Z2Lug-DdDGdCx50
+
