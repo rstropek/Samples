@@ -26,7 +26,10 @@
         "projectName": {
             "type": "string"
         },
-        "vaultName": {
+        "vaultNameProd": {
+            "type": "string"
+        },
+        "vaultNameTest": {
             "type": "string"
         }
     },
@@ -60,7 +63,7 @@
                         },
                         {
                             "name": "KeyVault:VaultName",
-                            "value": "[parameters('vaultName')]"
+                            "value": "[parameters('vaultNameProd')]"
                         },
                         {
                             "name": "KeyVault:ClientID",
@@ -106,6 +109,10 @@
                         {
                             "name": "ApplicationInsights:InstrumentationKey",
                             "value": "[if(empty(parameters('appInsightsInstrumentationKey')), parameters('appInsightsInstrumentationKey'), json('null'))]"
+                        },
+                        {
+                            "name": "KeyVault:VaultName",
+                            "value": "[parameters('vaultNameTest')]"
                         },
                         {
                             "name": "KeyVault:ClientID",
