@@ -11,10 +11,16 @@
         "appInsightsInstrumentationKey": {
             "type": "string"
         },
-        "clientSecret": {
+        "clientSecretProd": {
             "type": "securestring"
         },
-        "clientId": {
+        "clientSecretTest": {
+            "type": "securestring"
+        },
+        "clientIdProd": {
+            "type": "string"
+        },
+        "clientIdTest": {
             "type": "string"
         },
         "projectName": {
@@ -51,11 +57,11 @@
                         },
                         {
                             "name": "KeyVault:ClientID",
-                            "value": "[parameters('clientId')]"
+                            "value": "[parameters('clientIdProd')]"
                         },
                         {
                             "name": "KeyVault:ClientSecret",
-                            "value": "[parameters('clientSecret')]"
+                            "value": "[parameters('clientSecretProd')]"
                         }
                     ],
                     "use32BitWorkerProcess": false,
@@ -93,11 +99,11 @@
                         },
                         {
                             "name": "KeyVault:ClientID",
-                            "value": "[parameters('clientId')]"
+                            "value": "[parameters('clientIdTest')]"
                         },
                         {
                             "name": "KeyVault:ClientSecret",
-                            "value": "[parameters('clientSecret')]"
+                            "value": "[parameters('clientSecretTest')]"
                         }
                     ],
                     "use32BitWorkerProcess": false,
