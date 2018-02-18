@@ -59,7 +59,7 @@
                     "appSettings": [
                         {
                             "name": "ApplicationInsights:InstrumentationKey",
-                            "value": "[if(empty(parameters('appInsightsInstrumentationKey')), json('null'), parameters('appInsightsInstrumentationKey'))]"
+                            "value": "[parameters('appInsightsInstrumentationKey')]"
                         },
                         {
                             "name": "KeyVault:VaultName",
