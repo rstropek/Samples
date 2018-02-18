@@ -84,6 +84,9 @@
                 "Project": "[parameters('projectName')]",
                 "Tier": "Web"
             },
+            "dependsOn": [
+                "[parameters('webAppName')]"
+            ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('webFarmName'))]",
                 "siteConfig": {
