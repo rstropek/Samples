@@ -31,6 +31,15 @@
         },
         "vaultNameTest": {
             "type": "string"
+        },
+        "dbServerName": {
+            "type": "string"
+        },
+        "dbNameTest": {
+            "type": "string"
+        },
+        "dbNameProd": {
+            "type": "string"
         }
     },
     "variables": {
@@ -72,6 +81,14 @@
                         {
                             "name": "KeyVault:ClientSecret",
                             "value": "[parameters('clientSecretProd')]"
+                        },
+                        {
+                            "name": "DB:Server",
+                            "value": "[parameters('dbServerName')]"
+                        },
+                        {
+                            "name": "DB:Database",
+                            "value": "[parameters('dbNameProd')]"
                         }
                     ],
                     "use32BitWorkerProcess": false,
@@ -99,7 +116,8 @@
                         "appSettingNames": [
                             "KeyVault:VaultName",
                             "KeyVault:ClientID",
-                            "KeyVault:ClientSecret"
+                            "KeyVault:ClientSecret",
+                            "DB:Database"
                         ]
                     }
                 }
@@ -141,6 +159,14 @@
                         {
                             "name": "KeyVault:ClientSecret",
                             "value": "[parameters('clientSecretTest')]"
+                        },
+                        {
+                            "name": "DB:Server",
+                            "value": "[parameters('dbServerName')]"
+                        },
+                        {
+                            "name": "DB:Database",
+                            "value": "[parameters('dbNameTest')]"
                         }
                     ],
                     "use32BitWorkerProcess": false,
