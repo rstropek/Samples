@@ -17,25 +17,23 @@
         "clientId": {
             "type": "string"
         },
-        "slot": {
-            "type": "string",
-            "allowedValues": [
-                "prod", "test"
-            ],
-            "defaultValue": "prod"
+        "projectName": {
+            "type": "string"
         }
     },
     "variables": {
         "location": "[resourceGroup().location]",
-        "webDeployUser": "rainer"
+        "webDeployUser": "rainer",
+        "netFramework": "4.6"
     },
     "resources": [
         {
-            "name": "[concat(parameters('webAppName'), if(equals(parameters('slot'), 'test'), '/test', '')]",
-            "type": "[concat('Microsoft.Web/sites', if(equals(parameters('slot'), 'test'), '/slots', '')]",
+            "name": "[parameters('webAppName')]",
+            "type": "Microsoft.Web/sites",
             "apiVersion": "2016-08-01",
             "location": "[variables('location')]",
             "tags": {
+                "Project": "[parameters('projectName')]",
                 "Tier": "Web"
             },
             "properties": {
@@ -44,7 +42,49 @@
                     "defaultDocuments": [
                         "default.html"
                     ],
-                    "netFrameworkVersion": "v4.6",
+                    "netFrameworkVersion": "[variables('netFramework')]",
+                    "publishingUsername": "[variables('webDeployUser')]",
+                    "appSettings": [
+                        {
+                            "name": "ApplicationInsights:InstrumentationKey",
+                            "value": "[if(empty(parameters('appInsightsInstrumentationKey')), parameters('appInsightsInstrumentationKey'), json('null'))]"
+                        },
+                        {
+                            "name": "KeyVault:ClientID",
+                            "value": "[parameters('clientId')]"
+                        },
+                        {
+                            "name": "KeyVault:ClientSecret",
+                            "value": "[parameters('clientSecret')]"
+                        }
+                    ],
+                    "use32BitWorkerProcess": false,
+                    "webSocketsEnabled": true,
+                    "alwaysOn": true,
+                    "cors": {
+                        "allowedOrigins": [
+                            "*"
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "name": "[concat(parameters('webAppName'), '/test')]",
+            "type": "Microsoft.Web/sites/slots",
+            "apiVersion": "2016-08-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[parameters('projectName')]",
+                "Tier": "Web"
+            },
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('webFarmName'))]",
+                "siteConfig": {
+                    "defaultDocuments": [
+                        "default.html"
+                    ],
+                    "netFrameworkVersion": "[variables('netFramework')]",
                     "publishingUsername": "[variables('webDeployUser')]",
                     "appSettings": [
                         {
