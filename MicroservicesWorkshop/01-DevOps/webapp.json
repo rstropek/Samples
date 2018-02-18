@@ -83,7 +83,27 @@
                         ]
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "name": "slotConfigNames",
+                    "type": "config",
+                    "apiVersion": "2015-08-01",
+                    "dependsOn": [
+                        "[concat(parameters('webAppName'), '/test')]"
+                    ],
+                    "tags": {
+                        "displayName": "slotConfigNames"
+                    },
+                    "properties": {
+                        "appSettingNames": [
+                            "KeyVault:VaultName",
+                            "KeyVault:ClientID",
+                            "KeyVault:ClientSecret"
+                        ]
+                    }
+                }
+            ]
         },
         {
             "name": "[concat(parameters('webAppName'), '/test')]",
@@ -132,7 +152,27 @@
                         ]
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "name": "slotConfigNames",
+                    "type": "config",
+                    "apiVersion": "2015-08-01",
+                    "dependsOn": [
+                        "[concat(parameters('webAppName'), '/test')]"
+                    ],
+                    "tags": {
+                        "displayName": "slotConfigNames"
+                    },
+                    "properties": {
+                        "appSettingNames": [
+                            "KeyVault:VaultName",
+                            "KeyVault:ClientID",
+                            "KeyVault:ClientSecret"
+                        ]
+                    }
+                }
+            ]
         }
     ],
     "outputs": {}
