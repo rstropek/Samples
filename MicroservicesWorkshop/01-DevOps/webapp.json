@@ -25,6 +25,9 @@
         },
         "projectName": {
             "type": "string"
+        },
+        "vaultName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -54,6 +57,10 @@
                         {
                             "name": "ApplicationInsights:InstrumentationKey",
                             "value": "[if(empty(parameters('appInsightsInstrumentationKey')), parameters('appInsightsInstrumentationKey'), json('null'))]"
+                        },
+                        {
+                            "name": "KeyVault:VaultName",
+                            "value": "[parameters('vaultName')]"
                         },
                         {
                             "name": "KeyVault:ClientID",
