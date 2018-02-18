@@ -1,0 +1,247 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dbAdminUser": {
+            "type": "string",
+            "defaultValue": "demo",
+            "metadata": {
+                "description": "The administrator login for the created SQL Server."
+            }
+        },
+        "dbAdminPwd": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The SQL Server's administrator password."
+            }
+        },
+        "clientIdProd": {
+            "type": "string",
+            "metadata": {
+                "description": "Client ID for KeyVault access"
+            }
+        },
+        "clientIdTest": {
+            "type": "string",
+            "metadata": {
+                "description": "Client ID for KeyVault access"
+            }
+        },
+        "clientSecretProd": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Client Secret for KeyVault access"
+            }
+        },
+        "clientSecretTest": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Client Secret for KeyVault access"
+            }
+        },
+        "vaultNameProd": {
+            "type": "string"
+        },
+        "vaultNameTest": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "namePrefix": "msws",
+        "sqlServerName": "[concat(variables('namePrefix'), '-sql-', uniqueString(resourceGroup().id))]",
+        "dbNameProd": "[concat(variables('namePrefix'), '-db')]",
+        "dbNameTest": "[concat(variables('namePrefix'), '-db-test')]",
+        "webFarmName": "[concat(variables('namePrefix'), '-webfarm')]",
+        "webAppName": "[concat(variables('namePrefix'), '-web-', uniqueString(resourceGroup().id))]",
+        "appInsightsName": "[concat(variables('namePrefix'), '-ai')]",
+        "location": "[resourceGroup().location]",
+        "projectName": "Microservice Workshop",
+        "dbPoolName": "default-pool"
+    },
+    "resources": [
+        {
+            "name": "[variables('sqlServerName')]",
+            "type": "Microsoft.Sql/servers",
+            "comments": "SQL Server containing database for all application stages",
+            "apiVersion": "2014-04-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[variables('projectName')]",
+                "Tier": "Database"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('dbAdminUser')]",
+                "administratorLoginPassword": "[parameters('dbAdminPwd')]"
+            },
+            "resources": [
+                {
+                    "name": "[variables('dbPoolName')]",
+                    "location": "[variables('location')]",
+                    "comments": "Use Elastic DB Pool to lower costs",
+                    "type": "elasticpools",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[variables('sqlServerName')]"
+                    ],
+                    "properties": {
+                        "edition": "Standard",
+                        "dtu": "50",
+                        "databaseDtuMin": "0",
+                        "databaseDtuMax": "50"
+                    }
+                },
+                {
+                    "name": "AllowAllIps",
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "255.255.255.255"
+                    }
+                },
+                {
+                    "name": "AllowAzureInternalIPs",
+                    "type": "firewallRules",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                },
+                {
+                    "name": "[variables('dbNameProd')]",
+                    "type": "databases",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[variables('sqlServerName')]",
+                        "[resourceId('Microsoft.Sql/servers/elasticpools', variables('sqlServerName'), variables('dbPoolName'))]"
+                    ],
+                    "location": "[variables('location')]",
+                    "tags": {
+                        "Project": "[variables('projectName')]",
+                        "Tier": "Database"
+                    },
+                    "properties": {
+                        "edition": "Standard",
+                        "elasticPoolName": "[variables('dbPoolName')]"
+                    }
+                },
+                {
+                    "name": "[variables('dbNameTest')]",
+                    "type": "databases",
+                    "apiVersion": "2014-04-01",
+                    "dependsOn": [
+                        "[variables('sqlServerName')]",
+                        "[resourceId('Microsoft.Sql/servers/elasticpools', variables('sqlServerName'), variables('dbPoolName'))]"
+                    ],
+                    "location": "[variables('location')]",
+                    "tags": {
+                        "Project": "[variables('projectName')]",
+                        "Tier": "Database"
+                    },
+                    "properties": {
+                        "edition": "Standard",
+                        "elasticPoolName": "[variables('dbPoolName')]"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "[variables('webFarmName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[variables('projectName')]",
+                "Tier": "Web"
+            },
+            "properties": {
+                "name": "[variables('webFarmName')]"
+            },
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            }
+        },
+        {
+            "name": "[variables('appInsightsName')]",
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Project": "[variables('projectName')]",
+                "Tier": "Web"
+            },
+            "properties": {
+                "Application_Type": "web"
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "linkedTemplate-web-frontend",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('appInsightsName')]",
+                "[variables('webFarmName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://rawgit.com/rstropek/Samples/master/MicroservicesWorkshop/01-DevOps/webapp.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "webAppName": {
+                        "value": "[variables('webAppName')]"
+                    },
+                    "webFarmName": {
+                        "value": "[variables('webFarmName')]"
+                    },
+                    "appInsightsInstrumentationKey": {
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                    },
+                    "clientIdProd": {
+                        "value": "[parameters('clientIdProd')]"
+                    },
+                    "clientIdTest": {
+                        "value": "[parameters('clientIdTest')]"
+                    },
+                    "clientSecretProd": {
+                        "value": "[parameters('clientSecretProd')]"
+                    },
+                    "clientSecretTest": {
+                        "value": "[parameters('clientSecretTest')]"
+                    },
+                    "projectName": {
+                        "value": "[variables('projectName')]"
+                    },
+                    "vaultNameProd": {
+                        "value": "[parameters('vaultNameProd')]"
+                    },
+                    "vaultNameTest": {
+                        "value": "[parameters('vaultNameTest')]"
+                    },
+                    "dbServerName": {
+                        "value": "[concat(variables('sqlServerName'), '.database.windows.net')]"
+                    },
+                    "dbNameTest": {
+                        "value": "[variables('dbNameTest')]"
+                    },
+                    "dbNameProd": {
+                        "value": "[variables('dbNameProd')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
