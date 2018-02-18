@@ -13,22 +13,26 @@ namespace RentalManagement.Services
 {
     public class DataAccess : IDataAccess
     {
-        private KeyVaultOptions keyVaultOptions;
+        private IKeyVaultReader keyVaultReader;
         private DbServerOptions dbServerOptions;
 
-        public DataAccess(IOptions<KeyVaultOptions> keyVaultOptions, IOptions<DbServerOptions> dbServerOptions)
+        public DataAccess(IKeyVaultReader keyVaultReader, IOptions<DbServerOptions> dbServerOptions)
         {
-            this.keyVaultOptions = keyVaultOptions.Value;
+            this.keyVaultReader = keyVaultReader;
             this.dbServerOptions = dbServerOptions.Value;
         }
 
         public async Task<string> GetDbNameAsync()
         {
+            // Note that in practice you should cache the connection string for a while because
+            // getting it from key vault is not very fast.
             using (var conn = new SqlConnection(await GetConnectionString()))
             {
                 await conn.OpenAsync();
                 using (var cmd = conn.CreateCommand())
                 {
+                    // Imagine your DB access code here...
+
                     cmd.CommandText = "SELECT DB_NAME()";
                     return (string)await cmd.ExecuteScalarAsync();
                 }
@@ -37,23 +41,8 @@ namespace RentalManagement.Services
 
         private async Task<string> GetConnectionString()
         {
-            var dbPassword = await GetSecretAsync();
+            var dbPassword = await keyVaultReader.GetSecretAsync("DbPassword");
             return $"Server=tcp:{dbServerOptions.Server},1433;Initial Catalog={dbServerOptions.Database};User ID=demo;Password={dbPassword}";
-        }
-
-        private async Task<string> GetTokenAsync(string authority, string resource, string scope)
-        {
-            var authContext = new AuthenticationContext(authority);
-            var clientCred = new ClientCredential(this.keyVaultOptions.ClientID, this.keyVaultOptions.ClientSecret);
-            var result = await authContext.AcquireTokenAsync(resource, clientCred);
-            return result.AccessToken;
-        }
-
-        private async Task<string> GetSecretAsync()
-        {
-            var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(GetTokenAsync));
-            var sec = await kv.GetSecretAsync($"https://{this.keyVaultOptions.VaultName}.vault.azure.net/secrets/DbPassword");
-            return sec.Value;
         }
     }
 }

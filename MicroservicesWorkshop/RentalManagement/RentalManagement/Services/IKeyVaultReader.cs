@@ -2,8 +2,8 @@
 
 namespace RentalManagement.Services
 {
-    public interface IDataAccess
+    public interface IKeyVaultReader
     {
-        Task<string> GetDbNameAsync();
+        Task<string> GetSecretAsync(string key);
     }
 }

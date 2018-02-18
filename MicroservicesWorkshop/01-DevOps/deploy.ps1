@@ -32,6 +32,18 @@ function Set-DbPasswordInKeyVault([string]$vaultName, [securestring]$secureDbPas
     $dbPwdSecret
 }
 
+function Set-ServiceBusInKeyVault([string]$vaultName, [securestring]$sbConnectionString)
+{
+    # Check if DB password already in key vault
+    $serviceBusSecret = Get-AzureKeyVaultSecret -VaultName $vaultName -Name "ServiceBus"
+    if (!$serviceBusSecret) {
+        # Key vault does not yet have DB password stored in it -> add it
+        $serviceBusSecret = Set-AzureKeyVaultSecret -VaultName $vaultname -Name "ServiceBus" -SecretValue $sbConnectionString
+    }
+
+    $serviceBusSecret
+}
+
 function New-SecureRandomPassword()
 {
     $dbPassword = -join (33..126 | ForEach-Object {[char]$_} | Get-Random -Count 20)
@@ -106,6 +118,11 @@ New-KeyVault -vaultName $vaultNameTest -rg $rg -location $location -adminUserPri
 # Create a user with less privileges instead!
 Set-DbPasswordInKeyVault -vaultName $vaultNameProd -secureDbPassword $secureDbPassword
 Set-DbPasswordInKeyVault -vaultName $vaultNameTest -secureDbPassword $secureDbPassword
+
+$sbConnString = "Endpoint=sb://bike-rental.servicebus.windows.net/;SharedAccessKeyName=send-bike-rental-end;SharedAccessKey=AmdV8rrZUu5WTHxxNwgLcUcA6WuaJ8VEQoMjszBt5Lg=;";
+$sbSecureConnString = ConvertTo-SecureString $sbConnString -AsPlainText -Force
+Set-ServiceBusInKeyVault -vaultName $vaultNameProd -sbConnectionString $sbSecureConnString
+Set-ServiceBusInKeyVault -vaultName $vaultNameTest -sbConnectionString $sbSecureConnString
 
 # Register prod and test app in Azure AD
 $appProd = New-Application -displayName "BikeRentals" -idUri "http://bike-rentals"
