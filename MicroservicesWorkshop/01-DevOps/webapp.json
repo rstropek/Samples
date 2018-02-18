@@ -1,0 +1,76 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webAppName": {
+            "type": "string"
+        },
+        "webFarmName": {
+            "type": "string"
+        },
+        "appInsightsInstrumentationKey": {
+            "type": "string"
+        },
+        "clientSecret": {
+            "type": "securestring"
+        },
+        "clientId": {
+            "type": "string"
+        },
+        "slot": {
+            "type": "string",
+            "allowedValues": [
+                "prod", "test"
+            ],
+            "defaultValue": "prod"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "webDeployUser": "rainer"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('webAppName'), if(equals(parameters('slot'), 'test'), '/test', '')]",
+            "type": "[concat('Microsoft.Web/sites', if(equals(parameters('slot'), 'test'), '/slots', '')]",
+            "apiVersion": "2016-08-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "Tier": "Web"
+            },
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('webFarmName'))]",
+                "siteConfig": {
+                    "defaultDocuments": [
+                        "default.html"
+                    ],
+                    "netFrameworkVersion": "v4.6",
+                    "publishingUsername": "[variables('webDeployUser')]",
+                    "appSettings": [
+                        {
+                            "name": "ApplicationInsights:InstrumentationKey",
+                            "value": "[if(empty(parameters('appInsightsInstrumentationKey')), parameters('appInsightsInstrumentationKey'), json('null'))]"
+                        },
+                        {
+                            "name": "KeyVault:ClientID",
+                            "value": "[parameters('clientId')]"
+                        },
+                        {
+                            "name": "KeyVault:ClientSecret",
+                            "value": "[parameters('clientSecret')]"
+                        }
+                    ],
+                    "use32BitWorkerProcess": false,
+                    "webSocketsEnabled": true,
+                    "alwaysOn": true,
+                    "cors": {
+                        "allowedOrigins": [
+                            "*"
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
