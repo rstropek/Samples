@@ -1,12 +1,6 @@
-﻿using Microsoft.Azure.KeyVault;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RentalManagement.Services
@@ -39,10 +33,42 @@ namespace RentalManagement.Services
             }
         }
 
-        private async Task<string> GetConnectionString()
+        public async Task<string> GetConnectionString()
         {
-            var dbPassword = await keyVaultReader.GetSecretAsync("DbPassword");
-            return $"Server=tcp:{dbServerOptions.Server},1433;Initial Catalog={dbServerOptions.Database};User ID=demo;Password={dbPassword}";
+            var builder = new SqlConnectionStringBuilder();
+
+            #region Build data source
+            var dataSouceBuilder = new StringBuilder(dbServerOptions.Server.Length + 10);
+            if (dbServerOptions.Protocol != null)
+            {
+                // Add protocol if configured
+                dataSouceBuilder.Append(dbServerOptions.Protocol);
+                dataSouceBuilder.Append(':');
+            }
+
+            dataSouceBuilder.Append(dbServerOptions.Server);
+            if (dbServerOptions?.Protocol == "tcp")
+            {
+                // Add port if configured
+                dataSouceBuilder.Append(',');
+                dataSouceBuilder.Append(dbServerOptions.TcpPort ?? 1433);
+            }
+            builder.DataSource = dataSouceBuilder.ToString();
+
+            builder.InitialCatalog = dbServerOptions.Database;
+            builder.UserID = dbServerOptions?.DbUser ?? "demo";
+            #endregion
+
+            if (keyVaultReader != null && keyVaultReader.IsAvailable)
+            {
+                builder.Password = await keyVaultReader.GetSecretAsync("DbPassword");
+            }
+            else
+            {
+                builder.Password = dbServerOptions.DbPassword;
+            }
+
+            return builder.ToString();
         }
     }
 }
