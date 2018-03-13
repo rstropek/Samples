@@ -1,3 +1,4 @@
-run.cmd
+.vscode
+dist
 node_modules
-typings
+dist-test

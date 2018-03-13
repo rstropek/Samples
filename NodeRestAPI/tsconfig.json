@@ -1,12 +1,8 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "noImplicitAny": true,
-        "sourceMap": true,
-        "target": "ES5"
-    },
-    "files": [
-        "server.ts",
-        "client/app.ts"
-    ]
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "outDir": "dist",
+    "sourceMap": true
+  }
 }
