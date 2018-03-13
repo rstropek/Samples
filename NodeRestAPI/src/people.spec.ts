@@ -1,9 +1,10 @@
-/**
- * @license
- * Copyright (c) Ammann Schweiz AG. All Rights Reserved.
- */
 import 'jasmine';
+
 import { getAllPeople } from './people';
+
+// Tip:
+// For testing web apis, consider using a testing framework
+// like supertest (https://github.com/visionmedia/supertest)
 
 describe('people middleware', () => {
   it('returns some people', async (done: DoneFn) => {
