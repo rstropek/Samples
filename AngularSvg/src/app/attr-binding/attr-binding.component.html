@@ -1,0 +1,30 @@
+<h1 class="mat-headline">Data Binding with SVG</h1>
+
+<div fxLayout="column" fxLayoutGap="25px">
+    <h3 class="mat-subheading-2">Attribute Binding</h3>
+    <div fxLayout="column">
+        <mat-form-field>
+            <input matInput type="number" #currentValue placeholder="Current value (0-100)" value="50">
+        </mat-form-field>
+        <svg id="attr-binding" width="150" height="10">
+            <!-- [x2]="currentValue.value * 150 / 100" would lead to an error! -->
+            <line x1="0" y1="5" [attr.x2]="currentValue.value * 150 / 100" y2="5" stroke-dasharray="100 1000" />
+            <line x1="0" y1="5" [attr.x2]="currentValue.value * 150 / 100" y2="5" class="alarm" stroke-dasharray="1000 100" stroke-dashoffset="-100"
+            />
+        </svg>
+    </div>
+
+    <div fxLayout="column">
+        <h3 class="mat-subheading-2">Event Binding</h3>
+        <div fxLayout="column">
+            <svg id="switch" width="25" height="50">
+                <!-- No need for attribute binding when handling events -->
+                <g (click)="toggleSwitch()">
+                    <rect x="1" y="1" width="23" height="45" class="border" />
+                    <rect x="4" y="4" width="17" height="17" class="switch" [class.on]="isOn" />
+                </g>
+            </svg>
+            <p *ngIf="isOn">It's on</p>
+        </div>
+    </div>
+</div>

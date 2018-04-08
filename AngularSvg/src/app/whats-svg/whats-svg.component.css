@@ -1,0 +1,32 @@
+rect.semi-transparent {
+    opacity: 0.5;
+    stroke: greenyellow;
+    stroke-width: 1px;
+    fill: green;
+}
+
+@keyframes drive {
+    50% { 
+        transform: translate(300px); 
+    }
+    100% { 
+        transform: translate(0px); 
+    }
+}
+
+#car-animation path {
+    animation: drive 3s 1s;
+}
+
+#dashing {
+    stroke-width: 10px;
+    stroke: green;
+}
+
+#dashing .alarm {
+    stroke: red;
+}
+
+#dashing path {
+    fill: none;
+}

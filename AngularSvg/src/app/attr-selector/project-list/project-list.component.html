@@ -1,0 +1,34 @@
+<h1 class="mat-headline">SVG Component</h1>
+<h2 class="mat-title">Use attribute selectors...</h2>
+
+<mat-table #table [dataSource]="projects">
+    <ng-container matColumnDef="projectName">
+        <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            {{element.projectName}}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="budget">
+        <mat-header-cell *matHeaderCellDef>Budget</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            {{element.budget | number}}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="costs">
+        <mat-header-cell *matHeaderCellDef>Costs</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            {{element.currentCosts | number}}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="chart">
+        <mat-header-cell *matHeaderCellDef>Chart</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <svg width="150" height="10">
+                <g app-budget-chart [value]="element.currentCosts" [maxValue]="element.budget" [width]="150"></g>
+            </svg>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

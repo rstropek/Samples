@@ -1,0 +1,20 @@
+<div fxLayout="column" fxLayoutGap="25px">
+    <mat-toolbar>
+        <span>Angular and SVG</span>
+        <div class="menu-buttons" fxLayout="row">
+            <button mat-menu-item [matMenuTriggerFor]="appMenu">
+                Scenarios...
+            </button>
+        </div>
+    </mat-toolbar>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+<mat-menu #appMenu="matMenu">
+    <a routerLink="/whats-svg" mat-menu-item>What's SVG?</a>
+    <a routerLink="/attr-binding" mat-menu-item>Data Binding</a>
+    <a routerLink="/animation" mat-menu-item>Animation</a>
+    <a routerLink="/project-list" mat-menu-item>SVG Components</a>
+</mat-menu>

@@ -1,0 +1,23 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.ngx-contextmenu .dropdown-menu {
+    border: solid 1px lightgray;
+    background-color: white;
+    padding: 0;
+}
+.ngx-contextmenu li {
+    display: block;
+    border-top: solid 1px lightgray;
+    text-align: center;
+}
+.ngx-contextmenu li:first-child {
+    border-top:none;
+}
+.ngx-contextmenu a {
+    display: block;
+    padding: 0.5em 1em;
+    font: 400 16px/28px Roboto,"Helvetica Neue",sans-serif;
+}
+.ngx-contextmenu a:hover {
+    background-color:lightgray;
+}

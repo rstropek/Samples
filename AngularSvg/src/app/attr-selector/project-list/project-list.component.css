@@ -1,0 +1,8 @@
+:host >>> line {
+    stroke: green;
+    stroke-width: 10px;
+}
+
+:host >>> line.background-line {
+    stroke: lightgray;
+}

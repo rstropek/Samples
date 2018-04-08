@@ -1,0 +1,23 @@
+#attr-binding line {
+    stroke-width: 10px;
+    stroke: green;
+}
+
+#attr-binding line.alarm {
+    stroke: red;
+}
+
+#switch .border {
+    stroke: darkgray;
+    stroke-width: 2px;
+    fill: white;
+}
+
+#switch .switch {
+    stroke: none;
+    fill: darkgray;
+}
+
+#switch .switch.on {
+    transform: translate(0, 21px);
+}
