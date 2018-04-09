@@ -1,19 +1,19 @@
 <svg:g [contextMenu]="openCloseMenu">
     <g class="silo-fill">
-        <svg:rect x="1" y="15" width="49" height="65" stroke="none" />
-        <svg:path [@fill]="isOpen ? 'open' : 'closed'" d="M10,75 l15,15 l15,-15z" />
+        <rect x="1" [attr.y]="convertToSize(maxFill - fill)" width="49" [attr.height]="convertToSize(fill)" stroke="none" />
+        <path [@fill]="openingState" d="M10,75 l15,15 l15,-15z" />
     </g>
 </svg:g>
 
 <svg:path d="M5,80 H0 V0 H50 V80 h-5" fill="none" stroke="black" transform="translate(0.5, 0.5)" />
 
-<svg:path [@flapStateLeft]="isOpen ? 'open' : 'closed'" d="M25,90 l-10,-10 h-12.5" fill="none" stroke="black" />
-<svg:path [@flapStateRight]="isOpen ? 'open' : 'closed'" d="M25,90 l10,-10 h12.5" fill="none" stroke="black" />
-<svg:line [@materialFlow]="isOpen ? 'open' : 'closed'" x1="25" y1="75" x2="25" y2="125" stroke-width="4" stroke="red" stroke-dasharray="5, 3" />
+<svg:path [@flapStateLeft]="openingState" d="M25,90 l-10,-10 h-12.5" fill="none" stroke="black" />
+<svg:path [@flapStateRight]="openingState" d="M25,90 l10,-10 h12.5" fill="none" stroke="black" />
+<svg:line [@materialFlow]="openingState" x1="25" y1="75" x2="25" y2="125" class="material-flow" stroke-width="4" stroke-dasharray="5, 3" />
 
 <context-menu #openCloseMenu>
     <ng-template contextMenuItem (execute)="toggleFlap()">
-        {{ isOpen ? 'Close' : 'Open' }}
+        {{ openingState == 'open' ? 'Close' : 'Open' }}
     </ng-template>
     <ng-template contextMenuItem>
         Something else...

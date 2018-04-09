@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
+  // Note the attribute selector here. This is necessary because Angular
+  // would otherwise destroy the SVG code by adding an unknown element.
   selector: '[app-budget-chart]',
   template: `
     <svg:line x1="0" y1="5" [attr.x2]="width" y2="5" class="background-line" />

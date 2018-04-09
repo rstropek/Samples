@@ -1,5 +1,5 @@
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: '[app-silo]',
@@ -13,8 +13,8 @@ import {Component, OnInit} from '@angular/core';
       state('closed', style({
         transform: 'translate(0, 0.5px)'
       })),
-      transition('open => closed', animate('200ms ease-in')),
-      transition('closed => open', animate('200ms ease-out'))
+      transition('open => closed', animate('400ms ease-in')),
+      transition('closed => open', animate('400ms ease-out'))
     ]),
     trigger('flapStateRight', [
       state('open', style({
@@ -23,8 +23,8 @@ import {Component, OnInit} from '@angular/core';
       state('closed', style({
         transform: 'translate(0, 0.5px)'
       })),
-      transition('open => closed', animate('200ms ease-in')),
-      transition('closed => open', animate('200ms ease-out'))
+      transition('open => closed', animate('400ms ease-in')),
+      transition('closed => open', animate('400ms ease-out'))
     ]),
     trigger('fill', [
       state('open', style({
@@ -33,8 +33,8 @@ import {Component, OnInit} from '@angular/core';
       state('closed', style({
         transform: 'translate(0, 0px)'
       })),
-      transition('open => closed', animate('200ms ease-in')),
-      transition('closed => open', animate('200ms ease-out'))
+      transition('open => closed', animate('400ms ease-in')),
+      transition('closed => open', animate('400ms ease-out'))
     ]),
     trigger('materialFlow', [
       state('open', style({
@@ -43,15 +43,22 @@ import {Component, OnInit} from '@angular/core';
       state('closed', style({
         opacity: 0
       })),
-      transition('open => closed', animate('200ms ease-in')),
-      transition('closed => open', animate('200ms ease-out'))
+      transition('open => closed', animate('400ms ease-in')),
+      transition('closed => open', animate('400ms ease-out'))
     ])
   ]
 })
 export class SiloComponent {
-  public isOpen: boolean = false;
+  public openingState = 'closed';
 
   public toggleFlap() {
-    this.isOpen = !this.isOpen;
+    this.openingState = (this.openingState == 'open') ? 'closed' : 'open';
+  }
+
+  @Input() maxFill: number = 150;
+  @Input() fill: number = 0;
+
+  convertToSize(fill: number): number {
+    return fill * 80 / this.maxFill;
   }
 }

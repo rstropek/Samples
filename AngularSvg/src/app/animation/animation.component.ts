@@ -6,19 +6,27 @@ import { Component, OnInit } from '@angular/core';
     <h1 class="mat-headline">Animation</h1>
 
     <svg id="silo" width="152" height="122">
-        <g app-silo />
+        <g class="critical" app-silo [fill]="30" [maxFill]="100" />
+        <g class="ok" app-silo [fill]="75" [maxFill]="100" transform="translate(75, 0)" />
     </svg>
   `,
   styles: [`
-  :host >>> .silo-fill {
+  :host >>> .critical .silo-fill {
     fill: red;
-  }`]
-})
-export class AnimationComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
   }
 
+  :host >>> .critical .material-flow {
+    stroke: red;
+  }
+
+  :host >>> .ok .silo-fill {
+    fill: green;
+  }
+
+  :host >>> .ok .material-flow {
+    stroke: green;
+  }
+`]
+})
+export class AnimationComponent {
 }
