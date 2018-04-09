@@ -7,10 +7,10 @@
             <input matInput type="number" #currentValue placeholder="Current value (0-100)" value="50">
         </mat-form-field>
         <svg id="attr-binding" width="150" height="10">
-            <!-- [x2]="currentValue.value * 150 / 100" would lead to an error! -->
-            <line x1="0" y1="5" [attr.x2]="currentValue.value * 150 / 100" y2="5" stroke-dasharray="100 1000" />
-            <line x1="0" y1="5" [attr.x2]="currentValue.value * 150 / 100" y2="5" class="alarm" stroke-dasharray="1000 100" stroke-dashoffset="-100"
-            />
+            <!-- Note that [x2]="..." would lead to an error! -->
+            <line x1="0" y1="5" [attr.x2]="convertValueToScale(currentValue.value, 100, 150)" y2="5" stroke-dasharray="100 1000" />
+            <line x1="0" y1="5" [attr.x2]="convertValueToScale(currentValue.value, 100, 150)" y2="5" class="alarm" stroke-dasharray="1000 100"
+                stroke-dashoffset="-100" />
         </svg>
     </div>
 
@@ -21,6 +21,7 @@
                 <!-- No need for attribute binding when handling events -->
                 <g (click)="toggleSwitch()">
                     <rect x="1" y="1" width="23" height="45" class="border" />
+                    <!-- Note Angular class binding in SVG -->
                     <rect x="4" y="4" width="17" height="17" class="switch" [class.on]="isOn" />
                 </g>
             </svg>

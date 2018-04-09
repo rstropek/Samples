@@ -35,6 +35,12 @@
         <!-- Image source: https://www.svgrepo.com/svg/4303/hatchback-car-silhouette -->
         <svg id="car-animation" width="250" height="50">
             <g transform="translate(0 -37.5) scale(0.25)">
+                <!-- 
+                    Note animation of path in .css file.
+                    Other options beside CSS animations would be SMIL (SVG Animations), Web Animations API (see
+                    also https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) or libraries like
+                    SnapSVG (see also http://snapsvg.io/).
+                -->
                 <path d="M409.109,211.45c-5.282-0.368-9.842-0.683-12.11-1.326c-15.926-4.521-72.646-7.222-78.714-7.506
                 c-9.75-2.737-18.262-8.791-28.088-15.77c-19.841-14.106-44.539-31.67-94.121-32.704l-3.438-0.032
                 c-23.976,0-50.706,5.025-76,11.838c-11.163-4.27-29.551-10.818-39.834-11.814c-5.188-0.495-7.843,2.038-8.938,3.603
@@ -67,6 +73,7 @@
     <div fxLayout="column">
         <h3 class="mat-subheading-2">Dashed Lines</h3>
         <svg id="dashing" width="150" height="72.5">
+            <!-- See also https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-dasharray for details -->
             <line x1="0" y1="5" x2="150" y2="5" />
             <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 12.5)" stroke-dasharray="5 5" />
             <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 25.0)" stroke-dasharray="10 5" />

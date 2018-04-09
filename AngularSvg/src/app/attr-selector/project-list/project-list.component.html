@@ -24,6 +24,10 @@
         <mat-header-cell *matHeaderCellDef>Chart</mat-header-cell>
         <mat-cell *matCellDef="let element">
             <svg width="150" height="10">
+                <!-- 
+                    Using a regular Angular component does not work as it inserts an unknown element into the SVG code:
+                    <app-broken-budget-chart [value]="element.currentCosts" [maxValue]="element.budget" [width]="150"></app-broken-budget-chart>
+                -->
                 <g app-budget-chart [value]="element.currentCosts" [maxValue]="element.budget" [width]="150"></g>
             </svg>
         </mat-cell>

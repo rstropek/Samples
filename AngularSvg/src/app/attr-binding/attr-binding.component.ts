@@ -12,4 +12,8 @@ export class AttrBindingComponent {
   {
     this.isOn = !this.isOn;
   }
+
+  convertValueToScale(value: number, maxValue: number, width: number): number {
+    return value * width / maxValue;
+  }
 }

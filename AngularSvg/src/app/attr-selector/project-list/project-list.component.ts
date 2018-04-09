@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 export interface IProjectBudgetStatus {
   projectName: string;
@@ -16,10 +16,11 @@ export class ProjectListComponent {
   public displayedColumns = ['projectName', 'budget', 'costs', 'chart'];
 
   constructor() {
+    // Generate some random demo data
     for (let i = 0; i < 20; i++) {
       this.projects.push({
-        projectName: `Project ${i}`, 
-        budget: Math.ceil(Math.random() * 10) * 10000, 
+        projectName: `Project ${i}`,
+        budget: Math.ceil(Math.random() * 10) * 10000,
         currentCosts: Math.ceil(Math.random() * 10) * 10000
       });
     }
