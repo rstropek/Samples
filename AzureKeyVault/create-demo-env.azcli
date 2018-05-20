@@ -1,0 +1,93 @@
+#!/bin/sh
+
+# Prepare Azure CLI environment
+az login
+az account set --subscription "Microsoft Azure Sponsorship"
+az provider register -n Microsoft.KeyVault
+
+# Get access token for Key Vault using Azure CLI
+# Note that this is an option for programming languages that does not support
+# a ready-made package for MSI like C# does (Microsoft.Azure.Services.AppAuthentication).
+# See also Node sample in NodeDemo/server.js
+az account get-access-token --resource "https://vault.azure.net"
+
+# Some naming constants
+export RG=techorama-msi
+export PLAN=msi-demo-plan
+export APP=msi-demo-app
+export VAULT=msi-demo-vault
+export KEY=API-Key
+export VM=techorama-msi-demo
+
+# Create Resource Group if not exists
+if [ "$(az group exists --resource-group $RG)" == "false" ]
+then
+    az group create --name $RG --location westeurope
+fi
+
+# === App Service demo =================================================================
+# For details read https://docs.microsoft.com/en-us/azure/app-service/app-service-managed-service-identity?context=azure/active-directory/context/msi-context
+
+# Create App Service Plan if not exists
+# Note: MSIs for Linux plans currently not supported
+if [ "$(az appservice plan list --resource-group $RG --query "[?name=='$PLAN']")" == "[]" ]
+then
+    az appservice plan create --name $PLAN --resource-group $RG --sku S1
+fi
+
+# Create web app and assign MSI
+if [ "$(az webapp list --resource-group $RG --query "[?name=='$APP']")" == "[]" ]
+then
+    az webapp create --name $APP --resource-group $RG --plan $PLAN
+    az webapp identity assign --name $APP --resource-group $RG
+fi
+
+# Display the details about the created service principal
+az ad sp list --display-name $APP
+
+# Get Object ID of Service Principal and store it for later use
+export OID=$(az ad sp list --display-name $APP --query "[:1].objectId" --out tsv)
+
+# Create Key Vault if not exists and store a sample secret
+if [ "$(az keyvault list --resource-group $RG --query "[?name=='$VAULT']")" == "[]" ]
+then
+    az keyvault create --name $VAULT --resource-group $RG --location westeurope
+    az keyvault secret set --vault-name $VAULT --name $KEY --value 'P@ssw0rd!123'
+fi
+
+# Allow app (=Service Principal) to read secret from Key Vault
+az keyvault set-policy --name $VAULT --object-id $OID --secret-permissions get
+az keyvault secret show --vault-name $VAULT --name $KEY
+
+# === VM demo =====================================================================
+# For detailed information read https://docs.microsoft.com/en-us/azure/active-directory/managed-service-identity/tutorial-linux-vm-access-nonaad
+
+if [ "$(az vm show --resource-group $RG --name $VM)" == "" ]
+then
+    # Create VM
+    az network vnet create --resource-group $RG --name myVnet --address-prefix 192.168.0.0/16 \
+        --subnet-name mySubnet --subnet-prefix 192.168.1.0/24
+    az network public-ip create --resource-group $RG --name myPublicIP --dns-name $VM
+    az network nic create --resource-group $RG --name myNic --vnet-name myVnet --subnet mySubnet \
+        --public-ip-address myPublicIP
+    az vm create --resource-group $RG --name $VM --location westeurope --nics myNic --image UbuntuLTS \
+        --admin-username rainer --admin-password "P@ssw0rd!123"
+
+    # Assign MSI to VM
+    az vm identity assign --resource-group $RG --name $VM
+
+    # Allow VM MSI to read secret
+    export VMOID=$(az ad sp list --display-name $VM --query "[:1].objectId" --out tsv)
+    az keyvault set-policy --name $VAULT --object-id $VMOID --secret-permissions get
+fi
+
+# SSH into VM and run the folling statements to demo getting access token for Key Vault
+# Note that we get the token from the Azure Instance Metadata Service (IMDS) identity endpoint.
+# This is the recommended way of retrieving an access token.
+
+# sudo apt-get update
+# sudo apt-get install -y curl
+# curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true
+# curl 'https://msi-demo-vault.vault.azure.net/secrets/API-Key?api-version=2016-10-01' -H "Authorization: Bearer eyJ0..."
+
+
