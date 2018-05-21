@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^2.2.4"
+    "@types/mongodb": "^3.0.18",
+    "mongodb": "^3.0.0",
+    "typescript": "^2.8.3"
   }
 }

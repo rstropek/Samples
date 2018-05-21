@@ -1,9 +1,0 @@
-{
-  "dependencies": {},
-  "devDependencies": {
-    "mongodb": "registry:npm/mongodb#2.1.0+20160527161729"
-  },
-  "globalDevDependencies": {
-    "node": "registry:dt/node#6.0.0+20160709114037"
-  }
-}
