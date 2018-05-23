@@ -12,12 +12,12 @@ az provider register -n Microsoft.KeyVault
 az account get-access-token --resource "https://vault.azure.net"
 
 # Some naming constants
-export RG=techorama-msi
-export PLAN=msi-demo-plan
-export APP=msi-demo-app
-export VAULT=msi-demo-vault
+export RG=techorama-msi-live
+export PLAN=msi-demo-plan-live
+export APP=msi-demo-app-live
+export VAULT=msi-demo-vault-live
 export KEY=API-Key
-export VM=techorama-msi-demo
+export VM=techorama-msi-demo-live
 
 # Create Resource Group if not exists
 if [ "$(az group exists --resource-group $RG)" == "false" ]
@@ -42,6 +42,8 @@ then
     az webapp identity assign --name $APP --resource-group $RG
 fi
 
+# Show assigned identity for web app in Azure portal
+
 # Display the details about the created service principal
 az ad sp list --display-name $APP
 
@@ -51,6 +53,8 @@ export OID=$(az ad sp list --display-name $APP --query "[:1].objectId" --out tsv
 # Create Key Vault if not exists and store a sample secret
 if [ "$(az keyvault list --resource-group $RG --query "[?name=='$VAULT']")" == "[]" ]
 then
+    # Note: Seperate Key Vaults for stages (dev, test, prod, etc.)
+
     az keyvault create --name $VAULT --resource-group $RG --location westeurope
     az keyvault secret set --vault-name $VAULT --name $KEY --value 'P@ssw0rd!123'
 fi
@@ -58,6 +62,8 @@ fi
 # Allow app (=Service Principal) to read secret from Key Vault
 az keyvault set-policy --name $VAULT --object-id $OID --secret-permissions get
 az keyvault secret show --vault-name $VAULT --name $KEY
+
+# While creating the VM, demo *NetCoreDemo* locally and in the cloud
 
 # === VM demo =====================================================================
 # For detailed information read https://docs.microsoft.com/en-us/azure/active-directory/managed-service-identity/tutorial-linux-vm-access-nonaad
@@ -71,7 +77,7 @@ then
     az network nic create --resource-group $RG --name myNic --vnet-name myVnet --subnet mySubnet \
         --public-ip-address myPublicIP
     az vm create --resource-group $RG --name $VM --location westeurope --nics myNic --image UbuntuLTS \
-        --admin-username rainer --admin-password "P@ssw0rd!123"
+        --admin-username rainer --admin-password Passw0rd!123
 
     # Assign MSI to VM
     az vm identity assign --resource-group $RG --name $VM
@@ -86,8 +92,6 @@ fi
 # This is the recommended way of retrieving an access token.
 
 # sudo apt-get update
-# sudo apt-get install -y curl
-# curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true
-# curl 'https://msi-demo-vault.vault.azure.net/secrets/API-Key?api-version=2016-10-01' -H "Authorization: Bearer eyJ0..."
-
-
+# sudo apt-get install -y curl jq
+# curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true | jq .
+# curl 'https://msi-demo-vault.vault.azure.net/secrets/API-Key?api-version=2016-10-01' -H "Authorization: Bearer eyJ0eXAiOiJKV..." | jq .
