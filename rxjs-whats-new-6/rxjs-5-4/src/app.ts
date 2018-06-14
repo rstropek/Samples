@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { timer } from 'rxjs/observable/timer';
-import { of } from 'rxjs/observable/of';
+import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/take';
@@ -24,7 +24,7 @@ console.log('\x1Bc');
 })();
 
 (() => {
-    of(1, 2, 3, 4)
+    Observable.from([1, 2, 3, 4])
         .filter(n => n % 2 == 0)
         .map(n => n * n)
         .subscribe(n => console.log(n));
