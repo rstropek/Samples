@@ -62,7 +62,8 @@ npm start
 
 ## Synchronous Error Handling
 
-`try/catch` can no longer catch synchronously thrown errors. You need to specify e.g. an error callback.
+* `try/catch` can no longer catch synchronously thrown errors. You need to specify e.g. an error callback.
+* BTW: Note new `concat` creation method, no longer a `concat`-operator (simplification)
 
 ### Demo
 
