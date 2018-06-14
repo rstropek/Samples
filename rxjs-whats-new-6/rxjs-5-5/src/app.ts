@@ -8,6 +8,9 @@ import { take } from 'rxjs/operators/take';
 import { tap } from 'rxjs/operators/tap';
 import { _throw } from 'rxjs/observable/throw';
 
+// Alternative:
+// import { filter, map} from 'rxjs/operators';
+
 // Clear screen
 console.log('\x1Bc');
 
@@ -16,8 +19,8 @@ console.log('\x1Bc');
         observer.next(1);
         observer.next(2);
         setTimeout(() => {
-        observer.next(3);
-        observer.complete();
+            observer.next(3);
+            observer.complete();
         }, 1000);
     });
     observable
@@ -29,12 +32,19 @@ console.log('\x1Bc');
     of(1, 2, 3, 4)
         .pipe(filter(n => n % 2 == 0), map(n => n * n))
         .subscribe(n => console.log(n));
+
+    const removeEven = () => (source: Observable<number>) => source.pipe(filter(n => n % 2 !== 0));
+
+    of(1, 2, 3, 4)
+        .pipe(removeEven(), map(n => n * n))
+        .subscribe(n => console.log(n));
 }); //();
 
 (() => {
     console.log("Starting count down:");
     timer(0, 1000).pipe(map(n => 5 - n), take(6)).subscribe(n => console.log(n));
 }); //();
+
 
 (() => {
     try {
