@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { timer } from 'rxjs/observable/timer';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/take';
@@ -28,12 +28,12 @@ console.log('\x1Bc');
         .filter(n => n % 2 == 0)
         .map(n => n * n)
         .subscribe(n => console.log(n));
-}); //();
+})();
 
 (() => {
     console.log("Starting count down:");
-    timer(0, 1000)
+    Observable.timer(0, 1000)
         .map(n => 5 - n)
         .take(6)
         .subscribe(n => console.log(n));
-}); //();
+})();
