@@ -1,0 +1,20 @@
+{
+  "name": "rxjs-5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "concurrently \"tsc --watch\" \"nodemon ./dist/app.js\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.17.5",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "rxjs": "~5.4.0"
+  }
+}
