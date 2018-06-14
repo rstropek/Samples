@@ -1,10 +1,12 @@
 import { Observable } from 'rxjs/Observable';
 import { timer } from 'rxjs/observable/timer';
+import { concat } from 'rxjs/observable/concat';
 import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operators/map';
 import { filter } from 'rxjs/operators/filter';
 import { take } from 'rxjs/operators/take';
 import { tap } from 'rxjs/operators/tap';
+import { _throw } from 'rxjs/observable/throw';
 
 // Clear screen
 console.log('\x1Bc');
@@ -21,7 +23,7 @@ console.log('\x1Bc');
     observable
         .pipe(tap(n => console.log(`  Looking into ${n}`)))
         .subscribe(n => console.log(n));
-})();
+}); //();
 
 (() => {
     of(1, 2, 3, 4)
@@ -32,4 +34,12 @@ console.log('\x1Bc');
 (() => {
     console.log("Starting count down:");
     timer(0, 1000).pipe(map(n => 5 - n), take(6)).subscribe(n => console.log(n));
+}); //();
+
+(() => {
+    try {
+        concat(of(1), _throw('Something went wrong')).subscribe(n => console.log(n));
+    } catch (ex) {
+        console.error(ex);
+    }
 }); //();

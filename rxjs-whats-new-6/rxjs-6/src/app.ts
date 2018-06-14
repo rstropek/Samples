@@ -1,4 +1,4 @@
-import { Observable, timer, of } from 'rxjs';
+import { Observable, timer, of, concat, throwError } from 'rxjs';
 import { map, filter, take, tap } from 'rxjs/operators';
 
 // Clear screen
@@ -27,4 +27,13 @@ console.log('\x1Bc');
 (() => {
     console.log("Starting count down:");
     timer(0, 1000).pipe(map(n => 5 - n), take(6)).subscribe(n => console.log(n));
-})();
+}); //();
+
+
+(() => {
+    try {
+        concat(of(1), throwError('Something went wrong')).subscribe(n => console.log(n));
+    } catch (ex) {
+        console.error(ex);
+    }
+}); //();
