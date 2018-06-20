@@ -1,0 +1,18 @@
+<h1 class="mat-headline">LUIS Demo</h1>
+
+<div fxLayout="row" style="max-height: 50px">
+  <mat-form-field fxFlex="1 1 auto">
+    <input matInput type="text" placeholder="Enter query here..." [(ngModel)]="query" [matAutocomplete]="auto" />
+  </mat-form-field>
+  <mat-autocomplete #auto="matAutocomplete">
+      <mat-optgroup *ngFor="let q of queries" [label]="q.description">
+        <mat-option *ngFor="let o of q.options" [value]="o">
+          {{o}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-autocomplete>
+
+  <button type="submit" mat-button color="accent" (click)="search()" fxFlex="0 0 auto">Search</button>
+</div>
+
+<pre *ngIf="queryResult"><code highlight [code]="queryResult | async | json"></code></pre>

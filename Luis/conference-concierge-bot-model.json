@@ -1,0 +1,770 @@
+{
+  "luis_schema_version": "3.0.0",
+  "versionId": "0.1",
+  "name": "Conference Concierge",
+  "desc": "Get information about a conference",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "Feedback"
+    },
+    {
+      "name": "Food and Drinks"
+    },
+    {
+      "name": "Full Text Search"
+    },
+    {
+      "name": "Help"
+    },
+    {
+      "name": "Next Sessions"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "Program"
+    },
+    {
+      "name": "Venue Location"
+    }
+  ],
+  "entities": [
+    {
+      "name": "Feedback Topic",
+      "roles": []
+    },
+    {
+      "name": "Places.DestinationPlaceType",
+      "inherits": {
+        "domain_name": "Places",
+        "model_name": "DestinationPlaceType"
+      },
+      "roles": []
+    },
+    {
+      "name": "Places.MealType",
+      "inherits": {
+        "domain_name": "Places",
+        "model_name": "MealType"
+      },
+      "roles": []
+    },
+    {
+      "name": "Topic",
+      "roles": []
+    }
+  ],
+  "composites": [],
+  "closedLists": [
+    {
+      "name": "Food type",
+      "subLists": [
+        {
+          "canonicalForm": "coffee",
+          "list": []
+        },
+        {
+          "canonicalForm": "tea",
+          "list": []
+        },
+        {
+          "canonicalForm": "snack",
+          "list": [
+            "snacks"
+          ]
+        },
+        {
+          "canonicalForm": "food",
+          "list": []
+        },
+        {
+          "canonicalForm": "drink",
+          "list": [
+            "drinks",
+            "soda",
+            "sodas"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "Quality",
+      "subLists": [
+        {
+          "canonicalForm": "great",
+          "list": [
+            "awesome",
+            "good",
+            "wonderful",
+            "amazing",
+            "excellent",
+            "nice"
+          ]
+        },
+        {
+          "canonicalForm": "bad",
+          "list": [
+            "disgusting",
+            "terrible",
+            "very bad",
+            "aweful",
+            "poor"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "Track",
+      "subLists": [
+        {
+          "canonicalForm": "developer",
+          "list": [
+            "development"
+          ]
+        },
+        {
+          "canonicalForm": "sales",
+          "list": []
+        },
+        {
+          "canonicalForm": "project management",
+          "list": []
+        },
+        {
+          "canonicalForm": "cloud computing",
+          "list": []
+        },
+        {
+          "canonicalForm": "machine learning",
+          "list": []
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "patternAnyEntities": [
+    {
+      "name": "Session Time",
+      "explicitList": [],
+      "roles": [
+        "Begin",
+        "End"
+      ]
+    },
+    {
+      "name": "Unbounded Feedback Topic",
+      "explicitList": [],
+      "roles": []
+    }
+  ],
+  "regex_entities": [
+    {
+      "name": "Room",
+      "regexPattern": "[A-D]\\d{2}",
+      "roles": []
+    }
+  ],
+  "prebuiltEntities": [
+    {
+      "name": "datetimeV2",
+      "roles": []
+    },
+    {
+      "name": "number",
+      "roles": []
+    },
+    {
+      "name": "ordinal",
+      "roles": []
+    }
+  ],
+  "model_features": [
+    {
+      "name": "Upcoming",
+      "mode": true,
+      "words": "upcoming,next,coming,following",
+      "activated": true
+    },
+    {
+      "name": "Help",
+      "mode": true,
+      "words": "help,support,assistance",
+      "activated": true
+    },
+    {
+      "name": "Food",
+      "mode": true,
+      "words": "food,drink,eat,meals,eating,drinks,coffee,snacks,a snack,beverages,tea,drinking,desserts,sodas,soda,dessert,sweets",
+      "activated": true
+    },
+    {
+      "name": "Session",
+      "mode": true,
+      "words": "session,talk,presentation,seminar,workshop",
+      "activated": true
+    },
+    {
+      "name": "Venue",
+      "mode": true,
+      "words": "conference venue,conference hotel,venue,conference center",
+      "activated": true
+    }
+  ],
+  "regex_features": [],
+  "patterns": [
+    {
+      "pattern": "sessions in {Room} between {Session Time:Begin} and {Session Time:End}",
+      "intent": "Next Sessions"
+    },
+    {
+      "pattern": "sessions between {Session Time:Begin} and {Session Time:End}",
+      "intent": "Next Sessions"
+    }
+  ],
+  "utterances": [
+    {
+      "text": "address of the conference",
+      "intent": "Venue Location",
+      "entities": []
+    },
+    {
+      "text": "are buses or trains running from the stadium at the end of the game ?",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 37,
+          "endPos": 43
+        }
+      ]
+    },
+    {
+      "text": "at what time will be lunch served",
+      "intent": "Program",
+      "entities": [
+        {
+          "entity": "Places.MealType",
+          "startPos": 21,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "buy a ticket",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "call a cab for me",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "call someone",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "can i walk to denny ' s from the bus stop",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 33,
+          "endPos": 40
+        }
+      ]
+    },
+    {
+      "text": "can you tell me how long will it take me to drive from my house to u district",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 58,
+          "endPos": 62
+        }
+      ]
+    },
+    {
+      "text": "cancel my ticket",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chilis from work please",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 12,
+          "endPos": 15
+        }
+      ]
+    },
+    {
+      "text": "find directions from work to home",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 21,
+          "endPos": 24
+        }
+      ]
+    },
+    {
+      "text": "find information about a03",
+      "intent": "Full Text Search",
+      "entities": [
+        {
+          "entity": "Topic",
+          "startPos": 23,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "get a taxi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "home improvement store 10 minutes from home",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 0,
+          "endPos": 3
+        },
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 39,
+          "endPos": 42
+        }
+      ]
+    },
+    {
+      "text": "home to arbys please",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 0,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "how can i give feedback",
+      "intent": "Feedback",
+      "entities": []
+    },
+    {
+      "text": "how can you help me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "how do i get to the conference venue",
+      "intent": "Venue Location",
+      "entities": []
+    },
+    {
+      "text": "how many visitors are at the conference",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "how to leave the garage ?",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 17,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "i am freezing",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i am hungry",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "i am looking for coffee",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "i am starving",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "i am thirsty",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "i have feedback about sessions",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 22,
+          "endPos": 29
+        }
+      ]
+    },
+    {
+      "text": "i have feedback about the temperature",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 26,
+          "endPos": 36
+        }
+      ]
+    },
+    {
+      "text": "i need help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "i need something to drink",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "i want to give feedback",
+      "intent": "Feedback",
+      "entities": []
+    },
+    {
+      "text": "i want to give feedback about a session",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 30,
+          "endPos": 38
+        }
+      ]
+    },
+    {
+      "text": "i want to organizers give feedback about coffee",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 41,
+          "endPos": 46
+        }
+      ]
+    },
+    {
+      "text": "i want to tell you about the quality of the tea",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 44,
+          "endPos": 46
+        }
+      ]
+    },
+    {
+      "text": "is tom here",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "it is much too cold",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "it is much too hot in here",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "lead me to the conference",
+      "intent": "Venue Location",
+      "entities": []
+    },
+    {
+      "text": "let me give feedback about the program",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 31,
+          "endPos": 37
+        }
+      ]
+    },
+    {
+      "text": "let me provide feedback",
+      "intent": "Feedback",
+      "entities": []
+    },
+    {
+      "text": "lookup jane smith",
+      "intent": "Full Text Search",
+      "entities": [
+        {
+          "entity": "Topic",
+          "startPos": 7,
+          "endPos": 16
+        }
+      ]
+    },
+    {
+      "text": "navigate to the conference venue",
+      "intent": "Venue Location",
+      "entities": []
+    },
+    {
+      "text": "please help me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "program of day 1",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "program of the 1st day",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "query for deep learning",
+      "intent": "Full Text Search",
+      "entities": [
+        {
+          "entity": "Topic",
+          "startPos": 10,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "search for azure",
+      "intent": "Full Text Search",
+      "entities": [
+        {
+          "entity": "Topic",
+          "startPos": 11,
+          "endPos": 15
+        }
+      ]
+    },
+    {
+      "text": "session on the 1st day",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "show me the conference program",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "show me the traffic from work to home",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 25,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "show me the traffic right now from work to naperville",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 35,
+          "endPos": 38
+        }
+      ]
+    },
+    {
+      "text": "tell me a joke",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tell me a story",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tell me how you can assist me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "tell me something about john doe",
+      "intent": "Full Text Search",
+      "entities": [
+        {
+          "entity": "Topic",
+          "startPos": 24,
+          "endPos": 31
+        }
+      ]
+    },
+    {
+      "text": "tell me the upcoming sessions in b03",
+      "intent": "Next Sessions",
+      "entities": []
+    },
+    {
+      "text": "the coffee tastes great",
+      "intent": "Feedback",
+      "entities": []
+    },
+    {
+      "text": "the dinner was awesome",
+      "intent": "Feedback",
+      "entities": [
+        {
+          "entity": "Feedback Topic",
+          "startPos": 4,
+          "endPos": 9
+        }
+      ]
+    },
+    {
+      "text": "weaver st from home",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Places.DestinationPlaceType",
+          "startPos": 15,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "what are my options",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what are the next sessions",
+      "intent": "Next Sessions",
+      "entities": []
+    },
+    {
+      "text": "what can i ask you",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what is the next session in a01",
+      "intent": "Next Sessions",
+      "entities": []
+    },
+    {
+      "text": "what is the program in the development track",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "what questions can you answer",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what's to see next in a01",
+      "intent": "Next Sessions",
+      "entities": []
+    },
+    {
+      "text": "what's to see on day 1",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "what's to see on day 1 in the sales track",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "whats up on day 1",
+      "intent": "Program",
+      "entities": []
+    },
+    {
+      "text": "when will be dinner",
+      "intent": "Program",
+      "entities": [
+        {
+          "entity": "Places.MealType",
+          "startPos": 13,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "where can i find a vending machine",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "where can i find drinks",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "where can i rate sessions",
+      "intent": "Feedback",
+      "entities": []
+    },
+    {
+      "text": "where is the conference",
+      "intent": "Venue Location",
+      "entities": []
+    },
+    {
+      "text": "where is the feedback form",
+      "intent": "Feedback",
+      "entities": []
+    },
+    {
+      "text": "where to get coffee",
+      "intent": "Food and Drinks",
+      "entities": []
+    },
+    {
+      "text": "where to go next",
+      "intent": "Next Sessions",
+      "entities": []
+    },
+    {
+      "text": "you are stupid",
+      "intent": "None",
+      "entities": []
+    }
+  ]
+}
