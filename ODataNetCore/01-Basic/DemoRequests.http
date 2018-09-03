@@ -1,0 +1,8 @@
+GET http://localhost:5000/odata/Customers
+
+###
+GET http://localhost:5000/odata/Customers?$top=1
+
+###
+GET http://localhost:5000/odata/$metadata
+Accept: application/json
