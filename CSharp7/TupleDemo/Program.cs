@@ -60,6 +60,15 @@ namespace ConsoleApplication
             var result2 = Analyze2();
             Console.WriteLine($"Sum: {result2.Item1}, Count: {result2.Item2}");
 
+            // Member names are inferred from right-side expression. This is a new
+            // feature in C# 7.1. Open bug: Renaming of variable does not rename
+            // references to inferred tuple member names (see also
+            // https://github.com/dotnet/roslyn/issues/20116).
+            var FirstName = "Foo";
+            var LastName = "Bar";
+            var result3 = (FirstName, LastName);
+            Console.WriteLine($"First name: {result3.FirstName}, last name: {result3.LastName}");
+
             // Deconstruction
             (var mySum, var myCount) = Analyze();
             // Alternate syntaxes:
