@@ -1,4 +1,4 @@
-GET https://msi-demo-vault.vault.azure.net/secrets/API-Key?api-version=2016-10-01
+GET https://msi-basta-vault-live.vault.azure.net/secrets/API-Key?api-version=2016-10-01
 Authorization: Bearer eyJ0eXAiOiJKV...
 Content-Type: application/json
 Accept: application/json
