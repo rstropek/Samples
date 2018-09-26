@@ -6,18 +6,20 @@ az account set --subscription "Microsoft Azure Sponsorship"
 az provider register -n Microsoft.KeyVault
 
 # Get access token for Key Vault using Azure CLI
-# Note that this is an option for programming languages that does not support
+# Note that this is an option for programming languages that do not support
 # a ready-made package for MSI like C# does (Microsoft.Azure.Services.AppAuthentication).
 # See also Node sample in NodeDemo/server.js
 az account get-access-token --resource "https://vault.azure.net"
 
+# Show Account Selection in Visual Studio Options
+
 # Some naming constants
-export RG=techorama-msi-live
+export RG=basta-msi-live
 export PLAN=msi-demo-plan-live
-export APP=msi-demo-app-live
-export VAULT=msi-demo-vault-live
+export APP=msi-basta-demo-app-live
+export VAULT=msi-basta-vault-live
 export KEY=API-Key
-export VM=techorama-msi-demo-live
+export VM=basta-msi-demo-live
 
 # Create Resource Group if not exists
 if [ "$(az group exists --resource-group $RG)" == "false" ]
@@ -77,7 +79,7 @@ then
     az network nic create --resource-group $RG --name myNic --vnet-name myVnet --subnet mySubnet \
         --public-ip-address myPublicIP
     az vm create --resource-group $RG --name $VM --location westeurope --nics myNic --image UbuntuLTS \
-        --admin-username rainer --admin-password Passw0rd!123
+        --admin-username rainer --admin-password Passzw0rd-123
 
     # Assign MSI to VM
     az vm identity assign --resource-group $RG --name $VM
@@ -94,4 +96,4 @@ fi
 # sudo apt-get update
 # sudo apt-get install -y curl jq
 # curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true | jq .
-# curl 'https://msi-demo-vault.vault.azure.net/secrets/API-Key?api-version=2016-10-01' -H "Authorization: Bearer eyJ0eXAiOiJKV..." | jq .
+# curl 'https://msi-basta-vault-live.vault.azure.net/secrets/API-Key?api-version=2016-10-01' -H "Authorization: Bearer eyJ0eXAiOiJKV..." | jq .

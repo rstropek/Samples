@@ -24,7 +24,7 @@ namespace NetCoreDemo.Controllers
             // Use MSI to get a KeyVaultClient
             using (var kvClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback)))
             {
-                var secret = await kvClient.GetSecretAsync("https://msi-demo-vault.vault.azure.net/secrets/API-Key");
+                var secret = await kvClient.GetSecretAsync("https://msi-basta-vault-live.vault.azure.net/secrets/API-Key");
 
                 return Ok(new
                 {
