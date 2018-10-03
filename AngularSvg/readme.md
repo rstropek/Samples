@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This sample has originally been developed for [*Magdeburger Dev Days*](https://md-devdays.de/) 2018. I refreshed and extended the material for *Techorama Netherlands 2018*. The goal is to show how to use SVG + WebSockets in Angular projects.
+This sample has originally been developed for [*Magdeburger Dev Days*](https://md-devdays.de/) 2018. I refreshed and extended the material for [*Techorama Netherlands 2018*](https://techorama.nl). The goal is to show how to use SVG + WebSockets in Angular projects.
 
 ## Demo Checklist
 
