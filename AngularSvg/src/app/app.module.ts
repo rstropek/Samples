@@ -13,11 +13,12 @@ import {BudgetChartComponent, BrokenBudgetChartComponent} from './attr-selector/
 import {ProjectListComponent} from './attr-selector/project-list/project-list.component';
 import {IotModule} from './iot/iot.module';
 import {WhatsSvgComponent} from './whats-svg/whats-svg.component';
+import { SiloWithWebsocketComponent } from './silo-with-websocket/silo-with-websocket.component';
 
 @NgModule({
   declarations: [
     AppComponent, WhatsSvgComponent, AttrBindingComponent, ProjectListComponent,
-    BudgetChartComponent, AnimationComponent, BrokenBudgetChartComponent
+    BudgetChartComponent, AnimationComponent, BrokenBudgetChartComponent, SiloWithWebsocketComponent
   ],
   imports: [
     BrowserModule, AppRoutingModule, FlexLayoutModule, MatToolbarModule,

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This sample has originally been developed for [*Magdeburger Dev Days*](https://md-devdays.de/) 2018. The goal is to show how to use SVG in Angular projects.
+This sample has originally been developed for [*Magdeburger Dev Days*](https://md-devdays.de/) 2018. I refreshed and extended the material for *Techorama Netherlands 2018*. The goal is to show how to use SVG + WebSockets in Angular projects.
 
 ## Demo Checklist
 
@@ -37,8 +37,15 @@ The component in [*budget-chart.component.ts*](src/app/attr-selector/budget-char
 
 ### Animations
 
-The last sample brings everything together. It implements a silo element in a ficticious IoT visualization library. The element [*silo*](src/app/iot/silo) is a reusable component, uses Angular animations and supports context menus.
+The next sample brings everything together. It implements a silo element in a ficticious IoT visualization library. The element [*silo*](src/app/iot/silo) is a reusable component, uses Angular animations and supports context menus.
 
 * Context menu with [*ngx-contextmenu*](https://github.com/isaacplmann/ngx-contextmenu/)
 * Use of [Angular Animations](https://angular.io/guide/animations) with SVG
 * Using the component in a parent view (see [*animation.component.ts*](src/app/animation/animation.component.ts))
+
+### WebSockets
+
+The last sample demonstrates the integration of SVG+Angular+Websockets. A demo server is regularly sending the fill state of a silo using WebSockets.
+
+* Run [demo WebSockets server](https://github.com/rstropek/Samples/tree/master/AngularSvgServer) using `npx ts-node timer-broadcast.ts`
+* See how silo fill in [*silo-with-websocket.component.ts*](src/app/silo-with-websocket.component/silo-with-websocket.component.ts) changes based on data binding and incoming WebSocket messages

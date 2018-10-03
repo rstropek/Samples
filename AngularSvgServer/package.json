@@ -1,0 +1,16 @@
+{
+  "name": "sample-server",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "author": "Rainer Stropek",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^6.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.1.1",
+    "@types/ws": "^6.0.1",
+    "ts-node": "^7.0.1"
+  }
+}
