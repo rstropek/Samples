@@ -4,7 +4,8 @@
         "target": "es2015",
         "noImplicitAny": false,
         "sourceMap": false,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "outDir": "dist"
     },
     "exclude": [
         "node_modules"

@@ -31,7 +31,7 @@ async.waterfall(
     [
       // Open Database
       callback =>
-          mongodb.MongoClient.connect('mongodb://localhost:27017', callback),
+          mongodb.MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true }, callback),
 
       // Read all persons with first name "John"
       (cli, callback) => {

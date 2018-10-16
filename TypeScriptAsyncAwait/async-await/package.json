@@ -4,13 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc && node ./dist/app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/mongodb": "^3.0.18",
     "mongodb": "^3.0.0",
-    "typescript": "^2.8.3"
+    "typescript": "^3.1.3"
   }
 }

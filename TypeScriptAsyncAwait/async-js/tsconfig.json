@@ -4,6 +4,7 @@
         "target": "es2015",
         "noImplicitAny": false,
         "sourceMap": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "outDir": "dist"
     }
 }

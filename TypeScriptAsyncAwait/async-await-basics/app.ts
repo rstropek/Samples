@@ -15,7 +15,7 @@ function sleep(seconds: number) : Promise<void> {
 
 function getPokemonName(pokemonId: number): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-        needle.get(`http://pokeapi.co/api/v2/pokemon/${pokemonId}/`, (err, res) => {
+        needle.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`, (err, res) => {
             if (!err && res.statusCode == 200) {
                 let pokemon = <IPokemon>res.body;
                 resolve(pokemon.forms[0].name);

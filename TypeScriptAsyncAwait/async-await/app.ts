@@ -25,7 +25,7 @@ import * as mongodb from 'mongodb';
 
 async function run() {
   // Open Database
-  var client = await mongodb.MongoClient.connect('mongodb://10.0.75.2:27017');
+  var client = await mongodb.MongoClient.connect('mongodb://10.0.75.2:27017', { useNewUrlParser: true });
   var db = client.db('demo');
 
   // Read all persons with first name "John"
