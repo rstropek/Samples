@@ -1,5 +1,7 @@
 ﻿using Polygon.Core;
 using Polygon.Core.Generators;
+using PolygonDesigner.ViewLogic;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,38 +23,45 @@ namespace PolygonDesigner
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(PolygonManagementViewModel viewModel, IRegionManager regionManager)
         {
+            regionManager.RegisterViewWithRegion(RegionNames.GraphicalViewer, typeof(PolygonsViewer));
+            regionManager.RegisterViewWithRegion(RegionNames.MainMenu, typeof(MainMenu));
+            regionManager.RegisterViewWithRegion(RegionNames.PolygonList, typeof(PolygonsList));
+            regionManager.RegisterViewWithRegion(RegionNames.PolygonDetails, typeof(PolygonDetails));
+
             InitializeComponent();
-            this.DataContext = this;
+            //this.DataContext = this;
+            this.DataContext = viewModel;
+
+            //((PolygonManagementViewModel)this.DataContext).SelectedPolygonGenerator =
+            //    new RandomPolygonGenerator();
         }
 
-        public string PolygonPath { get; set; }
-        public string ClipPath { get; set; }
-        public string ResultPath { get; set; }
+        //public string PolygonPath { get; set; }
+        //public string ClipPath { get; set; }
+        //public string ResultPath { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnGenerate(object sender, RoutedEventArgs e)
-        {
-            var converter = new PointsToPathMarkup();
+        //private void OnGenerate(object sender, RoutedEventArgs e)
+        //{
+        //    PolygonGenerator generator = new RandomPolygonGenerator();
+        //    var polygon = generator.Generate(150d).Span;
+        //    PolygonPath = PathMarkupConverter.Convert(polygon);
 
-            PolygonGenerator generator = new RandomPolygonGenerator();
-            var polygon = generator.Generate(150d).Span;
-            PolygonPath = converter.Convert(polygon);
+        //    generator = new TrianglePolygonGenerator();
+        //    var clip = generator.Generate(150d).Span;
+        //    ClipPath = PathMarkupConverter.Convert(clip);
 
-            generator = new TrianglePolygonGenerator();
-            var clip = generator.Generate(150d).Span;
-            ClipPath = converter.Convert(clip);
+        //    var clippedPoly = new SutherlandHodgman().GetIntersectedPolygon(polygon, clip);
+        //    ResultPath = PathMarkupConverter.Convert(clippedPoly);
 
-            var clippedPoly = new SutherlandHodgman().GetIntersectedPolygon(polygon, clip);
-            ResultPath = converter.Convert(clippedPoly);
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PolygonPath)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ClipPath)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultPath)));
-        }
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PolygonPath)));
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ClipPath)));
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultPath)));
+        //}
     }
 }

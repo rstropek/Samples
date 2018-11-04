@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Polygon.Core
 {
-    public partial class MonteCarloAreaCalculator
+    public partial class MonteCarloAreaCalculator : AreaCalculator
     {
         public class Options
         {
@@ -20,7 +20,7 @@ namespace Polygon.Core
 
         public static readonly Options DefaultOptions = new Options
         {
-            Iterations = 100000,
+            Iterations = 1000,
             ProgressReportingIterations = 100
         };
 
@@ -33,7 +33,10 @@ namespace Polygon.Core
         public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape) =>
             CalculateAreaAsync(shape, CancellationToken.None);
 
-        public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation, IProgress<double> progress = null)
+        public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation) =>
+            CalculateAreaAsync(shape, cancellation, null);
+
+        public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation, IProgress<double> progress)
         {
             if (!CalculationOptions.Iterations.HasValue && !CalculationOptions.SimulationDuration.HasValue)
             {

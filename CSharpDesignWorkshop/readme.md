@@ -42,8 +42,10 @@
   * For example see [*Point*](Polygon.Core/Point.cs)
 * [Examples for `InternalsVisibleTo`](Polygon.Core/AssemblyProperties.cs)
   * For example see [*DoubleExtensions*](Polygon.Core/DoubleExtensions.cs)
-* `nameof`
+* [`nameof`](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/nameof)
   * For example see [*MonteCarloAreaCalculator*](Polygon.Core/MonteCarloAreaCalculator.cs)
+* [Pattern matching with `is`](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/is)
+  * For example see [*PointsToPointMarkupConverter*](PolygonDesigner.ViewLogic/PointsToPointMarkupConverter.cs)
 
 ## Testing
 
@@ -62,9 +64,18 @@
 * Progress reporting with `IProgress` and `Progress`
   * For example see [*MonteCarloAreaCalculator*](Polygon.Core/MonteCarloAreaCalculator.cs)
 
+## MVVM
+
+* [*Prism* Library](http://prismlibrary.github.io/index.html)
+  * Tip: [Prism Template Pack](https://marketplace.visualstudio.com/items?itemName=BrianLagunas.PrismTemplatePack)
+  * [Implementing MVVM](http://prismlibrary.github.io/docs/wpf/Implementing-MVVM.html)
+    * `BindableBase`
+    * For example see ...
+
 ## Various Topics
 
 * [Exception Design](https://docs.microsoft.com/en-us/dotnet/standard/exceptions/best-practices-for-exceptions)
   * For example see [*MonteCarloAreaCalculator*](Polygon.Core/MonteCarloAreaCalculator.cs)
 * Partial classes
   * For example see [*MonteCarloAreaCalculator*](Polygon.Core/CalculationController.cs)
+* Enabling C# 7.x language features

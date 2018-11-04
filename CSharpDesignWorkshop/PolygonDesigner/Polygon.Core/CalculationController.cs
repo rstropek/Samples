@@ -95,7 +95,7 @@ namespace Polygon.Core
                     }
                     else
                     {
-                        return Convert.ToDouble(Watch.ElapsedMilliseconds) / Convert.ToDouble(MaxTime.Value.Milliseconds);
+                        return Convert.ToDouble(Watch.ElapsedMilliseconds) / Convert.ToDouble(MaxTime.Value.TotalMilliseconds);
                     }
                 }
             }

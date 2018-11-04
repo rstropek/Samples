@@ -5,6 +5,7 @@ namespace Polygon.Core.Generators
     /// <summary>
     /// Implements a polygon generator that generates a triangle polygon
     /// </summary>
+    [FriendlyName("Triangle")]
     public class TrianglePolygonGenerator : PolygonGenerator
     {
         /// <inheritdoc />

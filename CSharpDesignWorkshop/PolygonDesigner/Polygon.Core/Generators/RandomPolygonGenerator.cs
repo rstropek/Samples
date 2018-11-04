@@ -5,6 +5,7 @@ namespace Polygon.Core.Generators
     /// <summary>
     /// Implements a polygon generator that generates a random polygon consisting of 8 points
     /// </summary>
+    [FriendlyName("Random Shape")]
     public class RandomPolygonGenerator : PolygonGenerator
     {
         /// <inheritdoc />

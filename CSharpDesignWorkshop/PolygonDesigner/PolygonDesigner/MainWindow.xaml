@@ -4,21 +4,53 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PolygonDesigner"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Generate">
-                <MenuItem Header="_Random" Click="OnGenerate" />
-                <MenuItem Header="_Clip" />
-                <Separator />
-                <MenuItem Header="_Exit" />
-            </MenuItem>
-        </Menu>
-        <Grid>
-            <Path Stroke="DarkBlue" Fill="#100000FF" Data="{Binding Path=PolygonPath}" />
-            <Path Stroke="DarkGreen" Fill="#1000FF00" Data="{Binding Path=ClipPath}" />
-            <Path Stroke="DarkRed" Fill="#10FF0000" Data="{Binding Path=ResultPath}" />
+        xmlns:vm="clr-namespace:PolygonDesigner.ViewLogic;assembly=PolygonDesigner.ViewLogic"
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:prism="http://prismlibrary.com/">
+    <Window.Resources>
+        <Style TargetType="GridSplitter">
+            <Setter Property="Background" Value="LightGray" />
+        </Style>
+        <Style TargetType="GridSplitter" x:Key="HorizontalGridSplitter" BasedOn="{StaticResource ResourceKey={x:Type GridSplitter}}">
+            <Setter Property="Height" Value="3" />
+        </Style>
+        <Style TargetType="GridSplitter" x:Key="VerticalGridSplitter" BasedOn="{StaticResource ResourceKey={x:Type GridSplitter}}">
+            <Setter Property="Width" Value="3" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ContentControl prism:RegionManager.RegionName="{x:Static local:RegionNames.MainMenu}" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ContentControl prism:RegionManager.RegionName="{x:Static local:RegionNames.GraphicalViewer}" />
+
+            <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                          Style="{StaticResource VerticalGridSplitter}"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <ContentControl prism:RegionManager.RegionName="{x:Static local:RegionNames.PolygonList}" 
+                                Margin="5"/>
+
+                <GridSplitter VerticalAlignment="Bottom" HorizontalAlignment="Stretch" 
+                              Style="{StaticResource HorizontalGridSplitter}"/>
+
+                <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static local:RegionNames.PolygonDetails}" 
+                                Margin="5"/>
+            </Grid>
         </Grid>
-    </DockPanel>
+    </Grid>
 </Window>

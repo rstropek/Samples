@@ -55,6 +55,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PolygonDetails.xaml.cs">
+      <DependentUpon>PolygonDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PolygonsList.xaml.cs">
+      <DependentUpon>PolygonsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RegionNames.cs" />
+    <Page Include="MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,8 +81,25 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PolygonDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PolygonsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PolygonsViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawingColorToColorConverter.cs" />
+    <Compile Include="PointsToPointMarkupConverter.cs" />
+    <Compile Include="PolygonsViewer.xaml.cs">
+      <DependentUpon>PolygonsViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -99,8 +130,21 @@
       <Project>{121eccd9-b729-4428-96e7-dd5e22fddc65}</Project>
       <Name>Polygon.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PolygonDesigner.ViewLogic\PolygonDesigner.ViewLogic.csproj">
+      <Project>{2390c520-7ca9-44d7-b2b8-9ea2f9562346}</Project>
+      <Name>PolygonDesigner.ViewLogic</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Prism.Unity">
+      <Version>7.1.0.431</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.Wpf">
+      <Version>7.1.0.431</Version>
+    </PackageReference>
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.5.1</Version>
+    </PackageReference>
     <PackageReference Include="System.Memory">
       <Version>4.5.1</Version>
     </PackageReference>
