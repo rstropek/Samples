@@ -6,6 +6,14 @@
              xmlns:local="clr-namespace:PolygonDesigner"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="AreaResult">
+            <Setter Property="FontSize" Value="48" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -21,10 +29,19 @@
         <TextBox Name="Description" Text="{Binding Path=SelectedPolygon.Description, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                  VerticalContentAlignment="Center"/>
 
-        <Button Grid.Row="1" Grid.ColumnSpan="2"
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,5"
                 Command="{Binding Path=CalculateAreaForSelectedPolygonCommand}">Calculate Area</Button>
 
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,5"
+                Visibility="{Binding Path=IsCalculatingArea, Converter={StaticResource BoolToVisibilityConverter}}"
+                Command="{Binding Path=CancelAreaCalculationCommand}">Cancel Calculation</Button>
+
         <ProgressBar Grid.Row="2" Grid.ColumnSpan="2" Height="20" Minimum="0" Maximum="1"
+                     Visibility="{Binding Path=IsCalculatingArea, Converter={StaticResource BoolToVisibilityConverter}}"
                      Value="{Binding Path=Progress}"/>
+
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Path=Area, StringFormat=0}" 
+                   Style="{StaticResource AreaResult}"
+                   Visibility="{Binding Path=IsAreaAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

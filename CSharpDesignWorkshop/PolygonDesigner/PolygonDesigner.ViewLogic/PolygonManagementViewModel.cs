@@ -28,19 +28,26 @@ namespace PolygonDesigner.ViewLogic
             Calculator = areaCalculator;
             CalculateAreaForSelectedPolygonCommand = new DelegateCommand(
                 CalculateAreaForSelectedPolygon,
-                () => Calculator != null && SelectedPolygon != null);
+                () => Calculator != null && SelectedPolygon != null && !IsCalculatingArea);
+
+            CancelAreaCalculationCommand = new DelegateCommand(
+                () => CancelSource?.Cancel(),
+                () => IsCalculatingArea);
 
             if (container != null)
             {
-                Generators = container.ResolveAll<PolygonGenerator>()
-                    .Select(g => new GeneratorInfo(this,
-                        (g.GetType()
-                            .GetCustomAttributes(typeof(FriendlyNameAttribute), true)
-                            .FirstOrDefault() as FriendlyNameAttribute)?.FriendlyName ?? g.GetType().Name,
-                        g));
+                Generators = GetGeneratorsFromContainer(container);
                 SelectedPolygonGenerator = Generators.LastOrDefault()?.Generator;
             }
         }
+
+        private IEnumerable<GeneratorInfo> GetGeneratorsFromContainer(IUnityContainer container) =>
+            container.ResolveAll<PolygonGenerator>()
+                .Select(g => new GeneratorInfo(this,
+                    (g.GetType()
+                        .GetCustomAttributes(typeof(FriendlyNameAttribute), true)
+                        .FirstOrDefault() as FriendlyNameAttribute)?.FriendlyName ?? g.GetType().Name,
+                    g));
 
         public const double MaxSideLength = 400d;
 
@@ -63,12 +70,19 @@ namespace PolygonDesigner.ViewLogic
 
         public DelegateCommand CalculateAreaForSelectedPolygonCommand { get; }
 
+        public DelegateCommand CancelAreaCalculationCommand { get; }
+
         private Polygon SelectedPolygonValue;
         public Polygon SelectedPolygon
         {
             get { return SelectedPolygonValue; }
             set
             {
+                if (IsCalculatingArea)
+                {
+                    CancelSource?.Cancel();
+                }
+
                 SetProperty(ref SelectedPolygonValue, value);
                 CalculateAreaForSelectedPolygonCommand.RaiseCanExecuteChanged();
             }
@@ -105,6 +119,33 @@ namespace PolygonDesigner.ViewLogic
             set { SetProperty(ref ProgressValue, value); }
         }
 
+        private CancellationTokenSource CancelSource;
+
+        private bool IsCalculatingAreaValue;
+        public bool IsCalculatingArea
+        {
+            get { return IsCalculatingAreaValue; }
+            private set
+            {
+                SetProperty(ref IsCalculatingAreaValue, value);
+                CalculateAreaForSelectedPolygonCommand.RaiseCanExecuteChanged();
+                CancelAreaCalculationCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private double? AreaValue;
+        public double? Area
+        {
+            get { return AreaValue; }
+            private set
+            {
+                SetProperty(ref AreaValue, value);
+                RaisePropertyChanged(nameof(AreaAvailable));
+            }
+        }
+
+        public bool AreaAvailable => Area.HasValue;
+
         private async void CalculateAreaForSelectedPolygon()
         {
             if (Calculator == null)
@@ -117,8 +158,26 @@ namespace PolygonDesigner.ViewLogic
                 throw new InvalidOperationException("No polygon selected");
             }
 
-            await Calculator.CalculateAreaAsync(SelectedPolygon.Points, CancellationToken.None,
-                new Progress<double>(progress => Progress = progress));
+            if (IsCalculatingArea)
+            {
+                throw new InvalidOperationException("Calculation is already running");
+            }
+
+            CancelSource = new CancellationTokenSource();
+            Area = null;
+            IsCalculatingArea = true;
+            try
+            {
+                Area = await Calculator.CalculateAreaAsync(SelectedPolygon.Points, CancelSource.Token,
+                    new Progress<double>(progress => Progress = progress));
+            }
+            catch (OperationCanceledException)
+            {
+                Area = null;
+            }
+
+            IsCalculatingArea = false;
+            CancelSource = null;
         }
     }
 }
