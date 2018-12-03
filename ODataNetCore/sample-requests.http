@@ -1,0 +1,100 @@
+@baseurl=https://services.odata.org/TripPinRESTierService
+@key=(S(vxeb3nya1pgo4k3klm4octuj))
+
+###
+GET {{baseurl}}/$metadata
+
+###
+GET {{baseurl}}/People
+
+###
+GET {{baseurl}}/People('russellwhyte')
+
+###
+GET {{baseurl}}/Airports('KSFO')
+
+###
+GET {{baseurl}}/Airports('KSFO')/Name
+
+###
+GET {{baseurl}}/Airports('KSFO')/Location
+
+###
+GET {{baseurl}}/People?$filter=FirstName eq 'Scott'
+
+###
+GET {{baseurl}}/Airports?$filter=contains(Location/Address, 'San Francisco')
+
+###
+GET {{baseurl}}/Airports?$select=Name, IcaoCode
+
+###
+GET {{baseurl}}/People('scottketchum')/Trips?$orderby=EndsAt desc
+
+###
+GET {{baseurl}}/People?$top=2 
+
+###
+GET {{baseurl}}/People?$skip=18
+
+###
+GET {{baseurl}}/People/$count
+
+###
+GET {{baseurl}}/Me/Friends?$filter=Friends/any(f:f/FirstName eq 'Scott')
+
+###
+GET {{baseurl}}/People('keithpinckney')?$expand=Trips
+
+###
+GET {{baseurl}}/People('russellwhyte')?$expand=Trips($top=1)
+
+###
+GET {{baseurl}}/People('russellwhyte')?$expand=Trips($select=TripId, Name)
+
+###
+GET {{baseurl}}/People('russellwhyte')?$expand=Trips($filter=Name eq 'Trip in US')
+
+###
+POST {{baseurl}}/{{key}}/People
+Content-Type: application/json
+
+{
+    "UserName":"rainerstropek",
+    "FirstName":"Rainer",
+    "LastName":"Stropek",
+    "Emails":[
+        "rainer@software-architects.at"
+    ],
+    "AddressInfo": [
+    {
+      "Address": "Somewhere 16",
+      "City": {
+        "Name": "Anywhere",
+        "CountryRegion": "Austria",
+        "Region": "AT"
+      }
+    }
+    ]
+}
+
+###
+GET {{baseurl}}/{{key}}/People('rainerstropek')
+
+###
+DELETE {{baseurl}}/{{key}}/People('rainerstropek')
+
+###
+PATCH {{baseurl}}/{{key}}/People('rainerstropek')
+Content-Type: application/json
+
+{
+    "FirstName": "Ano",
+    "LastName": "Nym"
+}
+
+###
+GET {{baseurl}}/GetNearestAirport(lat = 33, lon = -118)
+
+###
+Get {{baseurl}}/People('russellwhyte')/Trips(0)/Microsoft.OData.Service.Sample.TrippinInMemory.Models.GetInvolvedPeople
