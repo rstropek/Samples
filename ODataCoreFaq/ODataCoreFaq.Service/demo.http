@@ -1,0 +1,16 @@
+GET https://localhost:5001/api/FillDatabase
+
+###
+GET https://localhost:5001/odata/$metadata
+
+###
+GET https://localhost:5001/odata/Customers
+
+###
+GET https://localhost:5001/odata/Customers?$expand=Orders
+
+###
+GET https://localhost:5001/odata/Customers/OrderedBike
+
+###
+GET https://localhost:5001/odata/Customers/OrderedBike?$filter=CountryIsoCode eq 'CH'
