@@ -26,6 +26,8 @@ namespace LocalFunctionLambda
         /// </summary>
         static void BasicLocalFunction()
         {
+            // Note that VS suggests to use a local function instead of 
+            // the lambda function.
             MathOp add = (x, y) => x + y;
             Console.WriteLine($"The result is {add(1, 2)}\n");
         }
@@ -71,7 +73,7 @@ namespace LocalFunctionLambda
             return (x, y) => x + y + randomValue;
         }
 
-        private int factor = 42;
+        private readonly int factor = 42;
 
         void ManyCalculations()
         {
@@ -86,7 +88,7 @@ namespace LocalFunctionLambda
             {
                 // Note that add uses "factor"
                 MathOp add = (x, y) => x + y + factor;
-                var result = add(rand.Next(0, 100), rand.Next(0, 100));
+                _ = add(rand.Next(0, 100), rand.Next(0, 100));
                 counter++;
             }
 

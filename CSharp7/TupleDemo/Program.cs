@@ -15,7 +15,7 @@ namespace ConsoleApplication
     {
         static readonly (int sum, int count) staticLiteral = (0, 1);
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             var numbers = new[] { 1, 2, 3, 4, 5 };
 

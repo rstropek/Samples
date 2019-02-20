@@ -4,7 +4,7 @@ namespace OutVars
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Write("Please enter a number: ");
             var numberAsString = Console.ReadLine();
@@ -15,6 +15,7 @@ namespace OutVars
 
         static void Classic(string numberAsString)
         {
+            // Note that VS suggests inlining of the variable declaration
             int number;
             if (int.TryParse(numberAsString, out number))
             {
@@ -30,7 +31,7 @@ namespace OutVars
         {
             // Note the use of `out var` here. In IL, this code is identical to the
             // classic version shown above. More infos about `out var` at
-            // https://docs.microsoft.com/en-us/dotnet/articles/csharp/whats-new/csharp-7#out-variables
+            // http://bit.ly/cs-out-var
             if (int.TryParse(numberAsString, out var number))
             {
                 Console.WriteLine($"Ok, I got the number {number}");
@@ -45,8 +46,9 @@ namespace OutVars
 
         static void ConsumeSomeNumbers()
         {
-            // Note that use of `_` here to indicate that you are not interested in
-            // some of the out-variables.
+            // Note that use of `_` (discard) here to indicate that you are not interested in
+            // some of the out-variables. Read more at
+            // https://docs.microsoft.com/en-us/dotnet/csharp/discards
             ReturnSomeNumbers(out var val, out _, out _);
             Console.WriteLine(val);
         }

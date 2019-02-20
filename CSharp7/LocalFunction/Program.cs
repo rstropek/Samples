@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+// Read more about local functions at
+// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/local-functions
+
 namespace LocalFunction
 {
     delegate int MathOp(int a, int b);
@@ -80,7 +83,7 @@ namespace LocalFunction
             return Add;
         }
 
-        private int factor = 42;
+        private readonly int factor = 42;
 
         void ManyCalculations()
         {
@@ -95,7 +98,10 @@ namespace LocalFunction
             {
                 // Note that Add uses "factor"
                 int Add(int x, int y) => x + y + factor;
-                var result = Add(rand.Next(0, 100), rand.Next(0, 100));
+
+                // Note discard in the next statement. Read more at
+                // https://docs.microsoft.com/en-us/dotnet/csharp/discards
+                _ = Add(rand.Next(0, 100), rand.Next(0, 100));
                 counter++;
             }
 

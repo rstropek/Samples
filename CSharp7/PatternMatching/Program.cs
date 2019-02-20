@@ -13,7 +13,7 @@ namespace PatternMatching
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             PerfTestIsPattern();
 
@@ -84,9 +84,11 @@ namespace PatternMatching
                     break;
 
                 case null:
-                    throw new InvalidOperationException("error...");
+                    // Add a null case to ensure the argument is not null
+                    throw new ArgumentNullException("error...");
 
                 // Note that "Var Pattern" here. It is always true.
+                // You could add a `when` clause to do something useful.
                 case var obj:
                     Console.WriteLine($"Got {obj.ToString()}");
                     break;
@@ -100,6 +102,8 @@ namespace PatternMatching
                 new { Name = "Bar", Orders = new [] { new { ID = 1, Revenue = 41.0 }} }
             };
 
+            // Recap: Can you remember null conditional operator in C#?
+            // Read more at https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-conditional-operators
             double? someNullableResult = customers?[0]?.Orders?[0]?.Revenue;
             if (someNullableResult is double result)
             {

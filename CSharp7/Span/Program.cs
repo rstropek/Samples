@@ -9,13 +9,13 @@ namespace Span
     {
         static void Main(string[] args)
         {
-            SpanBasics();
-            UnmanagedBasics();
+            //SpanBasics();
+            //UnmanagedBasics();
 
             // Learning: With Span<T>, you can write methods supporting any kind of memory
             //           (including heap, stack, unmanaged memory).
 
-            SpanVsList();
+            //SpanVsList();
 
             BenchmarkRunner.Run<StringsWithSpan>();
 
