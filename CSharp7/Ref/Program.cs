@@ -18,6 +18,7 @@ namespace Ref
 
         // Create an immutable instance of TwoDoubles by returning
         // it using ref readonly. This is a new feature of C# 7.
+        // Read more at https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref#ref-readonly-locals
         private static TwoDoubles empty = new TwoDoubles { A = 0, B = 0 };
         public static ref readonly TwoDoubles Empty => ref empty;
         public void SetToDefault()
@@ -27,7 +28,8 @@ namespace Ref
         }
     }
 
-    // The following struct must be immutable because it is readonly
+    // The following struct must be immutable because it is readonly.
+    // Read more at https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/readonly#readonly-struct-example
     readonly struct ReadOnlyTwoDoubles
     {
         public double A { get; }
@@ -50,9 +52,12 @@ namespace Ref
     {
         public double[] Values;
 
-        // Note ref return. This is a new feature in C# 7
+        // Note ref return. This is a new feature in C# 7.
+        // Read more at https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/ref-returns
         public ref double this[int index]
         {
+            // Note the throw expression here. Read more at
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/throw#the-throw-expression
             get { return ref (Values ?? throw new InvalidOperationException("Values is null"))[index]; }
         }
 
@@ -61,7 +66,9 @@ namespace Ref
             var builder = new StringBuilder("[ ");
 
             // Note the throw expression here. This is a new feature in C# 7.
-            foreach(var value in Values ?? throw new InvalidOperationException("Values is null"))
+            // Read more at
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/throw#the-throw-expression
+            foreach (var value in Values ?? throw new InvalidOperationException("Values is null"))
             {
                 if (builder.Length > 2)
                 {
@@ -92,7 +99,8 @@ namespace Ref
             Console.WriteLine($"{val} swapped is {swappedVal}");
 
             // Again, address of val will be passed but method cannot change val.
-            // "in" is a new feature of C# 7.2
+            // "in" is a new feature of C# 7.2. Read more at
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/in-parameter-modifier
             val = new TwoDoubles { A = 1d, B = -1d };
             swappedVal = SwapWithIn(in val); // Note that you can skip "in" here
             Console.WriteLine($"{val} swapped is {swappedVal}");
@@ -162,7 +170,7 @@ namespace Ref
             // Note swapping variables using C# 7's tuple syntax
             (source.A, source.B) = (source.B, source.A);
 
-            // Not C# 7's new ref return statement. This will return a reference to
+            // Note C# 7's new ref return statement. This will return a reference to
             // the original variable "source".
             return ref source;
         }
