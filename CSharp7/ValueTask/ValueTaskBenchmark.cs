@@ -4,6 +4,9 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+// For a practical application of ValueTask, see
+// https://github.com/dotnet/corefx/blob/4ac4ecf5303565a5f6ce1a85ed0baed98ed2db6e/src/Common/src/CoreLib/System/Collections/Generic/IAsyncEnumerator.cs
+
 namespace ValueTask
 {
     [SimpleJob(RunStrategy.ColdStart, targetCount: 1)]

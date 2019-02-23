@@ -4,6 +4,10 @@ using System;
 using System.Linq;
 using System.Text;
 
+// Take a look at a practical application of Span in string formating based on
+// the new Range struct from C# 8:
+// https://github.com/dotnet/corefx/blob/a5155f3aeefd316eb6a66f21587506e3b8cf8d25/src/Common/src/CoreLib/System/Range.cs#L60
+
 namespace Span
 {
     [SimpleJob(RunStrategy.ColdStart, targetCount: 10)]
