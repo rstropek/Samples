@@ -17,6 +17,12 @@ lang: en
 
 # Introduction
 
+
+This document contains business-related questions used to prepare software architecture workshops for SaaS projects. Discussing these topics is crucial for the success of SaaS projects as the technical implementation has to reflect the business goals. Starting a project with a too technical focus raises the danger of a project failure because of over-engineering or over-simplification.
+
+
+# Vision and Scope
+
 ## Vision
 
 > Add a **summary of the vision** for the new SaaS solution (i.e. what is the solution all about and what could it become).
@@ -28,6 +34,8 @@ lang: en
 > Describe the project scope in relation to the vision (i.e. what portion of the long-term vision should be addressed in the current project).
 
 **Consider** describing the scope of the current project as well as a rough sketch of the scopes of downstream projects.
+
+**Consider** explicitly mentioning topics that are **out of scope** of the current project. This can reduce the risk of [scope creep](https://en.wikipedia.org/wiki/Scope_creep)
 
 
 # Innovation
@@ -222,7 +230,29 @@ lang: en
 **Consider** the concept of the [Minimum Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product).
 
 
-# Existing Artifacts
+# Technology
+
+## Technological Restrictions
+
+> Describe technological restrictions that the current project has to comply with (e.g. use of certain programming languages or frameworks).
+
+**Don't** go in too much detail. If available, add references to existing documents and guidelines (e.g. [software design](https://en.wikipedia.org/wiki/Software_design) guidelines, description of methodologies like [*12factor*](https://12factor.net/)).
+
+**Consider** describing the reasoning behind the restriction.
+
+**Do** reference standards (e.g. standardized communication protocols, standard regarding data security, industry standards) that the project has to implement. **Consider** describing the reasoning why the standards are relevant.
+
+**Avoid** subjective opinions (e.g. "we don't believe that x has a future"), **prefer** references to objective facts (e.g. decreasing adoption rate according to GitHub statistics or large-scale polls).
+
+## Known Technical Risks
+
+> Describe known technical risks and unsolved challenges (e.g. from previous projects, from research projects) that can already be anticipated.
+
+**Don't** go in too much detail. If available, add a reference to more detailed documents (e.g. research project results).
+
+**Consider** limiting yourself to the five most important risks and challenges that could lead to a failed project as a whole.
+
+## Existing Artifacts
 
 > Describe **existing components that have to be used** in the SaaS development process (e.g. existing code base, third-party components that must be used, interfaces to existing systems, etc.).
 
