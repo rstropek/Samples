@@ -9,8 +9,12 @@ namespace Span
     {
         static void Main(string[] args)
         {
+            //TheProblem();
+
             //SpanBasics();
             //UnmanagedBasics();
+
+            //BadIdeas();
 
             // Learning: With Span<T>, you can write methods supporting any kind of memory
             //           (including heap, stack, unmanaged memory).
@@ -27,6 +31,69 @@ namespace Span
             //{
             //    Console.WriteLine($"{i * 10}..{(i + 1) * 10 - 1}: {result[i]}");
             //}
+        }
+
+        private static void TheProblem()
+        {
+            void BubbleSort<T>(T[] list) where T : IComparable
+            {
+                bool madeChanges;
+                int itemCount = list.Length;
+                do
+                {
+                    madeChanges = false;
+                    itemCount--;
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        if (list[i].CompareTo(list[i + 1]) > 0)
+                        {
+                            T temp = list[i + 1];
+                            list[i + 1] = list[i];
+                            list[i] = temp;
+                            madeChanges = true;
+                        }
+                    }
+                } while (madeChanges);
+            }
+
+            void BubbleSortSpan<T>(Span<T> list) where T : IComparable
+            {
+                bool madeChanges;
+                int itemCount = list.Length;
+                do
+                {
+                    madeChanges = false;
+                    itemCount--;
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        if (list[i].CompareTo(list[i + 1]) > 0)
+                        {
+                            T temp = list[i + 1];
+                            list[i + 1] = list[i];
+                            list[i] = temp;
+                            madeChanges = true;
+                        }
+                    }
+                } while (madeChanges);
+            }
+
+            // The problem:
+            // We have a list of numbers and want to sort them
+            var numbers = new byte[] { 55, 34, 21, 13, 8, 5, 3, 2, 1 };
+            BubbleSort(numbers);
+            foreach (var n in numbers) { Console.WriteLine(n); }
+
+            // Now we want to sort a part of the array -> we have to copy
+            numbers = new byte[] { 55, 34, 21, 13, 8, 5, 3, 2, 1 };
+            var someNumbers = new byte[numbers.Length - 2];
+            for (var i = 1; i < numbers.Length - 1; i++) { someNumbers[i - 1] = numbers[i]; }
+            BubbleSort(someNumbers);
+            //foreach (var n in someNumbers) { Console.WriteLine(n); }
+
+            // Span solves our problem
+            Span<byte> numbersSpan = new byte[] { 55, 34, 21, 13, 8, 5, 3, 2, 1 };
+            BubbleSortSpan(numbersSpan[1..^1]);
+            foreach (var n in numbersSpan) { Console.WriteLine(n); }
         }
 
         static void SpanBasics()
@@ -47,6 +114,11 @@ namespace Span
             // Create a slice - which is a Span<t> itself - of the array
             // Note the use of a read-only span here.
             ReadOnlySpan<byte> slice = bytes.Slice(1, 2);
+
+            // You can also use C# 8's new range feature
+            PrintHeadline("Spans and ranges:");
+            ReadOnlySpan<byte> sliceFromRange = bytes[1..^1];
+            Console.WriteLine($"\tLength of source was {bytes.Length}, new slice has length {sliceFromRange.Length}");
 
             // Iterate over slice using a for-loop
             // BTW: Did you know that C# eliminates bounds checks in cases like this?
@@ -69,6 +141,24 @@ namespace Span
             {
                 Console.WriteLine($"\t{value}");
             }
+
+            PrintHeadline("Spans and strings:");
+            var answer = "The answer is 42";
+            ReadOnlySpan<char> answerSpan = answer.AsSpan();
+            Console.WriteLine("\t" + int.Parse(answerSpan.Slice(answerSpan.IndexOf('4'))));
+        }
+
+        static void BadIdeas()
+        {
+            Span<byte> ReturnSomeBytes()
+            {
+                // Note that we cannot return Span<T> if we use stackalloc
+                Span<byte> bytes = /*stackalloc*/ new byte[9] { 1, 2, 3, 5, 8, 13, 21, 34, 55 };
+                return bytes;
+            }
+
+            PrintHeadline("Span returns:");
+            foreach (var b in ReturnSomeBytes()) { Console.WriteLine("\t" + b); }
         }
 
         static void UnmanagedBasics()
@@ -112,6 +202,18 @@ namespace Span
             public byte B;
         }
 
+        private struct RefColor
+        {
+            public byte[] colors;
+
+            public RefColor(byte red)
+            {
+                colors = new[] { red, (byte)0, (byte)0 };
+            }
+
+            public ref byte R { get { return ref colors[0]; } }
+        }
+
         static void SpanVsList()
         {
             // Create an array of colors (structs)
@@ -122,10 +224,15 @@ namespace Span
             Span<Color> colorsSpan = colorsArray;
 
             // The following line will not work because left side is no variable to which you can assign a value
-            // colorsList[0].R = 0xff;
+            //colorsList[0].R = 0xff;
 
             // Assignment works fine for Span<T>
             colorsSpan[0].R = 0xff;
+
+            // How does Span do the trick? --> Ref returns
+            var refColorArray = new[] { new RefColor(0xff), new RefColor(0) };
+            var refColorsList = new List<RefColor>(refColorArray);
+            refColorsList[0].R = 0xC0;
         }
 
         static void PrintHeadline(string text)

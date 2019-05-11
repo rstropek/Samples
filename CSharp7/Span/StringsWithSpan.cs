@@ -172,7 +172,7 @@ namespace Span
             return ageStats;
         }
 
-        [Params(10, 1000, 100000, 1000000)]
+        [Params(10, 1000, 100_000, 1_000_000)]
         public int NumberOfLines;
 
         [Benchmark]
