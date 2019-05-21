@@ -49,3 +49,4 @@ The last sample demonstrates the integration of SVG+Angular+Websockets. A demo s
 
 * Run [demo WebSockets server](https://github.com/rstropek/Samples/tree/master/AngularSvgServer) using `npx ts-node timer-broadcast.ts`
 * See how silo fill in [*silo-with-websocket.component.ts*](src/app/silo-with-websocket.component/silo-with-websocket.component.ts) changes based on data binding and incoming WebSocket messages
+* Describe how websocket messages are distributed using RxJS (see [*backend.service.ts*](src/app/iot/backend.service.ts))

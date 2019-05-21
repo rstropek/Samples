@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { BackendService, isSiloFillMessage, SiloFillMessage } from '../iot/backend.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-silo-with-websocket',
@@ -29,17 +31,11 @@ styles: [`
 export class SiloWithWebsocketComponent implements OnInit {
   public fill = 0;
 
-  constructor() { }
+  constructor(private backend: BackendService) { }
 
   ngOnInit() {
-    // Create WebSocket connection.
-    const socket = new WebSocket('ws://localhost:3000');
-
-    // Listen for messages
-    const that = this;
-    socket.addEventListener('message', function (event) {
-      that.fill = parseInt(event.data);
-    });
+    this.backend.messages$.pipe(
+      filter(m => isSiloFillMessage(m) && m.deviceId === 42)
+    ).subscribe((m: SiloFillMessage) => this.fill = m.value);
   }
-
 }

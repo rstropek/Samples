@@ -1,6 +1,15 @@
 import * as WebSocket from 'ws';
 import { setInterval } from 'timers';
 
+interface Message {
+  messageType: number;
+}
+
+interface SiloFillMessage extends Message {
+  deviceId: number;
+  value: number;
+}
+
 // Create WebSockets server listening on port 3000
 const wss = new WebSocket.Server({port: 3000});
 
@@ -25,5 +34,10 @@ setInterval(() => {
     i += 5 * direction;
   }
 
-  broadcast(i.toString());
+  const message: SiloFillMessage = {
+    messageType: 1,
+    deviceId: 42,
+    value: i
+  };
+  broadcast(JSON.stringify(message));
 }, 250);
