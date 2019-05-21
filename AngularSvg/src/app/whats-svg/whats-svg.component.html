@@ -9,8 +9,8 @@
 </p>
 
 <h3 class="mat-subheading-2">External Source</h3>
-<img src="/assets/logo-ede-toptaken.svg" width="7%" />
-<img src="/assets/robot.svg" width="7%" />
+<img src="/assets/logo-techorama.svg" width="7%" />
+<img src="/assets/robot-2.svg" width="7%" />
 
 <div fxLayout="row wrap" fxLayoutGap="25px">
     <div fxLayout="column">
@@ -28,6 +28,22 @@
         <svg width="115" height="100">
             <rect x="1" y="1" width="75" height="50" fill="red" stroke="darkred" stroke-width="1" />
             <rect x="1" y="1" width="75" height="50" transform="translate(25 25) rotate(45 37.5 25)" class="semi-transparent" />
+        </svg>
+    </div>
+
+    <div fxLayout="column">
+        <h3 class="mat-subheading-2">Grouping</h3>
+        <!-- Read more about transformations at https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform -->
+        <svg width="115" height="100">
+            <defs>
+                <pattern id="fillPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" >
+                    <circle cx="10" cy="10" r="10" style="stroke: none; fill: #00116A" />
+               </pattern>
+            </defs>
+            <g fill="url(#fillPattern)">
+                <rect x="1" y="1" width="75" height="50" />
+                <rect x="25" y="25" width="75" height="50" />
+            </g>
         </svg>
     </div>
 
@@ -73,28 +89,26 @@
 <div fxLayout="row wrap" fxLayoutGap="25px">
     <div fxLayout="column">
         <h3 class="mat-subheading-2">Dashed Lines</h3>
-        <svg id="dashing" width="150" height="72.5">
+        <svg id="dashing" width="150" height="85.0">
             <!-- See also https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-dasharray for details -->
             <line x1="0" y1="5" x2="150" y2="5" />
             <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 12.5)" stroke-dasharray="5 5" />
-            <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 25.0)" stroke-dasharray="10 5" />
-            <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 37.5)" stroke-dasharray="10 5" stroke-dashoffset="5" />
+            <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 25.0)" stroke-dasharray="5 5" class="animated-line" />
+            <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 37.5)" stroke-dasharray="10 5" />
+            <line x1="0" y1="5" x2="150" y2="5" transform="translate(0 50.0)" stroke-dasharray="10 5" stroke-dashoffset="5" />
 
-            <line x1="0" y1="5" x2=" 75" y2="5" transform="translate(0 50.0)" stroke-dasharray="100 1000" />
-            <line x1="0" y1="5" x2=" 75" y2="5" transform="translate(0 50.0)" class="alarm" stroke-dasharray="1000 100" stroke-dashoffset="-100"
-            />
+            <line x1="0" y1="5" x2=" 75" y2="5" transform="translate(0 62.5)" stroke-dasharray="100 1000" />
+            <line x1="0" y1="5" x2=" 75" y2="5" transform="translate(0 62.5)" class="alarm" stroke-dasharray="1000 100" stroke-dashoffset="-100" />
 
-            <line x1="0" y1="5" x2="125" y2="5" transform="translate(0 62.5)" stroke-dasharray="100 1000" />
-            <line x1="0" y1="5" x2="125" y2="5" transform="translate(0 62.5)" class="alarm" stroke-dasharray="1000 100" stroke-dashoffset="-100"
-            />
+            <line x1="0" y1="5" x2="125" y2="5" transform="translate(0 75.0)" stroke-dasharray="100 1000" />
+            <line x1="0" y1="5" x2="125" y2="5" transform="translate(0 75.0)" class="alarm" stroke-dasharray="1000 100" stroke-dashoffset="-100" />
         </svg>
     </div>
     <div fxLayout="column">
         <h3 class="mat-subheading-2">Paths and Arcs</h3>
         <svg id="dashing" width="150" height="55">
             <path d="M0,50a50,50 0 1,1 100,0" transform="translate(5 5)" stroke-dasharray="78.5 1000" />
-            <path d="M0,50a50,50 0 1,1 100,0" transform="translate(5 5)" class="alarm" stroke-dasharray="39.25 78.5" stroke-dashoffset="-78.5"
-            />
+            <path d="M0,50a50,50 0 1,1 100,0" transform="translate(5 5)" class="alarm" stroke-dasharray="39.25 78.5" stroke-dashoffset="-78.5" />
         </svg>
     </div>
 </div>

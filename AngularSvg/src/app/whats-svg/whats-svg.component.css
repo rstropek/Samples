@@ -30,3 +30,13 @@ rect.semi-transparent {
 #dashing path {
     fill: none;
 }
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+.animated-line {
+    animation: dash 1s linear infinite;
+}

@@ -6,11 +6,11 @@
   "author": "Rainer Stropek",
   "license": "MIT",
   "dependencies": {
-    "ws": "^6.0.0"
+    "ws": "^7.0.0"
   },
   "devDependencies": {
-    "typescript": "^3.1.1",
+    "typescript": "^3.4.5",
     "@types/ws": "^6.0.1",
-    "ts-node": "^7.0.1"
+    "ts-node": "^8.1.0"
   }
 }
