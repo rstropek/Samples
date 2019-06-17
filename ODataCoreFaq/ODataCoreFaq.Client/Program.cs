@@ -31,9 +31,9 @@ namespace ODataCoreFaq.Client
                 .For<Customer>()
                 .Filter(x => x.CountryIsoCode == "AT")
                 .FindEntriesAsync();
-            foreach (var package in customers)
+            foreach (var customer in customers)
             {
-                Console.WriteLine(package.CompanyName);
+                Console.WriteLine(customer.CompanyName);
             }
         }
 
@@ -46,13 +46,14 @@ namespace ODataCoreFaq.Client
                 .FindEntriesAsync();
             foreach (dynamic customer in customers)
             {
-                Console.WriteLine(customer["CompanyName"]);
+                Console.WriteLine(customer.CompanyName);
             }
         }
 
         private static async Task BasicApi(ODataClient client)
         {
-            var customers = await client.FindEntriesAsync("Customers?$filter=CountryIsoCode eq 'AT'");
+            var customers = await client.FindEntriesAsync(
+                "Customers?$filter=CountryIsoCode eq 'AT'");
             foreach (var customer in customers)
             {
                 Console.WriteLine(customer["CompanyName"]);

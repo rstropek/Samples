@@ -24,8 +24,8 @@ namespace ODataCoreFaq.Service
         public static readonly LoggerFactory MyLoggerFactory
             = new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //    => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.UseLoggerFactory(MyLoggerFactory);
 
         public async Task ClearAndFillWithDemoData()
         {

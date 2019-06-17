@@ -4,7 +4,7 @@ GET https://localhost:5001/api/FillDatabase
 GET https://localhost:5001/odata/$metadata
 
 ###
-GET https://localhost:5001/odata/Customers
+GET https://localhost:5001/odata/Customers?$filter=CountryIsoCode eq 'AT'
 
 ###
 GET https://localhost:5001/odata/Customers?$expand=Orders

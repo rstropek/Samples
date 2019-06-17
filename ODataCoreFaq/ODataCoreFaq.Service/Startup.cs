@@ -29,7 +29,9 @@ namespace ODataCoreFaq.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<OrderManagementContext>(opt => opt.UseInMemoryDatabase("OrderManagement"));
+            //services.AddDbContext<OrderManagementContext>(opt => opt.UseInMemoryDatabase("OrderManagement"));
+            services.AddDbContext<OrderManagementContext>(options => options.UseSqlServer(
+                Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddOData();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
