@@ -1,7 +1,7 @@
 GET http://localhost:5000/odata/Customers
 
 ###
-GET http://localhost:5000/odata/Customers?$filter=LastName eq 'Smith'
+GET http://localhost:5000/odata/Customers?$filter=LastName eq 'Smith'&$top=3
 
 ###
 GET http://localhost:5000/odata/Customers?$top=3
