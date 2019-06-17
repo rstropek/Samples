@@ -33,6 +33,7 @@ namespace ODataNetCoreSimple
             // Add OData to ASP.NET Core's dependency injection system
             services.AddOData();
 
+            // Currently necessary (read details in https://github.com/OData/WebApi/issues/1707)
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
