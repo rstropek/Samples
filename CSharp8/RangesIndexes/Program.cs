@@ -45,13 +45,13 @@ namespace RangesIndexes
 
             // Note that Index is a struct with two members:
             Index myIndex = new Index(1, true);
-            if (myIndex.FromEnd)
+            if (myIndex.IsFromEnd)
             {
                 WriteLine($"Index counts from the back {myIndex.Value} element(s)");
             }
 
             // Note that C# turns `numbers[numberIndex]` into something like that:
-            singleNumber = numbers[myIndex.FromEnd ? (numbers.Length - myIndex.Value) : myIndex.Value];
+            singleNumber = numbers[myIndex.IsFromEnd ? (numbers.Length - myIndex.Value) : myIndex.Value];
 
             // You can turn integers into Index...
             var myIntIndex = 1;
@@ -85,7 +85,8 @@ namespace RangesIndexes
             WriteLine(numbersSplice.Aggregate(string.Empty, (acc, n) => acc += $" {n}"));
 
             // Range is a struct with two Indexes
-            Range myRange = Range.Create(1, ^1);
+            Range myRange = new Range(1, ^1);
+            Range myRange2 = 1..^1;
             WriteLine($"This range is from {myRange.Start} to {myRange.End}");
 
             // Currently, ranges do not work with Lists

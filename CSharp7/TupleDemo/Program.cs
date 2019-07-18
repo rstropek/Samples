@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// Note that you have to install System.ValueTuple for this sample (see .csproj)
-
 // Show IL code during demos using dnSpy.
 
 // Learn more about C# tuples at https://docs.microsoft.com/en-us/dotnet/articles/csharp/tuples.
@@ -126,6 +124,24 @@ namespace ConsoleApplication
             var p = new Point(1, 2);
             var (x, y) = p;
             Console.WriteLine($"p.x={x}, p.y={y}");
+
+            // Compare
+            var t1 = (sum: 42, count: 5);
+            var t2 = (sum: 42, count2: 5);
+            if (t1 == t2)
+            {
+                Console.WriteLine("Equal");
+            }
+            else
+            {
+                Console.WriteLine("Not Equal");
+            }
+
+            // Deconstruction + Tuple
+            var a = 1;
+            var b = 2;
+            (a, b) = (b, a);
+            Console.WriteLine($"{a} {b}");
         }
     }
 

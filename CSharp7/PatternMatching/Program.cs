@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0019 // Use pattern matching
+
 // Learn more about C# pattern matching at https://docs.microsoft.com/en-us/dotnet/articles/csharp/pattern-matching.
 
 namespace PatternMatching
@@ -183,7 +186,10 @@ namespace PatternMatching
             {
                 var counter = 0L;
                 var stopRequested = false;
-                var timer = new Timer(_ => stopRequested = true, null, TimeSpan.FromSeconds(10), new TimeSpan(-1));
+                var timer = new Timer(_ => stopRequested = true,
+                                      null,
+                                      TimeSpan.FromSeconds(10),
+                                      new TimeSpan(-1));
                 while (!stopRequested)
                 {
                     body();

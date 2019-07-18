@@ -86,7 +86,7 @@ namespace Ref
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             // val will be copied
             var val = new TwoDoubles { A = 1d, B = -1d };
@@ -220,5 +220,8 @@ namespace Ref
 
             public double B;
         }
+
+        // Note that C# 8 will add disposable ref structs
+        // (https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8#disposable-ref-structs).
     }
 }

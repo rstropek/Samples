@@ -5,13 +5,17 @@ using System.Threading.Tasks;
 // Read more about local functions at
 // https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/local-functions
 
+// Note that C# 8 will add static local functions
+// (https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8#static-local-functions).
+// They cannot capture (reference) any variables from the enclosing scope.
+
 namespace LocalFunction
 {
     delegate int MathOp(int a, int b);
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             BasicLocalFunction();
             SumFromZeroTo100();

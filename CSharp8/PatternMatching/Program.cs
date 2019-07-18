@@ -5,6 +5,22 @@
 
 namespace RecursivePatterns
 {
+    enum HeroType
+    {
+        NuclearAccident,
+        FailedScienceExperiment,
+        Alien,
+        Mutant,
+        Other
+    };
+
+    enum HeroTypeCategory
+    {
+        Accident,
+        SuperPowersFromBirth,
+        Other
+    }
+
     class Person
     {
         public Person(string name)
@@ -18,12 +34,28 @@ namespace RecursivePatterns
     // Note that Hero derives from Person
     class Hero : Person
     {
-        public Hero(string name, bool canFly) : base(name)
+        public Hero(string name, bool canFly, HeroType heroType = HeroType.Other) : base(name)
         {
             CanFly = canFly;
+            HeroType = heroType;
         }
 
         public bool CanFly { get; set; }
+
+        public HeroType HeroType { get; set; }
+
+        public HeroTypeCategory HeroTypeCategory
+        {
+            // Note Property Pattern in the following Switch Expression
+            get => this switch
+            {
+                { HeroType: HeroType.NuclearAccident } => HeroTypeCategory.Accident,
+                { HeroType: HeroType.FailedScienceExperiment } => HeroTypeCategory.Accident,
+                { HeroType: HeroType.Alien } => HeroTypeCategory.SuperPowersFromBirth,
+                { HeroType: HeroType.Mutant } => HeroTypeCategory.SuperPowersFromBirth,
+                _ => HeroTypeCategory.Other
+            };
+        }
     }
 
     class Program
@@ -32,9 +64,9 @@ namespace RecursivePatterns
         {
             var people = new Person[]
             {
-                new Hero("Superman", true),
+                new Hero("Superman", true, HeroType.Alien),
                 new Person("John Doe"),
-                new Hero("Flash", false),
+                new Hero("Flash", false, HeroType.FailedScienceExperiment),
             };
 
             RecursivePattern(people);
@@ -91,7 +123,8 @@ namespace RecursivePatterns
                 // in combination with pattern matching.
                 // Be *CAREFUL* when editing this code in the current VS2019 preview.
                 // Unfortunately, it crashes regularly when working with switch expressions.
-                Console.WriteLine(person switch {
+                Console.WriteLine(person switch
+                {
                     Hero h => $"Hero {h.Name} {h.CanFly}",
                     Person p => $"Person {p.Name}",
                     _ => "Who is that?!?"

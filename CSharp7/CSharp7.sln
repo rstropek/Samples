@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionBodiedMembers", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValueTask", "ValueTask\ValueTask.csproj", "{DCC1B7CD-1D53-4777-8533-DDCFB6E0441D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Span", "Span\Span.csproj", "{0805B202-2FE2-4553-B462-7DBB780021CD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncMain", "AsyncMain\AsyncMain.csproj", "{32BDECE3-9852-4411-9EC8-FB6E12DA5EA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ref", "Ref\Ref.csproj", "{87E24910-8D9D-4FCB-A700-5EF91C7DF8A2}"

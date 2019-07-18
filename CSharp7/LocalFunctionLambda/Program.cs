@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+#pragma warning disable IDE0039 // Use local function
+
 // This sample demonstrates local functions implemented with lambdas. This is
 // not new in VS 2017, I just use it as an introduction to local functions
 // (see project in ../LocalFunction).
@@ -12,7 +14,7 @@ namespace LocalFunctionLambda
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             BasicLocalFunction();
             AsyncLocalFunction();

@@ -1,5 +1,8 @@
 ﻿using System;
 
+#pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable IDE0052 // Remove unread private members
+
 namespace ExpressionBodiedMembers
 {
     // C# 7 now understands much more expression-bodied members.
@@ -27,9 +30,10 @@ namespace ExpressionBodiedMembers
             Console.WriteLine("Hello World!");
         }
 
+
         // Note throw expression and (recap) `nameof`
         private static int evenNumber = 2;
-        private static void SetEvenNumber(int n) => 
+        private static void SetEvenNumber(int n) =>
             evenNumber = (n % 2 == 0) ? n : throw new ArgumentException(nameof(n));
 
         private static string someString = "abc";

@@ -4,7 +4,7 @@ namespace RefReturns
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var calculatedDeliveryDate = new DateTime(2016, 5, 18);
             var desiredDeliveryDate = new DateTime(2016, 5, 1);
