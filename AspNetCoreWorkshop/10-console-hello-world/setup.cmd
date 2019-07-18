@@ -1,9 +1,4 @@
 @echo off
-REM *** Prerequisite: 
-REM https://www.microsoft.com/net/core#windows
-
-REM *** For more details see 
-REM https://docs.microsoft.com/en-us/dotnet/articles/core/tools/dotnet
 
 REM Generate a console app called "helloWorld"
 mkdir helloworld
@@ -11,7 +6,7 @@ cd helloworld
 dotnet new console
 
 REM Generate a library called "superutils"
-REM Goal: Compare project.json from console app and library
+REM Goal: Compare .csproj from console app and library
 cd ..
 mkdir superutils
 cd superutils
@@ -30,10 +25,14 @@ dotnet build
 
 REM Run app
 dotnet run
-dotnet bin\Debug\netcoreapp2.0\helloworld.dll
+dotnet bin\Debug\netcoreapp2.2\helloworld.dll
 
 REM Publish app (look at what happens in the file system)
-dotnet publish
+dotnet publish -o out
 REM Run the app from the published directory
-REM *** For more details see also
-REM https://github.com/dotnet/cli/blob/rel/1.0.0/Documentation/specs/runtime-configuration-file.md
+
+REM Generate platform-dependent executable
+REM Note that the behavior regarding executables will change significantly in
+REM .NET Core 3 (see also https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-core-3-0#default-executables).
+dotnet publish -c Release -r win-x64 -o out
+REM Run the app from published directory

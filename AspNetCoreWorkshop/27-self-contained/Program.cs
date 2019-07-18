@@ -2,11 +2,11 @@
 using System;
 using System.IO;
 
-namespace _27_self_contained
+namespace SelfContained
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             if (File.Exists("greet.json"))
             {
