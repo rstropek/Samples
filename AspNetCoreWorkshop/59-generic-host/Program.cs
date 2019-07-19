@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -29,6 +28,8 @@ namespace GenericHost
                 })
                 .ConfigureAppConfiguration((hostContext, configApp) =>
                 {
+                    // Configure app settings. For details see
+                    // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#configureappconfiguration
                     configApp.SetBasePath(Directory.GetCurrentDirectory());
                     configApp.AddJsonFile("appsettings.json", optional: true);
                     configApp.AddJsonFile(
@@ -39,12 +40,17 @@ namespace GenericHost
                 })
                 .ConfigureLogging((hostContext, configLogging) =>
                 {
+                    // Configure logging to write logs to the console. For details see
+                    // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#configurelogging
                     configLogging.AddConsole();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<FaceRecognitionService>();
+                    // Adding our hosted service that monitors a folder. For details see
+                    // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#configureservices
+                    services.AddHostedService<FileHashingService>();
                 })
+                // Make sure to gracefully shutdown in case of Ctrl+C.
                 .UseConsoleLifetime()
                 .Build();
 

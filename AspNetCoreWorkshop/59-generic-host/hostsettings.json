@@ -1,3 +1,4 @@
 {
-  "environment": "PreProduction"
+  "environment": "PreProduction",
+  "folderToWatch": "C:\\temp\\images-to-hash"
 }
