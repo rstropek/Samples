@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 
 namespace myApp
 {
     public class Program
     {
         public static void Main(string[] args) =>
-            new WebHostBuilder().UseKestrel().UseStartup<Startup>().Build().Run();
+            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build().Run();
     }
 
     public class Startup
@@ -42,6 +43,7 @@ namespace myApp
     public class MyTransientService : MyService { public MyTransientService() : base("Transient") { } }
     public class MyScopedService : MyService { public MyScopedService() : base("Scoped") { } }
 
+    [ApiController]
     [Route("greet")]
     public class GreetingController : ControllerBase
     {

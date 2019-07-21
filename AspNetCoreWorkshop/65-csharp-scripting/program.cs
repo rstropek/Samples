@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 
 namespace myApp
 {
     public class Program
     {
         public static void Main(string[] args) =>
-            new WebHostBuilder().UseKestrel().UseStartup<Startup>().Build().Run();
+            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build().Run();
     }
     
     public class Startup
@@ -27,8 +28,9 @@ namespace myApp
         }
     }
     
+    [ApiController]
     [Route("calc")]
-    public class GreetingController : Controller
+    public class GreetingController : ControllerBase
     {
         [HttpGet]
         public async Task<string> Get(string formula)
