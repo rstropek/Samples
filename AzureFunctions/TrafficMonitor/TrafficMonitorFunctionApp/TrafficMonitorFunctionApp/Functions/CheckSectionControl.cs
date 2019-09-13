@@ -1,23 +1,29 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
-using System.Threading.Tasks;
-using System;
+using Microsoft.Extensions.Logging;
 using TrafficMonitor.Model;
 using TrafficMonitor.Services;
-using Microsoft.Extensions.Logging;
 
-namespace TrafficMonitor.Functions
+namespace TrafficMonitorFunctionApp.Functions
 {
-    public static class CheckSectionControl
+    public class CheckSectionControl
     {
+        private readonly IStorage storage;
+
+        public CheckSectionControl(IStorage storage)
+        {
+            this.storage = storage;
+        }
+
         /// <summary>
         /// Speed check for section control
         /// </summary>
         [FunctionName("CheckSectionControl")]
-        public static async Task Run(
+        public async Task Run(
             [ServiceBusTrigger("plate-read", "section-control", Connection = "SECCTRL_RECEIVE_PLATE_READ")]PlateRead plate,
-            ILogger log,
-            [Inject(typeof(IStorage))]IStorage storage)
+            ILogger log)
         {
             log.LogInformation($"Start section control check for {plate.LicensePlate}");
 
@@ -30,7 +36,7 @@ namespace TrafficMonitor.Functions
             {
                 // License plate read is from a start of a section control
                 log.LogInformation("Processing entry into section control");
-                
+
                 if (car.ActiveSection != null)
                 {
                     car.Violations.Add(new Violation(plate.ReadTimestamp, "Possible fraud, entered multiple times"));

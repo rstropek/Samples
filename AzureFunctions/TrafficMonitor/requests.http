@@ -1,0 +1,21 @@
+@host = https://svrlstictactoe.azurewebsites.net
+
+###
+POST {{ host }}/api/HttpTrigger1
+Content-Type: application/json
+
+[ " ", "X", " ",
+  " ", "X", " ",
+  " ", "X", " " ]
+
+###
+POST {{ host }}/api/HttpTrigger1
+Content-Type: application/json
+
+[ " ", "X", " " ]
+
+###
+POST http://localhost:7071/api/generate-demo-data
+
+###
+POST https://srvlstrafficmonitor.azurewebsites.net/api/generate-demo-data

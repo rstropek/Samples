@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -10,15 +12,19 @@ using Newtonsoft.Json;
 using TrafficMonitor.Model;
 using TrafficMonitor.Services;
 
-// Note that this demo can be used to showcase custom Application Insights telemetry with
-// Azure Functions, too (e.g. for tracking OpenALPR dependency). However, at the time of
-// writing, there is a bug in the Functions preview SDK that makes this impossible (for
-// details see https://github.com/Azure/azure-functions-host/issues/2473).
-
-namespace TrafficMonitor
+namespace TrafficMonitorFunctionApp.Functions
 {
-    public static class ProcessCarImage
+    public class ProcessCarImage
     {
+        private readonly Configuration configuration;
+        private readonly ILicensePlateRecognizer licensePlateRecognizer;
+
+        public ProcessCarImage(Configuration configuration, ILicensePlateRecognizer licensePlateRecognizer)
+        {
+            this.configuration = configuration;
+            this.licensePlateRecognizer = licensePlateRecognizer;
+        }
+
         /// <summary>
         /// Process incoming camera image
         /// </summary>
@@ -33,12 +39,10 @@ namespace TrafficMonitor
         /// </remarks>
         [FunctionName("ProcessCarImage")]
         [return: ServiceBus("plate-read", Connection = "SECCTRL_SEND_PLATE_READ", EntityType = EntityType.Topic)]
-        public static async Task<Message> Run(
+        public async Task<Message> Run(
             [BlobTrigger("car-images/cameras/{camera}/{name}", Connection = "SECCTRL_CAR_IMAGES")]CloudBlockBlob imageBlob,
             string camera,
             string name,
-            [Inject(typeof(Configuration))]Configuration configuration,
-            [Inject(typeof(ILicensePlateRecognizer))]ILicensePlateRecognizer licensePlateRecognizer,
             ILogger log)
         {
             log.LogInformation($"Start processing of new image {name} from camera {camera}");
@@ -78,7 +82,7 @@ namespace TrafficMonitor
                 };
 
                 var readQuality = "low";
-                if (recognitionResult.Confidence >= 75d && recognitionResult.RegionConfidence >= 75d)
+                if (recognitionResult.Confidence >= 75d && recognitionResult.RegionConfidence >= 25d)
                 {
                     readQuality = "high";
                 }

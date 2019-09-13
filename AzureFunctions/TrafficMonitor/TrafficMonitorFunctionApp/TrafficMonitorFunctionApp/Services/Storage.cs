@@ -22,7 +22,7 @@ namespace TrafficMonitor.Services
         public Uri CarsUri { get; set; }
         public Uri CamerasUri { get; set; }
 
-        public Storage([Inject(typeof(Configuration))]Configuration configuration)
+        public Storage(Configuration configuration)
         {
             Client = new DocumentClient(new Uri(configuration.Host), configuration.AuthKey, new ConnectionPolicy
             {

@@ -1,23 +1,31 @@
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using TrafficMonitor.Model;
 using TrafficMonitor.Services;
 
-namespace TrafficMonitor.Functions
+namespace TrafficMonitorFunctionApp.Functions
 {
-    public static class CheckVignette
+    public class CheckVignette
     {
+        private readonly IStorage storage;
+
+        public CheckVignette(IStorage storage)
+        {
+            this.storage = storage;
+        }
+
         /// <summary>
         /// Checks whether a car has a valid vignette
         /// </summary>
         [FunctionName("CheckVignette")]
-        public static async Task Run(
+        public async Task Run(
             [ServiceBusTrigger("plate-read", "check-vignette", Connection = "SECCTRL_RECEIVE_PLATE_READ")]PlateRead plate,
-            ILogger log,
-            [Inject(typeof(IStorage))]IStorage storage)
+            ILogger log)
         {
             log.LogInformation($"Start vignette check for {plate.LicensePlate}");
             var car = await storage.GetCarByLicensePlateAsync(plate.Nationality, plate.LicensePlate);

@@ -1,18 +1,20 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
-using System.Net;
-using TrafficMonitor.Model;
-using TrafficMonitor.Services;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using TrafficMonitor.Model;
+using System.Net;
+using TrafficMonitor.Services;
 
-namespace TrafficMonitor.Functions
+namespace TrafficMonitorFunctionApp.Functions
 {
-    public static class GenerateDemoData
+    public class GenerateDemoData
     {
         #region Helper variables
         private static readonly List<Vignette> DemoVignettes = new List<Vignette> {
@@ -22,7 +24,22 @@ namespace TrafficMonitor.Functions
 
         private static readonly IActionResult CreatedResult = new StatusCodeResult((int)HttpStatusCode.Created);
         private static readonly IActionResult ErrorResult = new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        private readonly Configuration configuration;
+        private readonly IStorage storage;
+        private readonly LicensePlateGenerator licensePlateGenerator;
+        private readonly VehicleCategoryGenerator vehicleCategoryGenerator;
         #endregion
+
+        public GenerateDemoData(Configuration configuration,
+            IStorage storage,
+            LicensePlateGenerator licensePlateGenerator,
+            VehicleCategoryGenerator vehicleCategoryGenerator)
+        {
+            this.configuration = configuration;
+            this.storage = storage;
+            this.licensePlateGenerator = licensePlateGenerator;
+            this.vehicleCategoryGenerator = vehicleCategoryGenerator;
+        }
 
         /// <summary>
         /// Generates demo data
@@ -34,13 +51,9 @@ namespace TrafficMonitor.Functions
         /// mock objects could be provided for these services.
         /// </remarks>
         [FunctionName("GenerateDemoData")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Admin, "post", Route = "generate-demo-data")]HttpRequest req,
-            ILogger log,
-            [Inject(typeof(Configuration))]Configuration configuration,
-            [Inject(typeof(IStorage))]IStorage storage,
-            [Inject(typeof(LicensePlateGenerator))]LicensePlateGenerator licensePlateGenerator,
-            [Inject(typeof(VehicleCategoryGenerator))]VehicleCategoryGenerator vehicleCategoryGenerator)
+            ILogger log)
         {
             log.LogInformation("Starting to re-generate demo data");
             try
