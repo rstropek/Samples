@@ -43,7 +43,8 @@ namespace TrafficMonitorFunctionApp.Functions
             [BlobTrigger("car-images/cameras/{camera}/{name}", Connection = "SECCTRL_CAR_IMAGES")]CloudBlockBlob imageBlob,
             string camera,
             string name,
-            ILogger log)
+            ILogger log,
+            [OrchestrationClient] DurableOrchestrationClient orchestrationClient)
         {
             log.LogInformation($"Start processing of new image {name} from camera {camera}");
 
@@ -85,6 +86,17 @@ namespace TrafficMonitorFunctionApp.Functions
                 if (recognitionResult.Confidence >= 75d && recognitionResult.RegionConfidence >= 25d)
                 {
                     readQuality = "high";
+                }
+
+                if (readQuality == "low")
+                {
+                    var instanceId = await orchestrationClient.StartNewAsync(
+                        "OrchestrateRequestApproval",
+                        new PlateReadApproval
+                        {
+                            Read = read
+                        });
+                    log.LogInformation($"Durable Function Ochestration started: {instanceId}");
                 }
 
                 return CreateMessage(read, readQuality);

@@ -1,7 +1,8 @@
 @host = https://svrlstictactoe.azurewebsites.net
+@localhost = http://localhost:7071
 
 ###
-POST {{ host }}/api/HttpTrigger1
+POST {{ host }}/api/TicTacToe
 Content-Type: application/json
 
 [ " ", "X", " ",
@@ -9,10 +10,13 @@ Content-Type: application/json
   " ", "X", " " ]
 
 ###
-POST {{ host }}/api/HttpTrigger1
+POST {{ host }}/api/TicTacToe
 Content-Type: application/json
 
 [ " ", "X", " " ]
+
+###
+GET {{ localhost }}/api/SayHello?name=Tom
 
 ###
 POST http://localhost:7071/api/generate-demo-data

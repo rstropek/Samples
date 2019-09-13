@@ -32,4 +32,13 @@ namespace TrafficMonitor.Model
         [JsonProperty(PropertyName = "carid", NullValueHandling = NullValueHandling.Ignore)]
         public string CarID { get; set; }
     }
+
+    public class PlateReadApproval
+    {
+        [JsonProperty(PropertyName = "read", NullValueHandling = NullValueHandling.Ignore)]
+        public PlateRead Read { get; set; }
+
+        [JsonProperty(PropertyName = "instanceId", NullValueHandling = NullValueHandling.Ignore)]
+        public string InstanceId { get; set; }
+    }
 }

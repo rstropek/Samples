@@ -1,10 +1,10 @@
-# Script
+1. Create function app
 
-1. Talk about what *serverless* means
+1. Speak about options
 
-1. Create *function app* in portal
+1. Create function in portal
 
-```
+```CSharp
 #r "Newtonsoft.Json"
 
 using System.Net;
@@ -51,3 +51,36 @@ private static IActionResult BuildResponse(HttpRequestMessage req, string winner
     => new OkObjectResult(new { winner = winner });
 
 ```
+
+1. Try requests (see *requests.http*)
+
+1. Create local function
+
+```bash
+func init --worker-runtime node --docker --language javascript
+func new --language javascript --name SayHello
+```
+
+* Change *authLevel* to *anonymous*
+
+```bash
+func start
+```
+
+1. Run in Docker
+
+```bash
+docker build -t funcsayhello .
+docker run -t --name sayhello -p 7071:80 funcsayhello
+docker rm -f sayhello
+```
+
+1. Show more complex solution in VS
+
+1. Discuss C# programming model
+
+1. Publish to folder and discuss files
+
+1. Speak about deployment options
+
+1. Demo license plate recognition
