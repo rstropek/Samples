@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>eolfixer</ToolCommandName>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="TestFile.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>
