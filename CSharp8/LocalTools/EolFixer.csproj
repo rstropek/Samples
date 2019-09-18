@@ -12,6 +12,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="nupkg\**" />
+      <EmbeddedResource Remove="nupkg\**" />
+      <None Remove="nupkg\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.6.0" />
     </ItemGroup>
 

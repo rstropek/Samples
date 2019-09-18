@@ -9,11 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RangesIndexes", "RangesInde
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternMatching", "PatternMatching\PatternMatching.csproj", "{34B77C47-D91C-4829-80BB-FB50B35AC3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadonlyMembers", "ReadonlyMembers\ReadonlyMembers.csproj", "{07632E6F-1559-4A5C-9537-F00CC3AE30FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadonlyMembers", "ReadonlyMembers\ReadonlyMembers.csproj", "{07632E6F-1559-4A5C-9537-F00CC3AE30FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsingDeclarations", "UsingDeclarations\UsingDeclarations.csproj", "{ACE09F36-DAA1-429E-B670-FBBA0841B1DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsingDeclarations", "UsingDeclarations\UsingDeclarations.csproj", "{ACE09F36-DAA1-429E-B670-FBBA0841B1DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NullableReferenceTypes", "NullableReferenceTypes\NullableReferenceTypes.csproj", "{67426BEC-3105-4668-B327-7128B728DEC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NullableReferenceTypes", "NullableReferenceTypes\NullableReferenceTypes.csproj", "{67426BEC-3105-4668-B327-7128B728DEC9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Json", "Json\Json.csproj", "{ACB4B8B7-CA51-4173-B0B3-1A9B2F823084}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EolFixer", "LocalTools\EolFixer.csproj", "{7AAE6D77-085B-4D6C-A45E-CD20D3131EF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{67426BEC-3105-4668-B327-7128B728DEC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67426BEC-3105-4668-B327-7128B728DEC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67426BEC-3105-4668-B327-7128B728DEC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB4B8B7-CA51-4173-B0B3-1A9B2F823084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB4B8B7-CA51-4173-B0B3-1A9B2F823084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB4B8B7-CA51-4173-B0B3-1A9B2F823084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB4B8B7-CA51-4173-B0B3-1A9B2F823084}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AAE6D77-085B-4D6C-A45E-CD20D3131EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AAE6D77-085B-4D6C-A45E-CD20D3131EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AAE6D77-085B-4D6C-A45E-CD20D3131EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AAE6D77-085B-4D6C-A45E-CD20D3131EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
