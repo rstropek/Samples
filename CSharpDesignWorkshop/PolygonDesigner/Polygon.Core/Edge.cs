@@ -1,11 +1,13 @@
 ﻿using System;
 
+// Note: Immutable struct marked as "readonly" (C# 7)
+
 namespace Polygon.Core
 {
     /// <summary>
     /// Represents an edge between two points
     /// </summary>
-    public struct Edge : IEquatable<Edge>
+    public readonly struct Edge : IEquatable<Edge>
     {
         public Point From { get; }
 
@@ -13,6 +15,8 @@ namespace Polygon.Core
 
         public Edge(in Point from, in Point to)
         {
+            // Note: "in" keyword for passing parameters by reference (C# 7)
+
             From = from;
             To = to;
         }
@@ -46,6 +50,8 @@ namespace Polygon.Core
         /// </remarks>
         public Point? GetIntersectionPoint(in Point lineFrom, in Point lineTo)
         {
+            // Note: "in" keyword for passing parameters by reference (C# 7)
+
             var direction1 = lineTo - lineFrom;
             var direction2 = To - From;
             var dotPerp = (direction1.X * direction2.Y) - (direction1.Y * direction2.X);

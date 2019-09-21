@@ -1,16 +1,17 @@
 ﻿using Polygon.Core.Generators;
 using Prism.Commands;
 using Prism.Mvvm;
+using System;
 
 namespace PolygonDesigner.ViewLogic
 {
     public class GeneratorInfo : BindableBase
     {
-        private PolygonManagementViewModel Parent;
+        private readonly PolygonManagementViewModel Parent;
 
         public string FriendlyName { get; }
 
-        public PolygonGenerator Generator { get; }
+        public IPolygonGenerator Generator { get; }
 
         public bool Selected
         {
@@ -18,11 +19,11 @@ namespace PolygonDesigner.ViewLogic
             set { Parent.SelectedPolygonGenerator = Generator; }
         }
 
-        public GeneratorInfo(PolygonManagementViewModel parent, string friendlyName, PolygonGenerator generator)
+        public GeneratorInfo(PolygonManagementViewModel parent, string friendlyName, IPolygonGenerator generator)
         {
             FriendlyName = friendlyName;
             Generator = generator;
-            Parent = parent;
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Parent.PropertyChanged += (_, ea) =>
             {
                 if (ea.PropertyName == nameof(PolygonManagementViewModel.SelectedPolygonGenerator))

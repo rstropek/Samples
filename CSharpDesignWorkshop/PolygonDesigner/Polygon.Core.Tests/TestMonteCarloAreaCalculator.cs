@@ -20,7 +20,7 @@ namespace Polygon.Core.Tests
             const double sideLength = 20d;
             var shape = new SquarePolygonGenerator().Generate(sideLength);
             var mc = new MonteCarloAreaCalculator();
-            var area = await mc.CalculateAreaAsync(shape);
+            var area = await mc.CalculateAreaAsync(shape).ConfigureAwait(false);
 
             Assert.Equal(Math.Pow(sideLength, 2), area);
         }
@@ -30,8 +30,8 @@ namespace Polygon.Core.Tests
         {
             const double sideLength = 20d;
             var shape = new TrianglePolygonGenerator().Generate(sideLength);
-            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculator.Options { SimulationDuration = TimeSpan.FromMilliseconds(250) });
-            var area = await mc.CalculateAreaAsync(shape);
+            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculatorOptions { SimulationDuration = TimeSpan.FromMilliseconds(250) });
+            var area = await mc.CalculateAreaAsync(shape).ConfigureAwait(false);
 
             var expectedArea = Math.Pow(sideLength, 2) / 2d;
             IsApproximately(expectedArea, area);
@@ -56,8 +56,8 @@ namespace Polygon.Core.Tests
                 new Point(0d, sideLength * 2d)
             };
 
-            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculator.Options { SimulationDuration = TimeSpan.FromMilliseconds(250) });
-            var area = await mc.CalculateAreaAsync(shape);
+            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculatorOptions { SimulationDuration = TimeSpan.FromMilliseconds(250) });
+            var area = await mc.CalculateAreaAsync(shape).ConfigureAwait(false);
 
             var expectedArea = Math.Pow(sideLength, 2) * 5;
             IsApproximately(expectedArea, area);
@@ -93,17 +93,20 @@ namespace Polygon.Core.Tests
         {
             const double sideLength = 20d;
             var shape = new SquarePolygonGenerator().Generate(sideLength);
-            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculator.Options
+            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculatorOptions
             {
                 Iterations = 10,
                 ProgressReportingIterations = 2
             });
 
-            var progresses = new List<double>();
+            // Note use of Mocking framework
+
+            var progresses = new List<double>(5);
             var progressMock = new Mock<IProgress<double>>();
             progressMock.Setup(x => x.Report(It.IsAny<double>()))
-                .Callback<double>((double progress) => progresses.Add(progress));
-            await mc.CalculateAreaAsync(shape, CancellationToken.None, progressMock.Object);
+                .Callback((double progress) => progresses.Add(progress));
+            await mc.CalculateAreaAsync(shape, progressMock.Object, CancellationToken.None)
+                .ConfigureAwait(false);
             Assert.Equal(new[] { 0d, 0.2d, 0.4d, 0.6d, 0.8d, 1d }, progresses);
         }
 
@@ -112,7 +115,7 @@ namespace Polygon.Core.Tests
         {
             const double sideLength = 20d;
             var shape = new SquarePolygonGenerator().Generate(sideLength);
-            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculator.Options
+            var mc = new MonteCarloAreaCalculator(new MonteCarloAreaCalculatorOptions
             {
                 SimulationDuration = TimeSpan.FromMilliseconds(50),
                 ProgressReportingIterations = 2
@@ -121,8 +124,9 @@ namespace Polygon.Core.Tests
             var progresses = new List<double>();
             var progressMock = new Mock<IProgress<double>>();
             progressMock.Setup(x => x.Report(It.IsAny<double>()))
-                .Callback<double>((double progress) => progresses.Add(progress));
-            await mc.CalculateAreaAsync(shape, CancellationToken.None, progressMock.Object);
+                .Callback((double progress) => progresses.Add(progress));
+            await mc.CalculateAreaAsync(shape, progressMock.Object, CancellationToken.None)
+                .ConfigureAwait(false);
             Assert.True(progresses.Count > 2);
             Assert.Equal(0d, progresses[0]);
             Assert.Equal(1d, progresses[progresses.Count - 1]);

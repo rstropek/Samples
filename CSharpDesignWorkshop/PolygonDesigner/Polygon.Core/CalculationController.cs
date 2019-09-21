@@ -12,7 +12,7 @@ namespace Polygon.Core
             private int? MaxIterations { get; }
             private TimeSpan? MaxTime { get; }
             private int? ProgressReportingIterations { get; }
-            private IProgress<double> ProgressCallback { get; }
+            private IProgress<double>? ProgressCallback { get; }
             public int InCounter { get; set; }
             public int Iterations { get; set; }
             private Stopwatch Watch { get; }
@@ -20,16 +20,13 @@ namespace Polygon.Core
             private bool HasReported100Perc { get; set; }
 
             public CalculationController(int? maxIterations, TimeSpan? maxTime,
-                int? progressReportingIterations, IProgress<double> progressCallback)
+                int? progressReportingIterations, IProgress<double>? progressCallback)
             {
                 MaxIterations = maxIterations;
                 MaxTime = maxTime;
                 ProgressReportingIterations = progressReportingIterations;
                 ProgressCallback = progressCallback;
-                if (MaxTime.HasValue)
-                {
-                    Watch = new Stopwatch();
-                }
+                Watch = new Stopwatch();
             }
 
             public void Start()
@@ -54,7 +51,7 @@ namespace Polygon.Core
                 var reportedProgress = progress ?? Progress;
                 if (ShouldReportProgress && !(reportedProgress == 0d && HasReported0Perc) && !(reportedProgress == 1d && HasReported100Perc))
                 {
-                    ProgressCallback.Report(reportedProgress);
+                    ProgressCallback?.Report(reportedProgress);
                     if (reportedProgress == 1d)
                     {
                         HasReported100Perc = true;
@@ -93,10 +90,12 @@ namespace Polygon.Core
                     {
                         return Convert.ToDouble(Iterations) / Convert.ToDouble(MaxIterations.Value);
                     }
-                    else
+                    else if (MaxTime.HasValue)
                     {
                         return Convert.ToDouble(Watch.ElapsedMilliseconds) / Convert.ToDouble(MaxTime.Value.TotalMilliseconds);
                     }
+
+                    return 0d;
                 }
             }
         }

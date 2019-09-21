@@ -14,8 +14,8 @@ namespace PolygonDesigner.ViewLogic
             set { SetProperty(ref PointsValue, value); }
         }
 
-        private string DescriptionValue;
-        public string Description
+        private string? DescriptionValue;
+        public string? Description
         {
             get { return DescriptionValue; }
             set { SetProperty(ref DescriptionValue, value); }

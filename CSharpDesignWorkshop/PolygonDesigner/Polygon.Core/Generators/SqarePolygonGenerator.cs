@@ -6,7 +6,7 @@ namespace Polygon.Core.Generators
     /// Implements a polygon generator that generates a square polygon
     /// </summary>
     [FriendlyName("Square")]
-    public class SquarePolygonGenerator : PolygonGenerator
+    public class SquarePolygonGenerator : IPolygonGenerator
     {
         /// <inheritdoc />
         public ReadOnlyMemory<Point> Generate(in double maxSideLength)

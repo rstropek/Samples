@@ -40,5 +40,11 @@ namespace Polygon.Core.Tests
         {
             Assert.True(PathMarkupConverter.Convert(string.Empty).Length == 0);
         }
+
+        [Fact]
+        public void ExceptionOnInvalidMarkup()
+        {
+            Assert.Throws<ArgumentException>(() => PathMarkupConverter.Convert("FooBar"));
+        }
     }
 }

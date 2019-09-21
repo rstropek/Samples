@@ -1,11 +1,13 @@
 ﻿using System;
 
+// Note: Immutable struct marked as "readonly" (C# 7)
+
 namespace Polygon.Core
 {
     /// <summary>
     /// Represents a 2D point
     /// </summary>
-    public struct Point : IEquatable<Point>
+    public readonly struct Point : IEquatable<Point>
     {
         /// <summary>
         /// Gets the X coordinate of the point
@@ -24,6 +26,8 @@ namespace Polygon.Core
         /// <param name="y">Initial Y coordinate</param>
         public Point(in double x, in double y)
         {
+            // Note: "in" keyword for passing parameters by reference (C# 7)
+
             X = x;
             Y = y;
         }

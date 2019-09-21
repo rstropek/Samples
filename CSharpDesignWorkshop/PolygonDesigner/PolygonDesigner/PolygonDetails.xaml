@@ -38,7 +38,7 @@
 
         <ProgressBar Grid.Row="2" Grid.ColumnSpan="2" Height="20" Minimum="0" Maximum="1"
                      Visibility="{Binding Path=IsCalculatingArea, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Value="{Binding Path=Progress}"/>
+                     Value="{Binding Path=Progress, Mode=OneWay}"/>
 
         <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Path=Area, StringFormat=0}" 
                    Style="{StaticResource AreaResult}"

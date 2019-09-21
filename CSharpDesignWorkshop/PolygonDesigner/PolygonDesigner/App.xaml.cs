@@ -1,9 +1,8 @@
-﻿using Polygon.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Polygon.Core;
 using Polygon.Core.Generators;
 using PolygonDesigner.ViewLogic;
-using Prism.Ioc;
-using Prism.Regions;
-using Prism.Unity;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,29 +10,58 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Navigation;
 
 namespace PolygonDesigner
 {
-    public partial class App : PrismApplication
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
     {
-        protected override Window CreateShell() => Container.Resolve<MainWindow>();
+        private readonly IHost host;
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        public App()
         {
-            containerRegistry.Register<PolygonGenerator, SquarePolygonGenerator>("Square");
-            containerRegistry.Register<PolygonGenerator, TrianglePolygonGenerator>("Triangle");
-            containerRegistry.Register<PolygonGenerator, RandomPolygonGenerator>("Random");
+            host = new HostBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddTransient<IPolygonGenerator, SquarePolygonGenerator>();
+                    services.AddTransient<IPolygonGenerator, TrianglePolygonGenerator>();
+                    services.AddTransient<IPolygonGenerator, RandomPolygonGenerator>();
 
-            containerRegistry.RegisterSingleton<PolygonManagementViewModel>();
+                    services.AddSingleton<PolygonManagementViewModel>();
 
-            containerRegistry.RegisterInstance<AreaCalculator>(new MonteCarloAreaCalculator(new MonteCarloAreaCalculator.Options
+                    services.AddSingleton<IPolygonClipper, SutherlandHodgman>();
+
+                    services.AddSingleton<IAreaCalculator>(new MonteCarloAreaCalculator(new MonteCarloAreaCalculatorOptions
+                    {
+                        SimulationDuration = TimeSpan.FromSeconds(5d),
+                        ProgressReportingIterations = 100000
+                    }));
+
+                    services.AddSingleton<MainWindow>();
+                })
+                .Build();
+        }
+
+        private async void Application_Startup(object sender, StartupEventArgs e)
+        {
+#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
+            await host.StartAsync();
+#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
+
+            var mainWindow = host.Services.GetService<MainWindow>();
+            mainWindow.Show();
+        }
+
+        private async void Application_Exit(object sender, ExitEventArgs e)
+        {
+            using (host)
             {
-                SimulationDuration = TimeSpan.FromSeconds(5d),
-                ProgressReportingIterations = 100000
-            }));
-
-            containerRegistry.Register<MainWindow>();
+#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
+                await host.StopAsync(TimeSpan.FromSeconds(5));
+#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
+            }
         }
     }
 }

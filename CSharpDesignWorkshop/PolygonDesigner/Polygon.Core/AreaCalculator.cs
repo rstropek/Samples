@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Polygon.Core
 {
-    public interface AreaCalculator
+    /// <summary>
+    /// Implements a class that can calculate the area of a shape
+    /// </summary>
+    public interface IAreaCalculator
     {
         Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape);
 
         Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation);
 
-        Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation, IProgress<double> progress);
+        Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, IProgress<double>? progress, CancellationToken cancellation);
     }
 }

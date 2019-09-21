@@ -1,11 +1,13 @@
 ﻿using System;
 
+// Note: Immutable struct marked as "readonly" (C# 7)
+
 namespace Polygon.Core
 {
     /// <summary>
     /// Represents a 2D vector
     /// </summary>
-    public struct Vector : IEquatable<Vector>
+    public readonly struct Vector : IEquatable<Vector>
     {
         public double X { get; }
 
@@ -13,6 +15,8 @@ namespace Polygon.Core
 
         public Vector(in double x, in double y)
         {
+            // Note: "in" keyword for passing parameters by reference (C# 7)
+
             X = x;
             Y = y;
         }

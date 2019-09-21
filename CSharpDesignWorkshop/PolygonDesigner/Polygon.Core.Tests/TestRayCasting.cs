@@ -8,6 +8,8 @@ namespace Polygon.Core.Tests
         [Fact]
         public void Rectangle()
         {
+            // Note: stackalloc
+
             ReadOnlySpan<Point> shape = stackalloc[] {
                 new Point(0d, 0d),
                 new Point(20d, 0d),

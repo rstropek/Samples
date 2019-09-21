@@ -6,27 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Unity;
-using Unity.Resolution;
 using Xunit;
 
 namespace PolygonDesigner.ViewLogic.Tests
 {
     public class TestPolygonManagementViewModel
     {
-        private Mock<PolygonGenerator> GetMockGenerator()
+        private Mock<IPolygonGenerator> GetMockGenerator()
         {
-            var mockGenerator = new Mock<PolygonGenerator>();
+            var mockGenerator = new Mock<IPolygonGenerator>();
             mockGenerator.Setup(x => x.Generate(It.IsAny<double>()))
                 .Returns(new ReadOnlyMemory<Point>(Array.Empty<Point>()));
             return mockGenerator;
         }
 
-        private (TaskCompletionSource<double> tcs, Mock<AreaCalculator> calculator) GetMockAreaCalculator()
+        private (TaskCompletionSource<double> tcs, Mock<IAreaCalculator> calculator) GetMockAreaCalculator()
         {
             var tcs = new TaskCompletionSource<double>();
-            var mockCalculator = new Mock<AreaCalculator>();
-            mockCalculator.Setup(x => x.CalculateAreaAsync(It.IsAny<ReadOnlyMemory<Point>>(), It.IsAny<CancellationToken>(), It.IsAny<IProgress<double>>()))
+            var mockCalculator = new Mock<IAreaCalculator>();
+            mockCalculator.Setup(x => x.CalculateAreaAsync(It.IsAny<ReadOnlyMemory<Point>>(), It.IsAny<IProgress<double>>(), It.IsAny<CancellationToken>()))
                 .Returns(tcs.Task);
             return (tcs, mockCalculator);
         }
@@ -34,7 +32,7 @@ namespace PolygonDesigner.ViewLogic.Tests
         [Fact]
         public void CannotGeneratePolygonWithoutGenerator()
         {
-            var vm = new PolygonManagementViewModel();
+            using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>());
 
             // vm.SelectedPolygonGenerator is initially null
 
@@ -44,7 +42,7 @@ namespace PolygonDesigner.ViewLogic.Tests
         [Fact]
         public void SendCommandEventWhenGeneratorGetsSelected()
         {
-            var vm = new PolygonManagementViewModel();
+            using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>());
             var receivedGenerateCommandChanged = false;
             vm.GenerateAndAddPolygonCommand.CanExecuteChanged +=
                 (_, __) => receivedGenerateCommandChanged = true;
@@ -58,8 +56,10 @@ namespace PolygonDesigner.ViewLogic.Tests
         [Fact]
         public void GeneratePolygon()
         {
-            var vm = new PolygonManagementViewModel();
-            vm.SelectedPolygonGenerator = GetMockGenerator().Object;
+            using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>())
+            {
+                SelectedPolygonGenerator = GetMockGenerator().Object
+            };
             vm.GenerateAndAddPolygonCommand.Execute();
 
             Assert.Single(vm.Polygons);
@@ -72,7 +72,7 @@ namespace PolygonDesigner.ViewLogic.Tests
         }
 
         [FriendlyName("Dummy")]
-        private class DummyGenerator : PolygonGenerator
+        private class DummyGenerator : IPolygonGenerator
         {
             public ReadOnlyMemory<Point> Generate(in double maxSideLength) =>
                 throw new NotImplementedException();
@@ -81,11 +81,7 @@ namespace PolygonDesigner.ViewLogic.Tests
         [Fact]
         public void FillPolygonGeneratorsFromContainer()
         {
-            var mockGenerator = new Mock<IUnityContainer>();
-            mockGenerator.Setup(x => x.Resolve(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<ResolverOverride[]>()))
-                .Returns(new[] { new DummyGenerator() });
-
-            var vm = new PolygonManagementViewModel(mockGenerator.Object);
+            using var vm = new PolygonManagementViewModel(new[] { new DummyGenerator() });
             Assert.Single(vm.Generators);
             var generator = vm.Generators.First();
             Assert.Equal("Dummy", generator.FriendlyName);
@@ -98,20 +94,23 @@ namespace PolygonDesigner.ViewLogic.Tests
         {
             (var tcs, var mockCalculator) = GetMockAreaCalculator();
 
-            var vm = new PolygonManagementViewModel(null, mockCalculator.Object);
-            vm.SelectedPolygon = new Polygon();
+            using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>(), mockCalculator.Object)
+            {
+                SelectedPolygon = new Polygon()
+            };
             var receivedEvents = new HashSet<string>();
             vm.PropertyChanged += (_, ea) => receivedEvents.Add(ea.PropertyName);
-            var commandExecStates = (Calculate: false, Cancel: false);
-            vm.CalculateAreaForSelectedPolygonCommand.CanExecuteChanged += (_, __) => commandExecStates.Calculate = true;
-            vm.CancelAreaCalculationCommand.CanExecuteChanged += (_, __) => commandExecStates.Cancel = true;
+            var calculate = false;
+            var cancel = false;
+            vm.CalculateAreaForSelectedPolygonCommand.CanExecuteChanged += (_, __) => calculate = true;
+            vm.CancelAreaCalculationCommand.CanExecuteChanged += (_, __) => cancel = true;
 
             // Check state before calculation starts
             Assert.True(vm.CalculateAreaForSelectedPolygonCommand.CanExecute());
             Assert.False(vm.IsCalculatingArea);
             Assert.False(vm.CancelAreaCalculationCommand.CanExecute());
             Assert.Null(vm.Area);
-            Assert.False(vm.AreaAvailable);
+            Assert.False(vm.IsAreaAvailable);
 
             // Start calculation
             vm.CalculateAreaForSelectedPolygonCommand.Execute();
@@ -120,26 +119,26 @@ namespace PolygonDesigner.ViewLogic.Tests
             Assert.True(vm.IsCalculatingArea);
             Assert.Contains(nameof(PolygonManagementViewModel.IsCalculatingArea), receivedEvents);
             Assert.False(vm.CalculateAreaForSelectedPolygonCommand.CanExecute());
-            Assert.True(commandExecStates.Calculate);
+            Assert.True(calculate);
             Assert.True(vm.CancelAreaCalculationCommand.CanExecute());
-            Assert.True(commandExecStates.Cancel);
+            Assert.True(cancel);
 
             // Simulate finishing of calculation
-            commandExecStates.Calculate = commandExecStates.Cancel = false;
+            calculate = cancel = false;
             receivedEvents.Clear();
             tcs.SetResult(42d);
 
             // Check state after calculation
             Assert.True(vm.CalculateAreaForSelectedPolygonCommand.CanExecute());
-            Assert.True(commandExecStates.Calculate);
+            Assert.True(calculate);
             Assert.False(vm.CancelAreaCalculationCommand.CanExecute());
-            Assert.True(commandExecStates.Cancel);
+            Assert.True(cancel);
             Assert.False(vm.IsCalculatingArea);
             Assert.Contains(nameof(PolygonManagementViewModel.IsCalculatingArea), receivedEvents);
             Assert.Equal(42d, vm.Area);
             Assert.Contains(nameof(PolygonManagementViewModel.Area), receivedEvents);
-            Assert.True(vm.AreaAvailable);
-            Assert.Contains(nameof(PolygonManagementViewModel.AreaAvailable), receivedEvents);
+            Assert.True(vm.IsAreaAvailable);
+            Assert.Contains(nameof(PolygonManagementViewModel.IsAreaAvailable), receivedEvents);
         }
 
         [Fact]
@@ -147,8 +146,10 @@ namespace PolygonDesigner.ViewLogic.Tests
         {
             (var tcs, var mockCalculator) = GetMockAreaCalculator();
 
-            var vm = new PolygonManagementViewModel(null, mockCalculator.Object);
-            vm.SelectedPolygon = new Polygon();
+            using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>(), mockCalculator.Object)
+            {
+                SelectedPolygon = new Polygon()
+            };
             vm.CalculateAreaForSelectedPolygonCommand.Execute();
             tcs.SetCanceled();
 
@@ -161,8 +162,32 @@ namespace PolygonDesigner.ViewLogic.Tests
         [Fact]
         public void CalculationNotPossibleIfNoPolygonSelected()
         {
-            var vm = new PolygonManagementViewModel(null, new Mock<AreaCalculator>().Object);
+            using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>(), new Mock<IAreaCalculator>().Object);
             Assert.False(vm.CalculateAreaForSelectedPolygonCommand.CanExecute());
+        }
+
+        private class DummyClipper : IPolygonClipper
+        {
+            public ReadOnlySpan<Point> GetIntersectedPolygon(in ReadOnlySpan<Point> _, in ReadOnlySpan<Point> __) =>
+                new ReadOnlySpan<Point>();
+        }
+
+        [Fact]
+        public void ClipPossibleWithMultiplePolygons()
+        {
+            var clipper = new DummyClipper();
+            var dummyGenerator = Mock.Of<IPolygonGenerator>();
+            using var vm = new PolygonManagementViewModel(new[] { dummyGenerator }, null, clipper);
+
+            Assert.False(vm.ClipPolygonsCommand.CanExecute());
+            Assert.Empty(vm.Polygons);
+
+            vm.GenerateAndAddPolygonCommand.Execute();
+            vm.GenerateAndAddPolygonCommand.Execute();
+            Assert.True(vm.ClipPolygonsCommand.CanExecute());
+
+            vm.ClipPolygonsCommand.Execute();
+            Assert.Equal(3, vm.Polygons.Count);
         }
     }
 }

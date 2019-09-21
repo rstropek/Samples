@@ -5,20 +5,10 @@ using System.Threading.Tasks;
 
 namespace Polygon.Core
 {
-    public partial class MonteCarloAreaCalculator : AreaCalculator
+    public partial class MonteCarloAreaCalculator : IAreaCalculator
     {
-        public class Options
-        {
-            public TimeSpan? SimulationDuration { get; set; }
-
-            public int? Iterations { get; set; }
-
-            public int? ProgressReportingIterations { get; set; }
-
-            public ContainmentChecker ContainmentChecker { get; set; }
-        }
-
-        public static readonly Options DefaultOptions = new Options
+        public static readonly MonteCarloAreaCalculatorOptions DefaultOptions =
+            new MonteCarloAreaCalculatorOptions
         {
             Iterations = 1000,
             ProgressReportingIterations = 100
@@ -26,17 +16,17 @@ namespace Polygon.Core
 
         public MonteCarloAreaCalculator() : this(DefaultOptions) { }
 
-        public MonteCarloAreaCalculator(Options options) => CalculationOptions = options;
+        public MonteCarloAreaCalculator(MonteCarloAreaCalculatorOptions options) => CalculationOptions = options;
 
-        public Options CalculationOptions { get; }
+        public MonteCarloAreaCalculatorOptions CalculationOptions { get; }
 
         public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape) =>
             CalculateAreaAsync(shape, CancellationToken.None);
 
         public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation) =>
-            CalculateAreaAsync(shape, cancellation, null);
+            CalculateAreaAsync(shape, null, cancellation);
 
-        public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, CancellationToken cancellation, IProgress<double> progress)
+        public Task<double> CalculateAreaAsync(ReadOnlyMemory<Point> shape, IProgress<double>? progress, CancellationToken cancellation)
         {
             if (!CalculationOptions.Iterations.HasValue && !CalculationOptions.SimulationDuration.HasValue)
             {

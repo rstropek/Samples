@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Polygon.Core
 {
-    public class SutherlandHodgman : PolygonClipper
+    public class SutherlandHodgman : IPolygonClipper
     {
         /// <summary>
         /// This clips the subject polygon against the clip polygon (gets the intersection of the two polygons)

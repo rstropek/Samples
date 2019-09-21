@@ -9,12 +9,13 @@
     <Menu DockPanel.Dock="Top">
         <MenuItem Header="_Polygon">
             <MenuItem Header="_Generate" Command="{Binding Path=GenerateAndAddPolygonCommand}" />
+            <MenuItem Header="_Clip" Command="{Binding Path=ClipPolygonsCommand}" />
         </MenuItem>
         <MenuItem Header="_Generators" ItemsSource="{Binding Path=Generators}">
             <MenuItem.ItemTemplate>
                 <DataTemplate>
                     <MenuItem Header="{Binding Path=FriendlyName}" IsCheckable="True"
-                                  IsChecked="{Binding Path=Selected}" />
+                              IsChecked="{Binding Path=Selected, Mode=TwoWay}" />
                 </DataTemplate>
             </MenuItem.ItemTemplate>
         </MenuItem>

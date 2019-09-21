@@ -5,7 +5,7 @@ namespace Polygon.Core.Generators
     /// <summary>
     /// Represents a polygon generator
     /// </summary>
-    public interface PolygonGenerator
+    public interface IPolygonGenerator
     {
         /// <summary>
         /// Generates polygon

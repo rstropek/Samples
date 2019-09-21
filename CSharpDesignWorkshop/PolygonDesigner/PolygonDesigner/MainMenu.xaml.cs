@@ -1,9 +1,7 @@
 ﻿using PolygonDesigner.ViewLogic;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,10 +19,9 @@ namespace PolygonDesigner
     /// </summary>
     public partial class MainMenu : UserControl
     {
-        public MainMenu(PolygonManagementViewModel viewModel)
+        public MainMenu()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
     }
 }

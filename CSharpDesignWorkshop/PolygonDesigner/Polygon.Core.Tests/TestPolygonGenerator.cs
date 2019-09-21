@@ -1,37 +1,40 @@
 using Polygon.Core.Generators;
 using System;
-using System.Linq;
-using System.Reflection;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Polygon.Core.Tests
 {
     public class TestPolygonGenerator
     {
-        [Fact]
-        public void MaxSideLength()
+        public static readonly IEnumerable<object[]> generators = new[]
         {
+            new object[] { new RandomPolygonGenerator() },
+            new object[] { new SquarePolygonGenerator() },
+            new object[] { new TrianglePolygonGenerator() }
+        };
+
+        // Note: xUnit Theory instead of Fact
+
+        [Theory]
+        [MemberData(nameof(generators))]
+        public void MaxSideLength(IPolygonGenerator generator)
+        {
+            if (generator == null)
+            {
+                throw new ArgumentNullException(nameof(generator));
+            }
+
             const double maxSideLength = 100d;
 
-            // Find all polygon generators
-            var generatorTypes = Assembly.GetAssembly(typeof(PolygonGenerator))
-                .DefinedTypes
-                .Where(t => !t.IsAbstract && typeof(PolygonGenerator).GetTypeInfo().IsAssignableFrom(t));
+            // Generate polygon
+            var points = generator.Generate(maxSideLength);
 
-            foreach(var gt in generatorTypes)
+            // Size of polygon must be <= specified max side length
+            foreach (var point in points.Span)
             {
-                // Create instande of polygon generator
-                var generator = (PolygonGenerator)Activator.CreateInstance(gt);
-
-                // Generate polygon
-                var points = generator.Generate(maxSideLength);
-
-                // Size of polygon must be <= specified max side length
-                foreach(var point in points.Span)
-                {
-                    Assert.True(point.X <= maxSideLength);
-                    Assert.True(point.Y <= maxSideLength);
-                }
+                Assert.True(point.X <= maxSideLength);
+                Assert.True(point.Y <= maxSideLength);
             }
         }
     }

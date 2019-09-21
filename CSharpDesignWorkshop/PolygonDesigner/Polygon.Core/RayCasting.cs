@@ -2,7 +2,7 @@
 
 namespace Polygon.Core
 {
-    public class RayCasting : ContainmentChecker
+    public class RayCasting : IContainmentChecker
     {
         private bool Intersects(in Point A, in Point B, in Point P)
         {

@@ -5,7 +5,7 @@ namespace Polygon.Core
     /// <summary>
     /// Clips a subject polygon against a clip polygon
     /// </summary>
-    public interface PolygonClipper
+    public interface IPolygonClipper
     {
         /// <summary>
         /// This clips the subject polygon against the clip polygon (gets the intersection of the two polygons)

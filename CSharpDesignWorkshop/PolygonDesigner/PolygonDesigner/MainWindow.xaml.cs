@@ -1,10 +1,6 @@
-﻿using Polygon.Core;
-using Polygon.Core.Generators;
-using PolygonDesigner.ViewLogic;
-using Prism.Regions;
+﻿using PolygonDesigner.ViewLogic;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,13 +21,8 @@ namespace PolygonDesigner
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(PolygonManagementViewModel viewModel, IRegionManager regionManager)
+        public MainWindow(PolygonManagementViewModel viewModel)
         {
-            regionManager.RegisterViewWithRegion(RegionNames.GraphicalViewer, typeof(PolygonsViewer));
-            regionManager.RegisterViewWithRegion(RegionNames.MainMenu, typeof(MainMenu));
-            regionManager.RegisterViewWithRegion(RegionNames.PolygonList, typeof(PolygonsList));
-            regionManager.RegisterViewWithRegion(RegionNames.PolygonDetails, typeof(PolygonDetails));
-
             InitializeComponent();
             //this.DataContext = this;
             this.DataContext = viewModel;
