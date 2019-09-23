@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0040: Add accessibility modifiers
+dotnet_style_require_accessibility_modifiers = never:silent

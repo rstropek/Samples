@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 // Learn more about C# tuples at https://docs.microsoft.com/en-us/dotnet/articles/csharp/tuples.
 
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+#pragma warning disable IDE0052 // Remove unread private members
+#pragma warning disable CS0414
+
 namespace ConsoleApplication
 {
     public class Program
