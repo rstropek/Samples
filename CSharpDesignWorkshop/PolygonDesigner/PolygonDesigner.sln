@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29311.281
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolygonDesigner", "PolygonDesigner\PolygonDesigner.csproj", "{129B5778-0F4A-41B7-AB58-DC30C27349A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonDesigner", "PolygonDesigner\PolygonDesigner.csproj", "{129B5778-0F4A-41B7-AB58-DC30C27349A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polygon.Core", "Polygon.Core\Polygon.Core.csproj", "{F2E8478B-2102-4115-90E0-A4276557A4D4}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonDesigner.ViewLogic", "PolygonDesigner.ViewLogic\PolygonDesigner.ViewLogic.csproj", "{6E3738D4-8125-4625-A4A9-4A8AF0B4D9DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonDesigner.ViewLogic.Tests", "PolygonDesigner.ViewLogic.Tests\PolygonDesigner.ViewLogic.Tests.csproj", "{644DD6FD-6A6D-4AE1-A0A5-695D4CAC0D25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointsToMarkupBenchmark", "PointsToMarkupBenchmark\PointsToMarkupBenchmark.csproj", "{FBBB615D-07F9-4E8C-81FB-CEDF5932D1C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{644DD6FD-6A6D-4AE1-A0A5-695D4CAC0D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{644DD6FD-6A6D-4AE1-A0A5-695D4CAC0D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{644DD6FD-6A6D-4AE1-A0A5-695D4CAC0D25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBBB615D-07F9-4E8C-81FB-CEDF5932D1C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBBB615D-07F9-4E8C-81FB-CEDF5932D1C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBBB615D-07F9-4E8C-81FB-CEDF5932D1C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBBB615D-07F9-4E8C-81FB-CEDF5932D1C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
