@@ -19,9 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Json", "Json\Json.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EolFixer", "LocalTools\EolFixer.csproj", "{7AAE6D77-085B-4D6C-A45E-CD20D3131EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AeadCrypto", "AeadCrypto\AeadCrypto.csproj", "{059DA325-FB5A-4BDF-9405-A7604CA7D4F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AeadCrypto", "AeadCrypto\AeadCrypto.csproj", "{059DA325-FB5A-4BDF-9405-A7604CA7D4F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Http2Client", "Http2Client\Http2Client.csproj", "{70A675EB-046C-46BE-A871-7A685BB8C158}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http2Client", "Http2Client\Http2Client.csproj", "{70A675EB-046C-46BE-A871-7A685BB8C158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericHost", "GenericHost\GenericHost.csproj", "{3F78A80D-ED37-41EF-9479-B27804F1CEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{70A675EB-046C-46BE-A871-7A685BB8C158}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70A675EB-046C-46BE-A871-7A685BB8C158}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70A675EB-046C-46BE-A871-7A685BB8C158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F78A80D-ED37-41EF-9479-B27804F1CEBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F78A80D-ED37-41EF-9479-B27804F1CEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F78A80D-ED37-41EF-9479-B27804F1CEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F78A80D-ED37-41EF-9479-B27804F1CEBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

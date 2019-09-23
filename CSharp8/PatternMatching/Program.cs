@@ -125,6 +125,7 @@ namespace RecursivePatterns
                 // Unfortunately, it crashes regularly when working with switch expressions.
                 Console.WriteLine(person switch
                 {
+                    Hero { Name: var n, CanFly: true } => $"Hero {n} that can fly",
                     Hero h => $"Hero {h.Name} {h.CanFly}",
                     Person p => $"Person {p.Name}",
                     _ => "Who is that?!?"

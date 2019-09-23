@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using System.IO;
 
 // Note that this feature will *NOT* work in .NET Framework 4.x.
 // It needs .NET Standard 2.1 and .NET Framework 4.x. will not implement
@@ -53,6 +54,15 @@ namespace AsyncStreams
             // Note that Linq is currently not supported with IAsyncEnumerable.
             // So the following line does not work:
             // GetCustomerNamesAsync(new[] { 1, 2, 3 }).Where(n => !string.IsNullOrEmpty(n));
+
+            // Note await using here. This is how you consume an IAsyncDisposable.
+            const string demoFile = @"c:\temp\demo.txt";
+            await using (var x = new MyWriterWrapperNew(demoFile))
+            {
+                await x.WriteLineAsync("asdf").ConfigureAwait(false);
+            }
+
+            Console.WriteLine(await File.ReadAllTextAsync(demoFile));
         }
     }
 }

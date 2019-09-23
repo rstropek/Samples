@@ -11,7 +11,7 @@ namespace NullableReferenceTypes
         {
             // Note that myString must not be null
             string myString = DateTime.Today.Day % 2 == 0 ? null : "Yes";
-            PrintLength(myString);
+            PrintLength(myString); // Try myString! instead
             SafePrintLength(myString);
 
             // Note nullable reference type
@@ -27,6 +27,11 @@ namespace NullableReferenceTypes
             PrintLength(myString);
             SafePrintLength(myString);
 #nullable restore
+        }
+
+        static void RiskyPrintLength(string? s)
+        {
+            Console.WriteLine(s!.Length);
         }
 
         static void PrintLength(string s)
