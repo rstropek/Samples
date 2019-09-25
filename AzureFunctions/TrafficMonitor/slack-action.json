@@ -1,0 +1,23 @@
+{
+    "text": "Please check the read for license plate *{0}*.",
+    "attachments": [
+        {
+            "title": "Can you confirm?",
+            "callback_id": "confirm_lpr",
+            "actions": [
+                {
+                    "name": "approve",
+                    "text": "Approve",
+                    "type": "button",
+                    "value": "Approve"
+                },
+                {
+                    "name": "reject",
+                    "text": "Reject",
+                    "type": "button",
+                    "value": "Reject"
+                }
+            ]
+        }
+    ]
+}

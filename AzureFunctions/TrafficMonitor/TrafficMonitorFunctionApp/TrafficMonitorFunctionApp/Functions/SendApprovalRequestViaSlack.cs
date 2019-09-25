@@ -24,7 +24,7 @@ namespace TrafficMonitorFunctionApp.Functions
         {
             var approvalRequestUrl = Environment.GetEnvironmentVariable("Slack:ApprovalUrl", EnvironmentVariableTarget.Process);
             var approvalMessageTemplate = Environment.GetEnvironmentVariable("Slack:ApprovalMessageTemplate", EnvironmentVariableTarget.Process);
-            var approvalMessage = string.Format(approvalMessageTemplate, requestMetadata.Read.LicensePlate);
+            var approvalMessage = string.Format(approvalMessageTemplate, requestMetadata.Read.LicensePlate, requestMetadata.InstanceId);
 
             string resultContent;
             httpClient.BaseAddress = new Uri(approvalRequestUrl);
