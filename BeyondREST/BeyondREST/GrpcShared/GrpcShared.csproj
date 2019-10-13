@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="greet.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.10.0" />
+    <PackageReference Include="Grpc" Version="2.24.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.24.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="google\rpc\code.proto">
+      <SourceUrl>https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/code.proto</SourceUrl>
+    </Protobuf>
+    <Protobuf Include="google\rpc\status.proto">
+      <SourceUrl>https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/status.proto</SourceUrl>
+    </Protobuf>
+    <Protobuf Include="greet.proto" />
+  </ItemGroup>
+</Project>
