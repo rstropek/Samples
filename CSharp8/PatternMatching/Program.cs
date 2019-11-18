@@ -28,6 +28,8 @@ namespace RecursivePatterns
             Name = name;
         }
 
+        public string GenerateName() => Name.ToUpper();
+
         public string Name { get; set; }
     }
 
