@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServer", "GrpcServer\Gr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcClient", "GrpcClient\GrpcClient.csproj", "{357E4144-9862-4BF6-AE97-A5E587746337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcShared", "GrpcShared\GrpcShared.csproj", "{3412658E-F61A-4508-81B6-06DB10AF92EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcShared", "GrpcShared\GrpcShared.csproj", "{3412658E-F61A-4508-81B6-06DB10AF92EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDrawingServer", "SignalRDrawingServer\SignalRDrawingServer.csproj", "{1BC15D06-6148-4B0B-BA78-22E38C76DDD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRDrawingServer", "SignalRDrawingServer\SignalRDrawingServer.csproj", "{1BC15D06-6148-4B0B-BA78-22E38C76DDD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRIntroduction", "SignalRIntroduction\SignalRIntroduction.csproj", "{486217BB-75C6-45D9-9C2F-F8E3793A0158}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1BC15D06-6148-4B0B-BA78-22E38C76DDD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BC15D06-6148-4B0B-BA78-22E38C76DDD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BC15D06-6148-4B0B-BA78-22E38C76DDD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{486217BB-75C6-45D9-9C2F-F8E3793A0158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{486217BB-75C6-45D9-9C2F-F8E3793A0158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{486217BB-75C6-45D9-9C2F-F8E3793A0158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{486217BB-75C6-45D9-9C2F-F8E3793A0158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

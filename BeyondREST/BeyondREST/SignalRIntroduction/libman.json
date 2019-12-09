@@ -1,0 +1,16 @@
+{
+    "version": "1.0",
+    "defaultProvider": "cdnjs",
+    "libraries": [
+        {
+            "provider": "cdnjs",
+            "library": "aspnet-signalr@1.1.4",
+            "destination": "wwwroot/js"
+        },
+        {
+            "provider": "cdnjs",
+            "library": "rxjs@6.5.3",
+            "destination": "wwwroot/js"
+        }
+    ]
+}
