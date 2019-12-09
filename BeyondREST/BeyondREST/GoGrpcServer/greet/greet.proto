@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option go_package = "greet";
+
+package Demo;
+
+import "google/rpc/status.proto";
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+// Note streaming result
+service MathGuru {
+    rpc GetFibonacci (FromTo) returns (stream NumericResult);
+    rpc GetFibonacciStepByStep (stream FromTo) returns (stream StepByStepResult);
+}
+
+message FromTo {
+  int32 from = 1;
+  int32 to = 2;
+}
+
+message NumericResult {
+  int32 result = 1;
+}
+
+message StepByStepResult {
+    oneof payload {
+        NumericResult result = 1;
+        google.rpc.Status error = 2;
+    };
+}
