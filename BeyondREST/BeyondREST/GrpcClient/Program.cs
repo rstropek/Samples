@@ -10,12 +10,15 @@ namespace GrpcClient
     {
         static async Task Main()
         {
+            AppContext.SetSwitch(
+                "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
             // Create channel.
             // Represents long-lived connection to gRPC service.
             // The port number(5001) must match the port of the gRPC server.
             // Tip: In ASP.NET Core apps, use client factory (similar to
             //      IHttpClientFactory (see https://docs.microsoft.com/en-us/aspnet/core/grpc/clientfactory).
-            var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            var channel = GrpcChannel.ForAddress("http://localhost:8080");
 
             await UnaryCall(channel);
 

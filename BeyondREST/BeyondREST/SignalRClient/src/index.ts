@@ -11,6 +11,7 @@ window.onload = async () => {
     // Setting up connection to SignalR hub
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("https://localhost:5001/hub")
+        .configureLogging(signalR.LogLevel.Debug)
         .build()
 
     // Handle setColor message
