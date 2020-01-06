@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OData.Edm;
@@ -29,25 +30,28 @@ namespace ODataCoreFaq.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add controllers, but disable endpoint routing. This is
+            // NOT supported yet. The OData team is working on it.
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+
             //services.AddDbContext<OrderManagementContext>(opt => opt.UseInMemoryDatabase("OrderManagement"));
             services.AddDbContext<OrderManagementContext>(options => options.UseSqlServer(
                 Configuration["ConnectionStrings:DefaultConnection"]));
+
             services.AddOData();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+
             app.UseMvc(b =>
             {
                 b.Select().Expand().Filter().OrderBy().Count();

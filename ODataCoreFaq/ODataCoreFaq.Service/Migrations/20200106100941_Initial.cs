@@ -28,7 +28,7 @@ namespace ODataCoreFaq.Service.Migrations
                     Description = table.Column<string>(maxLength: 200, nullable: false),
                     CategoryCode = table.Column<string>(maxLength: 10, nullable: false),
                     IsAvailable = table.Column<bool>(nullable: false),
-                    PricePerUom = table.Column<decimal>(nullable: false)
+                    PricePerUom = table.Column<decimal>(type: "decimal(10, 2)", nullable: false)
                 },
                 constraints: table =>
                 {

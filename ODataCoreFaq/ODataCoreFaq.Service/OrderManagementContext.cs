@@ -21,8 +21,8 @@ namespace ODataCoreFaq.Service
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
-        public static readonly LoggerFactory MyLoggerFactory
-            = new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+        public static readonly ILoggerFactory MyLoggerFactory
+            = LoggerFactory.Create(builder => builder.AddConsole());
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseLoggerFactory(MyLoggerFactory);

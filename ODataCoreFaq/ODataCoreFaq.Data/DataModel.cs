@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ODataCoreFaq.Data
 {
@@ -8,8 +9,8 @@ namespace ODataCoreFaq.Data
     {
 		public Customer()
 		{
-			this.CustomerId = Guid.NewGuid();
-			this.Orders = new OrderCollection();
+			CustomerId = Guid.NewGuid();
+			Orders = new OrderCollection();
 		}
 
 		[Key]
@@ -30,8 +31,8 @@ namespace ODataCoreFaq.Data
 	{
 		public Product()
 		{
-			this.ProductId = Guid.NewGuid();
-			this.OrderDetails = new OrderDetailCollection();
+			ProductId = Guid.NewGuid();
+			OrderDetails = new OrderDetailCollection();
 		}
 
 		[Key]
@@ -49,6 +50,7 @@ namespace ODataCoreFaq.Data
 		public bool IsAvailable { get; set; }
 
 		[Required]
+		[Column(TypeName = "decimal(10, 2)")]
 		public decimal PricePerUom { get; set; }
 
 		public OrderDetailCollection OrderDetails { get; set; }
@@ -58,7 +60,7 @@ namespace ODataCoreFaq.Data
 	{
 		public OrderHeader()
 		{
-			this.OrderId = Guid.NewGuid();
+			OrderId = Guid.NewGuid();
 		}
 
 		[Key]
@@ -79,7 +81,7 @@ namespace ODataCoreFaq.Data
 	{
 		public OrderDetail()
 		{
-			this.OrderDetailId = Guid.NewGuid();
+			OrderDetailId = Guid.NewGuid();
 		}
 
 		[Key]

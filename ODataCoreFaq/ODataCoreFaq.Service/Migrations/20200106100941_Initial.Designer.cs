@@ -10,28 +10,31 @@ using ODataCoreFaq.Service;
 namespace ODataCoreFaq.Service.Migrations
 {
     [DbContext(typeof(OrderManagementContext))]
-    [Migration("20181204151950_Initial")]
+    [Migration("20200106100941_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ODataCoreFaq.Data.Customer", b =>
                 {
                     b.Property<Guid>("CustomerId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("CountryIsoCode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2)")
                         .HasMaxLength(2);
 
                     b.HasKey("CustomerId");
@@ -42,13 +45,17 @@ namespace ODataCoreFaq.Service.Migrations
             modelBuilder.Entity("ODataCoreFaq.Data.OrderDetail", b =>
                 {
                     b.Property<Guid>("OrderDetailId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("OrderId");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductId");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("OrderDetailId");
 
@@ -62,11 +69,14 @@ namespace ODataCoreFaq.Service.Migrations
             modelBuilder.Entity("ODataCoreFaq.Data.OrderHeader", b =>
                 {
                     b.Property<Guid>("OrderId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("OrderDate");
+                    b.Property<DateTimeOffset>("OrderDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("OrderId");
 
@@ -78,19 +88,24 @@ namespace ODataCoreFaq.Service.Migrations
             modelBuilder.Entity("ODataCoreFaq.Data.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategoryCode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<bool>("IsAvailable");
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
 
-                    b.Property<decimal>("PricePerUom");
+                    b.Property<decimal>("PricePerUom")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("ProductId");
 
@@ -102,12 +117,14 @@ namespace ODataCoreFaq.Service.Migrations
                     b.HasOne("ODataCoreFaq.Data.OrderHeader", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ODataCoreFaq.Data.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ODataCoreFaq.Data.OrderHeader", b =>
@@ -115,7 +132,8 @@ namespace ODataCoreFaq.Service.Migrations
                     b.HasOne("ODataCoreFaq.Data.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

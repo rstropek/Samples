@@ -9,7 +9,7 @@ namespace ODataCoreFaq.Client
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             using (var httpClient = new HttpClient())
             {

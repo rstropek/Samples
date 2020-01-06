@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ODataCoreFaq.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ODataCoreFaq.Service.Controllers
@@ -10,7 +6,7 @@ namespace ODataCoreFaq.Service.Controllers
     [Route("api/[Controller]")]
     public class FillDatabaseController : Controller
     {
-        private OrderManagementContext db;
+        private readonly OrderManagementContext db;
 
         public FillDatabaseController(OrderManagementContext context)
         {

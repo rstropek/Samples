@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
-using ODataCoreFaq.Data;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ODataCoreFaq.Service.Controllers
 {
     public class CustomersController : ODataController
     {
-        private OrderManagementContext db;
+        private readonly OrderManagementContext db;
 
         public CustomersController(OrderManagementContext context)
         {
