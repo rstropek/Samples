@@ -2,11 +2,11 @@
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 
 namespace ODataNetCoreSimple
@@ -14,7 +14,10 @@ namespace ODataNetCoreSimple
     public class Program
     {
         public static void Main(string[] args) => 
-            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build().Run();
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .Build()
+                .Run();
     }
 
     public class Customer
@@ -30,14 +33,15 @@ namespace ODataNetCoreSimple
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add controllers, but disable endpoint routing. This is
+            // NOT supported yet. The OData team is working on it.
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+
             // Add OData to ASP.NET Core's dependency injection system
             services.AddOData();
-
-            // Currently necessary (read details in https://github.com/OData/WebApi/issues/1707)
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseMvc(routeBuilder =>
             {
@@ -52,7 +56,7 @@ namespace ODataNetCoreSimple
         private static IEdmModel GetEdmModel()
         {
             // Use a convention builder to derive model from C# classes
-            // See http://odata.github.io/WebApi/#02-04-convention-model-builder for details
+            // See https://docs.microsoft.com/en-us/odata/webapi/convention-model-builder for details
             var builder = new ODataConventionModelBuilder();
             builder.EntitySet<Customer>("Customers");
             return builder.GetEdmModel();

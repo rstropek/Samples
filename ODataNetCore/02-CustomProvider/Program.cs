@@ -7,11 +7,11 @@ using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
 
@@ -20,7 +20,10 @@ namespace ODataNetCoreCustomProvider
     public class Program
     {
         public static void Main(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build().Run();
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .Build()
+                .Run();
     }
 
     public class Customer
@@ -36,13 +39,15 @@ namespace ODataNetCoreCustomProvider
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add controllers, but disable endpoint routing. This is
+            // NOT supported yet. The OData team is working on it.
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+
             // Add OData to ASP.NET Core's dependency injection system
             services.AddOData();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseMvc(routeBuilder =>
             {
@@ -69,7 +74,7 @@ namespace ODataNetCoreCustomProvider
         // Helpers for generating customer names
         private readonly char[] letters1 = "aeiou".ToArray();
         private readonly char[] letters2 = "bcdfgklmnpqrstvw".ToArray();
-        private Random random = new Random();
+        private readonly Random random = new Random();
 
         private const int pageSize = 100;
 
@@ -89,8 +94,8 @@ namespace ODataNetCoreCustomProvider
             if (options.Filter != null)
             {
                 // We only support a single "eq" filter
-                var binaryOperator = options.Filter.FilterClause.Expression as BinaryOperatorNode;
-                if (binaryOperator == null || binaryOperator.OperatorKind != BinaryOperatorKind.Equal)
+                if (!(options.Filter.FilterClause.Expression is BinaryOperatorNode binaryOperator)
+                    || binaryOperator.OperatorKind != BinaryOperatorKind.Equal)
                 {
                     return BadRequest();
                 }
