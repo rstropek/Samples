@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Basics - 030 Configure</Title>
+			<Shortcut>030-configure</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp"><![CDATA[app.UseMvc(routeBuilder =>
+            {
+                // Specify allowed OData operations
+                routeBuilder.Select().Filter().MaxTop(50);
+
+                // Set route name, prefix, and OData data model
+                routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
+            });]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

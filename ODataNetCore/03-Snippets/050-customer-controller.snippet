@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Basics - 050 Customer Controller</Title>
+			<Shortcut>050-customer-controller</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp"><![CDATA[public class CustomersController : ODataController
+    {
+        private static Customer[] Customers { get; } = new [] 
+        {
+            new Customer { CustomerId = 1, FirstName = "John", LastName = "Doe" },
+            new Customer { CustomerId = 2, FirstName = "Foo", LastName = "Bar" }
+        };
+
+        [EnableQuery]
+        public IActionResult Get() => Ok(Customers.AsQueryable());
+    }]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

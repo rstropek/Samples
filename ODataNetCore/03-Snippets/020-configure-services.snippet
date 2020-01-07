@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Basics - 020 ConfigureServices</Title>
+			<Shortcut>020-configure-services</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp"><![CDATA[// Add controllers, but disable endpoint routing. This is
+            // NOT supported yet. The OData team is working on it.
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+
+            // Add OData to ASP.NET Core's dependency injection system
+            services.AddOData();]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
