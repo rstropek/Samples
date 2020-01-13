@@ -10,7 +10,7 @@ namespace PointsToMarkupBenchmark
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             BenchmarkRunner.Run<MarkupToPoints>();
             BenchmarkRunner.Run<PointsToMarkup>();
@@ -22,7 +22,7 @@ namespace PointsToMarkupBenchmark
     public class MarkupToPoints
     {
         [ParamsSource(nameof(Markups))]
-        public string PathMarkup { get; set; }
+        public string PathMarkup { get; set; } = string.Empty;
 
         public IEnumerable<string> Markups { get; set; }
 
