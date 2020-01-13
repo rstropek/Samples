@@ -12,7 +12,8 @@ namespace Polygon.Core.Tests
     public class TestMonteCarloAreaCalculator
     {
         private void IsApproximately(double expected, double value) =>
-            Assert.True(value >= expected - 2d && value <= expected + 2d);
+            Assert.True(value >= expected - 2d && value <= expected + 2d,
+                $"{value} not between {expected - 2d} and {expected + 2d}");
 
         [Fact]
         public async Task Square()
