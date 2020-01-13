@@ -56,12 +56,14 @@ namespace PolygonDesigner.ViewLogic.Tests
         [Fact]
         public void GeneratePolygon()
         {
+            var mockGenerator = GetMockGenerator();
             using var vm = new PolygonManagementViewModel(Array.Empty<IPolygonGenerator>())
             {
-                SelectedPolygonGenerator = GetMockGenerator().Object
+                SelectedPolygonGenerator = mockGenerator.Object
             };
             vm.GenerateAndAddPolygonCommand.Execute();
 
+            mockGenerator.Verify(x => x.Generate(in It.Ref<double>.IsAny), Times.Exactly(9));
             Assert.Single(vm.Polygons);
 
             var newPolygon = vm.Polygons[0];
