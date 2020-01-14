@@ -12,6 +12,17 @@
 | *PolygonDesigner*                 | WPF App (.NET Core 3.1)         | UI for Poloygon Designer, references *Polygon.Core* and *PolygonDesigner.ViewLogic* |
 | *PolygonDesigner.ViewLogic.Tests* | xUnit Tests (.NET Core 3.1)     | Tests for UI logic, references *PolygonDesigner.ViewLogic*                          |
 
+Add the necessary *NuGet packages*:
+
+* *Polygon.Core.Tests*
+  * [*Moq*](https://www.nuget.org/packages/Moq/)
+* *PolygonDesigner*
+  * [*Microsoft.Extensions.Hosting*](https://www.nuget.org/packages/Microsoft.Extensions.Hosting/)
+* *PolygonDesigner.ViewLogic*
+  * [*Prism.Core*](https://www.nuget.org/packages/Prism.Core/)
+* *PolygonDesigner.ViewLogic.Tests*
+  * [*Moq*](https://www.nuget.org/packages/Moq/)
+
 Measures to ensure good code quality, ensure the following for *all* project files:
 
 * Enable the use of latest C# features: `<LangVersion>latest</LangVersion>`
@@ -71,9 +82,10 @@ In order to make internals visible to test projects, add [*AssemblyProperties.cs
   * Discuss `IPolygonClipper` abstraction
 * Add [*TestSutherlandHodgeman.cs*](PolygonDesigner/Polygon.Core.Tests/TestSutherlandHodgeman.cs)
 
-### Benchmarking
+## Benchmarking
 
 * Add [*PointsToPathMarkup.cs*](PolygonDesigner/Polygon.Core/PointsToPathMarkup.cs) to *Polygon.Core*
+  * Discuss different implementations (with and without `Span<T>`/`Memory<T>`)
 * Add [*TestPointsToPathMarkup.cs*](PolygonDesigner/Polygon.Core.Tests/TestPointsToPathMarkup.cs) to *Polygon.Core.Tests*
 * Add new project called *PointsToMarkupBenchmark* to solution:
   * .NET Core 3.1 Console App
@@ -82,3 +94,13 @@ In order to make internals visible to test projects, add [*AssemblyProperties.cs
   * Add [*BenchmarkDotNet*](https://benchmarkdotnet.org/index.html) NuGet package
 * Add [*Program.cs*](PolygonDesigner/PointsToMarkupBenchmark/Program.cs) go *PointsToMarkupBenchmark*
   * Run benchmarks and discuss benchmark test setup and results
+
+## View Model Testing
+
+* Add files from [*PolygonDesigner.ViewLogic*](PolygonDesigner/PolygonDesigner.ViewLogic) to *PolygonDesigner.ViewLogic* project
+* Add files from [*PolygonDesigner.ViewLogic.Tests*](PolygonDesigner/PolygonDesigner.ViewLogic.Tests) to *PolygonDesigner.ViewLogic.Tests* project
+  * Discuss used View Model testing concepts
+
+## UI
+
+Add files from [*PolygonDesigner*](PolygonDesigner/PolygonDesigner) to *PolygonDesigner* project and run WPF app. It should work as expected.

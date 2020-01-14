@@ -63,7 +63,7 @@ namespace PolygonDesigner.ViewLogic.Tests
             };
             vm.GenerateAndAddPolygonCommand.Execute();
 
-            mockGenerator.Verify(x => x.Generate(in It.Ref<double>.IsAny), Times.Exactly(9));
+            mockGenerator.Verify(x => x.Generate(in It.Ref<double>.IsAny), Times.Once());
             Assert.Single(vm.Polygons);
 
             var newPolygon = vm.Polygons[0];
