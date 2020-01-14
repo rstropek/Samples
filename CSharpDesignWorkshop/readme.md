@@ -70,7 +70,6 @@
   * Tip: [Prism Template Pack](https://marketplace.visualstudio.com/items?itemName=BrianLagunas.PrismTemplatePack)
   * [Implementing MVVM](http://prismlibrary.github.io/docs/wpf/Implementing-MVVM.html)
     * `BindableBase`
-    * For example see ...
 
 ## Various Topics
 
