@@ -67,7 +67,7 @@ namespace PolygonDesigner.ViewLogic.Tests
             Assert.Single(vm.Polygons);
 
             var newPolygon = vm.Polygons[0];
-            Assert.True(!string.IsNullOrEmpty(newPolygon.Description));
+            Assert.False(string.IsNullOrEmpty(newPolygon.Description));
             Assert.Equal(newPolygon.StrokeColor.R, newPolygon.FillColor.R);
             Assert.Equal(newPolygon.StrokeColor.G, newPolygon.FillColor.G);
             Assert.Equal(newPolygon.StrokeColor.B, newPolygon.FillColor.B);
