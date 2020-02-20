@@ -1,0 +1,34 @@
+@baseAddress = http://localhost:7071
+
+###
+# @name triggerWorkflow
+POST {{baseAddress}}/api/SpeedViolationRecognition
+Content-Type: application/json
+
+{
+    "CameraID": 42,
+    "LicensePlateNumber": "XY-0815",
+    "RecognitionAccuracy": 0.6,
+    "SpeedKmh": 90
+}
+
+###
+@orchId = {{triggerWorkflow.response.body.id}}
+
+POST {{baseAddress}}/api/ProcessSlackApproval
+Content-Type: application/json
+
+{
+    "OrchestrationInstanceID": "{{orchId}}",
+    "Approved": true
+}
+
+###
+GET {{baseAddress}}/api/lawsuite/902ae960-1e74-4ac3-b9ae-909a1d64ce95
+Accept: application/json
+
+###
+POST {{baseAddress}}/api/lawsuite/902ae960-1e74-4ac3-b9ae-909a1d64ce95/setDriver
+Content-Type: application/json
+
+"Foo Bar"
