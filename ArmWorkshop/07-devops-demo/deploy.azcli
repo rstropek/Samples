@@ -1,0 +1,32 @@
+az login
+az account set --subscription "b33f0285-db27-4896-ac5c-df22004b0aba"
+
+az group create --name porsche-web-app-demo --location westeurope
+
+az group deployment create --resource-group porsche-web-app-demo --template-file azuredeploy.json --parameters webAppName=porsche-webapp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SUBSCRIPTION_ID=b33f0285-db27-4896-ac5c-df22004b0aba
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$SUBSCRIPTION_ID"
+# APP_ID=d4e918e7-f7c8-4098-8bff-ae529319ab10
+# PASSWORD=9c697c66-e679-46ff-a25b-b1ea672032c3
+
+export ARM_SUBSCRIPTION_ID=$SUBSCRIPTION_ID
+export ARM_CLIENT_ID=$APP_ID
+export ARM_CLIENT_SECRET=$PASSWORD
+export ARM_TENANT_ID=022e4faf-c745-475a-be06-06b1e1c9e39d
+export ARM_ENVIRONMENT=public
