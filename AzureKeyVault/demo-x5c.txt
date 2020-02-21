@@ -1,0 +1,3 @@
+-----BEGIN CERTIFICATE-----
+MIIDBTCCAe2gAwI...
+-----END CERTIFICATE-----

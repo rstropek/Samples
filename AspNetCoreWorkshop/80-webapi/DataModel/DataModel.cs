@@ -24,6 +24,8 @@ namespace DataModel
         [Required(AllowEmptyStrings = false)]
         public string CompanyName { get; set; }
 
+        public string CompanyRegNumber { get; set; }
+
         [MaxLength(2)]
         [Required(AllowEmptyStrings = false)]
         public string CountryIsoCode { get; set; }

@@ -28,6 +28,8 @@ namespace WebApiDemo.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
+                    b.Property<string>("CompanyRegNumber");
+
                     b.Property<string>("CountryIsoCode")
                         .IsRequired()
                         .HasMaxLength(2);

@@ -23,3 +23,6 @@ POST http://localhost:7071/api/generate-demo-data
 
 ###
 POST https://srvlstrafficmonitor.azurewebsites.net/api/generate-demo-data
+
+###
+POST https://62d61df3.ngrok.io/api/slackapproval

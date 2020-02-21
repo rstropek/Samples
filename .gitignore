@@ -141,3 +141,5 @@ UpgradeLog*.XML
 /Snek2015AngularWebApiSample/WebClient/fonts
 /Snek2015AngularWebApiSample/WebClient/scripts
 *.backup
+
+nupkg

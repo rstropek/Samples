@@ -10,7 +10,7 @@ namespace Json
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var json = File.ReadAllText("DemoData.json");
 
@@ -105,14 +105,14 @@ namespace Json
                                     Console.WriteLine($"{prefix}[{i}]: Null");
                                     break;
                                 default:
-                                    Console.WriteLine($"{prefix}[{i}]: {prop.ToString()}");
+                                    Console.WriteLine($"{prefix}[{i}]: {prop}");
                                     break;
                             }
                         }
                         break;
                     default:
                         // Element is a simple property, no object or array
-                        Console.WriteLine($"{prefix}{element.ToString()}");
+                        Console.WriteLine($"{prefix}{element}");
                         break;
                 }
             }

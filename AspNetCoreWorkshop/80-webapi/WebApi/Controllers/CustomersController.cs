@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataModel;
+using WebApiDemo;
 
 namespace WebApiDemo.Controllers
 {
@@ -20,24 +21,15 @@ namespace WebApiDemo.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Gets a list of all customers
-        /// </summary>
-        /// <returns>List of customers</returns>
+        // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
             return await _context.Customers.ToListAsync();
         }
 
-        /// <summary>
-        /// Gets a customer by ID
-        /// </summary>
-        /// <param name="id">ID of the customer to return</param>
-        /// <returns>Customer with the given ID</returns>
+        // GET: api/Customers/5
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Customer), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Customer>> GetCustomer(Guid id)
         {
             var customer = await _context.Customers.FindAsync(id);

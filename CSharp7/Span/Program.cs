@@ -14,6 +14,8 @@ namespace Span
             //SpanBasics();
             //UnmanagedBasics();
 
+            //MemoryBasics();
+
             //BadIdeas();
 
             // Learning: With Span<T>, you can write methods supporting any kind of memory
@@ -187,6 +189,31 @@ namespace Span
                         Console.WriteLine($"\t{*buffer}");
                     }
                 }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
+        }
+
+        static void MemoryBasics()
+        {
+            static void DoSomethingWithSpan(Span<byte> bytes)
+            {
+                bytes[^1] = (byte)(bytes[^2] + bytes[^3]);
+                foreach (var number in bytes) Console.WriteLine(number);
+            }
+
+            Memory<byte> bytes = new byte[] { 1, 2, 3, 0 };
+            DoSomethingWithSpan(bytes.Span);
+
+            IntPtr ptr = Marshal.AllocHGlobal(1024);
+            try
+            {
+                using var memMgr = new UnmanagedMemoryManager<byte>(ptr, bytes.Length + 1);
+                Memory<byte> unmanagedBytes = memMgr.Memory;
+                bytes.CopyTo(unmanagedBytes);
+                DoSomethingWithSpan(unmanagedBytes.Span);
             }
             finally
             {

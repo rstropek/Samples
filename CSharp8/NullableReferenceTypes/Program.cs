@@ -7,6 +7,7 @@ namespace NullableReferenceTypes
 {
     class Program
     {
+
         static void Main()
         {
             // Note that myString must not be null

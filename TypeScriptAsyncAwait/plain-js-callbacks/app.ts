@@ -25,7 +25,7 @@ import * as mongodb from 'mongodb';
  */
 
 // Open Database
-mongodb.MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+mongodb.MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true }, (err, client) => {
   // Read all persons with first name "John"
   const db = client.db('demo');
   db.collection('Person', (err, coll) => {

@@ -11,7 +11,7 @@ describe('people middleware', () => {
     const contextMock: any = {};
     await getAllPeople(contextMock);
     expect(contextMock.body).toBeTruthy();
-    expect(contextMock.body.length).toBeGreaterThan(0);
+    expect(contextMock.body.length).toBeGreaterThan(100);
     done();
   });
 });

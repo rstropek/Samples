@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace WebApiDemo
 {

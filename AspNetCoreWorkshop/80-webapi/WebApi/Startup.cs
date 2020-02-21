@@ -24,6 +24,7 @@ namespace WebApiDemo
             // Update database with: dotnet ef database update 
             services.AddDbContext<OrderManagementContext>(options => options.UseSqlServer(
                 Configuration["ConnectionStrings:DefaultConnection"]));
+            System.Console.WriteLine(Configuration["ConnectionStrings:DefaultConnection"]);
 
             // Add Open API generation using NSwag
             // See also https://github.com/RicoSuter/NSwag/wiki/AspNetCore-Middleware
