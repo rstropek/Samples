@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 // Note that the nullable annotation context is enabled in .csproj for this project.
 // (see also https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references#nullable-contexts)
@@ -28,6 +29,21 @@ namespace NullableReferenceTypes
             PrintLength(myString);
             SafePrintLength(myString);
 #nullable restore
+
+            var customerDictionary = new Dictionary<int, string>
+            {
+                { 1, "Foo" },
+                { 2, "Bar" }
+            };
+            customerDictionary.TryGetValue(1, out var c);
+
+            // Try this with "if" and find out how the compiler understands
+            // nullability by going to definition of "TryGetValue".
+            // See also https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.codeanalysis?view=netcore-3.1
+            // if (customerDictionary.TryGetValue(1, out var c))
+            {
+                Console.WriteLine(c.Length);
+            }
         }
 
         static void RiskyPrintLength(string? s)
