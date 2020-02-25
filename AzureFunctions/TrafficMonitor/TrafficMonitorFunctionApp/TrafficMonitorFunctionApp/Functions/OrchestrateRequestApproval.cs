@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,7 @@ namespace TrafficMonitorFunctionApp.Functions
     {
         [FunctionName("OrchestrateRequestApproval")]
         public static async Task<bool> RunOrchestrator(
-            [OrchestrationTrigger] DurableOrchestrationContext context,
+            [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log)
         {
             var approvalRequest = context.GetInput<PlateReadApproval>();

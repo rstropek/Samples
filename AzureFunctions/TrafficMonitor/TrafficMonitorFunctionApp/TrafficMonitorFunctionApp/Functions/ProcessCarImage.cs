@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,7 @@ namespace TrafficMonitorFunctionApp.Functions
             string camera,
             string name,
             ILogger log,
-            [OrchestrationClient] DurableOrchestrationClient orchestrationClient)
+            [DurableClient] IDurableOrchestrationClient orchestrationClient)
         {
             log.LogInformation($"Start processing of new image {name} from camera {camera}");
 

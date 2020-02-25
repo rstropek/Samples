@@ -30,7 +30,18 @@ namespace TrafficMonitorFunctionApp.Functions
             // Get car and camera from DB
             log.LogInformation($"Get car and camera data from database");
             var car = await storage.GetCarByLicensePlateAsync(plate.Nationality, plate.LicensePlate);
+            if (car == null)
+            {
+                log.LogWarning($"Unknown car {plate.Nationality} {plate.LicensePlate}");
+                return;
+            }
+
             var camera = await storage.GetCameraByIDAsync(plate.CameraID);
+            if (camera == null)
+            {
+                log.LogWarning($"Unknown camera {plate.CameraID}");
+                return;
+            }
 
             if (camera.Start != null)
             {

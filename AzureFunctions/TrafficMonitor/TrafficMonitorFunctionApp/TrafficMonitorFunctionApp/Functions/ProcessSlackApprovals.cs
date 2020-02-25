@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace TrafficMonitorFunctionApp.Functions
 {
@@ -33,7 +34,7 @@ namespace TrafficMonitorFunctionApp.Functions
         /// <returns></returns>
         [FunctionName("ProcessSlackApprovals")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, methods: "post", Route = "slackapproval")] HttpRequestMessage req, [OrchestrationClient] DurableOrchestrationClient orchestrationClient, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, methods: "post", Route = "slackapproval")] HttpRequestMessage req, [DurableClient] IDurableOrchestrationClient orchestrationClient, ILogger log)
         {
             var formData = await req.Content.ReadAsFormDataAsync();
             string payload = formData.Get("payload");

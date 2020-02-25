@@ -1,0 +1,100 @@
+SUBSCRIPTION="Microsoft Azure Sponsorship"
+LOCATION="westeurope"
+RG="BastaServerless"
+KV="bastaserverlesskv"
+AIAPP="bastaserverlessai"
+COSMOS="bastaserverlessdb"
+SBNS="bastaserverlesssb"
+STORAGE="bastaserverlessstg"
+FUNC="bastaserverlessfunc"
+
+# Log in and select correct account
+az login
+az account set --subscription "$SUBSCRIPTION"
+
+# Create resource group
+az group create --name "$RG" --location "$LOCATION" --output none
+
+# Create Keyvault to store service principal's password
+az keyvault create --resource-group "$RG" --name "$KV"
+
+# Create app insights
+az extension add -n application-insights
+az monitor app-insights component create --app "$AIAPP" --location $LOCATION --kind web -g "$RG" --application-type web
+AIKEY=$(az monitor app-insights component show --app "$AIAPP" -g "$RG" --query "instrumentationKey" -o tsv)
+az keyvault secret set --vault-name $KV --name "AIKEY" --value "$AIKEY"
+
+az cosmosdb create -n "$COSMOS" -g "$RG" --default-consistency-level Eventual
+SECCTRLHOST=$(az cosmosdb show -n "$COSMOS" -g "$RG" --query "writeLocations[0].documentEndpoint" -o tsv)
+az keyvault secret set --vault-name $KV --name "SECCTRLHOST" --value "$SECCTRLHOST"
+
+SECCTRLAUTHKEY=$(az cosmosdb keys list --name "$COSMOS" --resource-group "$RG" --query "primaryMasterKey" -o tsv)
+az keyvault secret set --vault-name $KV --name "SECCTRLAUTHKEY" --value "$SECCTRLAUTHKEY"
+
+az cosmosdb sql database create --account-name "$COSMOS" --resource-group "$RG" --name "TrafficManager"
+az cosmosdb sql database create --account-name "$COSMOS" --resource-group "$RG" --name "TrafficManager"
+az cosmosdb sql container create --name "Cars" --database-name "TrafficManager" --account-name "$COSMOS" --resource-group "$RG" --partition-key-path "/lp"
+az cosmosdb sql container create --name "Cameras" --database-name "TrafficManager" --account-name "$COSMOS" --resource-group "$RG" --partition-key-path "/id"
+
+az servicebus namespace create --resource-group "$RG" --name "$SBNS" --location $LOCATION
+az servicebus topic create --resource-group "$RG" --namespace-name "$SBNS" --name "plate-read"
+az servicebus topic subscription create --resource-group "$RG" --namespace-name "$SBNS" --topic-name "plate-read" --name "section-control"
+az servicebus topic subscription create --resource-group "$RG" --namespace-name "$SBNS" --topic-name "plate-read" --name "check-vignette"
+az servicebus topic authorization-rule create --resource-group "$RG" --namespace-name "$SBNS" --topic-name "plate-read" --name send-plate-read --rights Send
+az servicebus topic authorization-rule create --resource-group "$RG" --namespace-name "$SBNS" --topic-name "plate-read" --name receive-plate-read --rights Listen
+SBSENDKEY=$(az servicebus topic authorization-rule keys list --resource-group "$RG" --namespace-name "$SBNS" --topic-name "plate-read" --name send-plate-read --query primaryKey -o tsv)
+SBRECEIVEKEY=$(az servicebus topic authorization-rule keys list --resource-group "$RG" --namespace-name "$SBNS" --topic-name "plate-read" --name receive-plate-read --query primaryKey -o tsv)
+az keyvault secret set --vault-name $KV --name "SECCTRLSENDPLATEREAD" --value "Endpoint=sb://$SBNS.servicebus.windows.net/;SharedAccessKeyName=send-plate-read;SharedAccessKey=$SBSENDKEY;"
+az keyvault secret set --vault-name $KV --name "SECCTRLRECEIVEPLATEREAD" --value "Endpoint=sb://$SBNS.servicebus.windows.net/;SharedAccessKeyName=receive-plate-read;SharedAccessKey=$SBRECEIVEKEY;"
+
+az storage account create -g "$RG" -l "$LOCATION" -n "$STORAGE" --sku Standard_LRS
+STORAGEKEY=$(az storage account keys list -n "$STORAGE" --query "[0].value" -o tsv)
+az storage container create -n "car-images" --account-name "$STORAGE" --account-key "$STORAGEKEY"
+az keyvault secret set --vault-name $KV --name "STORAGE" --value "DefaultEndpointsProtocol=https;AccountName=$STORAGE;AccountKey=$STORAGEKEY"
+
+az functionapp create -n $FUNC --storage-account $STORAGE --consumption-plan-location $LOCATION `
+    --app-insights $AIAPP --runtime dotnet -g $RG --functions_version 2
+az functionapp identity assign -g "$RG" -n "$FUNC"
+FUNCPRINCIPALID=$(az functionapp identity show --name "$FUNC" --resource-group "$RG" --query "principalId" -o tsv)
+FUNCAPPID=$(az ad sp show --id $FUNCPRINCIPALID --query "appId" -o tsv)
+KVID=$(az keyvault show --name "$KV" --resource-group "$RG" --query "id" -o tsv)
+az keyvault set-policy --name "$KV" --spn "$FUNCAPPID" --secret-permissions get list
+
+KVSECRET=$(az keyvault secret show --vault-name $KV --name "STORAGE" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "AzureWebJobsStorage=@Microsoft.KeyVault(SecretUri=$KVSECRET)"
+
+AIKEYSECRET=$(az keyvault secret show --vault-name $KV --name "AIKEY" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "APPINSIGHTS_INSTRUMENTATIONKEY=@Microsoft.KeyVault(SecretUri=$AIKEYSECRET)"
+
+SECCTRLHOSTSECRET=$(az keyvault secret show --vault-name $KV --name "SECCTRLHOST" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_HOST=@Microsoft.KeyVault(SecretUri=$SECCTRLHOSTSECRET)"
+
+SECCTRLAUTHKEYSECRET=$(az keyvault secret show --vault-name $KV --name "SECCTRLAUTHKEY" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_AUTH_KEY=@Microsoft.KeyVault(SecretUri=$SECCTRLAUTHKEYSECRET)"
+
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_NUMBER_CARS_A=10"
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_NUMBER_CARS_D=100"
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_NUMBER_SECTION_CONTROLS_A=5"
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_NUMBER_SECTION_CONTROLS_D=10"
+
+az keyvault secret set --vault-name $KV --name "OPENALPRKEY" --value "..."
+OPENALPRKEYSECRET=$(az keyvault secret show --vault-name $KV --name "OPENALPRKEY" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_OPENALPR_KEY=@Microsoft.KeyVault(SecretUri=$OPENALPRKEYSECRET)"
+
+STORAGESECRET=$(az keyvault secret show --vault-name $KV --name "STORAGE" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_CAR_IMAGES=@Microsoft.KeyVault(SecretUri=$STORAGESECRET)"
+
+SECCTRLSENDPLATEREADSECRET=$(az keyvault secret show --vault-name $KV --name "SECCTRLSENDPLATEREAD" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_SEND_PLATE_READ=@Microsoft.KeyVault(SecretUri=$SECCTRLSENDPLATEREADSECRET)"
+
+SECCTRLRECEIVEPLATEREADSECRET=$(az keyvault secret show --vault-name $KV --name "SECCTRLRECEIVEPLATEREAD" --query "id" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_RECEIVE_PLATE_READ=@Microsoft.KeyVault(SecretUri=$SECCTRLRECEIVEPLATEREADSECRET)"
+
+echo "\"AzureWebJobsStorage\": \"$(az keyvault secret show --vault-name $KV --name "STORAGE" --query "value" -o tsv)\","
+echo "\"APPINSIGHTS_INSTRUMENTATIONKEY\": \"$(az keyvault secret show --vault-name $KV --name "AIKEY" --query "value" -o tsv)\","
+echo "\"SECCTRL_HOST\": \"$(az keyvault secret show --vault-name $KV --name "SECCTRLHOST" --query "value" -o tsv)\","
+echo "\"SECCTRL_AUTH_KEY\": \"$(az keyvault secret show --vault-name $KV --name "SECCTRLAUTHKEY" --query "value" -o tsv)\","
+echo "\"SECCTRL_OPENALPR_KEY\": \"$(az keyvault secret show --vault-name $KV --name "OPENALPRKEY" --query "value" -o tsv)\","
+echo "\"SECCTRL_CAR_IMAGES\": \"$(az keyvault secret show --vault-name $KV --name "STORAGE" --query "value" -o tsv)\","
+echo "\"SECCTRL_SEND_PLATE_READ\": \"$(az keyvault secret show --vault-name $KV --name "SECCTRLSENDPLATEREAD" --query "value" -o tsv)\","
+echo "\"SECCTRL_RECEIVE_PLATE_READ\": \"$(az keyvault secret show --vault-name $KV --name "SECCTRLRECEIVEPLATEREAD" --query "value" -o tsv)\","
