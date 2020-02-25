@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 090 - CORS for gRPC Web</Title>
+			<Shortcut>090-cors</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+    builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders("Grpc-Status", "Grpc-Message");
+}));]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

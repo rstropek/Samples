@@ -123,7 +123,6 @@ namespace RecursivePatterns
             {
                 // Note that you can now use switch as an expression. Very useful
                 // in combination with pattern matching.
-                // Be *CAREFUL* when editing this code in the current VS2019 preview.
                 // Unfortunately, it crashes regularly when working with switch expressions.
                 Console.WriteLine(person switch
                 {

@@ -18,6 +18,9 @@
 * What you need for the server:
   * gRPC metapackage for gRPC in ASP.NET Core [on NuGet](https://www.nuget.org/packages/Grpc.AspNetCore)
   * Note call to `MapGrpcService` in `Startup.Configure` and to `services.AddGrpc` in `Startup.ConfigureServices` ([docs](https://docs.microsoft.com/en-us/aspnet/core/grpc/aspnetcore#add-grpc-services-to-an-aspnet-core-app))
+* For gRPC Web support (Preview):
+  * Add [Grpc.AspNetCore.Web](https://www.nuget.org/packages/Grpc.AspNetCore.Web)
+  * Call `app.UseGrpcWeb()` and `endpoints.MapGrpcService<...Service>().EnableGrpcWeb();` for adding gRPC Web support
 * What you need for the client:
   * gRPC Client for C# [on NuGet](https://www.nuget.org/packages/Grpc.Net.Client)
 * What you need for libraries:
@@ -32,6 +35,13 @@
   * `dotnet-grpc add-url -o google\rpc\status.proto -s Both https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/status.proto`
   * `dotnet-grpc add-url -o google\rpc\code.proto -s Both https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/code.proto`
 * Note that you can refresh the content of the referenced files with `dotnet-grpc refresh [options] [<references>...]` ([docs](https://docs.microsoft.com/en-us/aspnet/core/grpc/dotnet-grpc#refresh))
+
+### Generating TypeScript Client for gRPC Web
+
+* [Details about gRPC Web](https://github.com/grpc/grpc-web)
+* Setting up [gRPC Web in C#](https://docs.microsoft.com/en-us/aspnet/core/grpc/browser?view=aspnetcore-3.1)
+* `protoc greet.proto --js_out=import_style=commonjs:. --grpc-web_out=import_style=typescript,mode=grpcwebtext:.`
+* [Stackblitz client (completed)](https://stackblitz.com/edit/angular-a9wisf)
 
 ### Links
 

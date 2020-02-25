@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 005 Greeter Impl.</Title>
+			<Shortcut>005-greeter-impl</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[_logger.LogInformation($"Saying hello to {request.Name}");
+return Task.FromResult(new HelloReply
+{
+    Message = "Hello " + request.Name
+});]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

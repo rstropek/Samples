@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 020 - Fibonacci</Title>
+			<Shortcut>020-fibonacci</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[public class MathAlgorithms
+{
+    public IEnumerable<int> GetFibonacci()
+    {
+        var previous = 0;
+        var current = 1;
+        while (true)
+        {
+            (previous, current) = (current, previous + current);
+            yield return current;
+        }
+    }
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

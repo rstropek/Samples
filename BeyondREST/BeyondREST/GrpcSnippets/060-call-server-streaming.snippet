@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 060 - Call Server Streaming</Title>
+			<Shortcut>060-call-server-streaming</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[// Tip: Reuse channel for gRPC calls, create multiple gRPC clients
+//      from it (including different types of clients).
+var mathClient = new MathGuru.MathGuruClient(channel);
+await ServerStreaming(mathClient);]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

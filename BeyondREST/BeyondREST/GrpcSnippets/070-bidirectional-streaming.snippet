@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 070 - Bidirectional Streaming</Title>
+			<Shortcut>070-bidirectional-streaming</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[public override async Task GetFibonacciStepByStep(IAsyncStreamReader<FromTo> requestStream, IServerStreamWriter<StepByStepResult> responseStream, ServerCallContext context)
+{
+    var fib = math.GetFibonacci().GetEnumerator();
+    FromTo? previousFromTo = null;
+
+    // Read requests from client
+    await foreach (var item in requestStream.ReadAllAsync())
+    {
+        // Check if request is valid
+        if (item.From > item.To)
+        {
+            // Note returning error details using a oneof field in ProtoBuf.
+            // See also https://cloud.google.com/apis/design/errors#error_model for
+            // details about Google.Rpc.Status and Google.Rpc.Code
+            await responseStream.WriteAsync(new StepByStepResult
+            {
+                Error = new Google.Rpc.Status
+                {
+                    Code = (int)Google.Rpc.Code.InvalidArgument,
+                    Message = "To must be >= From"
+                }
+            });
+
+            // Wait for next client request
+            continue;
+        }
+
+        // Make sure new request is not < previous one
+        if (previousFromTo != null && item.From < previousFromTo.To)
+        {
+            await responseStream.WriteAsync(new StepByStepResult
+            {
+                Error = new Google.Rpc.Status
+                {
+                    Code = (int)Google.Rpc.Code.InvalidArgument,
+                    Message = "From must be >= previously sent To"
+                }
+            });
+
+            continue;
+        }
+
+        previousFromTo = item;
+
+        // Calculate Fibi
+        while (fib.Current < item.From)
+        {
+            fib.MoveNext();
+        }
+
+        if (fib.Current > item.To)
+        {
+            continue;
+        }
+
+        while (fib.Current <= item.To)
+        {
+            await responseStream.WriteAsync(new StepByStepResult
+            {
+                Result = new NumericResult { Result = fib.Current }
+            });
+            fib.MoveNext();
+            await Task.Delay(250);
+        }
+    }
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

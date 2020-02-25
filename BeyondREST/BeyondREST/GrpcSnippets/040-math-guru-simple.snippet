@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 040 - MathGuru Simple</Title>
+			<Shortcut>030-math-guru-simple</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[public class MathGuruService : MathGuru.MathGuruBase
+{
+    private readonly MathAlgorithms math;
+
+    public MathGuruService(MathAlgorithms math)
+    {
+        // Note the use of ASP.NET Core's DI to get MathAlgorithms
+        this.math = math;
+    }
+
+    public override async Task GetFibonacci(FromTo request, IServerStreamWriter<NumericResult> responseStream, ServerCallContext context)
+    {
+        // Check input parameters
+        if (request.From > request.To)
+        {
+            // Note simple error indication with status code and message
+            context.Status = new Status(StatusCode.InvalidArgument, "FromTo.From must be <= FromTo.To");
+            return;
+        }
+
+        foreach (var current in math.GetFibonacci())
+        {
+            if (current < request.From)
+            {
+                // Fibonacci number is too low
+                continue;
+            }
+            else if (current <= request.To)
+            {
+                // We got a Fibonacci number that the client is interested in
+                await responseStream.WriteAsync(new NumericResult { Result = current });
+
+                // Simulate some long running calculation
+                await Task.Delay(250);
+            }
+            else
+            {
+                // Fibonacci number is too high
+                break;
+            }
+        }
+    }
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 050 - Server Streaming Client</Title>
+			<Shortcut>050-server-streaming-client</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[private static async Task ServerStreaming(MathGuru.MathGuruClient mathClient)
+{
+    // Note usage of new using statement (C# 8)
+    using var fibResult = mathClient.GetFibonacci(new FromTo() { From = 10, To = 50 });
+
+    // Note usage of new streaming enumerable
+    await foreach (var fib in fibResult.ResponseStream.ReadAllAsync())
+    {
+        Console.WriteLine(fib);
+    }
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

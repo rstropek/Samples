@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>gRPC - 080 - Bidirectional Streaming Client</Title>
+			<Shortcut>080-bidirectional-streaming-client</Shortcut>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[private static async Task BidirectionalStreaming(MathGuru.MathGuruClient mathClient)
+{
+    using var duplexStream = mathClient.GetFibonacciStepByStep();
+
+    // Note that client processes streamed results from server asynchronously
+    var receiverTask = Task.Run(async () =>
+    {
+        // Note that this task will end when the server has closed the response stream
+        await foreach (var fib in duplexStream.ResponseStream.ReadAllAsync())
+        {
+            switch (fib.PayloadCase)
+            {
+                case StepByStepResult.PayloadOneofCase.Error:
+                    Console.Error.WriteLine($$"ERROR: {fib.Error.Message}");
+                    break;
+                case StepByStepResult.PayloadOneofCase.Result:
+                    Console.WriteLine(fib.Result.Result);
+                    if (fib.Result.Result == 34)
+                    {
+                        // Ok, we got the highest Fibonacci number we were looking for.
+                        // We can close the request stream so the server can gracefully stop.
+                        await duplexStream.RequestStream.CompleteAsync();
+                    }
+                    break;
+                default:
+                    // This should never happen
+                    throw new InvalidOperationException($$"Unexpected payload {fib.PayloadCase}");
+            }
+        }
+    });
+
+    // 1, 1, 2, 3, 5, 8, 13, 21, 34, 55
+    await duplexStream.RequestStream.WriteAsync(new FromTo() { From = 1, To = 10 });
+
+    // Note that the following request will result in an error
+    // because From (5) is < previous To (10)
+    await duplexStream.RequestStream.WriteAsync(new FromTo() { From = 5, To = 15 });
+
+    // Request a meaningful result
+    await duplexStream.RequestStream.WriteAsync(new FromTo() { From = 20, To = 40 });
+
+    // Wait until the async processing task has ended
+    await receiverTask;
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
