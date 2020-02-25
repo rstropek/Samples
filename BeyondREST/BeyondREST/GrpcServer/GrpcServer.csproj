@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.27.0" />
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.27.0-pre1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GrpcShared\GrpcShared.csproj" />
