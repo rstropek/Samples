@@ -59,12 +59,13 @@ FUNCPRINCIPALID=$(az functionapp identity show --name "$FUNC" --resource-group "
 FUNCAPPID=$(az ad sp show --id $FUNCPRINCIPALID --query "appId" -o tsv)
 KVID=$(az keyvault show --name "$KV" --resource-group "$RG" --query "id" -o tsv)
 az keyvault set-policy --name "$KV" --spn "$FUNCAPPID" --secret-permissions get list
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings FUNCTIONS_EXTENSION_VERSION=~3
 
 KVSECRET=$(az keyvault secret show --vault-name $KV --name "STORAGE" --query "id" -o tsv)
 az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "AzureWebJobsStorage=@Microsoft.KeyVault(SecretUri=$KVSECRET)"
 
-AIKEYSECRET=$(az keyvault secret show --vault-name $KV --name "AIKEY" --query "id" -o tsv)
-az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "APPINSIGHTS_INSTRUMENTATIONKEY=@Microsoft.KeyVault(SecretUri=$AIKEYSECRET)"
+AIKEY=$(az keyvault secret show --vault-name $KV --name "AIKEY" --query "value" -o tsv)
+az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "APPINSIGHTS_INSTRUMENTATIONKEY=$AIKEY"
 
 SECCTRLHOSTSECRET=$(az keyvault secret show --vault-name $KV --name "SECCTRLHOST" --query "id" -o tsv)
 az functionapp config appsettings set --name "$FUNC" --resource-group "$RG" --settings "SECCTRL_HOST=@Microsoft.KeyVault(SecretUri=$SECCTRLHOSTSECRET)"
