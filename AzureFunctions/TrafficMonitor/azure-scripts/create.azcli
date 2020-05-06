@@ -52,8 +52,7 @@ STORAGEKEY=$(az storage account keys list -n "$STORAGE" --query "[0].value" -o t
 az storage container create -n "car-images" --account-name "$STORAGE" --account-key "$STORAGEKEY"
 az keyvault secret set --vault-name $KV --name "STORAGE" --value "DefaultEndpointsProtocol=https;AccountName=$STORAGE;AccountKey=$STORAGEKEY"
 
-az functionapp create -n $FUNC --storage-account $STORAGE --consumption-plan-location $LOCATION `
-    --app-insights $AIAPP --runtime dotnet -g $RG --functions_version 2
+az functionapp create -n $FUNC --storage-account $STORAGE --consumption-plan-location $LOCATION --app-insights $AIAPP --runtime dotnet -g $RG --functions-version 3
 az functionapp identity assign -g "$RG" -n "$FUNC"
 FUNCPRINCIPALID=$(az functionapp identity show --name "$FUNC" --resource-group "$RG" --query "principalId" -o tsv)
 FUNCAPPID=$(az ad sp show --id $FUNCPRINCIPALID --query "appId" -o tsv)

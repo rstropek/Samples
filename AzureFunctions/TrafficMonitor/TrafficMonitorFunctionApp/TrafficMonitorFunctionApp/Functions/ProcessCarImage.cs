@@ -84,7 +84,7 @@ namespace TrafficMonitorFunctionApp.Functions
                 };
 
                 var readQuality = "low";
-                if (recognitionResult.Confidence >= 75d && recognitionResult.RegionConfidence >= 25d)
+                if (recognitionResult.Confidence >= 94d && recognitionResult.RegionConfidence >= 25d)
                 {
                     readQuality = "high";
                 }
