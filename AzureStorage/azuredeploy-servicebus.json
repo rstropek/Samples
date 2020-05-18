@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sbTopicName": {
+            "type": "string",
+            "defaultValue": "t-invoices",
+            "metadata": {
+                "description": "Name of the Service Bus Topic"
+            }
+        },
+        "sbSubscriptionName": {
+            "type": "string",
+            "defaultValue": "s-invoices",
+            "metadata": {
+                "description": "Name of the Service Bus Subscription"
+            }
+        }
+    },
+    "functions": [
+    ],
+    "variables": {
+        "serviceBus": "[concat('sb-', uniqueString(resourceGroup().id))]",
+        "applicationTag": "Azure Storage Demo"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-04-01",
+            "name": "[variables('serviceBus')]",
+            "type": "Microsoft.ServiceBus/Namespaces",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "ApplicationName": "[variables('applicationTag')]"
+            },
+            "sku": {
+                "name": "Premium"
+            },
+            "properties": {
+            },
+            "resources": [
+                {
+                    "apiVersion": "2017-04-01",
+                    "name": "[parameters('sbTopicName')]",
+                    "type": "Topics",
+                    "tags": {
+                        "ApplicationName": "[variables('applicationTag')]"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.ServiceBus/namespaces/', variables('serviceBus'))]"
+                    ],
+                    "properties": {
+                        "path": "[parameters('sbTopicName')]"
+                    },
+                    "resources": [
+                        {
+                            "apiVersion": "2017-04-01",
+                            "name": "[parameters('sbSubscriptionName')]",
+                            "type": "Subscriptions",
+                            "tags": {
+                                "ApplicationName": "[variables('applicationTag')]"
+                            },
+                            "dependsOn": [
+                                "[parameters('sbTopicName')]"
+                            ],
+                            "properties": {
+                            },
+                            "resources": [
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "2017-04-01",
+            "name": "[concat(variables('serviceBus'), concat('/', parameters('sbSubscriptionName'), '-read'))]",
+            "type": "Microsoft.ServiceBus/namespaces/authorizationRules",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceBus/namespaces/', variables('serviceBus'))]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "Rights": [
+                    "Listen"
+                ]
+            }
+        },
+        {
+            "apiVersion": "2017-04-01",
+            "name": "[concat(variables('serviceBus'), concat('/', parameters('sbSubscriptionName'), '-write'))]",
+            "type": "Microsoft.ServiceBus/namespaces/authorizationRules",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceBus/namespaces/', variables('serviceBus'))]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "Rights": [
+                    "Send"
+                ]
+            }
+        }
+    ],
+    "outputs": {
+    }
+}
