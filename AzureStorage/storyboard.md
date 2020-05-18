@@ -261,6 +261,31 @@
   * Note [retry schedule](https://docs.microsoft.com/en-us/azure/event-grid/delivery-and-retry#retry-schedule-and-duration)
 
 
+# Multi-Tenant Data Storage
+
+* Design a system so that each tenant’s data is isolated from one another
+* Divide storage into compartments so one tenant breach cannot flow into another tenant
+* No service should have access to all tenant data
+* Always keep general [service limits, quotas, and constraints](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits) in mind.
+
+## Relational
+
+* [SQL Database elastic pools](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-elastic-pool)
+  * [Pricing](https://azure.microsoft.com/en-us/pricing/details/sql-database/elastic/)
+  * One DB (cluster) for each tenant
+* [Azure Database for PostgresSQL - Hyperscale](https://docs.microsoft.com/en-us/azure/postgresql/overview#azure-database-for-postgresql---hyperscale-citus)
+  * [Sharding](https://docs.microsoft.com/en-us/azure/postgresql/concepts-hyperscale-choose-distribution-column#multi-tenant-apps)
+
+## NoSQL
+
+* Azure Storage
+  * *Storage account* per tenant
+  * *Container* per tenant
+* Azure CosmosDB
+  * [Container](https://docs.microsoft.com/en-us/azure/cosmos-db/databases-containers-items#azure-cosmos-containers) per tenant
+  * Tenant as partition key
+
+
 # Hybrid Solutions
 
 ## Potential Services
