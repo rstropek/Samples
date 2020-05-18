@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "eventViewerEndpoint": {
+            "type": "string",
+            "defaultValue": "https://storage-demo-event-grid-viewer.azurewebsites.net/api/updates",
+            "metadata": {
+                "description": "Endpoint of Event Viewer app"
+            }
+        }
+    },
+    "functions": [
+    ],
+    "variables": {
+        "storageAccount": "[concat('st', uniqueString(resourceGroup().id))]",
+        "applicationTag": "Azure Storage Demo"
+    },
+    "resources": [
+        {
+            "name": "[variables('storageAccount')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "tags": {
+                "ApplicationName": "[variables('applicationTag')]"
+            },
+            "location": "[resourceGroup().location]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_ZRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "accessTier": "Hot"
+            },
+            "resources": [
+                {
+                    "type": "blobServices/containers",
+                    "name": "[concat('default/', 'car-images')]",
+                    "dependsOn": [
+                        "[variables('storageAccount')]"
+                    ],
+                    "apiVersion": "2019-06-01",
+                    "properties": {
+                        "publicAccess": "None",
+                        "metadata": {
+                            "ApplicationName": "[variables('applicationTag')]"
+                        }
+                    },
+                    "resources": [
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/providers/eventSubscriptions",
+            "name": "[concat(variables('storageAccount'), '/Microsoft.EventGrid/', 'storage-event-subscription')]",
+            "apiVersion": "2018-01-01",
+            "dependsOn": [
+                "[variables('storageAccount')]"
+            ],
+            "tags": {
+                "ApplicationName": "[variables('applicationTag')]"
+            },
+            "properties": {
+                "destination": {
+                    "endpointType": "WebHook",
+                    "properties": {
+                        "endpointUrl": "[parameters('eventViewerEndpoint')]"
+                    }
+                },
+                "filter": {
+                    "subjectBeginsWith": "",
+                    "subjectEndsWith": "",
+                    "isSubjectCaseSensitive": false,
+                    "includedEventTypes": [
+                        "All"
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

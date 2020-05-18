@@ -1,0 +1,154 @@
+# Set some variables that we will use throughout this demo
+
+SUBSCRIPTION="b33f0285-db27-4896-ac5c-df22004b0aba"
+LOCATION="East US"
+RG="StorageDemo"
+VNET="$RG-Vnet"
+SUBNET_PE="PrivateEndpointSubnet"
+SUBNET_REGULAR="RegularSubnet"
+SUBNET_ACI="AciSubnet"
+INTERACTIVE_IMAGE="rstropek/ddo-interactive"
+INTERACTIVE_CONT="ddoaciinteractive"
+SQLSERVER="$RG-SqlServer"
+SQLDB="$RG-SqlDb"
+SQLENDPOINT="$RG-SqlPrivateEndpoint"
+SQLDNSLINK="$RG-SqlDnsLink"
+FRONTEND_URL="https://cddataexchange.blob.core.windows.net/data-exchange/Frontend.zip"
+
+
+########################################################################################################################
+# Log in (not necessary in cloud shell) and select correct account
+az login --use-device-code
+az account set --subscription "$SUBSCRIPTION"
+
+
+########################################################################################################################
+# Create resource groups
+if [ $(az group exists --name $RG) == 'false' ]
+then
+    az group create --name $RG --location "$LOCATION"
+fi
+
+
+########################################################################################################################
+# Deploy network and subnets
+if ! az network vnet show --name $VNET --resource-group $RG 2> /dev/null
+then
+    # Network with subnet for private endpoints
+    az network vnet create --name $VNET --resource-group $RG --location "$LOCATION" \
+        --address-prefixes 10.0.0.0/16 --subnet-name $SUBNET_PE --subnet-prefixes 10.0.0.0/24
+
+    # We have to disable private endpoint network policies as network security groups (NSGs)
+    # are not supported for private endpoints. For details see also
+    # https://docs.microsoft.com/en-us/azure/private-link/disable-private-endpoint-network-policy
+    az network vnet subnet update --name $SUBNET_PE --resource-group $RG --vnet-name $VNET \
+        --disable-private-endpoint-network-policies true
+
+    # Subnet for resources other than private endpoints
+    az network vnet subnet create --vnet-name $VNET --name $SUBNET_REGULAR --resource-group $RG \
+        --address-prefixes 10.0.1.0/24
+
+    # Subnet for ACI (for demo purposes only)
+    az network vnet subnet create --vnet-name $VNET --name $SUBNET_ACI --resource-group $RG \
+        --address-prefixes 10.0.2.0/24
+fi
+
+
+########################################################################################################################
+# DEMO accessing backend API
+# Try accessing api over public internet
+curl http://$PRIVATEWEBAPP.azurewebsites.net
+
+# Try accessing api from within VNet
+if ! az container show --resource-group $RG --name $INTERACTIVE_CONT 2> /dev/null
+then
+    az container create --resource-group $RG --name $INTERACTIVE_CONT --image $INTERACTIVE_IMAGE \
+        --restart-policy Never --vnet $VNET --subnet $SUBNET_ACI --cpu 1 --memory 1
+fi
+az container exec --resource-group $RG --name $INTERACTIVE_CONT --exec-command "sh"
+    # curl DdoWebPrivate.azurewebsites.net
+    # nslookup DdoWebPrivate.azurewebsites.net
+    # curl http://10.0.0.4
+    # curl http://10.0.0.4 -H "Host: DdoWebPrivate.azurewebsites.net"
+
+
+########################################################################################################################
+# Deploy Azure SQL DB
+if ! az sql server show --name $SQLSERVER --resource-group $RG 2> /dev/null
+then
+    # Note that we disallow access from public network
+    az sql server create --name $SQLSERVER --resource-group $RG --location "$LOCATION" \
+        --admin-user "sqladmin" --admin-password "Passw0rd1234" --enable-public-network false
+
+    # Proxy is needed for private endpoint. For details see
+    # https://docs.microsoft.com/en-us/azure/sql-database/sql-database-private-endpoint-overview#limitations
+    az sql server conn-policy update --connection-type Proxy --resource-group $RG --server $SQLSERVER
+    
+    az sql server firewall-rule create --resource-group $RG --server $SQLSERVER --name everyone \
+        --start-ip-address 10.0.0.0 --end-ip-address 10.0.255.255
+fi
+SQLSERVER_ID=$(az sql server show --name $SQLSERVER --resource-group $RG --query "id" -o tsv)
+
+if ! az sql db show --resource-group $RG --server $SQLSERVER --name $SQLDB 2> /dev/null
+then
+    az sql db create --resource-group $RG --server $SQLSERVER --name $SQLDB
+fi
+
+# Demonstrate that accessing SQL DB over the internet is not possible
+
+
+########################################################################################################################
+# Deploy private endpoint for SQL DB
+if ! az network private-endpoint show --resource-group $RG --name $SQLENDPOINT 2> /dev/null
+then
+    az network private-endpoint create --name $SQLENDPOINT --resource-group $RG \
+        --vnet-name $VNET --subnet $SUBNET_PE --private-connection-resource-id "$SQLSERVER_ID" \
+        --group-ids sqlServer --connection-name "$SQLENDPOINT-connection"
+fi
+SQLPEP_NIC_IPCONFIG=$(az network private-endpoint show --resource-group $RG --name $SQLENDPOINT --query "networkInterfaces[0].id" -o tsv)
+az resource show --ids $SQLPEP_NIC_IPCONFIG --query "properties.ipConfigurations[0].properties.privateLinkConnectionProperties.fqdns"
+SQLPEP_IP=$(az resource show --ids $SQLPEP_NIC_IPCONFIG --query "properties.ipConfigurations[0].properties.privateIPAddress" -o tsv)
+echo $SQLPEP_IP
+
+
+########################################################################################################################
+# Deploy private DNS zone for SQL name resolution
+if ! az network private-dns zone show --resource-group $RG --name  "privatelink.database.windows.net" 2> /dev/null
+then
+    az network private-dns zone create --resource-group $RG --name  "privatelink.database.windows.net"
+fi
+if ! az network private-dns link vnet show --resource-group $RG --zone-name  "privatelink.database.windows.net" --name $SQLDNSLINK 2> /dev/null
+then
+    # Add private DNS link to existing VNet
+    az network private-dns link vnet create --resource-group $RG --zone-name  "privatelink.database.windows.net" \
+        --name $SQLDNSLINK --virtual-network $VNET --registration-enabled false 
+    az network private-dns record-set a create --name $SQLSERVER --zone-name privatelink.database.windows.net --resource-group $RG
+    az network private-dns record-set a add-record --record-set-name $SQLSERVER --zone-name privatelink.database.windows.net \
+        --resource-group $RG -a $SQLPEP_IP
+fi
+
+
+########################################################################################################################
+# Deploy frontend API
+if ! az webapp show --resource-group $RGW --name $PUBLICWEBAPP 2> /dev/null
+then
+    az webapp create --resource-group $RGW --plan $APPSERVPLANW --name $PUBLICWEBAPP
+fi
+if [ $(az webapp vnet-integration list --resource-group $RGW --name $PUBLICWEBAPP | jq length) == '0' ]
+then
+    az webapp vnet-integration add --resource-group $RGW --name $PUBLICWEBAPP --vnet $VNET --subnet $SUBNET_REGULAR
+fi
+az webapp config appsettings set --resource-group $RGW --name $PUBLICWEBAPP \
+    --settings \
+        Backend__Address=$PEP_IP \
+        Backend__Host=ddowebprivate.azurewebsites.net \
+        "SqlConnection=Server=$SQLSERVER.database.windows.net;Database=$SQLDB;User ID=sqladmin;Password=Passw0rd1234;Connect Timeout=3;" \
+        WEBSITE_DNS_SERVER=168.63.129.16 WEBSITE_VNET_ROUTE_ALL=1 \
+        WEBSITE_RUN_FROM_PACKAGE=$FRONTEND_URL
+curl https://$PUBLICWEBAPP.azurewebsites.net/api && echo
+
+
+########################################################################################################################
+# Helper scripts
+az resource list --resource-group $RG --output table
+az resource list --resource-group $RGW --output table

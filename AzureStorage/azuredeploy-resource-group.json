@@ -1,0 +1,41 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "string",
+            "defaultValue": "storage-demo-rg",
+            "metadata": {
+                "description": "Resource Group Name"
+            }
+        },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "westeurope",
+            "metadata": {
+                "description": "Azure location for resource group"
+            }
+        }
+    },
+    "functions": [
+    ],
+    "variables": {
+        "applicationTag": "Azure Storage Demo"
+    },
+    "resources": [
+        {
+            "name": "[parameters('rgName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2019-10-01",
+            "location": "[parameters('rgLocation')]",
+            "tags": {
+                "ApplicationName": "[variables('applicationTag')]"
+            },
+            "properties": {
+            }
+        }
+    ],
+    "outputs": {
+
+    }
+}
