@@ -1,0 +1,9 @@
+az login --use-device-code
+
+az account set --subscription "Microsoft Azure Sponsorship"
+
+az deployment group create --resource-group AzureBasics --template-file azuredeploy-storage-basic.json
+
+az feature register --namespace Microsoft.Storage --name Versioning
+az feature show --namespace Microsoft.Storage --name Versioning
+az provider register -n Microsoft.Storage

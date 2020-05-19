@@ -132,6 +132,7 @@
 * [Copy blob from URL](https://docs.microsoft.com/en-us/rest/api/storageservices/copy-blob-from-url) to move/copy existing blobs
 * [Build blobs incrementally](https://docs.microsoft.com/en-us/rest/api/storageservices/put-block-list)
 * Use [Event Grid integration](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-event-overview) to prevent polling
+* Use [*AzCopy*](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10) tool to transfer larger block blobs
 
 ### Samples
 
