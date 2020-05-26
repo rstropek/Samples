@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 
 // Tip: If you are looking for more Roslyn samples,
-// look at https://github.com/dotnet/roslyn/tree/master/src/Samples
+// look at https://github.com/dotnet/roslyn-sdk/tree/master/samples
 
 namespace RoslynDemos.SemanticModel
 {
@@ -20,6 +20,7 @@ namespace RoslynDemos.SemanticModel
 			// Let's self-inspect this program and find out the type of 'greeting'
 			var sourcePath = Path.Combine(
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+				"..", // notcoreapp
 				"..", // debug
 				"..", // bin
 				"Program.cs");
@@ -30,7 +31,7 @@ namespace RoslynDemos.SemanticModel
 			// Run the compiler and get the semantic model
 			var semanticModel = CSharpCompilation.Create("selfInspection")
 				.AddSyntaxTrees(syntaxTree)
-				.AddReferences(	// Add reference to mscorlib
+				.AddReferences(	// Add reference to System CoreLib
 					MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
 				.GetSemanticModel(syntaxTree);
 

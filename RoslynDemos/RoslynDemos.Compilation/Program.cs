@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 
 // Tip: If you are looking for more Roslyn samples,
-// look at https://github.com/dotnet/roslyn/tree/master/src/Samples
+// look at https://github.com/dotnet/roslyn-sdk/tree/master/samples
 
 namespace RoslynDemos.Compilation
 {

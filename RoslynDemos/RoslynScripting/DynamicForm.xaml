@@ -1,4 +1,0 @@
-﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<TextBlock FontFamily="Segue UI" FontSize="40" Text="Hello BASTA!" />
-</UserControl>

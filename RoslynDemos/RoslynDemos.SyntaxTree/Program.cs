@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 
 // Tip: If you are looking for more Roslyn samples,
-// look at https://github.com/dotnet/roslyn/tree/master/src/Samples
+// look at https://github.com/dotnet/roslyn-sdk/tree/master/samples
 
 namespace RoslynDemos.SyntaxTree
 {
@@ -20,7 +20,7 @@ namespace RoslynDemos.SyntaxTree
 
 		static void ReadSyntaxTree()
 		{
-			const string text = "class Basta2015 { void CSharpWorkshop(int numberOfAttendees) { } }";
+			const string text = "class InfoDay2020 { void CSharpWorkshop(int numberOfAttendees) { } }";
 
 			// Generate syntax tree by parsing the text
 			var tree = SyntaxFactory.ParseSyntaxTree(text);
@@ -44,7 +44,7 @@ namespace RoslynDemos.SyntaxTree
 
 		static void ChangeSyntaxTree()
 		{
-			const string text = "class Basta2015 { void CSharpWorkshop(int numberOfAttendees) { } }";
+			const string text = "class InfoDay2020 { void CSharpWorkshop(int numberOfAttendees) { } }";
 
 			// Generate syntax tree by parsing the text
 			var tree = SyntaxFactory.ParseSyntaxTree(text);
@@ -78,10 +78,18 @@ namespace RoslynDemos.SyntaxTree
 		}
 
 		#region SyntaxTreeVisitor
+		class InfoDay2020
+		{
+			void CSharpWorkshop(int numberOfAttendees) { }
+			void LetsHaveFunWithRoslyn() { }
+		}
+
 		static void SyntaxTreeVisitor()
 		{
-			const string text = @"class Basta2015 { void CSharpWorkshop(int numberOfAttendees) { } 
-				void LetsHaveFunWithRoslyn() { } }";
+			const string text = @"class InfoDay2020 { 
+				void CSharpWorkshop(int numberOfAttendees) { } 
+				void LetsHaveFunWithRoslyn() { } 
+			}";
 
 			var tree = SyntaxFactory.ParseSyntaxTree(text);
 			new MethodNamePrinter().Visit(tree.GetRoot());
