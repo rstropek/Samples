@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using ODataCoreFaq.Data;
 using System.Linq;
 
 namespace ODataCoreFaq.Service.Controllers
@@ -17,6 +18,9 @@ namespace ODataCoreFaq.Service.Controllers
         public IActionResult Get()
         {
             return Ok(db.Customers);
+
+            // This is how you would return OData count property:
+            // return Ok(new PageResult<Customer>(db.Customers, null, count: db.Customers.Count()));
         }
 
 
