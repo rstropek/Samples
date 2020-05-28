@@ -200,9 +200,9 @@ namespace DurableFunctions
             if (winner == approvalResponse && approvalResponse.Result)
             {
                 // License plate read approved -> Store speed violation
-                // await context.CallActivityAsync(nameof(StoreSpeedViolation), sv);
+                await context.CallActivityAsync(nameof(StoreSpeedViolation), sv);
 
-                var entityId = Guid.NewGuid();
+                var entityId = context.NewGuid();
                 var lawsuitId = new EntityId(nameof(SpeedViolationLawsuit), entityId.ToString());
                 await context.CallEntityAsync(lawsuitId, nameof(SpeedViolationLawsuit.SetSpeedViolation), sv);
                 log.LogInformation(entityId.ToString());

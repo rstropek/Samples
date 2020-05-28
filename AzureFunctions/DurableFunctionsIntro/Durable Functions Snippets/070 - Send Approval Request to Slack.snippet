@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>070 Send Approval Request to Slack</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[[FunctionName(nameof(SendApprovalRequestViaSlack))]
+public Task SendApprovalRequestViaSlack([ActivityTrigger] ApprovalRequest req, ILogger log)
+{
+    log.LogInformation($$"Message regarding {req.SpeedViolation.LicensePlateNumber} sent to Slack " +
+        $$"(instance ID {req.OrchestrationInstanceID}!");
+
+    // Todo: Send data about speed violation to Slack via Slack REST API.
+    //       Not implemented here, just a demo.
+
+    return Task.CompletedTask;
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>030 Store Speed Violation</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[public Task StoreSpeedViolation(SpeedViolation sv, ILogger log)
+{
+    log.LogInformation($$"Processing speed violation from camera {sv.CameraID}" +
+        $$"for LP {sv.LicensePlateNumber} ({sv.SpeedKmh} km/h)");
+
+    // Todo: Add code for processing speed violation
+    //       Not implemented here, just a demo.
+
+    return Task.CompletedTask;
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

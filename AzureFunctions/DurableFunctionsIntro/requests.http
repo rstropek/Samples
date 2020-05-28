@@ -1,7 +1,9 @@
 @baseAddress = http://localhost:7071
 
 ###
-# @name triggerWorkflow
+# @name speedViolation1
+# Description of the responses see also
+# https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-http-api
 POST {{baseAddress}}/api/SpeedViolationRecognition
 Content-Type: application/json
 
@@ -13,7 +15,12 @@ Content-Type: application/json
 }
 
 ###
-@orchId = {{triggerWorkflow.response.body.id}}
+# @name statusQuery
+GET {{speedViolation1.response.body.$.statusQueryGetUri}}
+
+
+###
+@orchId = {{speedViolation1.response.body.id}}
 
 POST {{baseAddress}}/api/ProcessSlackApproval
 Content-Type: application/json
@@ -24,11 +31,11 @@ Content-Type: application/json
 }
 
 ###
-GET {{baseAddress}}/api/lawsuite/902ae960-1e74-4ac3-b9ae-909a1d64ce95
+GET {{baseAddress}}/api/lawsuite/{{statusQuery.response.body.$.customStatus}}
 Accept: application/json
 
 ###
-POST {{baseAddress}}/api/lawsuite/902ae960-1e74-4ac3-b9ae-909a1d64ce95/setDriver
+POST {{baseAddress}}/api/lawsuite/{{statusQuery.response.body.$.customStatus}}/setDriver
 Content-Type: application/json
 
 "Foo Bar"

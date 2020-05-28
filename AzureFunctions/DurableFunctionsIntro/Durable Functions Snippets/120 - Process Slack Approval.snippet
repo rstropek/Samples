@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>120 - Process Slack Approval</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[/// <summary>
+/// Web API receiving responses from Slack API
+/// </summary>
+/// <returns>
+/// OK if approval was ok, BadRequest if approval is unknown or no longer running
+/// </returns>
+[FunctionName(nameof(ProcessSlackApproval))]
+public async Task<HttpResponseMessage> ProcessSlackApproval(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post")]HttpRequestMessage req,
+    [DurableClient] IDurableOrchestrationClient orchestrationClient,
+    ILogger log)
+{
+    // Get approval response from HTTP body
+    var slackResponse = JsonSerializer.Deserialize<ApprovalResponse>(await req.Content.ReadAsStringAsync());
+
+    // Get status based on orchestration ID
+    var status = await orchestrationClient.GetStatusAsync(slackResponse.OrchestrationInstanceID);
+    if (status.RuntimeStatus == OrchestrationRuntimeStatus.Running || status.RuntimeStatus == OrchestrationRuntimeStatus.Pending)
+    {
+        log.LogInformation("Received Slack response in time, raising event");
+
+        // Raise an event for the given orchestration
+        await orchestrationClient.RaiseEventAsync(slackResponse.OrchestrationInstanceID,
+            ReceiveApprovalResponseEvent, slackResponse.Approved);
+        return new HttpResponseMessage(HttpStatusCode.OK);
+    }
+             
+    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

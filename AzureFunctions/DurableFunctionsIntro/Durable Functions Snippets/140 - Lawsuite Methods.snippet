@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>140 - Lawsuite Methods</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[[FunctionName(nameof(GetLawsuite))]
+public async Task<IActionResult> GetLawsuite(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "lawsuite/{entityKey}")]HttpRequestMessage req,
+    string entityKey,
+    [DurableClient] IDurableEntityClient client,
+    ILogger log)
+{
+    var svl = await client.ReadEntityStateAsync<SpeedViolationLawsuit>(new EntityId(nameof(SpeedViolationLawsuit), entityKey));
+
+    return new OkObjectResult(svl);
+}
+
+[FunctionName(nameof(SetDriver))]
+public async Task<IActionResult> SetDriver(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "lawsuite/{entityKey}/setDriver")]HttpRequestMessage req,
+    string entityKey,
+    [DurableClient] IDurableEntityClient client,
+    ILogger log)
+{
+    var driverName = JsonSerializer.Deserialize<string>(await req.Content.ReadAsStringAsync());
+    await client.SignalEntityAsync(new EntityId(nameof(SpeedViolationLawsuit), entityKey), nameof(SpeedViolationLawsuit.StoreDriver), driverName);
+    return new StatusCodeResult((int)HttpStatusCode.Accepted);
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

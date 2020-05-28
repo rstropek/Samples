@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>110 - Handle Slack Approval</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[// Wait for the event that will be raised once we have received the response from Slack.
+var approvalResponse = context.WaitForExternalEvent<bool>(ReceiveApprovalResponseEvent);
+
+// Wait for Slack response or timer, whichever comes first
+var winner = await Task.WhenAny(approvalResponse, timeoutTask);
+
+// Was the Slack task the first task to complete?
+if (winner == approvalResponse && approvalResponse.Result)
+{
+    // License plate read approved -> Store speed violation
+    await context.CallActivityAsync(nameof(StoreSpeedViolation), sv);
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

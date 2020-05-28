@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>020 Basic Function</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Net</Namespace>
+        </Import>
+        <Import>
+          <Namespace>System.Net.Http</Namespace>
+        </Import>
+        <Import>
+          <Namespace>System.Text.Json</Namespace>
+        </Import>
+      </Imports>
+      <Code Language="csharp" Delimiter="$"><![CDATA[public class TrafficSpeedViolation
+{
+    /// <summary>
+    /// Web API handling incoming speed violations recognized by traffic cameras
+    /// </summary>
+    /// <returns>
+    /// OK if license plate read accuracy was ok, otherwise tracking data for
+    /// long-running orchestration handling manual approval of license plate read.
+    /// </returns>
+    [FunctionName(nameof(SpeedViolationRecognition))]
+    public async Task<HttpResponseMessage> SpeedViolationRecognition(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestMessage req,
+        [DurableClient] IDurableOrchestrationClient starter,
+        ILogger log)
+    {
+        var sv = JsonSerializer.Deserialize<SpeedViolation>(await req.Content.ReadAsStringAsync());
+
+        log.LogError($$"{nameof(SpeedViolationRecognition)} not yet implemented");
+
+        return new HttpResponseMessage(HttpStatusCode.OK);
+    }
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

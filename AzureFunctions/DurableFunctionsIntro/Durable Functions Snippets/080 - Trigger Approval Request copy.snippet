@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>080 Trigger Approval Request</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[// Call activity that sends approval request to Slack. Note that this
+// activity will not await the human's response. It will only wait until
+// message will have been sent to Slack.
+await context.CallActivityAsync(nameof(SendApprovalRequestViaSlack), new ApprovalRequest
+{
+    OrchestrationInstanceID = context.InstanceId,
+    SpeedViolation = sv
+});]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>040 Call Store Speed Violation</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[// Check if read accuracy was not good enough
+if (sv.RecognitionAccuracy < 0.75d)
+{
+    // Note: Add `"logLevel": { "default": "Information" },` to host.json to see information in console
+    // More at https://docs.microsoft.com/en-us/azure/azure-functions/functions-monitoring?tabs=cmd#log-configuration-in-hostjson
+
+    log.LogInformation($$"Recognition not accurate enough, starting orchestration to ask human for help");
+
+    log.LogError($$"Manual recognition not yet implemented");
+
+    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+}
+
+// Read accuracy was ok -> store it (assumption: storing speed 
+// violation is pretty fast, i.e. a matter of seconds).
+await StoreSpeedViolation(sv, log);]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

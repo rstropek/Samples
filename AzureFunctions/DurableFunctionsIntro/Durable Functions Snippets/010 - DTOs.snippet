@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>010 DTOs</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[#region Data Transfer Objects
+/// <summary>
+/// Represents a speed violation recognized by a traffic camera
+/// </summary>
+public class SpeedViolation
+{
+    /// <summary>
+    /// ID of the camera that has recognized the vehicle
+    /// </summary>
+    public int CameraID { get; set; }
+
+    /// <summary>
+    /// License plate number as recognized by the camera
+    /// </summary>
+    public string LicensePlateNumber { get; set; }
+
+    /// <summary>
+    /// Accuracy of license plate recognition (value between 0 and 1)
+    /// </summary>
+    public double RecognitionAccuracy { get; set; }
+
+    /// <summary>
+    /// Measured speed of the vehicle
+    /// </summary>
+    public decimal SpeedKmh { get; set; }
+}
+
+/// <summary>
+/// Represents a request for manual approval of license plate read
+/// </summary>
+public class ApprovalRequest
+{
+    /// <summary>
+    /// ID or the long-running orchestration handling the approval process
+    /// </summary>
+    public string OrchestrationInstanceID { get; set; }
+
+
+    /// <summary>
+    /// Data about the speed violation to approve
+    /// </summary>
+    public SpeedViolation SpeedViolation { get; set; }
+}
+
+/// <summary>
+/// Represents a response of a user concerning a license plate read
+/// </summary>
+public class ApprovalResponse
+{
+    /// <summary>
+    /// ID or the long-running orchestration handling the approval process
+    /// </summary>
+    public string OrchestrationInstanceID { get; set; }
+
+    /// <summary>
+    /// True if license plate read has been confirmed, otherwise false
+    /// </summary>
+    public bool Approved { get; set; }
+}
+#endregion]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

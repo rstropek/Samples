@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>050 Orchestration Function</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System.Threading</Namespace>
+        </Import>
+      </Imports>
+      <Code Language="csharp" Delimiter="$"><![CDATA[/// <summary>
+/// Durable function handling long-running approval process
+/// </summary>
+[FunctionName(nameof(ManuallyApproveRecognition))]
+public async Task<bool> ManuallyApproveRecognition([OrchestrationTrigger] IDurableOrchestrationContext context, ILogger log)
+{
+    log.LogInformation($$"Entering {nameof(ManuallyApproveRecognition)} at {DateTime.Now}");
+
+    // Get speed violation data from orchestration context
+    var sv = context.GetInput<SpeedViolation>();
+
+    // Send request to Slack
+    log.LogError("Communication with Slack not yet implemented");
+
+    // We want the human operator to respond within 60 minutes. We setup a
+    // timer for that. Note that this is NOT a regular .NET timer. It is a
+    // special timer from the Durable Functions runtime!
+    using var timeoutCts = new CancellationTokenSource();
+    var expiration = context.CurrentUtcDateTime.AddSeconds(10); // .AddMinutes(60);
+    var timeoutTask = context.CreateTimer(expiration, timeoutCts.Token);
+
+    // Wait for the event that will be raised once we have received the response from Slack.
+    log.LogError("Waiting for Slack not yet implemented");
+
+    await timeoutTask;
+
+    if (!timeoutTask.IsCompleted)
+    {
+        // All pending timers must be completed or cancelled before the function exits.
+        timeoutCts.Cancel();
+    }
+
+    return false;
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>060 Trigger Orchestration</Title>
+      <Author>Rainer Stropek</Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[// Start durable function for manual approval process
+string instanceId = await starter.StartNewAsync(nameof(ManuallyApproveRecognition), sv);
+
+// Return status object with instance ID and URLs for status monitoring
+return starter.CreateCheckStatusResponse(req, instanceId);]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
