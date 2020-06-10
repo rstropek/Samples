@@ -25,31 +25,29 @@ namespace TrafficMonitorFunctionApp.Functions
 
             // Wait for Response as an external event or a time out. 
             // The approver has a limit to approve otherwise the request will be rejected.
-            using (var timeoutCts = new CancellationTokenSource())
+            using var timeoutCts = new CancellationTokenSource();
+            var expiration = context.CurrentUtcDateTime.AddMinutes(5);
+            Task timeoutTask = context.CreateTimer(expiration, timeoutCts.Token);
+
+            var approvalResponse = context.WaitForExternalEvent<bool>("ReceiveApprovalResponse");
+            var winner = await Task.WhenAny(approvalResponse, timeoutTask);
+            if (winner == approvalResponse)
             {
-                var expiration = context.CurrentUtcDateTime.AddMinutes(5);
-                Task timeoutTask = context.CreateTimer(expiration, timeoutCts.Token);
-
-                var approvalResponse = context.WaitForExternalEvent<bool>("ReceiveApprovalResponse");
-                var winner = await Task.WhenAny(approvalResponse, timeoutTask);
-                if (winner == approvalResponse)
-                {
-                    log.LogInformation("License plate read approved");
-                }
-                else
-                {
-                    log.LogInformation("License plate read rejected");
-                }
-
-                if (!timeoutTask.IsCompleted)
-                {
-                    // All pending timers must be completed or cancelled before the function exits.
-                    timeoutCts.Cancel();
-                }
-
-                // Once the approval process has been finished, the Blob is to be moved to the corresponding container.
-                return winner == approvalResponse;
+                log.LogInformation("License plate read approved");
             }
+            else
+            {
+                log.LogInformation("License plate read rejected");
+            }
+
+            if (!timeoutTask.IsCompleted)
+            {
+                // All pending timers must be completed or cancelled before the function exits.
+                timeoutCts.Cancel();
+            }
+
+            // Once the approval process has been finished, the Blob is to be moved to the corresponding container.
+            return winner == approvalResponse;
         }
     }
 }

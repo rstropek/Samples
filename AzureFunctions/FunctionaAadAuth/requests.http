@@ -1,0 +1,17 @@
+@tenant=022e4faf-c745-475a-be06-06b1e1c9e39d
+@appid=e1b5df66-126d-4e00-82d6-3787aa1a5ae0
+@appid_client=25de34c1-ce8f-405d-b5a0-d27b30208607
+@appid_client_secret=a49d3153-6636-4b77-a393-30e9eeaeae81
+
+###
+# @name token
+GET https://login.microsoftonline.com/{{tenant}}/oauth2/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id={{appid_client}}&resource={{appid}}&client_secret={{appid_client_secret}}
+
+###
+@access_token={{token.response.body.$.access_token}}
+
+GET https://func-functionsauth.azurewebsites.net/api/Function1
+Authorization: Bearer {{access_token}}
