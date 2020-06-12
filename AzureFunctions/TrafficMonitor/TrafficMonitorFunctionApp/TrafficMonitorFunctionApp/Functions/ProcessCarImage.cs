@@ -1,10 +1,14 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
@@ -41,7 +45,7 @@ namespace TrafficMonitorFunctionApp.Functions
         [FunctionName("ProcessCarImage")]
         [return: ServiceBus("plate-read", Connection = "SECCTRL_SEND_PLATE_READ", EntityType = EntityType.Topic)]
         public async Task<Message> Run(
-            [BlobTrigger("car-images/cameras/{camera}/{name}", Connection = "SECCTRL_CAR_IMAGES")]CloudBlockBlob imageBlob,
+            [BlobTrigger("car-images/cameras/{camera}/{name}", Connection = "SECCTRL_CAR_IMAGES")] CloudBlockBlob imageBlob,
             string camera,
             string name,
             ILogger log,
@@ -113,6 +117,23 @@ namespace TrafficMonitorFunctionApp.Functions
                 };
                 return CreateMessage(read, "empty");
             }
+        }
+
+        [FunctionName("ReceieveCarImageRead")]
+        public async Task<IActionResult> Receive(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", "post", Route = null)] HttpRequest req,
+            [ServiceBus("plate-read", Connection = "SECCTRL_SEND_PLATE_READ", EntityType = EntityType.Topic)] IAsyncCollector<Message> read,
+            ILogger log)
+        {
+            log.LogInformation($"Start processing of new read");
+
+            using var reader = new StreamReader(req.Body);
+            var requestBody = await reader.ReadToEndAsync();
+            var plateRead = JsonConvert.DeserializeObject<PlateRead>(requestBody);
+
+            await read.AddAsync(CreateMessage(plateRead, "high"));
+
+            return new AcceptedResult();
         }
 
         private static Message CreateMessage(EmptyPlateRead read, string quality)
