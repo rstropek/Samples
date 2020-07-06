@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+        "name": "outputSbQueue",
+        "type": "serviceBus",
+        "topicName": "incoming-orders",
+        "connection": "ServiceBusConnectionString",
+        "direction": "out"
+    }
+  ],
+  "scriptFile": "../dist/Source/orderProcessing.js",
+  "entryPoint": "receiveIncomingOrder"
+}

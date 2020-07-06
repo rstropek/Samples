@@ -1,0 +1,25 @@
+@host=127.0.0.1:7071
+
+GET http://{{ host }}/api/Ping?name=Rainer
+
+###
+
+# @name login
+POST http://{{ host }}/api/Login
+Authorization: Basic JohnDoe:Password
+
+###
+GET http://{{ host }}/api/negotiate?negotiateVersion=1
+Authorization: Bearer {{login.response.body.accessToken}}
+x-ms-signalr-userid: JohnDoe
+
+###
+POST http://{{ host }}/api/Order
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+    "customerId": 42,
+    "product": "Foo Bar",
+    "amount": 3141
+}

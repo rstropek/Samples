@@ -1,0 +1,224 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "srSku": {
+      "type": "string",
+      "allowedValues": [ "Free_F1", "Standard_S1" ],
+      "defaultValue": "Standard_S1",
+      "metadata": {
+        "description": "SKU for SignalR Service"
+      }
+    },
+    "srCapacity": {
+      "type": "int",
+      "allowedValues": [ 1, 2, 5, 10, 20, 50, 100 ],
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Capacity for SignalR Service, has to be 1 for Free SKU"
+      }
+    },
+    "srUpstreamUrlPattern": {
+      "type": "string",
+      "metadata": {
+        "description": "Upstream URL pattern for forwarding SignalR events"
+      }
+    }
+  },
+  "functions": [],
+  "variables": {
+    "srName": "[concat('sr-', uniqueString(resourceGroup().id))]",
+    "srIdentity": "[concat('sri-', uniqueString(resourceGroup().id))]",
+    "stgName": "[concat('stg', uniqueString(resourceGroup().id))]",
+    "aiName": "[concat('ai-', uniqueString(resourceGroup().id))]",
+    "fnName": "[concat('fn-', uniqueString(resourceGroup().id))]",
+    "sbName": "[concat('sb-', uniqueString(resourceGroup().id))]",
+    "orderTopicName": "incoming-orders",
+    "orderSendPolicy": "incoming-orders-send",
+    "orderProcessSubscription": "incoming-orders-process",
+    "srApiVersion": "2018-10-01"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "name": "[variables('srIdentity')]",
+      "apiVersion": "2018-11-30",
+      "location": "[resourceGroup().location]"
+    },
+    {
+      "name": "[variables('stgName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "tags": {
+        "displayName": "Storage for Async Serverless Angular Sample"
+      },
+      "location": "[resourceGroup().location]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "kind": "other",
+      "name": "[variables('aiName')]",
+      "apiVersion": "2014-04-01",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Application Insights for Async Serverless Angular Sample"
+      },
+      "properties": {}
+    },
+    {
+      "name": "[variables('fnName')]",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "location": "[resourceGroup().location]",
+      "kind": "functionapp",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('stgName'))]",
+        "[resourceId('microsoft.insights/components', variables('aiName'))]",
+        "[resourceId('Microsoft.SignalRService/signalR', variables('srName'))]",
+        "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', variables('sbName'), variables('orderTopicName'), variables('orderSendPolicy'))]"
+      ],
+      "properties": {
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "AzureWebJobsDashboard",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stgName'), ';AccountKey=', listKeys(variables('stgName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stgName'), ';AccountKey=', listKeys(variables('stgName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~3"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('microsoft.insights/components/', variables('aiName')), '2015-05-01').InstrumentationKey]"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "node"
+            },
+            {
+              "name": "AzureSignalRConnectionString",
+              "value": "[concat('Endpoint=https://', variables('srName'), '.service.signalr.net;AccessKey=', listKeys(resourceId('Microsoft.SignalRService/signalR', variables('srName')), variables('srApiVersion')).primaryKey, ';Version=1.0;')]"
+            },
+            {
+              "name": "ServiceBusConnectionString",
+              "value": "[concat('Endpoint=sb://', variables('sbName'), '.servicebus.windows.net/;SharedAccessKeyName=', variables('orderSendPolicy'), ';SharedAccessKey=', listKeys(resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', variables('sbName'), variables('orderTopicName'), variables('orderSendPolicy')), '2017-04-01').primaryKey)]"
+            }
+          ]
+        },
+        "cors": {
+          "allowedOrigins": [ "*" ]
+        }
+      },
+      "resources": [
+      ]
+    },
+    {
+      "name": "[variables('srName')]",
+      "type": "Microsoft.SignalRService/signalR",
+      "apiVersion": "[variables('srApiVersion')]",
+      "tags": {
+        "displayName": "Serverless SignalR Service"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('srIdentity'))]"
+      ],
+      "sku": {
+        "name": "[parameters('srSku')]",
+        "capacity": "[parameters('srCapacity')]"
+      },
+      "identity": {
+        "type": "userAssigned",
+        "userAssignedIdentities": {
+          "[resourceID('Microsoft.ManagedIdentity/userAssignedIdentities/',variables('srIdentity'))]": {}
+        }
+      },
+      "properties": {
+        "features": [
+          {
+            "flag": "ServiceMode",
+            "value": "Serverless"
+          }
+        ],
+        "upstream": {
+          "templates": [
+            {
+              "UrlTemplate": "[parameters('srUpstreamUrlPattern')]",
+              "EventPattern": "*",
+              "HubPattern": "*",
+              "CategoryPattern": "*"
+            }
+          ]
+        }
+      },
+      "location": "[resourceGroup().location]"
+    },
+    {
+      "apiVersion": "2017-04-01",
+      "name": "[variables('sbName')]",
+      "type": "Microsoft.ServiceBus/Namespaces",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "tags": {
+        "displayName": "Service Bus for Async Serverless Angular Sample"
+      },
+      "properties": {},
+      "resources": [
+        {
+          "apiVersion": "2017-04-01",
+          "name": "[variables('orderTopicName')]",
+          "type": "Topics",
+          "dependsOn": [
+            "[concat('Microsoft.ServiceBus/namespaces/', variables('sbName'))]"
+          ],
+          "properties": {},
+          "resources": [
+            {
+              "name": "[variables('orderSendPolicy')]",
+              "type": "authorizationRules",
+              "apiVersion": "2017-04-01",
+              "dependsOn": [
+                "[variables('orderTopicName')]"
+              ],
+              "properties": {
+                "rights": [ "send", "listen" ]
+              }
+            },
+            {
+              "apiVersion": "2017-04-01",
+              "name": "[variables('orderProcessSubscription')]",
+              "type": "Subscriptions",
+              "dependsOn": [
+                "[variables('orderTopicName')]"
+              ],
+              "properties": {},
+              "resources": [
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "srConnectionString": {
+      "type": "string",
+      "value": "[concat('Endpoint=https://', variables('srName'), '.service.signalr.net;AccessKey=', listKeys(resourceId('Microsoft.SignalRService/signalR', variables('srName')), variables('srApiVersion')).primaryKey, ';Version=1.0;')]"
+    },
+    "sbConnectionString": {
+      "type": "string",
+      "value": "[concat('Endpoint=sb://', variables('sbName'), '.servicebus.windows.net/;SharedAccessKeyName=', variables('orderSendPolicy'), ';SharedAccessKey=', listKeys(resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', variables('sbName'), variables('orderTopicName'), variables('orderSendPolicy')), '2017-04-01').primaryKey)]"
+    }
+  }
+}

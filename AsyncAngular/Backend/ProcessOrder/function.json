@@ -1,0 +1,21 @@
+{
+  "bindings": [
+    {
+      "topicName": "incoming-orders",
+      "subscriptionName": "incoming-orders-process",
+      "connection": "ServiceBusConnectionString",
+      "name": "order",
+      "type": "serviceBusTrigger",
+      "direction": "in"
+    },
+    {
+      "type": "signalR",
+      "name": "signalRMessages",
+      "hubName": "orders",
+      "connectionStringSetting": "AzureSignalRConnectionString",
+      "direction": "out"
+    }
+  ],
+  "scriptFile": "../dist/Source/orderProcessing.js",
+  "entryPoint": "processOrder"
+}

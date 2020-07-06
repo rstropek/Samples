@@ -1,0 +1,23 @@
+<h1>Async Serverless Angular Sample</h1>
+
+<h2>Login and Logout</h2>
+
+<button (click)="login('JohnDoe')" [disabled]="auth.isSignedIn">Login as JohnDoe</button>
+<button (click)="login('JaneSmith')" [disabled]="auth.isSignedIn">Login as JaneSmith</button>
+<br/>
+<button (click)="logout()" [disabled]="!auth.isSignedIn">Logout</button>
+
+<div [hidden]="!auth.isSignedIn">
+    <pre>{{ auth.token }}</pre>
+</div>
+
+<div [hidden]="!auth.isSignedIn">
+    <h2>Send Order</h2>
+
+    <button (click)="sendOrder()">Send order</button>
+    <button (click)="sendMessage()">Say hello to server via SignalR</button>
+
+    <ul>
+        <li *ngFor="let item of orderStatusList">{{ item }}</li>
+    </ul>
+</div>
