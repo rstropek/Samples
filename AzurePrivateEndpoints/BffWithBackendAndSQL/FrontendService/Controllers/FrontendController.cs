@@ -1,22 +1,24 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace BackendService.Controllers
+namespace FrontendService.Controllers
 {
     [Route("")]
     [ApiController]
-    public class DatabaseController : ControllerBase
+    public class FrontendController : ControllerBase
     {
         private readonly IConfiguration configuration;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public DatabaseController(IConfiguration configuration)
+        public FrontendController(IConfiguration configuration, IHttpClientFactory clientFactory)
         {
             this.configuration = configuration;
+            _clientFactory = clientFactory;
         }
 
         [HttpGet]
@@ -42,17 +44,15 @@ namespace BackendService.Controllers
 
             try
             {
-                using var conn = new SqlConnection(configuration["ConnectionString"]);
-                await conn.OpenAsync();
-                using var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT 'Hi' AS Greet";
-                var result = (string)await cmd.ExecuteScalarAsync();
-                resultText.Append($"SQL Query Result:\n");
-                resultText.Append(result);
+                var uri = configuration["BackendUri"];
+                var client = _clientFactory.CreateClient();
+                var response = await client.GetStringAsync(uri);
+                resultText.Append($"Response from '{configuration["BackendUri"]}':\n");
+                resultText.Append(response);
             }
             catch (Exception ex)
             {
-                resultText.Append($"ERROR while querying DB:\n");
+                resultText.Append($"ERROR while getting response from '{configuration["BackendUri"]}':\n");
                 resultText.Append(ex.Message);
             }
 

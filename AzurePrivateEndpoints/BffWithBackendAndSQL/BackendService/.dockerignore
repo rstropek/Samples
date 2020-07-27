@@ -1,0 +1,7 @@
+.config
+.vs
+bin
+obj
+Dockerfile
+*.user
+*.sln
