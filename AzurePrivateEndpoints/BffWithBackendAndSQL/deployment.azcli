@@ -1,37 +1,117 @@
+#!/bin/bash
+
+########################################################################################################################
+#   AZURE PRIVATE ENDPOINTS
+# ----------------------------------------------------------------------------------------------------------------------
+#   This sample demonstrates Azure Private Endpoints for App Service and SQL Database (PaaS flavor).
+#   The SQL DB and the private web API are NOT accessible over the public internet. Only the public
+#   web API can be reached from outside.
+#
+#   For demo purposes, the private web API (aka backend API) returns the IP address of the SQL DB
+#   (will be a local IP address from our Azure VNet because we will prevent access from the public
+#   internet) and the result of a dummy query (to demonstrate the DB access really works). The
+#   public web API (aka frontend API) returns the IP address of the backend API (again a local IP
+#   address from our VNet) and the result from calling the backend API.
+#
+#   You can find the code for the backend API at 
+#   https://github.com/rstropek/Samples/blob/master/AzurePrivateEndpoints/BffWithBackendAndSQL/BackendService/Controllers/DatabaseController.cs.
+#   The code for the frontend API is at
+#   https://github.com/rstropek/Samples/blob/master/AzurePrivateEndpoints/BffWithBackendAndSQL/FrontendService/Controllers/FrontendController.cs.
+#   Both APIs are available on the Docker hub, too: https://hub.docker.com/repository/docker/rstropek/pep-demo-backend
+#   and https://hub.docker.com/repository/docker/rstropek/pep-demo-frontend. This sample uses these
+#   Docker images in conjunction with Azure App Service for Linux.
+# ----------------------------------------------------------------------------------------------------------------------
+#                                       +-------------------------------------------------------------+
+#                                       | A Z U R E                                                   |
+#           .-~~~-.                     |                                                             |
+#   .- ~ ~-(       )_ _                 |     +-----------------+           +-----------------+       |
+#  /                     ~ -.           |     |                 |           |                 |       |
+# |      I N T E R N E T      \  ===========> | Public Web API  | ========> | Private Web API |       |
+#  \                         .'         |     |                 |           |                 |       |
+#    ~- . _____________ . -~            |     +-----------------+           +-----------------+       |
+#                                       |                                             |               |
+#                                       |                                             |               |
+#                                       |                                             V               |
+#                                       |                                          _______            |
+#                                       |                                         /       \           |
+#                                       |                                        |\_______/|          |
+#                                       |                                        |         |          |
+#                                       |                                        |  SQL DB |          |
+#                                       |                                        |         |          |
+#                                       |                                         \_______/           |
+#                                       |                                                             |
+#                                       +-------------------------------------------------------------+
+#
+########################################################################################################################
+
+########################################################################################################################
+# Some helper functions
+RANDSTR=""
+function randomString {
+    RANDSTR=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $1 | head -n 1)
+}
+function randomSimpleString {
+    RANDSTR=$(cat /dev/urandom | tr -dc 'a-z' | fold -w $1 | head -n 1)
+}
+
+
+########################################################################################################################
 # Set some variables that we will use throughout this demo
-SUBSCRIPTION="b33f0285-db27-4896-ac5c-df22004b0aba" # Microsoft Azure Sponsorship Rainer
+
+# Azure Subscription ID in which we create resources. You have to change
+# that to your own subscription ID. Using this value unchanged will not work.
+SUBSCRIPTION="b33f0285-db27-4896-ac5c-df22004b0aba"
+
+# Location where we create resources
 LOCATION="westeurope"
-RG="PrivateEndpointDemo"
-APPSERVPLAN="PedPlan"
-STORAGE="pedappstorage"
-APPCONTAINER="apps"
-APPBLOB=https://$STORAGE.blob.core.windows.net/$APPCONTAINER/BackendService.zip
-APPBLOBFRONTEND=https://$STORAGE.blob.core.windows.net/$APPCONTAINER/pedfrontend.zip
-PRIVATEWEBAPP="PedWebPrivate"
-PUBLICWEBAPP="PedWebPublic"
-WEBDNSLINK="PedWebDnsLink"
-VNET="PedVnet"
-AI_APP_NAME="PrivateEndpointDemoAI"
-SUBNET_DB="DatabaseSubnet"
-SUBNET_BACKEND="BackendSubnet"
-ENDPOINT="PedWebPrivateEndpoint"
-INTERACTIVE_IMAGE="rstropek/ped-interactive"
-INTERACTIVE_CONT="pedaciinteractive"
-SQLSERVER="pedsqlserver"
-SQLDB="PedSqlDb"
-SQLENDPOINT="PedSqlPrivateEndpoint"
-SQLDNSLINK="PedSqlDnsLink"
-FRONTEND_URL="https://cddataexchange.blob.core.windows.net/data-exchange/Frontend.zip"
+
+# Long description of the sample (only letters)
+SAMPLE_DESC="privateendpointdemo"
+
+# Short description of the sample (only letters). Most other names are
+# derived from that code.
+#
+# The first version appends a random string in order to generate a unique code.
+# The second version uses a constant code. You can choose which logic you want.
+# SAMPLE_CODE="ped$(randomSimpleString 8 && echo $RANDSTR)"
+SAMPLE_CODE="ped"
+
+# Name of the resource group
+RG="$SAMPLE_LONG"
+
+# App service- and web app-related constants
+APPSERVPLAN="plan-$SAMPLE_LONG"
+PRIVATEWEBAPP="app-$SAMPLE_CODE-private"
+PUBLICWEBAPP="app-$SAMPLE_CODE-public"
+ENDPOINT="pep-$SAMPLE_CODE-private"
+WEBDNSLINK="pep-dnsl-$SAMPLE_CODE-private"
+
+# SQL-related constants
+# NOTE: NEVER PUT SECRETS LIKE PASSWORDS IN SCRIPTS. USE AZURE MANAGED IDENTIY OR KEY VAULT INSTEAD.
+#       This sample should focus on Private Endpoints. Therefore, complexity in other areas (like
+#       security) should be limited. The plaintext password is for demo/learning purposes only.
+SQLADMINUSER="sqladmin"
+SQLADMINPWD="P@ssw0rd-123"
+# SQLADMINPWD="ped$(randomString 16 && echo $RANDSTR)"
+SQLSERVER="sql-$SAMPLE_CODE"
+SQLDB="sqldb-$SAMPLE_CODE"
+SQLENDPOINT="pep-$SQLSERVER"
+SQLDNSLINK="pep-dnsl-$SQLSERVER"
+
+# VNet-related constants
+VNET="vnet-$SAMPLE_CODE"
+SUBNET_PRIVATEEP="snet-$SAMPLE_CODE-private-ep"
+SUBNET_PUBLIC="snet-$SAMPLE_CODE-public"
 
 
 ########################################################################################################################
 # Log in (not necessary in cloud shell) and select correct account
-az login --use-device-code
-az account set --subscription "$SUBSCRIPTION"
+# az login --use-device-code
+# az account set --subscription "$SUBSCRIPTION"
 
 
 ########################################################################################################################
-# Create resource groups
+# Create resource group
 if [[ $(az group exists --name $RG) == false* ]]
 then
     az group create --name $RG --location "$LOCATION"
@@ -39,127 +119,105 @@ fi
 
 
 ########################################################################################################################
-# Create storage with container
-if ! az storage account show --resource-group $RG --name $STORAGE 2> /dev/null
+# Deploy Azure SQL DB
+if ! az sql server show --name $SQLSERVER --resource-group $RG 2> /dev/null
 then
-    az storage account create --name $STORAGE --resource-group $RG --location $LOCATION --kind StorageV2 --sku Standard_LRS --default-action Allow
-fi
+    az sql server create --name $SQLSERVER --resource-group $RG --location "$LOCATION" \
+        --admin-user $SQLADMINUSER --admin-password $SQLADMINPWD
 
-if [[ $(az storage container exists --account-name $STORAGE --name $APPCONTAINER --query exists -o tsv) == false* ]]
+    # Note that we did not prevent external network access to the server. This is for testing only.
+    # External access will be turned off later in this sample. However, we do add any specific IP addresses
+    # to the SQL DB's firewall. If you want to test access to the DB from your own computer, don't
+    # forget to configure the necessary firewall settings (portal or az sql server firewall-rule create command).
+
+    # Proxy is needed for private endpoint. For details see
+    # https://docs.microsoft.com/en-us/azure/sql-database/sql-database-private-endpoint-overview#limitations
+    az sql server conn-policy update --connection-type Proxy --resource-group $RG --server $SQLSERVER
+fi
+SQLSERVER_ID=$(az sql server show --name $SQLSERVER --resource-group $RG --query "id" -o tsv)
+
+# Allow Azure-internal services to access this server
+az sql server firewall-rule create --server $SQLSERVER --resource-group $RG --name rule-$SQLSERVER-allow-azure-services \
+    --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+
+# Create a sample database (empty)
+if ! az sql db show --resource-group $RG --server $SQLSERVER --name $SQLDB 2> /dev/null
 then
-    az storage container create --account-name $STORAGE --name $APPCONTAINER
+    az sql db create --resource-group $RG --server $SQLSERVER --name $SQLDB
 fi
-
-END=`date -u -d "90 days" '+%Y-%m-%dT%H:%MZ'`
-SAS=`az storage container generate-sas --account-name $STORAGE --name $APPCONTAINER --https-only --permissions r --expiry $END -o tsv`
 
 
 ########################################################################################################################
-# Create app service plans (one for Linux and one for Windows)
+# Create app service plan and web APIs
 # Note Premium V2 plan, necessary for private endpoints
 if output=$(az appservice plan show --resource-group "$RG" --name "$APPSERVPLAN") && [ -z "$output" ]
 then
     az appservice plan create --name $APPSERVPLAN --resource-group $RG \
-        --location "$LOCATION" --sku P1V2 --number-of-workers 1
+        --is-linux --location "$LOCATION" --sku P1V2 --number-of-workers 1
 fi
+
+# Add backend web api (at the end of this sample, this api will not be reachable from the public internet)
+if ! az webapp show --resource-group $RG --name $PRIVATEWEBAPP 2> /dev/null
+then
+    az webapp create --resource-group $RG --plan $APPSERVPLAN \
+        --name $PRIVATEWEBAPP --deployment-container-image-name rstropek/pep-demo-backend
+fi
+PRIVATEWEBAPP_ID=$(az webapp show --name $PRIVATEWEBAPP --resource-group $RG --query "id" -o tsv)
+
+# Add frontend web api (reachable from public internet)
+if ! az webapp show --resource-group $RG --name $PUBLICWEBAPP 2> /dev/null
+then
+    az webapp create --resource-group $RG --plan $APPSERVPLAN \
+        --name $PUBLICWEBAPP --deployment-container-image-name rstropek/pep-demo-frontend
+fi
+PUBLICWEBAPP_ID=$(az webapp show --name $PUBLICWEBAPP --resource-group $RG --query "id" -o tsv)
+
+# Configure APIs:
+# Backend needs the connection information for the DB server.
+# Frontend needs the connection information for the backend.
+az webapp config appsettings set --name $PRIVATEWEBAPP --resource-group $RG \
+    --settings ServerName=$SQLSERVER.database.windows.net \
+      ConnectionString="Server=tcp:$SQLSERVER.database.windows.net,1433;Initial Catalog=$SQLDB;Persist Security Info=False;User ID=$SQLADMINUSER;Password=$SQLADMINPWD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+az webapp config appsettings set --name $PUBLICWEBAPP --resource-group $RG \
+    --settings ServerName=$PRIVATEWEBAPP.azurewebsites.net \
+      BackendUri="https://$PRIVATEWEBAPP.azurewebsites.net"
+
+
+########################################################################################################################
+# Test public access to web APIs
+#
+# At this stage of the demo, accessing both API over the public internet should work. The displayed
+# IP addresses are public ones
+curl https://$PRIVATEWEBAPP.azurewebsites.net
+curl https://$PUBLICWEBAPP.azurewebsites.net
 
 
 ########################################################################################################################
 # Deploy network and subnets
 if ! az network vnet show --name $VNET --resource-group $RG 2> /dev/null
 then
-    # Network with subnet for private endpoints
+    # Network with subnet for private endpoints (DB, backend API)
     az network vnet create --name $VNET --resource-group $RG --location "$LOCATION" \
-        --address-prefixes 10.0.0.0/16 --subnet-name $SUBNET_DB --subnet-prefixes 10.0.0.0/24
+        --address-prefixes 10.0.0.0/16 --subnet-name $SUBNET_PRIVATEEP --subnet-prefixes 10.0.0.0/24
 
     # We have to disable private endpoint network policies as network security groups (NSGs)
     # are not supported for private endpoints. For details see also
     # https://docs.microsoft.com/en-us/azure/private-link/disable-private-endpoint-network-policy
-    az network vnet subnet update --name $SUBNET_DB --resource-group $RG --vnet-name $VNET \
+    az network vnet subnet update --name $SUBNET_PRIVATEEP --resource-group $RG --vnet-name $VNET \
         --disable-private-endpoint-network-policies true
 
-    az network vnet subnet create --vnet-name $VNET --name $SUBNET_BACKEND --resource-group $RG \
+    # Create subnet for frontend API
+    az network vnet subnet create --vnet-name $VNET --name $SUBNET_PUBLIC --resource-group $RG \
         --address-prefixes 10.0.1.0/24
-    
-    az network vnet subnet update --vnet-name $VNET --name $SUBNET_BACKEND --resource-group $RG \
-        --disable-private-endpoint-network-policies true
 fi
 
-
-########################################################################################################################
-# Deploy backend API
-if ! az webapp show --resource-group $RG --name $PRIVATEWEBAPP 2> /dev/null
-then
-    az webapp create --resource-group $RG --plan $APPSERVPLAN --name $PRIVATEWEBAPP
-fi
-PRIVATEWEBAPP_ID=$(az webapp show --name $PRIVATEWEBAPP --resource-group $RG --query "id" -o tsv)
-
-az webapp config appsettings set --name $PRIVATEWEBAPP --resource-group $RG --settings WEBSITE_RUN_FROM_PACKAGE="$APPBLOB?$SAS"
-
-# Create private endpoint for backend API
-if ! az network private-endpoint show --resource-group $RG --name $ENDPOINT 2> /dev/null
-then
-    az network private-endpoint create --resource-group $RG --name $ENDPOINT --vnet-name $VNET --subnet $SUBNET_DB \
-        --private-connection-resource-id "$PRIVATEWEBAPP_ID" --connection-name "$ENDPOINT-connection" --location "$LOCATION" \
-        --group-ids sites
-fi
-PEP_NIC_IPCONFIG=$(az network private-endpoint show --resource-group $RG --name $ENDPOINT --query "networkInterfaces[0].id" -o tsv)/ipConfigurations/sites-sites.privateEndpoint
-az network nic ip-config show --ids $PEP_NIC_IPCONFIG --query "privateLinkConnectionProperties.fqdns" -o tsv
-PEP_IP=$(az network nic ip-config show --ids $PEP_NIC_IPCONFIG --query "privateIpAddress" -o tsv)
-echo "$PEP_IP"
-
-
-########################################################################################################################
-# DEMO accessing backend API
-# Try accessing api over public internet
-curl http://$PRIVATEWEBAPP.azurewebsites.net
-
-
-
-########################################################################################################################
-# Deploy private DNS zone for Web API resolution
-if ! az network private-dns zone show --resource-group $RG --name  "privatelink.azurewebsites.net" 2> /dev/null
-then
-    az network private-dns zone create --resource-group $RG --name  "privatelink.azurewebsites.net"
-fi
-if ! az network private-dns link vnet show --resource-group $RG --zone-name  "privatelink.azurewebsites.net" --name $WEBDNSLINK 2> /dev/null
-then
-    # Add private DNS link to existing VNet
-    az network private-dns link vnet create --resource-group $RG --zone-name  "privatelink.azurewebsites.net" \
-        --name $WEBDNSLINK --virtual-network $VNET --registration-enabled false 
-    az network private-dns record-set a create --name $PRIVATEWEBAPP --zone-name privatelink.azurewebsites.net --resource-group $RG
-    az network private-dns record-set a add-record --record-set-name $PRIVATEWEBAPP --zone-name privatelink.azurewebsites.net \
-        --resource-group $RG -a $PEP_IP
-fi
-
-
-########################################################################################################################
-# Deploy Azure SQL DB
-if ! az sql server show --name $SQLSERVER --resource-group $RG 2> /dev/null
-then
-    # Note that we disallow access from public network
-    az sql server create --name $SQLSERVER --resource-group $RG --location "$LOCATION" \
-        --admin-user "sqladmin" --admin-password "Passw0rd1234" --enable-public-network false
-
-    # Proxy is needed for private endpoint. For details see
-    # https://docs.microsoft.com/en-us/azure/sql-database/sql-database-private-endpoint-overview#limitations
-    az sql server conn-policy update --connection-type Proxy --resource-group $RG --server $SQLSERVER
-    
-    # az sql server firewall-rule create --resource-group $RG --server $SQLSERVER --name everyone \
-    #    --start-ip-address 10.0.0.0 --end-ip-address 10.0.255.255
-fi
-SQLSERVER_ID=$(az sql server show --name $SQLSERVER --resource-group $RG --query "id" -o tsv)
-
-if ! az sql db show --resource-group $RG --server $SQLSERVER --name $SQLDB 2> /dev/null
-then
-    az sql db create --resource-group $RG --server $SQLSERVER --name $SQLDB
-fi
-
-az webapp config appsettings set --name $PRIVATEWEBAPP --resource-group $RG --settings ConnectionString="Server=tcp:$SQLSERVER.database.windows.net,1433;Initial Catalog=PedSqlDb;Persist Security Info=False;User ID=sqladmin;Password=Passw0rd1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" \
-    WEBSITE_VNET_ROUTE_ALL="1" WEBSITE_DNS_SERVER="168.63.129.16"
-
-
-# Demonstrate that accessing SQL DB over the internet is not possible
+# Add web APIs to VNet
+# Note that we add BOTH APIs to the VNet. For the frontend API, this is obvious. The backend API
+# must also be added because it should be able to access the SQL DB. The SQL DB is locked down so
+# that it only accepts connections from WITHIN our VNet. Therefore, the backend API has to have access
+# to the VNet and access the SQL DB through it instead of trying to access the DB over its public endpoint.
+az webapp vnet-integration add --resource-group $RG --name $PUBLICWEBAPP --vnet $VNET --subnet $SUBNET_PUBLIC
+az webapp vnet-integration add --resource-group $RG --name $PRIVATEWEBAPP --vnet $VNET --subnet $SUBNET_PUBLIC
 
 
 ########################################################################################################################
@@ -167,9 +225,11 @@ az webapp config appsettings set --name $PRIVATEWEBAPP --resource-group $RG --se
 if ! az network private-endpoint show --resource-group $RG --name $SQLENDPOINT 2> /dev/null
 then
     az network private-endpoint create --name $SQLENDPOINT --resource-group $RG \
-        --vnet-name $VNET --subnet $SUBNET_DB --private-connection-resource-id "$SQLSERVER_ID" \
+        --vnet-name $VNET --subnet $SUBNET_PRIVATEEP --private-connection-resource-id "$SQLSERVER_ID" \
         --group-ids sqlServer --connection-name "$SQLENDPOINT-connection"
 fi
+
+# Find out private IP address of private endpoint
 SQLPEP_NIC_IPCONFIG=$(az network private-endpoint show --resource-group $RG --name $SQLENDPOINT --query "networkInterfaces[0].id" -o tsv)
 az resource show --ids $SQLPEP_NIC_IPCONFIG --query "properties.ipConfigurations[0].properties.privateLinkConnectionProperties.fqdns"
 SQLPEP_IP=$(az resource show --ids $SQLPEP_NIC_IPCONFIG --query "properties.ipConfigurations[0].properties.privateIPAddress" -o tsv)
@@ -177,34 +237,84 @@ echo $SQLPEP_IP
 
 
 ########################################################################################################################
-# Deploy private DNS zone for SQL name resolution
+# Deploy private DNS zone for SQL name resolution in our VNet
+# For details see also https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns
 if ! az network private-dns zone show --resource-group $RG --name  "privatelink.database.windows.net" 2> /dev/null
 then
+    # Create the private DNS zone for privatelink.database.windows.net
     az network private-dns zone create --resource-group $RG --name  "privatelink.database.windows.net"
 fi
 if ! az network private-dns link vnet show --resource-group $RG --zone-name  "privatelink.database.windows.net" --name $SQLDNSLINK 2> /dev/null
 then
-    # Add private DNS link to existing VNet
+    # Link our VNet to private DNS
     az network private-dns link vnet create --resource-group $RG --zone-name  "privatelink.database.windows.net" \
         --name $SQLDNSLINK --virtual-network $VNET --registration-enabled false 
-    az network private-dns record-set a create --name $SQLSERVER --zone-name privatelink.database.windows.net --resource-group $RG
-    az network private-dns record-set a add-record --record-set-name $SQLSERVER --zone-name privatelink.database.windows.net \
-        --resource-group $RG -a $SQLPEP_IP
+
+    # Add private endpoint to private DNS zone
+    az network private-endpoint dns-zone-group create  --resource-group $RG \
+        --endpoint-name $SQLENDPOINT --name $SQLDNSLINK-zone-group \
+        --private-dns-zone "privatelink.database.windows.net" --zone-name sql
 fi
 
-
 ########################################################################################################################
-# Deploy public webapp
-if ! az webapp show --resource-group $RG --name $PUBLICWEBAPP 2> /dev/null
+# Create private endpoint for backend API
+if ! az network private-endpoint show --resource-group $RG --name $ENDPOINT 2> /dev/null
 then
-    az webapp create --resource-group $RG --plan $APPSERVPLAN --name $PUBLICWEBAPP
+    az network private-endpoint create --resource-group $RG --name $ENDPOINT --vnet-name $VNET --subnet $SUBNET_PRIVATEEP \
+        --private-connection-resource-id "$PRIVATEWEBAPP_ID" --connection-name "$ENDPOINT-connection" --location "$LOCATION" \
+        --group-id sites
 fi
-PRIVATEWEBAPP_ID=$(az webapp show --name $PUBLICWEBAPP --resource-group $RG --query "id" -o tsv)
 
-az webapp config appsettings set --name $PUBLICWEBAPP --resource-group $RG --settings WEBSITE_RUN_FROM_PACKAGE="$APPBLOBFRONTEND?$SAS" BackendUri="https://$PRIVATEWEBAPP.azurewebsites.net/api/Database" \
-    WEBSITE_VNET_ROUTE_ALL="1" WEBSITE_DNS_SERVER="168.63.129.16"
+# Find out private IP address of private endpoint
+PEP_NIC_IPCONFIG=$(az network private-endpoint show --resource-group $RG --name $ENDPOINT --query "networkInterfaces[0].id" -o tsv)/ipConfigurations/sites-sites.privateEndpoint
+az network nic ip-config show --ids $PEP_NIC_IPCONFIG --query "privateLinkConnectionProperties.fqdns" -o tsv
+PEP_IP=$(az network nic ip-config show --ids $PEP_NIC_IPCONFIG --query "privateIpAddress" -o tsv)
+echo "$PEP_IP"
+
 
 ########################################################################################################################
-# Helper scripts
-az resource list --resource-group $RG --output table
-az resource list --resource-group $RGW --output table
+# Deploy private DNS zone for Web API resolution
+if ! az network private-dns zone show --resource-group $RG --name  "privatelink.azurewebsites.net" 2> /dev/null
+then
+    # Create the private DNS zone for privatelink.azurewebsites.net
+    az network private-dns zone create --resource-group $RG --name  "privatelink.azurewebsites.net"
+fi
+if ! az network private-dns link vnet show --resource-group $RG --zone-name  "privatelink.azurewebsites.net" --name $WEBDNSLINK 2> /dev/null
+then
+    # Link our VNet to private DNS
+    az network private-dns link vnet create --resource-group $RG --zone-name  "privatelink.azurewebsites.net" \
+        --name $WEBDNSLINK --virtual-network $VNET --registration-enabled false 
+
+    # Add private endpoint to private DNS zone
+    az network private-endpoint dns-zone-group create --name $WEBDNSLINK-zone-group \
+        --resource-group $RG --endpoint-name $ENDPOINT \
+        --private-dns-zone privatelink.azurewebsites.net \
+        --zone-name privatelink.azurewebsites.net
+fi
+
+# Configure APIs.
+# In addition to the settions mentioned above, we tell Azure to route all outgoing traffic
+# through our VNet (WEBSITE_VNET_ROUTE_ALL=1) and use Azure's DNS server (WEBSITE_DNS_SERVER=168.63.129.16).
+az webapp config appsettings set --name $PRIVATEWEBAPP --resource-group $RG \
+    --settings ServerName=$SQLSERVER.database.windows.net \
+      ConnectionString="Server=tcp:$SQLSERVER.database.windows.net,1433;Initial Catalog=$SQLDB;Persist Security Info=False;User ID=$SQLADMINUSER;Password=$SQLADMINPWD;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" \
+      WEBSITE_DNS_SERVER=168.63.129.16 WEBSITE_VNET_ROUTE_ALL=1
+az webapp config appsettings set --name $PUBLICWEBAPP --resource-group $RG \
+    --settings ServerName=$PRIVATEWEBAPP.azurewebsites.net \
+      BackendUri="https://$PRIVATEWEBAPP.azurewebsites.net" \
+      WEBSITE_DNS_SERVER=168.63.129.16 WEBSITE_VNET_ROUTE_ALL=1
+
+
+########################################################################################################################
+# Lock down database
+# Now we can prevent any access to our DB from outside our VNet.
+az sql server firewall-rule delete --server $SQLSERVER --resource-group $RG --name rule-$SQLSERVER-allow-azure-services
+az sql server update --name $SQLSERVER --resource-group $RG --enable-public-network false
+
+
+########################################################################################################################
+# Test public access to web APIs
+# Finally, only the public API should be reachable via public internet. All IP addresses have to be private 
+# ones (10.0.0.x). The DB must not be reachable via public internet.
+curl https://$PRIVATEWEBAPP.azurewebsites.net
+curl https://$PUBLICWEBAPP.azurewebsites.net
