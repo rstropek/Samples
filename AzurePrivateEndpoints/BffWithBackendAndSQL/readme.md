@@ -29,7 +29,9 @@ For demo purposes, the private web API (aka backend API) returns the IP address 
                                        +-------------------------------------------------------------+
 ```
 
-## Code for APIs
+## Sample Code
+
+The main part of this sample is in [deployment.azcli](deployment.azcli). It is written using the Azure CLI because CLI scripts are easier to demonstrate than ARM Templates. You can execute them step by step and inspect the Azure resources between the steps using the Azure portal. If you build something like this for production purposes, you should consider using ARM Templates instead of CLI scripts because you will be performance benefits (mainly because parallel execution of certain steps).
 
 You can find the code for the backend API [on GitHub](https://github.com/rstropek/Samples/blob/master/AzurePrivateEndpoints/BffWithBackendAndSQL/BackendService/Controllers/DatabaseController.cs). The code for the frontend API is [also there](https://github.com/rstropek/Samples/blob/master/AzurePrivateEndpoints/BffWithBackendAndSQL/FrontendService/Controllers/FrontendController.cs).
 
