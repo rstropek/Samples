@@ -42,25 +42,23 @@ namespace TrafficMonitorFunctionApp.Functions
             string callbackId = response.callback_id;
             string responseUrl = response.response_url;
             string[] callbackIdParts = callbackId.Split('#');
-            string approvalType = callbackIdParts[0];
             log.LogInformation($"Received a Slack Response with callbackid {callbackId}");
 
             string instanceId = callbackIdParts[1];
-            bool isApproved = false;
             log.LogInformation($"instaceId:'{instanceId}', response:'{response.actions[0].value}'");
             var status = await orchestrationClient.GetStatusAsync(instanceId);
             log.LogInformation($"Orchestration status: '{status}'");
             if (status.RuntimeStatus == OrchestrationRuntimeStatus.Running || status.RuntimeStatus == OrchestrationRuntimeStatus.Pending)
             {
                 string selection = response.actions[0].value;
-                isApproved = selection == "Approve";
+                bool isApproved = selection == "Approve";
 
                 await orchestrationClient.RaiseEventAsync(instanceId, "ReceiveApprovalResponse", isApproved);
 
                 httpClient.BaseAddress = new Uri(responseUrl);
                 var responseMessage = Environment.GetEnvironmentVariable("Slack:ResponseMessage", EnvironmentVariableTarget.Process);
                 var content = new StringContent(responseMessage, UnicodeEncoding.UTF8, "application/json");
-                var result = await httpClient.PostAsync(responseUrl, content);
+                _ = await httpClient.PostAsync(responseUrl, content);
 
                 return new OkObjectResult($"Thanks for your selection! Your selection was *'{selection}'*");
             }

@@ -32,7 +32,7 @@ namespace TrafficMonitor.Services
     /// </summary>
     public class OpenAlprRecognizer : ILicensePlateRecognizer
     {
-        private static HttpClient OpenAlprClient = new HttpClient()
+        private static readonly HttpClient OpenAlprClient = new HttpClient()
         {
             BaseAddress = new Uri("https://api.openalpr.com/v2/")
         };
@@ -47,17 +47,20 @@ namespace TrafficMonitor.Services
             var fileBase64 = Convert.ToBase64String(image);
 
             // Send image to OpenALPR for license plate recognition
-            using (var response = await OpenAlprClient.PostAsJsonAsync(
+            using var response = await OpenAlprClient.PostAsJsonAsync(
                 $"recognize_bytes?secret_key={configuration.OpenAlprKey}&country=eu&topn=1",
-                fileBase64))
-            {
-                response.EnsureSuccessStatusCode();
+                fileBase64);
+            response.EnsureSuccessStatusCode();
 
-                // Deserialize result
-                var resultString = Encoding.UTF8.GetString(await response.Content.ReadAsByteArrayAsync());
-                var result = JsonConvert.DeserializeObject<AlprResult>(resultString);
-                return result?.Results?[0];
+            // Deserialize result
+            var resultString = Encoding.UTF8.GetString(await response.Content.ReadAsByteArrayAsync());
+            var result = JsonConvert.DeserializeObject<AlprResult>(resultString);
+            if (result == null || result.Results == null || result.Results.Count == 0)
+            {
+                return null;
             }
+
+            return result.Results[0];
         }
     }
 
