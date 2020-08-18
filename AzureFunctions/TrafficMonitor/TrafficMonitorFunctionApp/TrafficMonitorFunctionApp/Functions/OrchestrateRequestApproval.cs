@@ -31,7 +31,7 @@ namespace TrafficMonitorFunctionApp.Functions
 
             var approvalResponse = context.WaitForExternalEvent<bool>("ReceiveApprovalResponse");
             var winner = await Task.WhenAny(approvalResponse, timeoutTask);
-            if (winner == approvalResponse)
+            if (winner == approvalResponse && approvalResponse.Result)
             {
                 log.LogInformation("License plate read approved");
             }

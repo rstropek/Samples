@@ -1,0 +1,9 @@
+<h1>Messages from Traffic Monitor</h1>
+
+<p [hidden]="messages.length > 0">No messages yet</p>
+
+<ul [hidden]="messages.length === 0">
+    <li *ngFor="let msg of messages">
+        {{ msg.Type }}: {{ msg.Nationality }} {{ msg.LicensePlate }}, Camera {{ msg.CameraID }}
+    </li>
+</ul>

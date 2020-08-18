@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using TrafficMonitor.Model;
@@ -25,6 +26,7 @@ namespace TrafficMonitorFunctionApp.Functions
         [FunctionName("CheckVignette")]
         public async Task Run(
             [ServiceBusTrigger("plate-read", "check-vignette", Connection = "SECCTRL_RECEIVE_PLATE_READ")]PlateRead plate,
+            [SignalR(HubName = nameof(RealTimeUIHub))] IAsyncCollector<SignalRMessage> signalRMessages,
             ILogger log)
         {
             log.LogInformation($"Start vignette check for {plate.LicensePlate}");
@@ -42,6 +44,18 @@ namespace TrafficMonitorFunctionApp.Functions
 
                     car.Violations.Add(new Violation(plate.ReadTimestamp, "Driving without vignette"));
                     await storage.UpdateCarAsync(car);
+
+                    await signalRMessages.AddAsync(new SignalRMessage
+                    {
+                        Target = "vignetteViolation",
+                        Arguments = new [] { new 
+                            {
+                                car.Nationality,
+                                car.LicensePlate,
+                                plate.CameraID
+                            } 
+                        }
+                    });
                 }
             }
             else
