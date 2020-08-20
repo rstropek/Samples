@@ -211,11 +211,12 @@ then
         --address-prefixes 10.0.1.0/24
 fi
 
-# Add web APIs to VNet
-# Note that we add BOTH APIs to the VNet. For the frontend API, this is obvious. The backend API
-# must also be added because it should be able to access the SQL DB. The SQL DB is locked down so
-# that it only accepts connections from WITHIN our VNet. Therefore, the backend API has to have access
-# to the VNet and access the SQL DB through it instead of trying to access the DB over its public endpoint.
+# Allow web APIs access to VNet
+# Note that we give BOTH APIs access to the VNet. For the frontend API, this is obvious. It needs it
+# to reach the backend API. The backend API must also be granted access, because it should be able 
+# to access the SQL DB. The SQL DB is locked down so that it only accepts connections from WITHIN 
+# our VNet. Therefore, the backend API has to have access to the VNet and access the SQL DB through 
+# it instead of trying to access the DB over its public endpoint.
 az webapp vnet-integration add --resource-group $RG --name $PUBLICWEBAPP --vnet $VNET --subnet $SUBNET_PUBLIC
 az webapp vnet-integration add --resource-group $RG --name $PRIVATEWEBAPP --vnet $VNET --subnet $SUBNET_PUBLIC
 
