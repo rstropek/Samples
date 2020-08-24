@@ -1,0 +1,109 @@
+﻿@page "/"
+@using System.Text
+@using System.IdentityModel.Tokens.Jwt
+@using Microsoft.IdentityModel.Tokens
+@using System.Security.Claims
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.SignalR.Client
+@inject AuthenticationService Auth
+@inject HttpClient HttpClient
+
+<h1>Async Serverless Angular Sample</h1>
+
+<h2>Login and Logout</h2>
+
+<button @onclick='async () => await LoginAsync("JohnDoe")' disabled="@(!string.IsNullOrEmpty(Token))">Login as JohnDoe</button>
+<button @onclick='async () => await LoginAsync("JaneSmith")' disabled="@(!string.IsNullOrEmpty(Token))">Login as JaneSmith</button>
+<br/>
+<button @onclick="Logout" disabled="@(string.IsNullOrEmpty(Token))">Logout</button>
+
+<div hidden="@string.IsNullOrEmpty(Token)">
+    <h2>Order Management</h2>
+
+    <button @onclick="SendOrder">Send Order</button>
+    <button @onclick="SayHello">Say Hello</button>
+
+    <ul>
+        @foreach (var message in NotificationMessages)
+        {
+            <li>@message</li>
+        }
+    </ul>
+</div>
+
+@code {
+    private HubConnection? hubConnection;
+    private string Token { get; set; } = string.Empty;
+    private string Username { get; set; } = string.Empty;
+    private List<string> NotificationMessages { get; } = new();
+
+    private async Task LoginAsync(string username)
+    {
+        Token = await Auth.AcquireTokenAsync(username);
+        Username = username;
+
+        var signalRConn = await GetSignalRConnectionAsync();
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(signalRConn.Url, conn => conn.AccessTokenProvider = () => Task.FromResult(signalRConn.AccessToken))
+            .Build();
+
+        // In practice, you should probably add some auto-reconnect logic here.
+        // hubConnection.Closed += ...
+
+        hubConnection.On<Order>("OrderProcessed", order =>
+        {
+            NotificationMessages.Add($"Received async result for order");
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task Logout()
+    {
+        Token = Username = string.Empty;
+        NotificationMessages.Clear();
+        if (hubConnection != null)
+        {
+            await hubConnection.StopAsync();
+        }
+
+        hubConnection = null;
+    }
+
+    private async Task SendOrder()
+    {
+        var order = new Order { CustomerID = "Foo Bar", Product = "Something", Amount = 42 };
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            Content = new StringContent(JsonSerializer.Serialize(order)),
+            RequestUri = new Uri("http://localhost:7071/api/Orders")
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+        NotificationMessages.Add("Sending order to server for processing");
+        var response = await HttpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        NotificationMessages.Add("Order sent, async result pending");
+    }
+
+    private async Task SayHello()
+    {
+        await hubConnection.SendAsync("SayHelloAsync", "Hello");
+    }
+
+    private async Task<NegotiateResult> GetSignalRConnectionAsync()
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri("http://localhost:7071/api/negotiate")
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+        var response = await HttpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<NegotiateResult>();
+    }
+}

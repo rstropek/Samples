@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "string",
+            "defaultValue": "AsyncServerlessAngular",
+            "metadata": {
+                "description": "Name of the Resource Group to create"
+            }
+        },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "westeurope",
+            "metadata": {
+                "description": "Location for the Resource Group"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+    },
+    "resources": [
+        {
+            "name": "[parameters('rgName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "location": "[parameters('rgLocation')]",
+            "tags": {
+                "displayName": "Async Serverless Angular Sample"
+            },
+            "properties": {
+            }
+        }
+    ],
+    "outputs": {
+        "resourceID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Resources/resourceGroups', parameters('rgName'))]"
+        }
+    }
+}
