@@ -10,8 +10,9 @@ This sample demonstrates how UI developers can make use of Azure's serverless ca
 
 ## Sample Structure
 
-| Folder        | Content                                                                       |
-| ------------- | ----------------------------------------------------------------------------- |
-| *DevOps*      | ARM-Template and Azure CLI Script for setting up Azure for running the sample |
-| *Slides*      | PPT Slides                                                                    |
-| *AsyncBlazor* | C# Source code                                                                |
+| Folder                | Content                                                                       |
+| --------------------- | ----------------------------------------------------------------------------- |
+| *DevOps*              | ARM-Template and Azure CLI Script for setting up Azure for running the sample |
+| *Slides*              | PPT Slides                                                                    |
+| *AsyncBlazor*         | C# Source code                                                                |
+| *AsyncBlazor-Starter* | Starter project for presenting the sample                                     |
