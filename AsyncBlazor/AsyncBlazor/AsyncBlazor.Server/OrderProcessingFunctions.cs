@@ -9,21 +9,22 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs.Extensions.SignalRService;
-using Microsoft.Azure.Amqp.Framing;
+using AsyncBlazor.OrderProcessing;
 
 namespace AsyncBlazor.Server
 {
     public class OrderProcessingFunctions
     {
+        private readonly OrderProcessor processor;
         private readonly Authentication auth;
 
-        public OrderProcessingFunctions(Authentication auth)
+        public OrderProcessingFunctions(OrderProcessor processor, Authentication auth)
         {
+            this.processor = processor;
             this.auth = auth;
         }
 
@@ -34,6 +35,11 @@ namespace AsyncBlazor.Server
             ILogger log)
         {
             log.LogInformation("Received order, checking access token");
+
+            // Validate token and extract userid from subject claim.
+            // Note that this is a naive implementation. In practise, use OpenID Connect
+            // ideally in conjunction with Azure Active Directory. This sample is not about auth, so we
+            // keep it simple here.
             string? user;
             try
             {
@@ -45,6 +51,7 @@ namespace AsyncBlazor.Server
                 return new UnauthorizedResult();
             }
 
+            // Light-weight order checking
             log.LogInformation("Verifying order");
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             Order order;
@@ -58,13 +65,13 @@ namespace AsyncBlazor.Server
                 return new BadRequestErrorMessageResult(ex.Message);
             }
 
-            if (!await VerifyOrderAsync(order))
+            if (!await processor.VerifyOrderAsync(order))
             {
                 log.LogError("Verification of order failed");
                 return new BadRequestResult();
             }
 
-            // Add user to order data
+            // Add user id from token to order data
             order.UserID = user;
 
             // Send order to SB topic
@@ -72,7 +79,17 @@ namespace AsyncBlazor.Server
 
             return new AcceptedResult();
         }
-        
+
+        /// <summary>
+        /// Helper function to create SB message from order
+        /// </summary>
+        private Message CreateOrderMessage(Order order)
+        {
+            var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(order));
+            var message = new Message(bytes) { ContentType = "application/json" };
+            return message;
+        }
+
         [FunctionName("ProcessOrder")]
         public async Task ProcessOrder(
             [ServiceBusTrigger("incoming-orders", "incoming-orders-process", Connection = "ServiceBusConnectionString")] Order order,
@@ -82,7 +99,7 @@ namespace AsyncBlazor.Server
             log.LogInformation("Received order for processing");
 
             // Trigger complex order processing
-            if (await ProcessOrderAsync(order))
+            if (await processor.ProcessOrderAsync(order))
             {
                 // Order processing was successfull. Send notification to browser client
                 // by using a SignalR output binding.
@@ -93,33 +110,6 @@ namespace AsyncBlazor.Server
                     Arguments = new [] { order }
                 });
             }
-        }
-
-        internal async Task<bool> VerifyOrderAsync(Order _)
-        {
-            // Simulate some processing time. Assumption: Initial checking of
-            // incoming order is rather fast (e.g. check of master data like 
-            // referenced customer exists).
-            await Task.Delay(100);
-
-            return true;
-        }
-
-        internal async Task<bool> ProcessOrderAsync(Order _)
-        {
-            // Simulate processing time. Assumption: This is the heavy lifting
-            // for order processing. Might include complex calculations, talking
-            // to multiple slow backend services, executing complex queries, etc.
-            await Task.Delay(2500);
-
-            return true;
-        }
-
-        internal Message CreateOrderMessage(Order order)
-        {
-            var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(order));
-            var message = new Message(bytes) { ContentType = "application/json" };
-            return message;
         }
     }
 }

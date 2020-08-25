@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace AsyncBlazor.Model
+﻿namespace AsyncBlazor.Model
 {
+    /// <summary>
+    /// Represents an order
+    /// </summary>
     public class Order
     {
         public string CustomerID { get; set; } = string.Empty;

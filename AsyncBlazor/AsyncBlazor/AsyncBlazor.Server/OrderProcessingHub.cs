@@ -5,9 +5,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AsyncBlazor.Server
@@ -43,17 +40,31 @@ namespace AsyncBlazor.Server
             return new OkObjectResult(Negotiate(user));
         }
 
+        // Note that in order to make event handling functions work, you must
+        // set the Azure SignalR upstream URL accordingly. For local debugging,
+        // use e.g. ngrok to get a URL like https://79569280f5e4.ngrok.io/runtime/webhooks/signalr.
+        // For configuration in Azure see https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-signalr-service-trigger?tabs=csharp#send-messages-to-signalr-service-trigger-binding.
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         [FunctionName(nameof(OnConnected))]
         public async Task OnConnected([SignalRTrigger] InvocationContext invocationContext, ILogger logger)
         {
             logger.LogInformation($"{invocationContext.ConnectionId} has connected");
         }
 
+        [FunctionName(nameof(OnDisconnected))]
+        public async Task OnDisconnected([SignalRTrigger] InvocationContext invocationContext, ILogger logger)
+        {
+            logger.LogInformation($"{invocationContext.ConnectionId} has disconnected");
+        }
 
         [FunctionName(nameof(SayHelloAsync))]
+#pragma warning disable IDE0060 // Remove unused parameter
         public async Task SayHelloAsync([SignalRTrigger] InvocationContext invocationContext, string message, ILogger logger)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
-            logger.LogInformation(message);
+            logger.LogInformation($"Got message from client: {message}");
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }

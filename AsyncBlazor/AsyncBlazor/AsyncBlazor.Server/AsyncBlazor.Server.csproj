@@ -14,6 +14,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\AsyncBlazor.Model\AsyncBlazor.Model.csproj" />
+		<ProjectReference Include="..\AsyncBlazor.OrderProcessing\AsyncBlazor.OrderProcessing.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="host.json">

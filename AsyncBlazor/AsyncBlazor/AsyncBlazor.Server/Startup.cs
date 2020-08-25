@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using AsyncBlazor.OrderProcessing;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,6 +15,7 @@ namespace AsyncBlazor.Server
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<OrderProcessor>();
             builder.Services.AddSingleton<Authentication>();
         }
     }
