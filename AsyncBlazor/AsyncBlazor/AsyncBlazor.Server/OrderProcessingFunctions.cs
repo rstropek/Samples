@@ -14,6 +14,7 @@ using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using AsyncBlazor.OrderProcessing;
+using System;
 
 namespace AsyncBlazor.Server
 {
@@ -74,10 +75,14 @@ namespace AsyncBlazor.Server
             // Add user id from token to order data
             order.UserID = user;
 
+            // Assign order ID
+            order.OrderID = Guid.NewGuid();
+
             // Send order to SB topic
             await ordersTopic.AddAsync(CreateOrderMessage(order));
 
-            return new AcceptedResult();
+            // Respond with Created
+            return new CreatedResult(string.Empty, order);
         }
 
         /// <summary>
@@ -96,20 +101,28 @@ namespace AsyncBlazor.Server
             [SignalR(HubName = nameof(OrderProcessingHub))] IAsyncCollector<SignalRMessage> signalRMessages,
             ILogger log)
         {
-            log.LogInformation("Received order for processing");
+            log.LogInformation($"Received order {JsonConvert.SerializeObject(order)} for processing");
+
+            // Send progress reporting via SignalR output binding
+            var progress = new Progress<string>();
+            progress.ProgressChanged += async (_, ea) =>
+                await signalRMessages.AddAsync(BuildMessage(order, ea));
 
             // Trigger complex order processing
-            if (await processor.ProcessOrderAsync(order))
+            if (await processor.ProcessOrderAsync(order, progress))
             {
-                // Order processing was successfull. Send notification to browser client
-                // by using a SignalR output binding.
-                await signalRMessages.AddAsync(new SignalRMessage
-                {
-                    Target = "OrderProcessed",
-                    UserId = order.UserID,
-                    Arguments = new [] { order }
-                });
+                // Order processing was completed successfull. Send notification 
+                // to browser client by using a SignalR output binding.
+                await signalRMessages.AddAsync(BuildMessage(order, $"Processing of order {order.OrderID} completed"));
             }
         }
+
+        private SignalRMessage BuildMessage(Order order, string message) =>
+            new SignalRMessage
+            {
+                Target = "OrderEvent",
+                UserId = order.UserID,
+                Arguments = new object[] { order, message }
+            };
     }
 }

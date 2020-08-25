@@ -1,4 +1,5 @@
 ﻿using AsyncBlazor.Model;
+using System;
 using System.Threading.Tasks;
 
 namespace AsyncBlazor.OrderProcessing
@@ -41,12 +42,20 @@ namespace AsyncBlazor.OrderProcessing
         /// typically takes 10-20 seconds.
         /// </remarks>
         /// <returns>True if order has been successfully processed, otherwise false.</returns>
-        public async Task<bool> ProcessOrderAsync(Order _)
+        public async Task<bool> ProcessOrderAsync(Order order, IProgress<string> progress = null)
         {
             // Simulate processing time. Assumption: This is the heavy lifting
             // for order processing. Might include complex calculations, talking
             // to multiple slow backend services, executing complex queries, etc.
-            await Task.Delay(5000);
+
+            await Task.Delay(2000);
+            progress?.Report($"Successfull availability check for {order.Amount} pice(s) of product {order.Product}");
+
+            await Task.Delay(2000);
+            progress?.Report($"Successfully sent order {order.OrderID} to ERP system");
+
+            await Task.Delay(2000);
+            progress?.Report($"Credit card processing for customer {order.CustomerID} done");
 
             return true;
         }

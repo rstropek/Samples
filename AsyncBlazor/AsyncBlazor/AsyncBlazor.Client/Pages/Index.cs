@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -48,10 +49,10 @@ namespace AsyncBlazor.Client.Pages
             // hubConnection.Closed += ...
 
             // Handle order processed event
-            hubConnection.On<Order>("OrderProcessed", order =>
+            hubConnection.On<Order, string>("OrderEvent", (order, msg) =>
             {
                 // Display information message that order has been processed
-                NotificationMessages.Add($"Received async result for order");
+                NotificationMessages.Add(msg);
                 StateHasChanged();
             });
 
@@ -82,13 +83,16 @@ namespace AsyncBlazor.Client.Pages
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                Content = new StringContent(JsonSerializer.Serialize(order)),
+                Content = new StringContent(JsonSerializer.Serialize(order), Encoding.UTF8, "application/json"),
                 RequestUri = new Uri("http://localhost:7071/api/Orders")
             };
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             var response = await HttpClient.SendAsync(request);
+
+            // Process API response
             response.EnsureSuccessStatusCode();
-            NotificationMessages.Add("Order sent, async result pending");
+            order = JsonSerializer.Deserialize<Order>(await response.Content.ReadAsStringAsync());
+            NotificationMessages.Add($"Order sent. Order ID is {order?.OrderID?.ToString() ?? "<UNKNOWN>" }. Async result pending");
         }
 
         private async Task SayHelloToServerAsync()
