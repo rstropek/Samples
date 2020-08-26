@@ -16,3 +16,13 @@ This sample demonstrates how UI developers can make use of Azure's serverless ca
 | *Slides*              | PPT Slides                                                                    |
 | *AsyncBlazor*         | C# Source code                                                                |
 | *AsyncBlazor-Starter* | Starter project for presenting the sample                                     |
+
+## Video
+
+I presented this sample at the [.NET Meetup Vienna](https://www.meetup.com/de-DE/dotnet-austria) on August 25th 2020. Here you can find the recording (English):
+
+[![.NET Meetup Recording](https://img.youtube.com/vi/h-l8uogXFvg/0.jpg)](https://www.youtube.com/watch?v=h-l8uogXFvg ".NET Meetup Recording")
+
+## Angular Version
+
+I created a TypeScript/Node.js/Angular version of the sample, too. You can find it [on GitHub](https://github.com/rstropek/Samples/tree/master/AsyncAngular).
