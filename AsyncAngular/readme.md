@@ -16,3 +16,13 @@ This sample demonstrates how UI developers can make use of Azure's serverless ca
 | *Backend*  | Backend (*Azure Function App*) written in Node.js                             |
 | *Frontend* | Angular Frontend                                                              |
 | *Slides*   | PPT Slides                                                                    |
+
+## Video
+
+I presented this sample at the [Angular Meetup Graz](https://www.meetup.com/de-DE/Angular-Meetup-Graz/) on July 6th 2020. Here you can find the recording (German):
+
+[![Meetup Recording](https://img.youtube.com/vi/uppdRP5smt4/0.jpg)](https://www.youtube.com/watch?v=uppdRP5smt4&&t=3m0s "Angular Meetup Recording")
+
+## Blazor Version
+
+I created a C#/.NET version of the sample, too. You can find it [on GitHub](https://github.com/rstropek/Samples/tree/master/AsyncBlazor). In the C# version, I use Blazor instead of Angular for the client.
