@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using static System.Console;
 
 static class Program
@@ -8,10 +9,12 @@ static class Program
 
     enum HeroTypeCategory { Accident, SuperPowersFromBirth, Other }
 
+    enum VoughtEmployeeType { TopManagement, TheSeven, LocalHero, RegularPerson };
+
     record Person(string FirstName, string LastName, int? Age = null, Person? Assistant = null);
 
-    record Hero(string FirstName, string LastName, string HeroName, HeroType Type, bool CanFly, Person? Assistant = null)
-        : Person(FirstName, LastName, Assistant: Assistant);
+    record Hero(string FirstName, string LastName, string HeroName, HeroType Type,
+        bool CanFly, Person? Assistant = null) : Person(FirstName, LastName, Assistant: Assistant);
 
     public static void Main()
     {
@@ -190,17 +193,37 @@ static class Program
 
         static void SwitchWithTuples()
         {
-            WriteLine(("Foo", "Bar", "General", 42) switch
+            var people = new[]
             {
-                //  +-- Discard operator
-                //  |             +-- Relational Operator
-                //  V             V
-                (_, _, "General", > 60) => 99,
-                (_, _, "General", _) => 90,
-                (_, _, _, > 60) => 80,
-                ("Foo", _, _, _) => 70,
-                _ => 60
+                (Name: "Stan Edgar", Type: VoughtEmployeeType.TopManagement, CanFly: false, Popularity: 0),
+                (Name: "Homelander", Type: VoughtEmployeeType.TheSeven, CanFly: true, Popularity: 10),
+                (Name: "The Deep", Type: VoughtEmployeeType.LocalHero, CanFly: false, Popularity: 2)
+            };
+            var yearlySalary = people.Select(p => p switch
+            {
+                ("Stan Edgar", VoughtEmployeeType.TopManagement, _, _) => 900_000_000,
+                (_, VoughtEmployeeType.TopManagement, _, _) => 10_000_000,
+                ("Homelander", VoughtEmployeeType.TheSeven, true, >= 9) => 100_000_000,
+                ("Homelander", VoughtEmployeeType.TheSeven, true, _) => 50_000_000,
+                (_, VoughtEmployeeType.TheSeven, true, _) => 25_000_000,
+                (_, VoughtEmployeeType.TheSeven, _, _) => 10_000_000,
+                (_, VoughtEmployeeType.LocalHero, _, _) => 1_000_000,
+                _ => 25_000
             });
+            WriteLine(yearlySalary.Sum());
+
+            var peopleRecords = new Hero[]
+            {
+                new("Carl", "Lucas", "Luka Cage", HeroType.FailedExperiment, false),
+                new("Danny", "Rand", "Iron Fist", HeroType.Other, false)
+            };
+            var yearlySalaryFromRecords = peopleRecords.Select(p => p switch
+            {
+                { CanFly: true, Type: _ } => 100_000_000, // You could omit the discard operator here
+                { CanFly: _, Type: HeroType.FailedExperiment } => 50_000_000,
+                _ => 1_000_000
+            });
+            WriteLine(yearlySalaryFromRecords.Sum());
         }
         SwitchWithTuples();
         #endregion
@@ -249,7 +272,7 @@ static class Program
         BasicRecursivePattern();
 
         static void DoubleRecursivePattern()
-        { 
+        {
             object bm = new Hero("Bruce", "Wayne", "Batman", HeroType.Technology, false,
                 new Hero("Robin", string.Empty, "Robin", HeroType.Technology, false));
             //  +-- Type Pattern
@@ -354,8 +377,8 @@ static class Program
             var p = new Person("Foo", "Bar", 13);
             var ag = p.Age switch // <-------------+
             {//                                    |
-            //  +-- Relational Pattern in switch --+
-            //  V
+             //  +-- Relational Pattern in switch --+
+             //  V
                 < 13 => "child",
                 < 18 => "teenager",
                 < 65 => "adult",

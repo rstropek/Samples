@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30509.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternMatching", "PatternMatching\PatternMatching.csproj", "{146C62E6-D101-43E6-ADF5-261338862528}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternMatching", "PatternMatching.csproj", "{146C62E6-D101-43E6-ADF5-261338862528}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
