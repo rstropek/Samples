@@ -1,6 +1,6 @@
 import { Context, HttpRequest } from "@azure/functions"
 import { validateTokenAndGetUser } from "./auth";
-import { UNAUTHORIZED, BAD_REQUEST } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 
 export async function negotiate(context: Context, req: HttpRequest, connectionInfo: any): Promise<void> {
     // Validate token. Note that this is a naive implementation. In practise, use OpenID Connect
@@ -8,13 +8,13 @@ export async function negotiate(context: Context, req: HttpRequest, connectionIn
     // keep it simple here.
     const user = validateTokenAndGetUser(context, req);
     if (!user) {
-        context.res = { statusCode: UNAUTHORIZED };
+        context.res = { statusCode: StatusCodes.UNAUTHORIZED };
         return;
     }
 
     // Verify that user from token and header are identical.
     if (user !== req.headers['x-ms-signalr-userid']) {
-        context.res = { statusCode: BAD_REQUEST };
+        context.res = { statusCode: StatusCodes.BAD_REQUEST };
         return;
     }
 

@@ -1,5 +1,5 @@
 import { Context, HttpRequest } from "@azure/functions"
-import { ACCEPTED, BAD_REQUEST } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { validateTokenAndGetUser } from "./auth";
 
 //-- HELPER FUNCTIONS ------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ export async function receiveIncomingOrder(context: Context, req: HttpRequest): 
     // Make sure incoming order is a valid order. Validation is known to be pretty fast.
     const order = req.body;
     if (!isOrder(order) || !await validateIncomingOrder(order)) {
-        context.res = { status: BAD_REQUEST };
+        context.res = { status: StatusCodes.BAD_REQUEST };
         return;
     }
 
@@ -70,7 +70,7 @@ export async function receiveIncomingOrder(context: Context, req: HttpRequest): 
     // Send service bus message that triggers async processing of incoming order.
     context.bindings.outputSbQueue = req.body;
 
-    context.res = { status: ACCEPTED };
+    context.res = { status: StatusCodes.ACCEPTED };
 };
 
 /**

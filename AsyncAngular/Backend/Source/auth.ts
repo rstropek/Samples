@@ -1,6 +1,6 @@
 import { Context, HttpRequest } from "@azure/functions";
 import * as jwt from 'jsonwebtoken';
-import { BAD_REQUEST, UNAUTHORIZED } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 
 // Obviously, NEVER store token signing secrets in code. This is for demo purposes only!!
 const secretForTokenSigning = 'secret';
@@ -14,7 +14,7 @@ export async function login(context: Context, req: HttpRequest): Promise<void> {
     // Get authorization header and make sure it is basic auth.
     const authHeaderBase64 = req.headers['Authorization'] || req.headers['authorization'];
     if (!authHeaderBase64 || !authHeaderBase64.startsWith('Basic ')) {
-        context.res = { statusCode: BAD_REQUEST };
+        context.res = { statusCode: StatusCodes.BAD_REQUEST };
         return;
     }
 
@@ -22,7 +22,7 @@ export async function login(context: Context, req: HttpRequest): Promise<void> {
     const authHeader = Buffer.from(authHeaderBase64.substr(6), 'base64').toString();
     const indexOfColon = authHeader.indexOf(':');
     if (indexOfColon <= 0) {
-        context.res = { statusCode: BAD_REQUEST };
+        context.res = { statusCode: StatusCodes.BAD_REQUEST };
         return;
     }
 
@@ -40,7 +40,7 @@ export function validateTokenAndGetUser(context: Context, req: HttpRequest): str
     // Get authorization header and make sure it is bearer auth.
     const authHeaderBase64 = req.headers['Authorization'] || req.headers['authorization'];
     if (!authHeaderBase64 || !authHeaderBase64.startsWith('Bearer ')) {
-        context.res = { statusCode: BAD_REQUEST };
+        context.res = { statusCode: StatusCodes.BAD_REQUEST };
         return '';
     }
 
@@ -48,7 +48,7 @@ export function validateTokenAndGetUser(context: Context, req: HttpRequest): str
     const token = authHeaderBase64.substr(7);
     const decodedToken: any = jwt.verify(token, secretForTokenSigning);
     if (!decodedToken || !decodedToken.sub) {
-        context.res = { statusCode: UNAUTHORIZED };
+        context.res = { statusCode: StatusCodes.UNAUTHORIZED };
         return '';
     }
 
