@@ -1,0 +1,16 @@
+title: Code Review Questionnaire
+date: \today
+author:
+  - Rainer Stropek (software architects)
+keywords: [Code Review, Code Quality, Questionaire]
+papersize: a4
+links-as-notes: true
+toc: true
+lang: en
+titlepage: true
+footer-left: software architects
+logo: software-architects-logo.pdf
+logo-width: 200
+table-use-row-colors: true
+reference-section-title: References
+
