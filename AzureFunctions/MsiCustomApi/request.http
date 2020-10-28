@@ -1,0 +1,1 @@
+New-AzureADServiceAppRoleAssignment -ObjectId "3d61bdc2-2c5e-4cee-84ff-d397fc26d856" -PrincipalId "3d61bdc2-2c5e-4cee-84ff-d397fc26d856" -ResourceId "c42c45ea-1cc2-4f0e-8e2b-7c0b0f0ee6c4" -Id "8c01247f-62c1-4634-85e2-854b67898031"
