@@ -1,0 +1,298 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "rgName": {
+      "type": "string"
+    },
+    "rgLocation": {
+      "type": "string"
+    },
+    "prefix": {
+      "type": "string",
+      "defaultValue": "dpsprivate"
+    },
+    "SQLAdminPassword": {
+      "type": "securestring"
+    },
+    "AADAdminLogin": {
+      "type": "string"
+    },
+    "AADAdminSid": {
+      "type": "string"
+    },
+    "AADTenantID": {
+      "type": "string"
+    },
+    "SQLAllowAllIPs": {
+      "type": "string",
+      "defaultValue": "false"
+    },
+    "SQLDenyPublicAccess": {
+      "type": "string",
+      "defaultValue": "true"
+    },
+    "vnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16"
+    },
+    "subnetVmAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24"
+    },
+    "subnetPrivateEndpointAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.2.0/24"
+    },
+    "VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS2_v2"
+    },
+    "vmAdminUsername": {
+      "type": "string",
+      "defaultValue": "otto"
+    },
+    "vmAdminPassword": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "sqlServerName": "[concat('sql-', parameters('prefix'),'-', uniqueString(parameters('prefix')))]",
+    "vnetName": "[concat('vnet-', parameters('prefix'), '-', uniqueString(parameters('prefix')))]",
+    "vmSubnet": "[concat('subnet-', parameters('prefix'), '-vm')]",
+    "privateEndpointSubnet": "[concat('subnet-', parameters('prefix'), '-pe')]",
+    "sqlPeName": "[concat('pe-', variables('sqlServerName'))]",
+    "privateDnsZoneName": "[concat('privatelink', environment().suffixes.sqlServerHostname)]",
+    "pvtendpointdnsgroupname": "[concat(variables('sqlPeName'),'/pednsgroupname')]",
+    "publicIpAddressName": "[concat('ip-', parameters('prefix'),'-', uniqueString(parameters('prefix')))]",
+    "vmName": "[concat('vm-', parameters('prefix'),'-', uniqueString(parameters('prefix')))]",
+    "networkInterfaceName": "[concat('nic-', parameters('prefix'),'-', uniqueString(parameters('prefix')))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('vnetName')]",
+      "location": "[parameters('rgLocation')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('vmSubnet')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetVmAddressPrefix')]"
+            }
+          },
+          {
+            "name": "[variables('privateEndpointSubnet')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetPrivateEndpointAddressPrefix')]",
+              "privateEndpointNetworkPolicies": "Disabled"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('sqlServerName')]",
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2020-08-01-preview",
+      "location": "[parameters('rgLocation')]",
+      "properties": {
+        "administratorLogin": "otto",
+        "administratorLoginPassword": "[parameters('SQLAdminPassword')]",
+        "version": "12.0",
+        "publicNetworkAccess": "[if(equals(parameters('SQLDenyPublicAccess'), 'true'), 'Disabled', 'Enabled')]"
+      },
+      "resources": [
+        {
+          "comments": "For testing purposes, we conditionally allow all IPs",
+          "condition": "[equals(parameters('SQLAllowAllIPs'), 'true')]",
+          "type": "firewallrules",
+          "name": "AllowAllIps",
+          "apiVersion": "2020-08-01-preview",
+          "location": "[parameters('rgLocation')]",
+          "properties": {
+            "endIpAddress": "255.255.255.255",
+            "startIpAddress": "0.0.0.0"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+          ]
+        },
+        {
+          "type": "administrators",
+          "name": "ActiveDirectory",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+          ],
+          "apiVersion": "2020-08-01-preview",
+          "properties": {
+            "administratorType": "ActiveDirectory",
+            "login": "[parameters('AADAdminLogin')]",
+            "sid": "[parameters('AADAdminSid')]",
+            "tenantId": "[parameters('AADTenantID')]"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('sqlPeName')]",
+      "location": "[parameters('rgLocation')]",
+      "dependsOn": [
+        "[variables('vnetName')]",
+        "[variables('sqlServerName')]"
+      ],
+      "properties": {
+        "subnet": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('privateEndpointSubnet'))]"
+        },
+        "privateLinkServiceConnections": [
+          {
+            "name": "[variables('sqlPeName')]",
+            "properties": {
+              "privateLinkServiceId": "[resourceId('Microsoft.Sql/servers',variables('sqlServerName'))]",
+              "groupIds": [
+                "sqlServer"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2020-01-01",
+      "name": "[variables('privateDnsZoneName')]",
+      "location": "global",
+      "dependsOn": [
+        "[variables('vnetName')]"
+      ],
+      "properties": ""
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+      "apiVersion": "2020-01-01",
+      "name": "[concat(variables('privateDnsZoneName'), '/', variables('privateDnsZoneName'), '-link')]",
+      "location": "global",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+      ],
+      "properties": {
+        "registrationEnabled": false,
+        "virtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('pvtendpointdnsgroupname')]",
+      "location": "[parameters('rgLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]",
+        "[variables('sqlPeName')]"
+      ],
+      "properties": {
+        "privateDnsZoneConfigs": [
+          {
+            "name": "config1",
+            "properties": {
+              "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('publicIpAddressName')]",
+      "location": "[parameters('rgLocation')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[tolower(variables('vmName'))]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('networkInterfaceName')]",
+      "location": "[parameters('rgLocation')]",
+      "dependsOn": [
+        "[variables('publicIpAddressName')]",
+        "[variables('vnetName')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipConfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpAddressName'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('vmSubnet'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('vmName')]",
+      "location": "[parameters('rgLocation')]",
+      "dependsOn": [
+        "[variables('networkInterfaceName')]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('VmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[parameters('vmAdminUsername')]",
+          "adminPassword": "[parameters('vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "[concat(variables('vmName'),'OsDisk')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
+            "diskSizeGB": 128
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

@@ -1,0 +1,16 @@
+az login --use-device-code
+az account set --subscription "Microsoft Azure Sponsorship"
+
+RG=dps-private-live
+LOC=westeurope
+AADAdminLogin=otto@rainertimecockpit.onmicrosoft.com
+AADAdminSid=$(az ad user show --id $AADAdminLogin --query objectId --output tsv)
+AADTenantID=$(az account show --query tenantId --output tsv)
+
+az deployment sub create --name create-demo-rg --location $LOC --template-file deploy-rg.json \
+  --parameters rgName=$RG rgLocation=$LOC
+
+az deployment group create --resource-group $RG --template-file deploy.json \
+  --parameters rgName=$RG rgLocation=$LOC AADAdminLogin=$AADAdminLogin AADAdminSid=$AADAdminSid AADTenantID=$AADTenantID SQLAllowAllIPs=true \
+    SQLAdminPassword=Passw0rd~123 SQLDenyPublicAccess=false vmAdminPassword=Passw0rd123
+
