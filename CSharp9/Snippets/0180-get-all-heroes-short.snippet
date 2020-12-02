@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0180 Get all heroes (short)</Title>
+			<Shortcut>cs9-get-all-heroes-short</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[[HttpGet("short")]
+public IActionResult GetAllHeroesShort() =>
+    Ok(repository.GetAllHeroesAndFriends()
+        .OfType<Hero>()
+        .Select(h => mapper.Map<HeroShortDto>(h)));
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

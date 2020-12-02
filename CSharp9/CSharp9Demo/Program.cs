@@ -1,3 +1,5 @@
+using AutoMapper;
+using CSharp9Demo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +20,8 @@ Host.CreateDefaultBuilder(args)
                 .AddScheme<DummyAuthenticationOptions, DummyAuthenticationHandler>("MyScheme", _ => { });
             services.AddAuthorization();
             services.AddControllers();
+            services.AddSingleton<HeroRepository>();
+            services.AddAutoMapper(config => config.CreateMap<Hero, HeroController.HeroShortDto>());
         })
         .Configure((context, app) =>
         {

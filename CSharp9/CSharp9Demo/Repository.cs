@@ -61,6 +61,7 @@ namespace NBattleshipCodingContest
             heroesAndFriends = new(new KeyValuePair<string, Person>[]
             {
                 new Hero("Homelander", Abilities.QuiteALot, 9, 9),
+                new Hero("Queen Maeve", Abilities.Superstrength | Abilities.Indestructible, 9, 5),
                 bruceWayne = new RegularHuman("Bruce", "Bruce Wayne"),
                 alfred = new("Alfred", "Alfred Pennyworth"),
                 new Hero("Batman", Abilities.TechnologicalGenius, 7, 1, bruceWayne) { Assistant = alfred },

@@ -59,3 +59,22 @@
 
 * Add `switch` with relational pattern to `Hero` with Snippet *0130 Switch with Relational Pattern*
 * Add recursive relational pattern to `HeroRepository` with Snippet *0140 Recursive Relational Pattern*
+
+## Back to Records
+
+* Create API Controller `HeroController`
+* Add DTOs to `HeroController` with Snippet *0150 DTOs*
+
+> Discuss attributes on init-only props
+
+* Add `HeroRepository` to DI: `services.AddSingleton<HeroRepository>();`
+* Add repository to constructor for DI (`HeroRepository repository`)
+* Add a method for getting all heroes with Snippet *0160 Get all heroes*
+
+> Repeat pattern matching with records
+
+* Add `AutoMapper.Extensions.Microsoft.DependencyInjection` NuGet package
+* Add *AutoMapper* to DI with Snippet *0170 Automapper setup*
+* Add method for getting all heroes (short version) with Snippet *0180 Get all heroes (short)*
+
+> Discuss why AutoMapper just works (record = class)

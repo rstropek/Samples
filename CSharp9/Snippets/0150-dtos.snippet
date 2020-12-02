@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0150 DTOs</Title>
+			<Shortcut>cs9-dtos</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[public record HeroDto(string Type, string Nickname, string? Abilities = null, 
+    int? Coolness = null, int? Evilness = null, string? RealLifeIdentity = null)
+{
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = Type;
+
+    [JsonPropertyName("nn")]
+    public string Nickname { get; init; } = Nickname;
+
+    [JsonPropertyName("abs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Abilities { get; init; } = Abilities;
+
+    [JsonPropertyName("cool")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? Coolness { get; init; } = Coolness;
+
+    [JsonPropertyName("evil")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? Evilness { get; init; } = Evilness;
+
+    [JsonPropertyName("rlid")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? RealLifeIdentity { get; init; } = RealLifeIdentity;
+}
+
+public record HeroShortDto(string Nickname, int Coolness, int Evilness);
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

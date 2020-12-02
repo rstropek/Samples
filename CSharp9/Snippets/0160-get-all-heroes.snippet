@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0160 Get all heroes</Title>
+			<Shortcut>cs9-get-all-heroes</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[[HttpGet]
+public IActionResult GetAllHeroes() =>
+    Ok(repository.GetAllHeroesAndFriends()
+        .Select(h => h switch
+        {
+            Hero he => new HeroDto(nameof(Hero), he.Nickname, he.Abilities.ToString(), he.Coolness, he.Evilness, he.RealLifeIdentity?.Nickname),
+            RegularHuman rh => new HeroDto(nameof(RegularHuman), rh.Nickname, RealLifeIdentity: rh.RealLifeName),
+            Person p => new HeroDto(nameof(Person), p.Nickname),
+            _ => throw new InvalidOperationException("Unknown type, this should never happen!")
+        }));
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
