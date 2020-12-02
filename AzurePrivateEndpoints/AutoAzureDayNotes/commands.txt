@@ -1,0 +1,42 @@
+Part 1:
+
+* Storage configuration -> security
+* Demo that https://stvwazureday.blob.core.windows.net/vwazureday/hello-world.txt cannot be accessed
+* Functions identity configuration
+* Functions app insights configuration
+* Show `new DefaultAzureCredential()` in Code
+  * Show https://func-public-vwazureday.azurewebsites.net/api/BlobReader
+* Go to app insights and search for "Starting to process"
+  * Show timeline of end-to-end transaction
+  * Show application map
+* Demo token retrieval in VM (commands below)
+
+Part 2:
+
+* Show vnet-vwazureday network
+* Show storage private endpoint configuration
+  * Show storage network configuration
+  * Speak about IP filtering
+  * Demo that https://stvwazuredayprivate.blob.core.windows.net/vwazureday/hello-world.txt cannot be accessed
+  * dig stvwazuredayprivate.blob.core.windows.net
+  * dig stvwazuredayprivate.blob.core.windows.net in VM
+* Speak about VM in VNet with Bastion
+* Functions auth configuration
+* Functions VNet configuration
+* Code walkthrough
+  * Show https://func-vwazureday-private.azurewebsites.net/api/BlobReader
+
+---
+
+dig stvwazureday.blob.core.windows.net
+
+dig stvwazuredayprivate.blob.core.windows.net
+
+curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true -s | jq .access_token -r
+
+token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true -s | jq .access_token -r)
+
+jwt $token
+
+echo $(curl https://stvwazuredayprivate.blob.core.windows.net/vwazureday/hello-world.txt -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $token" -s)
+
