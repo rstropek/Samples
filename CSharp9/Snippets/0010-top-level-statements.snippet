@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0010 Top-level Statements</Title>
+			<Shortcut>cs9-tls</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
+using System.Threading.Tasks;
+
+Host.CreateDefaultBuilder(args)
+    .ConfigureWebHostDefaults(webBuilder => webBuilder
+        .ConfigureServices(services =>
+        {
+            services.AddControllers();
+        })
+        .Configure((context, app) =>
+        {
+            if (context.HostingEnvironment.IsDevelopment()) app.UseDeveloperExceptionPage();
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapGet("health", async (HttpContext context) => await context.Response.WriteAsync("I am alive"));
+            });
+        })
+    )
+    .Build()
+    .Run();
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

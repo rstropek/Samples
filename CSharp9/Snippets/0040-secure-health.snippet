@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0040 Secure Health</Title>
+			<Shortcut>cs9-secure-health</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[static async Task SimpleAliveMessage(HttpContext context) => await context.Response.WriteAsync("I am alive");
+endpoints.MapGet("health", SimpleAliveMessage);
+
+[Authorize(AuthenticationSchemes = "MyScheme", Roles = "Admin")]
+static async Task AdminsOnlyAliveMessage(HttpContext context)
+{
+    var assemblyName = Assembly.GetExecutingAssembly().GetName();
+    await context.Response.WriteAsJsonAsync(new
+    {
+        Status = "Alive",
+        Assembly = assemblyName.FullName,
+        Version = assemblyName.Version
+    });
+}
+endpoints.MapGet("health-secure", AdminsOnlyAliveMessage);
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

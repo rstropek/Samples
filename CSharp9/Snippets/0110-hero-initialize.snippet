@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0110 Hero Initialize</Title>
+			<Shortcut>cs9-hero-initialize</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[RegularHuman bruceWayne, alfred;
+Hero tick;
+heroesAndFriends = new(new KeyValuePair<string, Person>[]
+{
+    new Hero("Homelander", Abilities.QuiteALot, 9, 9),
+    bruceWayne = new RegularHuman("Bruce", "Bruce Wayne"),
+    alfred = new("Alfred", "Alfred Pennyworth"),
+    new Hero("Batman", Abilities.TechnologicalGenius, 8, 1, bruceWayne) { Assistant = alfred },
+    new Hero("Tick", Abilities.Superstrength, 1, 0),
+	tick with { Nickname = "The Groot" }
+});
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0070 Derived Records</Title>
+			<Shortcut>cs9-derived-record</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[public record RegularHuman(string Nickname, string RealLifeName) : Person(Nickname);
+
+public record Hero(string Nickname, Abilities Abilities, int Coolness, int Evilness, RegularHuman? RealLifeIdentity = null) : Person(Nickname);
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

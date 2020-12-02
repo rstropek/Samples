@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>0050 Repository Starter</Title>
+			<Shortcut>cs9-repo-starter</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="csharp">
+                <![CDATA[using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace NBattleshipCodingContest
+{
+    [Flags]
+    public enum Abilities
+    {
+        None = 0b0000_0000,
+        Fly = 0b0000_0001,
+        Levitate = 0b0000_0010,
+        Superstrength = 0b0000_0100,
+        Invisible = 0b0000_1000,
+        DoesNotAge = 0b0001_0000,
+        Indestructible = 0b0010_0000,
+        TechnologicalGenius = 0b0100_0000,
+        Others = 0b1000_0000,
+        QuiteALot = Fly | Indestructible | Superstrength
+    }
+
+    public enum DangerLevel
+    {
+        Supervillain,
+        YouBetterRun,
+        Teddybear
+    }
+}
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
