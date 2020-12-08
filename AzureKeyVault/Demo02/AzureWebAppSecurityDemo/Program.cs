@@ -91,6 +91,9 @@ async Task GetSecrets(HttpContext http)
 
 async Task GetKeyVaultSetting(HttpContext http)
 {
+    // You have various options to get settings from Key Vault.
+    // Read more at https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references
+
     http.Response.StatusCode = 200;
     http.Response.ContentType = MediaTypeNames.Text.Plain;
     await http.Response.WriteAsync(app.Configuration["KeyVaultSetting"]);
