@@ -44,8 +44,8 @@ namespace CSharp9Demo.Tests
             var hr = new HeroRepository();
             var result = hr.GetCoolFlyingHeroes();
 
-            Assert.Equal(3, result.Count());
-            Assert.Equal(2, result.Where(r => r.Contains("not cool")).Count());
+            Assert.Equal(5, result.Count());
+            Assert.Equal(4, result.Where(r => r.Contains("not cool")).Count());
         }
     }
 }

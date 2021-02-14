@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-CircularReferences();
+// CircularReferences();
 await HttpClientExtensionMethods();
 
 static void CircularReferences()
@@ -15,14 +15,14 @@ static void CircularReferences()
     var eve = new Employee("Eve", research);
     research.Employee.Add(eve);
 
-    var options = new JsonSerializerOptions
-    {
-        ReferenceHandler = ReferenceHandler.Preserve,
-        WriteIndented = true
-    };
+    //var options = new JsonSerializerOptions
+    //{
+    //    ReferenceHandler = ReferenceHandler.Preserve,
+    //    WriteIndented = true
+    //};
 
     // Try with and without options
-    var json = JsonSerializer.Serialize(new[] { eve }, options);
+    var json = JsonSerializer.Serialize(new[] { eve }/*, options*/);
     Console.WriteLine(json);
 
     // Note ability to deserialize objects with parameterized ctors.
