@@ -1,0 +1,12 @@
+GET https://localhost:5001/api/heroes
+
+###
+POST https://localhost:5001/api/heroes
+Content-Type: application/json
+
+{
+    "id": 42,
+    "name": "The Tick",
+    "universe": "Amazon",
+    "canFly": false
+}
