@@ -68,6 +68,9 @@ namespace NBattleshipCodingContest
                 tick = new Hero("Tick", Abilities.Superstrength, 1, 0),
                 tick with { Nickname = "The Groot" }
             });
+
+            var heroesStartingWithHomeAndBeingCool = heroesAndFriends.Where(p =>
+                p.Value is Hero h && h is { Nickname: var n, Coolness: > 8 } && n.StartsWith("Home"));
         }
 
         public void AddOrUpdate(Person p) => heroesAndFriends[p.Nickname] = p;

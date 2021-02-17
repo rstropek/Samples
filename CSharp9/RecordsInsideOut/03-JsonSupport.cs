@@ -6,10 +6,11 @@ namespace RecordsInsideOut
 {
     public class JsonSupport
     {
-        private record Hero(string Name = "", string Universe = "", bool CanFly = false)
+        private record Hero(string Name = "", string Universe = "", 
+            [property: JsonPropertyName("flying") ] bool CanFly = false)
         {
-            [JsonPropertyName("flying")]
-            public bool CanFly { get; init; } = CanFly;
+            //[JsonPropertyName("flying")]
+            //public bool CanFly { get; init; } = CanFly;
         }
 
         [Fact]

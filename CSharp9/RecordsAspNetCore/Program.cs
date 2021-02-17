@@ -27,7 +27,7 @@ public class HeroesController : ControllerBase
 {
     public record HeroDto(int ID, string Name, string Universe, bool CanFly);
 
-    private List<HeroDto> Heroes { get; } = new()
+    private static List<HeroDto> Heroes { get; } = new()
     {
         new(1, "Homelander", "DC", true),
         new(2, "Groot", "Marvel", false),
