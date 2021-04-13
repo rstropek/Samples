@@ -73,8 +73,10 @@ SAMPLE_DESC="privateendpointdemo"
 #
 # The first version appends a random string in order to generate a unique code.
 # The second version uses a constant code. You can choose which logic you want.
-# SAMPLE_CODE="ped$(randomSimpleString 8 && echo $RANDSTR)"
-SAMPLE_CODE="ped"
+SAMPLE_CODE="api$(randomSimpleString 8 && echo $RANDSTR)"
+#SAMPLE_CODE="api"
+
+SAMPLE_LONG="api-conf"
 
 # Name of the resource group
 RG="$SAMPLE_LONG"
@@ -103,6 +105,14 @@ VNET="vnet-$SAMPLE_CODE"
 SUBNET_PRIVATEEP="snet-$SAMPLE_CODE-private-ep"
 SUBNET_PUBLIC="snet-$SAMPLE_CODE-public"
 
+# VM-related constants
+VM="vm-$SAMPLE_CODE"
+# NOTE: NEVER PUT SECRETS LIKE PASSWORDS IN SCRIPTS. USE AZURE MANAGED IDENTIY OR KEY VAULT INSTEAD.
+#       This sample should focus on Private Endpoints. Therefore, complexity in other areas (like
+#       security) should be limited. The plaintext password is for demo/learning purposes only.
+VMADMINUSER="vmadmin"
+VMADMINPWD="P@ssw0rd-123"
+SUBNET_VM="snet-$SAMPLE_CODE-vm"
 
 ########################################################################################################################
 # Log in (not necessary in cloud shell) and select correct account
@@ -209,6 +219,10 @@ then
     # Create subnet for frontend API
     az network vnet subnet create --vnet-name $VNET --name $SUBNET_PUBLIC --resource-group $RG \
         --address-prefixes 10.0.1.0/24
+
+    # Create subnet for VMs
+    az network vnet subnet create --vnet-name $VNET --name $SUBNET_VM --resource-group $RG \
+        --address-prefixes 10.0.2.0/24
 fi
 
 # Allow web APIs access to VNet
@@ -227,7 +241,7 @@ if ! az network private-endpoint show --resource-group $RG --name $SQLENDPOINT 2
 then
     az network private-endpoint create --name $SQLENDPOINT --resource-group $RG \
         --vnet-name $VNET --subnet $SUBNET_PRIVATEEP --private-connection-resource-id "$SQLSERVER_ID" \
-        --group-ids sqlServer --connection-name "$SQLENDPOINT-connection"
+        --group-id sqlServer --connection-name "$SQLENDPOINT-connection"
 fi
 
 # Find out private IP address of private endpoint
@@ -319,3 +333,21 @@ az sql server update --name $SQLSERVER --resource-group $RG --enable-public-netw
 # ones (10.0.0.x). The DB must not be reachable via public internet.
 curl https://$PRIVATEWEBAPP.azurewebsites.net
 curl https://$PUBLICWEBAPP.azurewebsites.net
+
+
+########################################################################################################################
+# Create VM in VNet
+# We want to investigate DNS settings interactively. For that, we create a VM in the VNet and make it publicly
+# available over a public IP address.
+if ! az vm show --resource-group $RG --name $VM 2> /dev/null
+then
+    az vm create --name $VM --resource-group $RG --admin-username $VMADMINUSER --admin-password $VMADMINPWD \
+        --authentication-type password --location $LOCATION --image UbuntuLTS --size Standard_DS2_v2 \
+        --public-ip-address-allocation dynamic --vnet-name $VNET \
+        --subnet $SUBNET_VM
+fi
+
+# Here are three dig statements that can help to understand how DNS works with private endpoints
+ssh -t vmadmin@20.61.114.25 dig $SQLSERVER.database.windows.net
+ssh -t vmadmin@20.61.114.25 dig app-$SAMPLE_CODE-private.azurewebsites.net
+ssh -t vmadmin@20.61.114.25 dig app-$SAMPLE_CODE-public.azurewebsites.net
