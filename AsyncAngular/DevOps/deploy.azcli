@@ -1,7 +1,7 @@
 # az login --use-device-code
 # az account set --subscription "b33f0285-db27-4896-ac5c-df22004b0aba"
 
-RG=AsyncServerlessAngular
+RG=JsconfAsyncServerless
 LOCATION="westeurope"
 
 az deployment sub create --name Deployment-$(date +"%Y-%m-%d") --template-file deploy-sub.json \

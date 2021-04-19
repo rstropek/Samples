@@ -90,6 +90,14 @@
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stgName'), ';AccountKey=', listKeys(variables('stgName'),'2015-05-01-preview').key1)]"
             },
             {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[concat('wcs', variables('fnName'))]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stgName'), ';AccountKey=', listKeys(variables('stgName'),'2015-05-01-preview').key1)]"
+            },
+            {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stgName'), ';AccountKey=', listKeys(variables('stgName'),'2015-05-01-preview').key1)]"
             },
@@ -219,6 +227,14 @@
     "sbConnectionString": {
       "type": "string",
       "value": "[concat('Endpoint=sb://', variables('sbName'), '.servicebus.windows.net/;SharedAccessKeyName=', variables('orderSendPolicy'), ';SharedAccessKey=', listKeys(resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', variables('sbName'), variables('orderTopicName'), variables('orderSendPolicy')), '2017-04-01').primaryKey)]"
+    },
+    "storageConnectionString": {
+      "type": "string",
+      "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stgName'), ';AccountKey=', listKeys(variables('stgName'),'2015-05-01-preview').key1)]"
+    },
+    "appInsightsInstrumentationKey": {
+      "type": "string",
+      "value": "[reference(resourceId('microsoft.insights/components/', variables('aiName')), '2015-05-01').InstrumentationKey]"
     }
   }
 }
