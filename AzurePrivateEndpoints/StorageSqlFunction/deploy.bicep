@@ -44,6 +44,7 @@ var uploadContainer = 'csv-upload'
 var processedContainer = 'csv-processed'
 
 // Helper variables for resource names
+var appServiceblobName = 'stas${uniqueString(baseName)}'
 var blobName = 'st${uniqueString(baseName)}'
 var serverName = 'sql-${uniqueString(baseName)}'
 var sqlDBName = 'sqldb-${uniqueString(baseName)}'
@@ -167,6 +168,22 @@ resource insights 'Microsoft.Insights/components@2020-02-02-preview' = {
 // ====================================================================================================================
 // STORAGE
 //
+resource appServiceStorage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: appServiceblobName
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Premium'
+  }
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Hot'
+    supportsHttpsTrafficOnly: true
+    allowBlobPublicAccess: false
+    minimumTlsVersion: 'TLS1_2'
+  }
+}
+
 resource csvStorage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   name: blobName
   location: resourceGroup().location
@@ -375,7 +392,7 @@ resource function 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${csvStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(csvStorage.id, csvStorage.apiVersion).keys[0].value}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${appServiceStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(appServiceStorage.id, appServiceStorage.apiVersion).keys[0].value}'
         }
         {
           'name': 'FUNCTIONS_EXTENSION_VERSION'
@@ -387,11 +404,11 @@ resource function 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${csvStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(csvStorage.id, csvStorage.apiVersion).keys[0].value}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${appServiceStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(appServiceStorage.id, appServiceStorage.apiVersion).keys[0].value}'
         }
         {
           name: 'StorageConnection'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${csvStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(csvStorage.id, csvStorage.apiVersion).keys[0].value}'
+          value: 'https://${csvStorage.name}.blob.core.windows.net/csv-processed'
         }
         {
           name: 'SqlConnection'

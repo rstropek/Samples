@@ -41,3 +41,7 @@ az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m
 STG_CONN=$(echo $RESULT | jq .properties.outputs.storageConnection.value -r)
 az storage cors add --methods DELETE GET HEAD MERGE OPTIONS POST PUT --origins \* --services b \
     --allowed-headers \* --connection-string $STG_CONN
+
+# Don't forget to add external user for managed identity to DB:
+# CREATE USER [tor21-live-demo] FROM EXTERNAL PROVIDER;
+# ALTER ROLE db_owner ADD MEMBER [tor21-live-demo];
