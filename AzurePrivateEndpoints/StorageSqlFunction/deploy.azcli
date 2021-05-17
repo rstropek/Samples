@@ -1,13 +1,19 @@
 # az login --use-device-code
 # az account set --subscription "<enter subscription ID here>"
 
-RG="Techorama2021"
-BASE="tor21"
+RG="Techorama2021-live"
+BASE="tor21live"
 
 # Find an AAD group
 ADMINGRP=$(az ad group list --display-name AzureAdmins | jq .[0].objectId -r)
 # Alternatively, you could find a single user like that:
 # az ad user list --filter "mail eq 'rainer@software-architects.at'"  | jq .[0].objectId -r
+
+########################################################################################################################
+# Deploy Bicep template (public solution)
+az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy-public.bicep \
+    --parameters rgName=$RG baseName=$BASE administratorLoginPassword=P_ssw0rd123 aadAdminTeamId=$ADMINGRP vmAdminPassword=P_ssw0rd123
 
 ########################################################################################################################
 # Deploy core Bicep template
@@ -16,7 +22,7 @@ RESULT=$(az deployment group create --resource-group $RG --name Deployment-$(dat
     --parameters rgName=$RG baseName=$BASE administratorLoginPassword=P_ssw0rd123 aadAdminTeamId=$ADMINGRP vmAdminPassword=P_ssw0rd123 \
 )
 echo $RESULT | jq
-echo $RESULT | jq .properties.outputs.functionDomainVerification.value
+echo $RESULT | jq .properties.outputs.functionDomainVerification.value -r
 
 # Change DNS entry accordingly (i.e. add TXT record with domain verification value)
 
@@ -45,3 +51,7 @@ az storage cors add --methods DELETE GET HEAD MERGE OPTIONS POST PUT --origins \
 # Don't forget to add external user for managed identity to DB:
 # CREATE USER [tor21-live-demo] FROM EXTERNAL PROVIDER;
 # ALTER ROLE db_owner ADD MEMBER [tor21-live-demo];
+
+# Links to try:
+https://techorama2021.coderdojo.net/api/GetBlob
+https://techorama2021.coderdojo.net/api/GetQuery

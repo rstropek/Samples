@@ -36,8 +36,6 @@ param vmAdminPassword string
 // IP ranges
 var vnetAddressPrefix = '10.0.0.0/16'
 var subnetDefaultAddressPrefix = '10.0.1.0/24'
-var subnetPrivateEndpointAddressPrefix = '10.0.2.0/24'
-var subnetWebAppsAddressPrefix = '10.0.3.0/24'
 
 // Important naming constants
 var uploadContainer = 'csv-upload'
@@ -50,15 +48,8 @@ var serverName = 'sql-${uniqueString(baseName)}'
 var sqlDBName = 'sqldb-${uniqueString(baseName)}'
 var vnetName = 'vnet-${baseName}-${uniqueString(baseName)}'
 var vmSubnet = 'subnet-${baseName}-vm'
-var privateEndpointSubnet = 'subnet-${baseName}-pe'
-var webAppSubnet = 'subnet-${baseName}-webapp'
-var sqlPeName = 'pe-${serverName}'
-var blobPeName = 'pe-${blobName}'
 var vmName = 'vm-${baseName}-${uniqueString(baseName)}'
 var functionName = '${baseName}-live-demo'
-
-var sqlPeDnsZoneName = 'privatelink${environment().suffixes.sqlServerHostname}' // privatelink.database.windows.net
-var blobPeDnsZoneName = 'privatelink.blob.${environment().suffixes.storage}' // privatelink.blob.core.windows.net
 
 // See https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#all
 // Note also bug/limitation https://github.com/Azure/bicep/issues/2031#issuecomment-816743989
@@ -85,68 +76,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
           addressPrefix: subnetDefaultAddressPrefix
         }
       }
-      {
-        name: privateEndpointSubnet
-        properties: {
-          addressPrefix: subnetPrivateEndpointAddressPrefix
-
-          // Disabling private endpoint NSGs is required. Read more at
-          // https://docs.microsoft.com/en-us/azure/private-link/disable-private-endpoint-network-policy
-          privateEndpointNetworkPolicies: 'Disabled'
-        }
-      }
-      {
-        name: webAppSubnet
-        properties: {
-          addressPrefix: subnetWebAppsAddressPrefix
-          delegations: [
-            {
-              name: 'webapp-subnet-delegation'
-              properties: {
-                serviceName: 'Microsoft.Web/serverFarms'
-              }
-            }            
-          ]
-        }
-      }
     ]
-  }
-}
-
-// ====================================================================================================================
-// DNS ZONES
-//
-resource privateDnsZoneSql 'Microsoft.Network/privateDnsZones@2020-01-01' = {
-  name: sqlPeDnsZoneName
-  location: 'global'
-  properties: { }
-
-  resource privateDnsZoneSql_privateDnsZoneName_link 'virtualNetworkLinks@2020-01-01' = {
-    name: sqlPeDnsZoneName
-    location: 'global'
-    properties: {
-      registrationEnabled: false
-      virtualNetwork: {
-        id: vnet.id
-      }
-    }
-  }
-}
-
-resource privateDnsZoneBlob 'Microsoft.Network/privateDnsZones@2020-01-01' = {
-  name: blobPeDnsZoneName
-  location: 'global'
-  properties: { }
-
-  resource privateDnsZoneSql_privateDnsZoneName_link 'virtualNetworkLinks@2020-01-01' = {
-    name: blobPeDnsZoneName
-    location: 'global'
-    properties: {
-      registrationEnabled: false
-      virtualNetwork: {
-        id: vnet.id
-      }
-    }
   }
 }
 
@@ -224,49 +154,6 @@ resource adminStorageAssignment 'Microsoft.Authorization/roleAssignments@2020-04
   }
 }
 
-// Create private endpoint for storage
-resource blobPe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
-  name: blobPeName
-  location: resourceGroup().location
-  properties: {
-    subnet: {
-      id: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, privateEndpointSubnet)
-    }
-    privateLinkServiceConnections: [
-      {
-        name: blobPeName
-        properties: {
-          privateLinkServiceId: csvStorage.id
-          groupIds: [
-            'blob'
-          ]
-        }
-      }
-    ]
-  }
-  dependsOn: [
-    vnet
-  ]
-}
-
-// Integrate private endpoint for storage with private DNS zone
-resource blobPeDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-06-01' = {
-  name: '${blobPeName}/pednsgroupname'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: 'config1'
-        properties: {
-          privateDnsZoneId: privateDnsZoneBlob.id
-        }
-      }
-    ]
-  }
-  dependsOn: [
-    blobPe
-  ]
-}
-
 // ====================================================================================================================
 // SQL
 //
@@ -310,49 +197,6 @@ resource server 'Microsoft.Sql/servers@2020-11-01-preview' = {
       tier: 'Standard'
     }
   }
-}
-
-// Create private endpoint for SQL
-resource sqlPe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
-  name: sqlPeName
-  location: resourceGroup().location
-  properties: {
-    subnet: {
-      id: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, privateEndpointSubnet)
-    }
-    privateLinkServiceConnections: [
-      {
-        name: sqlPeName
-        properties: {
-          privateLinkServiceId: server.id
-          groupIds: [
-            'sqlServer'
-          ]
-        }
-      }
-    ]
-  }
-  dependsOn: [
-    vnet
-  ]
-}
-
-// Integrate private endpoint for SQL with private DNS zone
-resource sqlPeDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-06-01' = {
-  name: '${sqlPeName}/pednsgroupname'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: 'config1'
-        properties: {
-          privateDnsZoneId: privateDnsZoneSql.id
-        }
-      }
-    ]
-  }
-  dependsOn: [
-    sqlPe
-  ]
 }
 
 // ====================================================================================================================
@@ -424,14 +268,6 @@ resource function 'Microsoft.Web/sites@2020-12-01' = {
       ]
     }
   }
-  // Add web app to VNet
-  resource functionVnet 'networkConfig@2020-10-01' = {
-    name: 'virtualNetwork'
-    properties: {
-      subnetResourceId: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, webAppSubnet)
-      swiftSupported: true
-    }
-  }
 }
 
 // Allow Azure Function to access storage
@@ -478,9 +314,6 @@ resource networkInterfaceName 'Microsoft.Network/networkInterfaces@2020-06-01' =
       }
     ]
   }
-  dependsOn: [
-    vnet
-  ]
 }
 
 resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {

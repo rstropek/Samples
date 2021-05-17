@@ -1,0 +1,15 @@
+{
+    "version": "2.0",
+    "logging": {
+        "applicationInsights": {
+            "samplingSettings": {
+                "isEnabled": true,
+                "excludedTypes": "Request"
+            }
+        },
+        "logLevel": {
+            "Function.Function.BlobHandling": "Information",
+            "Function.Function.SqlHandling": "Information"
+        }
+    }
+}
