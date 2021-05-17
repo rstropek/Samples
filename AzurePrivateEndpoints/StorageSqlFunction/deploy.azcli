@@ -1,8 +1,8 @@
 # az login --use-device-code
 # az account set --subscription "<enter subscription ID here>"
 
-RG="Techorama2021-live"
-BASE="tor21live"
+RG="Techorama2021"
+BASE="tor21"
 
 # Find an AAD group
 ADMINGRP=$(az ad group list --display-name AzureAdmins | jq .[0].objectId -r)
@@ -16,7 +16,7 @@ az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m
     --parameters rgName=$RG baseName=$BASE administratorLoginPassword=P_ssw0rd123 aadAdminTeamId=$ADMINGRP vmAdminPassword=P_ssw0rd123
 
 ########################################################################################################################
-# Deploy core Bicep template
+# Deploy Bicep template (private solution)
 RESULT=$(az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
     --template-file deploy.bicep \
     --parameters rgName=$RG baseName=$BASE administratorLoginPassword=P_ssw0rd123 aadAdminTeamId=$ADMINGRP vmAdminPassword=P_ssw0rd123 \

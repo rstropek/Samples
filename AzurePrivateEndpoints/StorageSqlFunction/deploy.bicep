@@ -64,6 +64,9 @@ var blobPeDnsZoneName = 'privatelink.blob.${environment().suffixes.storage}' // 
 // Note also bug/limitation https://github.com/Azure/bicep/issues/2031#issuecomment-816743989
 var roleIds = {
   storageBlobDataContributor: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+  keyVaultAdministrator: '00482a5a-887f-4fb3-b363-3b7fe8e74483'
+  keyVaultSecretsUser: '4633458b-17de-408a-b874-0445c86b69e6'
+  keyVaultReader: '21090545-7ca7-4776-b22c-e363652d74d2'
 }
 
 // ====================================================================================================================
@@ -356,6 +359,57 @@ resource sqlPeDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@
 }
 
 // ====================================================================================================================
+// KEY VAULT
+//
+resource keyvault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
+  name: 'keyv-${uniqueString(baseName)}'
+  location: resourceGroup().location
+  properties: {
+    enableRbacAuthorization: true
+    enabledForTemplateDeployment: true
+    enableSoftDelete: false // Demo purposes only. Consider soft delete in production scenarios.
+    tenantId: subscription().tenantId
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+  }
+  resource storageConnectionString 'secrets@2021-04-01-preview' = {
+    name: 'storageSecret'
+    properties: {
+      value: 'DefaultEndpointsProtocol=https;AccountName=${appServiceStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(appServiceStorage.id, appServiceStorage.apiVersion).keys[0].value}'
+    }
+  }
+}
+
+resource adminKeyVaultAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(keyvault.id, aadAdminTeamId)
+  scope: keyvault
+  properties: {
+    principalId: aadAdminTeamId
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.keyVaultAdministrator)
+  }
+}
+
+resource msiKeyVaultReaderAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(keyvault.id, function.id, 'reader')
+  scope: keyvault
+  properties: {
+    principalId: function.identity.principalId
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.keyVaultReader)
+  }
+}
+
+resource msiKeyVaultSecretsUserAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(keyvault.id, function.id, 'secrets')
+  scope: keyvault
+  properties: {
+    principalId: function.identity.principalId
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.keyVaultSecretsUser)
+  }
+}
+
+// ====================================================================================================================
 // FUNCTION
 //
 resource hosting 'Microsoft.Web/serverfarms@2020-12-01' = {
@@ -386,12 +440,20 @@ resource function 'Microsoft.Web/sites@2020-12-01' = {
       }
       appSettings: [
         {
+          name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
+          value: 'true'
+        }
+        {
+          name: 'WEBSITE_SKIP_CONTENTSHARE_VALIDATION'
+          value: '1'
+        }
+        {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: insights.properties.InstrumentationKey
         }
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${appServiceStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(appServiceStorage.id, appServiceStorage.apiVersion).keys[0].value}'
+          value: '@Microsoft.KeyVault(SecretUri=${reference(keyvault::storageConnectionString.id).secretUriWithVersion})'
         }
         {
           'name': 'FUNCTIONS_EXTENSION_VERSION'
@@ -399,11 +461,11 @@ resource function 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           'name': 'FUNCTIONS_WORKER_RUNTIME'
-          'value': 'dotnet'
+          'value': 'dotnet-isolated'
         }
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${appServiceStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(appServiceStorage.id, appServiceStorage.apiVersion).keys[0].value}'
+          value: '@Microsoft.KeyVault(SecretUri=${reference(keyvault::storageConnectionString.id).secretUriWithVersion})'
         }
         {
           name: 'StorageConnection'
