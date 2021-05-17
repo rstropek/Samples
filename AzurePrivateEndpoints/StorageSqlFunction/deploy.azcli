@@ -1,0 +1,43 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="Techorama2021"
+BASE="tor21"
+
+# Find an AAD group
+ADMINGRP=$(az ad group list --display-name AzureAdmins | jq .[0].objectId -r)
+# Alternatively, you could find a single user like that:
+# az ad user list --filter "mail eq 'rainer@software-architects.at'"  | jq .[0].objectId -r
+
+########################################################################################################################
+# Deploy core Bicep template
+RESULT=$(az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy.bicep \
+    --parameters rgName=$RG baseName=$BASE administratorLoginPassword=P_ssw0rd123 aadAdminTeamId=$ADMINGRP vmAdminPassword=P_ssw0rd123 \
+)
+echo $RESULT | jq
+echo $RESULT | jq .properties.outputs.functionDomainVerification.value
+
+# Change DNS entry accordingly (i.e. add TXT record with domain verification value)
+
+# Add custom hostname
+az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy-hostname.bicep \
+    --parameters baseName=$BASE customHostname=techorama2021.coderdojo.net
+
+# Add managed certificate for hostname
+CERT_RESULT=$(az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy-cert.bicep \
+    --parameters baseName=$BASE customHostname=techorama2021.coderdojo.net)
+THUMBPRINT=$(echo $CERT_RESULT | jq .properties.outputs.certThumbprint.value -r)
+
+# Bind managed certificate to custom hostname
+az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy-cert-binding.bicep \
+    --parameters baseName=$BASE customHostname=techorama2021.coderdojo.net certThumbprint=$THUMBPRINT
+
+########################################################################################################################
+# Set CORS policy for storage account
+STG_CONN=$(echo $RESULT | jq .properties.outputs.storageConnection.value -r)
+az storage cors add --methods DELETE GET HEAD MERGE OPTIONS POST PUT --origins \* --services b \
+    --allowed-headers \* --connection-string $STG_CONN
