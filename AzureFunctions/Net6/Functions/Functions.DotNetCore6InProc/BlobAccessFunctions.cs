@@ -25,7 +25,7 @@ namespace Functions.DotNetCore6InProc
             ILogger log)
         {
             // Note that we can get a CloudBlobContainer as a parameter.
-            // This is possible because of in-process .NET Core 3.1.
+            // This is possible because of in-process .NET Core.
 
             // Note HTTP-related data types from ASP.NET Core.
 
