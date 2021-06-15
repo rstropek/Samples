@@ -1,0 +1,14 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="HelloFunctions"
+BASE="hellofunctions"
+
+########################################################################################################################
+# Deploy Bicep template for Azure function
+RESULT=$(az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy.bicep \
+    --parameters baseName=$BASE
+)
+
+echo $RESULT | jq ".properties.outputs"

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+        <Nullable>enable</Nullable>
+        <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- We need that reference for Startup.cs (DI) -->
+        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+        
+        <!-- Check dependencies of the following NuGet package. Blob storage library is deprecated -->
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="4.0.4" />
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.3.0" />
+        
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.13" />
+        
+        <PackageReference Include="CsvHelper" Version="27.1.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+</Project>

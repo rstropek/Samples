@@ -1,0 +1,10 @@
+# @name sas
+GET http://localhost:7071/api/GetUploadSasUrl
+
+###
+PUT {{sas.response.body.$.uploadSas}}
+x-ms-blob-type: BlockBlob
+
+ID,Name
+1,FooBar
+2,FooBaz
