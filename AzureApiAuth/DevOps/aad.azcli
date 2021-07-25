@@ -1,0 +1,31 @@
+az login --use-device-code
+az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
+
+APP=AadAuth_API
+
+# =================================================================================================
+#  Create app registration
+
+# Register AAD App
+AADAPPREG=$(az ad app create --display-name $APP --available-to-other-tenants false --identifier-uris https://aadauth-sample.rstropek)
+# AADAPPREG=$(az ad app list --display-name $APP)
+# echo $AADAPPREG | jq
+
+# Get app id and object id from app registration JSON
+APPID=$(jq '.appId' -r <<< $AADAPPREG)
+OBJID=$(jq '.objectId' -r <<< $AADAPPREG)
+
+# Wait until app registration will have been completed
+# az rest --method GET --uri https://graph.microsoft.com/v1.0/applications/$OBJID | jq
+until az rest --method GET --uri https://graph.microsoft.com/v1.0/applications/$OBJID > /dev/null 2>&1; do
+    sleep 3s
+done
+
+# Disable existing scopes
+PERMISSIONS=$(az ad app show --id $APPID | jq '.oauth2Permissions')
+ALL_DISABLED=$(echo $PERMISSIONS | jq -r '.[].isEnabled = false')
+az ad app update --id $APPID --set oauth2Permissions="$ALL_DISABLED"
+
+# Add required API scopes
+az ad app update --id $APPID --set oauth2Permissions=@scopes.json
+

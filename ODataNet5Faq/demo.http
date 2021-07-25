@@ -1,13 +1,26 @@
+###
+https://graph.microsoft.com/v1.0/users?$count=true&$top=5&$filter=endsWith(mail,'software-architects.at')&$orderBy=displayName&$select=id,givenName
+
+###
 GET https://localhost:5001/api/FillDatabase
 
 ###
 GET https://localhost:5001/odata/$metadata
 
 ###
-GET https://localhost:5001/odata/Customers?$filter=CountryIsoCode eq 'AT'
+GET https://localhost:5001/odata/Customers?$filter=CountryIsoCode eq 'AT'&$select=CustomerId,CompanyName
 
 ###
-GET https://localhost:5001/odata/Customers?$expand=Orders
+GET https://localhost:5001/odata/Customers?$expand=OrderHeaders
+
+###
+GET https://localhost:5001/odata/OrderHeaders?$expand=Customer
+
+###
+GET https://localhost:5001/odata/Customers(da3adeda-aba6-429f-b121-4ff3b81152ff)
+
+###
+GET https://localhost:5001/odata/Customers(180e1086-cc05-4c48-87b4-57c7d6fc8eb0)/OrderHeaders
 
 ###
 GET https://localhost:5001/odata/Customers/OrderedBike()
@@ -17,3 +30,9 @@ GET https://localhost:5001/odata/Customers/OrderedBike()?$filter=CountryIsoCode 
 
 ###
 GET https://localhost:5001/odata/Customer?$filter=CountryIsoCode%20eq%20%27AT%27
+
+###
+GET https://localhost:5001/odata/OrderHeaders/CalculateStatistics()
+
+###
+GET https://localhost:5001/odata/OrderHeaders

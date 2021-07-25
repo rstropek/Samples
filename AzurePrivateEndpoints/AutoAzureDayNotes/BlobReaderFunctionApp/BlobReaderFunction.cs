@@ -30,7 +30,7 @@ namespace BlobReaderFunctionApp
             log.LogInformation(token.Token);
 
             // Download a blob with the Azure-provided token
-            const string containerEndpoint = "https://stvwazureday.blob.core.windows.net/vwazureday/";
+            const string containerEndpoint = "https://stmymicroservice.blob.core.windows.net/itdays/";
             var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
             var blockBlobClient = containerClient.GetBlockBlobClient("hello-world.txt");
             using var memorystream = new MemoryStream();

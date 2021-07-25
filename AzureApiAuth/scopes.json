@@ -1,0 +1,21 @@
+[
+    {
+        "adminConsentDescription": "Allow the application to read data on behalf of the signed-in user.",
+        "adminConsentDisplayName": "Read data",
+        "id": "08d37db8-9193-42b8-822f-ee79246d6dc5",
+        "isEnabled": true,
+        "type": "User",
+        "userConsentDescription": "Allow the application to read data on your behalf.",
+        "userConsentDisplayName": "Read data",
+        "value": "read"
+    },
+    {
+        "adminConsentDescription": "Allow the application to write data on behalf of the signed-in user.",
+        "adminConsentDisplayName": "Write data",
+        "id": "b9ec651f-fcbb-4dce-ad46-f8e3c3941392",
+        "isEnabled": true,
+        "type": "User",
+        "userConsentDescription": "Allow the application to write data on your behalf.",
+        "userConsentDisplayName": "Write data",
+        "value": "write"
+    }]

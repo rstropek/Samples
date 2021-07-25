@@ -132,7 +132,7 @@ namespace ODataCoreFaq.Service.Migrations
             modelBuilder.Entity("ODataCoreFaq.Data.OrderHeader", b =>
                 {
                     b.HasOne("ODataCoreFaq.Data.Customer", "Customer")
-                        .WithMany("Orders")
+                        .WithMany("OrderHeaders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -142,7 +142,7 @@ namespace ODataCoreFaq.Service.Migrations
 
             modelBuilder.Entity("ODataCoreFaq.Data.Customer", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderHeaders");
                 });
 
             modelBuilder.Entity("ODataCoreFaq.Data.OrderHeader", b =>
