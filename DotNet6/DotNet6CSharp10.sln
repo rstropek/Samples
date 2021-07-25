@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncOverAsyncNetCore", "Syn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartupPerfApi", "StartupPerfApi\StartupPerfApi.csproj", "{2A317CDB-91DA-4606-ACA5-ABE1A32A5434}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonSerializerCodeGen", "JsonSerializerCodeGen\JsonSerializerCodeGen.csproj", "{A1C41D68-EF34-4BCE-9F14-1D09C4562CB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonSerializerCodeGen", "JsonSerializerCodeGen\JsonSerializerCodeGen.csproj", "{A1C41D68-EF34-4BCE-9F14-1D09C4562CB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateTimeImprovements", "DateTimeImprovements\DateTimeImprovements.csproj", "{36ABB4AC-0EA2-4C87-9D9B-CE4B69E8665A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A1C41D68-EF34-4BCE-9F14-1D09C4562CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1C41D68-EF34-4BCE-9F14-1D09C4562CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1C41D68-EF34-4BCE-9F14-1D09C4562CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36ABB4AC-0EA2-4C87-9D9B-CE4B69E8665A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36ABB4AC-0EA2-4C87-9D9B-CE4B69E8665A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36ABB4AC-0EA2-4C87-9D9B-CE4B69E8665A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36ABB4AC-0EA2-4C87-9D9B-CE4B69E8665A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
