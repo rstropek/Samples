@@ -73,10 +73,10 @@ SAMPLE_DESC="privateendpointdemo"
 #
 # The first version appends a random string in order to generate a unique code.
 # The second version uses a constant code. You can choose which logic you want.
-SAMPLE_CODE="doc$(randomSimpleString 8 && echo $RANDSTR)"
+SAMPLE_CODE="api$(randomSimpleString 8 && echo $RANDSTR)"
 #SAMPLE_CODE="api"
 
-SAMPLE_LONG="devopscon"
+SAMPLE_LONG="api-conf"
 
 # Name of the resource group
 RG="$SAMPLE_LONG"
@@ -348,6 +348,6 @@ then
 fi
 
 # Here are three dig statements that can help to understand how DNS works with private endpoints
-ssh -t vmadmin@52.157.74.90 dig $SQLSERVER.database.windows.net
-ssh -t vmadmin@52.157.74.90 dig app-$SAMPLE_CODE-private.azurewebsites.net
-ssh -t vmadmin@52.157.74.90 dig app-$SAMPLE_CODE-public.azurewebsites.net
+ssh -t vmadmin@20.61.114.25 dig $SQLSERVER.database.windows.net
+ssh -t vmadmin@20.61.114.25 dig app-$SAMPLE_CODE-private.azurewebsites.net
+ssh -t vmadmin@20.61.114.25 dig app-$SAMPLE_CODE-public.azurewebsites.net

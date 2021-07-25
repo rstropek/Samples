@@ -423,14 +423,13 @@ resource hosting 'Microsoft.Web/serverfarms@2020-12-01' = {
 resource function 'Microsoft.Web/sites@2020-12-01' = {
   name: functionName
   location: resourceGroup().location
-  kind: 'functionapp,linux'
+  kind: 'functionapp'
   identity: {
     type: 'SystemAssigned'
   }
   properties: {
     httpsOnly: true
     serverFarmId: hosting.id
-    clientAffinityEnabled: false
     siteConfig: {
       netFrameworkVersion: 'v5.0'
       ftpsState: 'Disabled'

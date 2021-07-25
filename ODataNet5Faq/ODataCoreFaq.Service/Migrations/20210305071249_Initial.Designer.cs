@@ -10,7 +10,7 @@ using ODataCoreFaq.Service;
 namespace ODataCoreFaq.Service.Migrations
 {
     [DbContext(typeof(OrderManagementContext))]
-    [Migration("20210305093154_Initial")]
+    [Migration("20210305071249_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,7 +134,7 @@ namespace ODataCoreFaq.Service.Migrations
             modelBuilder.Entity("ODataCoreFaq.Data.OrderHeader", b =>
                 {
                     b.HasOne("ODataCoreFaq.Data.Customer", "Customer")
-                        .WithMany("OrderHeaders")
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -144,7 +144,7 @@ namespace ODataCoreFaq.Service.Migrations
 
             modelBuilder.Entity("ODataCoreFaq.Data.Customer", b =>
                 {
-                    b.Navigation("OrderHeaders");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ODataCoreFaq.Data.OrderHeader", b =>

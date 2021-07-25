@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using ODataCoreFaq.Data;
-using ODataCoreFaq.Service.Controllers;
 
 namespace ODataCoreFaq.Service
 {
@@ -37,13 +36,10 @@ namespace ODataCoreFaq.Service
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 
         private static IEdmModel GetEdmModel()
@@ -53,14 +49,10 @@ namespace ODataCoreFaq.Service
             builder.EntityType<Customer>()
                 .Collection
                 .Function("OrderedBike")
-                .ReturnsCollectionFromEntitySet<Customer>("Customers");
+                .ReturnsCollectionFromEntitySet<Customer>("Customer");
+
             builder.EntitySet<Product>("Products");
             builder.EntitySet<OrderHeader>("OrderHeaders");
-            builder.EntityType<OrderHeader>()
-                .Collection
-                .Function("CalculateStatistics")
-                .ReturnsCollection<OrderStatistic>();
-
             builder.EntitySet<OrderDetail>("OrderDetails");
 
             return builder.GetEdmModel();

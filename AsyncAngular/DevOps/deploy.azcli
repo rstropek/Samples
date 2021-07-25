@@ -8,5 +8,5 @@ az deployment sub create --name Deployment-$(date +"%Y-%m-%d") --template-file d
     --location $LOCATION --parameters rgLocation=$LOCATION rgName=$RG
 
 az deployment group create --name Deployment-$(date +"%Y-%m-%d") --template-file deploy.json \
-    --resource-group $RG --parameters srUpstreamUrlPattern=https://c5d772c4de77.ngrok.io/api/SignalrEvents \
+    --resource-group $RG --parameters srUpstreamUrlPattern=https://da26b77425d8.ngrok.io/api/SignalrEvents \
     | jq ".properties.outputs"

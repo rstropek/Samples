@@ -43,7 +43,7 @@ namespace BlobReaderFunctionApp
                 var token = await cred.GetTokenAsync(new TokenRequestContext(new[] { "https://storage.azure.com/.default" }));
                 resultBuilder.Append($"Token: {token.Token}\n\n");
 
-                var addresses = Dns.GetHostAddresses("stmymicroservice.blob.core.windows.net");
+                var addresses = Dns.GetHostAddresses("stvwazuredayprivate.blob.core.windows.net");
                 foreach (var hostAddress in addresses)
                 {
                     resultBuilder.Append($"Address: {hostAddress}\n\n");
@@ -53,7 +53,7 @@ namespace BlobReaderFunctionApp
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
                 client.DefaultRequestHeaders.Add("x-ms-version", "2017-11-09");
 
-                var message = await client.GetStringAsync("https://stmymicroservice.blob.core.windows.net/itdays/hello-world.txt");
+                var message = await client.GetStringAsync("https://stvwazuredayprivate.blob.core.windows.net/vwazureday/hello-world.txt");
 
                 log.LogInformation("Done processing the request");
                 resultBuilder.Append($"Message: {message}\n\n");

@@ -10,7 +10,7 @@ namespace ODataCoreFaq.Data
 		public Customer()
 		{
 			CustomerId = Guid.NewGuid();
-			OrderHeaders = new OrderCollection();
+			Orders = new OrderCollection();
 		}
 
 		[Key]
@@ -24,7 +24,7 @@ namespace ODataCoreFaq.Data
 		[Required(AllowEmptyStrings = false)]
 		public string CountryIsoCode { get; set; } = string.Empty;
 
-		public OrderCollection OrderHeaders { get; private set; }
+		public OrderCollection Orders { get; private set; }
 	}
 
 	public class Product

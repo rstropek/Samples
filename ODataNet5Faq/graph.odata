@@ -1,1 +1,0 @@
-https://graph.microsoft.com/v1.0/users?%24top=5+&%24orderBy=displayName+&%24select=id%2C+givenName&%24count=true&%24filter=endsWith%28mail%2C+%27software-architects.at%27%29
