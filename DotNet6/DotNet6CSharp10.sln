@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateTimeImprovements", "Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordStruct", "RecordStruct\RecordStruct.csproj", "{DE81C2B9-B8EC-414D-AA9A-2B561EF9010A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalUsing", "GlobalUsing\GlobalUsing.csproj", "{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{DE81C2B9-B8EC-414D-AA9A-2B561EF9010A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE81C2B9-B8EC-414D-AA9A-2B561EF9010A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE81C2B9-B8EC-414D-AA9A-2B561EF9010A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
