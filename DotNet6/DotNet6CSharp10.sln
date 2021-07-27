@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalUsing", "GlobalUsing\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonApis", "JsonApis\JsonApis.csproj", "{7D5259A0-B4EA-45DF-AA58-9FCEDEAB9FDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqEnhancements", "LinqEnhancements\LinqEnhancements.csproj", "{FE265D85-00FD-4268-BAB7-3F2EB9D17154}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{7D5259A0-B4EA-45DF-AA58-9FCEDEAB9FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D5259A0-B4EA-45DF-AA58-9FCEDEAB9FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D5259A0-B4EA-45DF-AA58-9FCEDEAB9FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
