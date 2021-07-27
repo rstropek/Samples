@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <!-- 
+        Note that <TrimMode>link</TrimMode> is default in .NET 6.
+        See https://docs.microsoft.com/en-us/dotnet/core/deploying/trimming-options#trimming-granularity
+    -->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LinkerLibrary\LinkerLibrary.csproj" />
+    </ItemGroup>
+
+    <!--
+        You can prevent trimming of assemblies. There are many additional options for trimming
+        Read more about them at https://docs.microsoft.com/en-us/dotnet/core/deploying/trim-self-contained#prevent-assemblies-from-being-trimmed
+    -->
+    <!--<ItemGroup>
+        <TrimmerRootAssembly Include="System.Text.Json" />
+    </ItemGroup>-->
+</Project>

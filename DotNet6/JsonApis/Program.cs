@@ -58,7 +58,7 @@ var theBoys = heroesToPatch!["theBoys"] as JsonArray;
 var nameOfHero = theBoys![1]?["name"]?.GetValue<string?>();
 WriteLine($"Name of hero is {nameOfHero}");
 // ...or LINQ
-nameOfHero = (string?)theBoys!.First(b => b["id"]?.GetValue<int>() == 43)?["name"];
+nameOfHero = (string?)theBoys!.First(b => b!["id"]?.GetValue<int>() == 43)?["name"];
 WriteLine($"Name of hero is {nameOfHero}");
 
 // You can manipulate the DOM without having to

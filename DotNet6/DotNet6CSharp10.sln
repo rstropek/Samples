@@ -13,13 +13,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonSerializerCodeGen", "Js
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateTimeImprovements", "DateTimeImprovements\DateTimeImprovements.csproj", "{36ABB4AC-0EA2-4C87-9D9B-CE4B69E8665A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordStruct", "RecordStruct\RecordStruct.csproj", "{DE81C2B9-B8EC-414D-AA9A-2B561EF9010A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecordStruct", "RecordStruct\RecordStruct.csproj", "{DE81C2B9-B8EC-414D-AA9A-2B561EF9010A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalUsing", "GlobalUsing\GlobalUsing.csproj", "{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GlobalUsing", "GlobalUsing\GlobalUsing.csproj", "{075BAA9C-E9C3-4469-B9BA-91DEEA03AFA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonApis", "JsonApis\JsonApis.csproj", "{7D5259A0-B4EA-45DF-AA58-9FCEDEAB9FDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonApis", "JsonApis\JsonApis.csproj", "{7D5259A0-B4EA-45DF-AA58-9FCEDEAB9FDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqEnhancements", "LinqEnhancements\LinqEnhancements.csproj", "{FE265D85-00FD-4268-BAB7-3F2EB9D17154}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqEnhancements", "LinqEnhancements\LinqEnhancements.csproj", "{FE265D85-00FD-4268-BAB7-3F2EB9D17154}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DummyCodeGenerator", "DummyCodeGenerator\DummyCodeGenerator.csproj", "{DD711896-4B80-41B6-8F45-262471AD50DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkerLibrary", "LinkerLibrary\LinkerLibrary.csproj", "{AD914850-2104-408A-A0B2-CB2CB204A675}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkerLibraryClient", "LinkerLibraryClient\LinkerLibraryClient.csproj", "{0AC85E06-DDD7-4C37-9C64-F7D6E0D3F9C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +69,18 @@ Global
 		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE265D85-00FD-4268-BAB7-3F2EB9D17154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD711896-4B80-41B6-8F45-262471AD50DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD711896-4B80-41B6-8F45-262471AD50DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD711896-4B80-41B6-8F45-262471AD50DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD711896-4B80-41B6-8F45-262471AD50DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD914850-2104-408A-A0B2-CB2CB204A675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD914850-2104-408A-A0B2-CB2CB204A675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD914850-2104-408A-A0B2-CB2CB204A675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD914850-2104-408A-A0B2-CB2CB204A675}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC85E06-DDD7-4C37-9C64-F7D6E0D3F9C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC85E06-DDD7-4C37-9C64-F7D6E0D3F9C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC85E06-DDD7-4C37-9C64-F7D6E0D3F9C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC85E06-DDD7-4C37-9C64-F7D6E0D3F9C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
