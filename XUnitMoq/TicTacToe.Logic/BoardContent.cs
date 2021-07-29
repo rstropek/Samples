@@ -17,6 +17,8 @@ namespace TicTacToe.Logic
         byte Get(int col, int row);
 
         IBoardContent Set(byte value, int col, int row);
+
+        bool HasEmptySquares { get; }
     }
 
     public readonly struct BoardContent : IBoardContent, IEquatable<BoardContent>
@@ -32,22 +34,21 @@ namespace TicTacToe.Logic
 
         public readonly byte[] Content => content.ToArray();
 
-        public readonly Span<byte> GetRow(int i)
-            => i switch
+        public readonly Span<byte> GetRow(int row)
+            => row switch
             {
                 0 => content[..3],
                 1 => content[3..^3],
                 2 => content[^3..],
-                _ => throw new ArgumentOutOfRangeException(nameof(i))
+                _ => throw new ArgumentOutOfRangeException(nameof(row))
             };
 
-        private static int CalculateIndexUnchecked(int col, int row) => row * 3 + col;
         internal static int CalculateIndex(int col, int row)
         {
             if (col is < 0 or > 2) throw new ArgumentOutOfRangeException(nameof(col));
             if (row is < 0 or > 2) throw new ArgumentOutOfRangeException(nameof(row));
 
-            return CalculateIndexUnchecked(col, row);
+            return row * 3 + col;
         }
 
         internal static bool IsValidValue(byte value) => value is SquareContent.X or SquareContent.Y;
@@ -66,6 +67,8 @@ namespace TicTacToe.Logic
 
             return new BoardContent(newContent);
         }
+
+        public bool HasEmptySquares => content.Any(c => c == SquareContent.EMPTY);
 
         #region Equatable-related members
         public readonly bool Equals(BoardContent other) => other.content.SequenceEqual(content);

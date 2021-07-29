@@ -22,7 +22,7 @@
         public void WinnerRow()
         {
             var contentMock = new Mock<IBoardContent>();
-            contentMock.Setup(c => c.Get(It.IsAny<int>(), 1)).Returns(1).Verifiable();
+            contentMock.Setup(c => c.Get(It.IsAny<int>(), 1)).Returns(1);
 
             var game = new Game("Foo", "Bar", contentMock.Object);
             Assert.Equal("Foo", game.GetWinner());
@@ -36,7 +36,7 @@
         public void WinnerColumn()
         {
             var contentMock = new Mock<IBoardContent>();
-            contentMock.Setup(c => c.Get(1, It.IsAny<int>())).Returns(2).Verifiable();
+            contentMock.Setup(c => c.Get(1, It.IsAny<int>())).Returns(2);
 
             var game = new Game("Foo", "Bar", contentMock.Object);
             Assert.Equal("Bar", game.GetWinner());
@@ -70,6 +70,20 @@
             Assert.Null(game.GetWinner());
 
             contentMock.Verify(c => c.Get(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(7));
+        }
+
+        [Fact]
+        public void Draw()
+        {
+            var contentMock = new Mock<IBoardContent>();
+            contentMock.Setup(c => c.Get(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns<int, int>((col, row) => (byte)((row * 3 + col) % 2));
+            contentMock.SetupGet(c => c.HasEmptySquares).Returns(false);
+
+            var game = new Game("Foo", "Bar", contentMock.Object);
+            Assert.True(game.IsDraw());
+
+            contentMock.VerifyAll();
         }
 
         [Fact]

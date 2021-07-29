@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace TicTacToe.Logic
+﻿namespace TicTacToe.Logic
 {
     public record Game(string Player1, string Player2)
     {
@@ -29,6 +27,8 @@ namespace TicTacToe.Logic
 
         public void Set(int col, int row)
         {
+            // Discuss: Does it make sense to write a test to verify that lock isn't missing?
+            //          If it does, how would you go for it?
             lock (contentLockObject)
             {
                 if (content.Get(col, row) != SquareContent.EMPTY) throw new AlreadySetException();
@@ -85,5 +85,7 @@ namespace TicTacToe.Logic
 
         public string? GetWinner() 
             => GetWinnerFromRows() ?? GetWinnerFromColumns() ?? GetWinnerFromDiagonals();
+
+        public bool IsDraw() => !content.HasEmptySquares && GetWinner() == null;
     }
 }

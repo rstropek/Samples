@@ -2,52 +2,95 @@ namespace TicTacToe.Tests
 {
     public class BoardContentTests
     {
+        /// <summary>
+        /// Ensures that <see cref="BoardContentFactory"/> creates board without exception.
+        /// </summary>
         [Fact]
-        public void FactoryCreatesContent() => Assert.Equal(9, new BoardContent(null).Content.Length);
+        public void FactoryCreatesContent() => BoardContentFactory.Create();
 
         [Fact]
-        public void FactoryFillsContent()
+        public void ConstructorFillsEmptyBoard()
         {
-            Assert.Equal(9, new BoardContent(new byte[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 }).Content.Length);
+            var content = new BoardContent(null).content;
+            Assert.Equal(9, content.Length);
+            Assert.All(content, c => Assert.Equal(SquareContent.EMPTY, c));
         }
 
+        [Fact]
+        public void ConstructorCopiesContent()
+        {
+            var content = new BoardContent(new byte[] { SquareContent.X, 0, 0, 0, 0, 0, 0, 0, 0 }).content;
+            Assert.Equal(SquareContent.X, content[0]);
+            Assert.All(content[1..], c => Assert.Equal(SquareContent.EMPTY, c));
+        }
+
+        /// <summary>
+        /// Ensure that the <see cref="BoardContent.Content"/> property copies internal value.
+        /// </summary>
+        [Fact]
+        public void ContentPropertyCopies()
+        {
+            var content = new BoardContent(null);
+            Assert.NotSame(content.Content, content.content);
+        }
+
+        /// <summary>
+        /// Ensure that we can ask for all three rows
+        /// </summary>
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
         public void GetRow(int index) => Assert.Equal(3, new BoardContent(null).GetRow(index).Length);
 
-
+        /// <summary>
+        /// Ensure proper exception in case of invalid row index
+        /// </summary>
         [Theory]
         [InlineData(-1)]
         [InlineData(3)]
         public void GetRowInvalidIndex(int index)
-            => Assert.Throws<ArgumentOutOfRangeException>(() => new BoardContent(null).GetRow(index));
+            => Assert.Throws<ArgumentOutOfRangeException>("row", () => new BoardContent(null).GetRow(index));
 
         [Theory]
         [MemberData(nameof(Squares))]
-        public void CalculateIndex(int expectedIx, int col, int row)
+        public void CalculateIndexHandlesColRowCorrectly(int expectedIx, int col, int row)
             => Assert.Equal(expectedIx, BoardContent.CalculateIndex(col, row));
 
-        public static IEnumerable<object[]> Squares
-            => Enumerable.Range(0, 2).SelectMany(
-                col => Enumerable.Range(0, 2).Select(
-                    row => new object[] { row * 3 + col, col, row })).ToArray();
-
-        [Theory]
-        [InlineData(-1, 0)]
-        [InlineData(0, -1)]
-        [InlineData(3, 0)]
-        [InlineData(0, 3)]
-        public void CalculateIndexInvalidIndex(int col, int row)
-            => Assert.Throws<ArgumentOutOfRangeException>(() => BoardContent.CalculateIndex(col, row));
-
-        [Fact]
-        public void IndexerGetSuccess()
+        public static IEnumerable<object[]> Squares()
         {
-            _ = new BoardContent(null).Get(0, 0);
-            _ = BoardContentFactory.Create()[(0, 0)];
+            var ix = 0;
+            for (var row = 0; row < 3; row++)
+            {
+                for (var col = 0; col < 3; col++)
+                {
+                    yield return new object[] { ix++, col, row };
+                }
+            }
         }
+
+        /// <summary>
+        /// Ensures proper exceptions in case of invalid column/row indexes
+        /// </summary>
+        [Theory]
+        [InlineData(-1, 0, "col")]
+        [InlineData(0, -1, "row")]
+        [InlineData(3, 0, "col")]
+        [InlineData(0, 3, "row")]
+        public void CalculateIndexInvalidIndex(int col, int row, string argument)
+            => Assert.Throws<ArgumentOutOfRangeException>(argument, () => BoardContent.CalculateIndex(col, row));
+
+        /// <summary>
+        /// Ensure that we can access a square using <see cref="BoardContent.Get(int, int)"/> without exception.
+        /// </summary>
+        [Fact]
+        public void GetSquareContent() => _ = new BoardContent(null).Get(0, 0);
+
+        /// <summary>
+        /// Ensure that we can access a square using the indexer without exception.
+        /// </summary>
+        [Fact]
+        public void Indexer() => _ = BoardContentFactory.Create()[(0, 0)];
 
         [Theory]
         [InlineData(0, 0)]
@@ -61,12 +104,20 @@ namespace TicTacToe.Tests
 
             var expected = new byte[3 * 3];
             expected[BoardContent.CalculateIndex(col, row)] = SquareContent.X;
-            Assert.True(content.Content.SequenceEqual(expected));
+            Assert.Equal(expected, content.Content);
         }
 
         [Fact]
-        public void IndexerSetInvalidValue()
-            => Assert.Throws<ArgumentOutOfRangeException>(() => new BoardContent(null).Set(99, 1, 1));
+        public void SetInvalidValue()
+            => Assert.Throws<ArgumentOutOfRangeException>("value", () => new BoardContent(null).Set(99, 1, 1));
+
+        [Fact]
+        public void HasEmptySquares()
+            => Assert.True(BoardContentFactory.Create().HasEmptySquares);
+
+        [Fact]
+        public void HasNoEmptySquares()
+            => Assert.False(new BoardContent(Enumerable.Range(0, 9).Select(_ => SquareContent.X).ToArray()).HasEmptySquares);
 
         [Fact]
         public void ContentEquals() => Assert.True(new BoardContent(null).Equals(new BoardContent(null)));
