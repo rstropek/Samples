@@ -73,7 +73,7 @@
         }
 
         [Fact]
-        public void Draw()
+        public void IsDraw()
         {
             var contentMock = new Mock<IBoardContent>();
             contentMock.Setup(c => c.Get(It.IsAny<int>(), It.IsAny<int>()))
