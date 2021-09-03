@@ -1,10 +1,7 @@
 using Microsoft.Extensions.Logging;
 using CsvHelper.Configuration;
 using System.Globalization;
-using System.IO;
-using System.Threading.Tasks;
 using CsvHelper;
-using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 
@@ -27,7 +24,7 @@ namespace Functions.DotNetCore6
             FunctionContext context)
         {
             // Note that we receive the content of the blob in a string.
-            // We cannot ask for e.g. a stream or a CloudBlockBlob.
+            // We cannot ask for e.g. a stream or a BlobClient.
 
             log.LogInformation("Parsing file {file}", name);
 

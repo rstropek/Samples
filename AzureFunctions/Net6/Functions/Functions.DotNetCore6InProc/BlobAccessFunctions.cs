@@ -3,9 +3,9 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Storage.Blob;
-using System;
 using Microsoft.Extensions.Configuration;
+using Azure.Storage.Sas;
+using Azure.Storage.Blobs;
 
 namespace Functions.DotNetCore6InProc
 {
@@ -21,10 +21,10 @@ namespace Functions.DotNetCore6InProc
         [FunctionName(nameof(GetUploadSasUrl))]
         public IActionResult GetUploadSasUrl(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
-            [Blob("%StorageContainer%", Connection = "StorageConnection")] CloudBlobContainer container,
+            [Blob("%StorageContainer%", Connection = "StorageConnection")] BlobContainerClient container,
             ILogger log)
         {
-            // Note that we can get a CloudBlobContainer as a parameter.
+            // Note that we can get a BlobContainerClient as a parameter.
             // This is possible because of in-process .NET Core.
 
             // Note HTTP-related data types from ASP.NET Core.
@@ -32,14 +32,18 @@ namespace Functions.DotNetCore6InProc
             var filename = $"{configuration["Prefix"]}{Guid.NewGuid()}.csv";
             log.LogInformation("Generating SAS for file {file}", filename);
 
-            var blob = container.GetBlockBlobReference(filename);
-            var sas = blob.GetSharedAccessSignature(new SharedAccessBlobPolicy()
+            // Note the use of the lastest blob storage SDK.
+            var sasBuilder = new BlobSasBuilder
             {
-                Permissions = SharedAccessBlobPermissions.Create | SharedAccessBlobPermissions.Add | SharedAccessBlobPermissions.Write,
-                SharedAccessExpiryTime = DateTime.Now.AddMinutes(5)
-            });
+                BlobName = filename,
+                Resource = "b",
+                ExpiresOn = DateTime.Now.AddMinutes(5),
+            };
+            sasBuilder.SetPermissions(BlobSasPermissions.Add | BlobSasPermissions.Create | BlobSasPermissions.Write);
+            var blobClient = container.GetBlobClient(filename);
+            var sas = blobClient.GenerateSasUri(sasBuilder);
 
-            return new OkObjectResult(new { UploadSas = blob.Uri + sas });
+            return new OkObjectResult(new { UploadSas = sas.ToString() });
         }
     }
 }

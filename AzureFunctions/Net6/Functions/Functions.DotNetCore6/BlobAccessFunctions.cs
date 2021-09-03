@@ -1,9 +1,7 @@
 using Microsoft.Extensions.Logging;
-using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using Azure.Core.Serialization;
@@ -31,7 +29,7 @@ namespace Functions.DotNetCore6
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestData req,
             FunctionContext context)
         {
-            // Note that we cannot use types like CloudBlobContainer because
+            // Note that we cannot use types like BlobContainerClient because
             // our .NET 6 function runs isolated in a separate process. Everything
             // has to be marshalled accross process boundaries (gRPC).
 
