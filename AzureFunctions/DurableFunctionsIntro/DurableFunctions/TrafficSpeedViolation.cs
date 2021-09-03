@@ -205,6 +205,7 @@ namespace DurableFunctions
                 var entityId = context.NewGuid();
                 var lawsuitId = new EntityId(nameof(SpeedViolationLawsuit), entityId.ToString());
                 await context.CallEntityAsync(lawsuitId, nameof(SpeedViolationLawsuit.SetSpeedViolation), sv);
+                context.SetCustomStatus(entityId);
                 log.LogInformation(entityId.ToString());
             }
 

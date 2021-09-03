@@ -14,13 +14,15 @@ https://slides.com/rainerstropek/azure-durable-functions/fullscreen
 
 * Replace generated function with snippet *020*
 
+* Add NuGet reference to * Microsoft.Azure.WebJobs.Extensions.DurableTask*
+
 * Add function simulating storage for speed violations, snippet *030*
 
 * Replace `log.LogError($$"{nameof(SpeedViolationRecognition)} not yet implemented");` with snippet 040
 
 ### Durable Orchestration Function
 
-* Add file *ManuallyApproveRecognition.cs* and add orchestration function with snippet 050
+* Add file *ManuallyApproveRecognitionFunction.cs* and add orchestration function with snippet 050
   * Demo function without durable part
   * Show state handling in *Azure Storage Explorer*
 
