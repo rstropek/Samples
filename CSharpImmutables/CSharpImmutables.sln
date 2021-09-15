@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31710.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpImmutables", "CSharpImmutables\CSharpImmutables.csproj", "{B159691B-CCF7-461F-9A90-577638DCCADA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpImmutables.Tests", "CSharpImmutables.Tests\CSharpImmutables.Tests.csproj", "{6AA34F99-E084-47A1-8CF5-1B91E0CBF76E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B159691B-CCF7-461F-9A90-577638DCCADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B159691B-CCF7-461F-9A90-577638DCCADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B159691B-CCF7-461F-9A90-577638DCCADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B159691B-CCF7-461F-9A90-577638DCCADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA34F99-E084-47A1-8CF5-1B91E0CBF76E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA34F99-E084-47A1-8CF5-1B91E0CBF76E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA34F99-E084-47A1-8CF5-1B91E0CBF76E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA34F99-E084-47A1-8CF5-1B91E0CBF76E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9AFDDAF6-DCEA-44AA-8C53-B006D086FD0B}
+	EndGlobalSection
+EndGlobal
