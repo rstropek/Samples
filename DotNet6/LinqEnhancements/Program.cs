@@ -1,8 +1,6 @@
 ﻿#nullable enable
 
 using static System.Console;
-using System.Linq;
-using System.Collections.Generic;
 
 var heroes = new Hero[]
 {
@@ -28,7 +26,7 @@ var leavers = heroes.Take(3..^2).Select(h => h.Name);
 WriteLine($"At some point, the seven were left by {string.Join(',', leavers)}");
 
 // New function TryGetNonEnumeratedCount to get count without enumerating
-IEnumerable<Hero> GenerateHeroes(int? n = null)
+static IEnumerable<Hero> GenerateHeroes(int? n = null)
 { 
     while (n is null || n-- > 0) yield return new("Dummy", "Foo Bar", 0, 0);
 }
