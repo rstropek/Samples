@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace SyncOverAsyncNetCore
 {
@@ -17,7 +13,7 @@ namespace SyncOverAsyncNetCore
                 for (int i = 0; i < 50; i++)
                 {
                     // Modern async programming:
-                    // tasks.Add(DoSomethingSlowAsync());
+                    //tasks.Add(DoSomethingSlowAsync());
 
                     // Sync-over-async
                     // Compare the results of this version between .NET Core 3.1 and .NET 6.

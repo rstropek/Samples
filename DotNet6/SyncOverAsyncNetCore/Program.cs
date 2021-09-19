@@ -22,7 +22,7 @@ namespace SyncOverAsyncNetCore
                     // Sync-over-async
                     // Compare the results of this version between .NET Core 3.1 and .NET 6.
                     // Read more at https://github.com/dotnet/runtime/issues/52558.
-                    // tasks.Add(Task.Run(DoSomethingSlow));
+                    //tasks.Add(Task.Run(DoSomethingSlow));
                 }
                 Task.WaitAll(tasks.ToArray());
                 Console.WriteLine($"It took {sw.Elapsed} in total");
