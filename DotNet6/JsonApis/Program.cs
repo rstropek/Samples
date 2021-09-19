@@ -1,15 +1,10 @@
 ﻿#nullable enable
 
-using System;
 using static System.Console;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Text.Json.Nodes;
 using System.Diagnostics;
-using System.Linq;
 
 var data = new { 
     Numbers = GetNumbers(5) // Note that GetNumbers return IAsyncEnumerable.
@@ -41,7 +36,7 @@ WriteLine();
 // Construct nodes by parsing string. Once parsed, you can access its data.
 // Useful in cases where you cannot/don't want to use POCOs
 var hero = JsonNode.Parse("{\"id\": 42, \"name\": \"Starlight\", \"canFly\": false}");
-Debug.Assert((bool?)hero!["canFly"] is true);
+Debug.Assert((bool?)hero!["canFly"] is false);
 
 // Parse a larger JSON into a writeable DOM
 var heroesToPatch = JsonNode.Parse(@"
@@ -75,7 +70,3 @@ var heroes = new JsonObject
     )
 };
 WriteLine(heroes.ToJsonString());
-
-// There is also a dynamic-based API (will it make it into .NET 6?)
-dynamic dynamicHeroes = heroes;
-WriteLine(dynamicHeroes.theBoys[0].name);
