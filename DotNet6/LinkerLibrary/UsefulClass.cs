@@ -2,7 +2,6 @@
 #pragma warning disable CA1822 // Mark members as static
 
 using System.Reflection;
-using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 
 namespace LinkerLibrary
@@ -16,7 +15,9 @@ namespace LinkerLibrary
         {
             var a = Assembly.Load("System.Text.Json");
             var t = a!.GetType("System.Text.Json.JsonSerializer");
-            var mi = t!.GetMethods().First(m => m.Name == "Serialize" && !m.IsGenericMethod);
+
+            // Get Serialize overload (https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer.serialize?view=net-5.0#System_Text_Json_JsonSerializer_Serialize_System_Object_System_Type_System_Text_Json_JsonSerializerOptions_)
+            var mi = t!.GetMethods().First(m => m.Name == "Serialize" && !m.IsGenericMethod && m.GetParameters().Length == 3);
             var resultDynamic = mi!.Invoke(null, new object?[] { "Hello World!", typeof(string), null });
             return resultDynamic!.ToString() ?? string.Empty;
         }

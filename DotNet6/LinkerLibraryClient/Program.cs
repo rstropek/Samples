@@ -7,3 +7,5 @@ Console.WriteLine(computer.GetAnswer());
 Console.WriteLine(computer.Serialize());
 
 new DummyClass().DoSomething();
+
+Console.ReadKey();
