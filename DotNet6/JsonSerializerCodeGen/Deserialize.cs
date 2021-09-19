@@ -1,17 +1,15 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace JsonSerializerCodeGen
 {
+    [JsonSourceGenerationOptions(
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(Person[]))]
-    public partial class MyDeserializationContext : JsonSerializerContext
+    internal partial class MyDeserializationContext : JsonSerializerContext
     {
     }
 
