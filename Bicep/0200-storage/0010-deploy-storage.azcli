@@ -1,0 +1,29 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="DemoResourceGroup"
+
+########################################################################################################################
+# Create resource group with Bicep script of the last lecture
+# ../0010-azure-basics/0040-deploy-bicep.azcli
+
+########################################################################################################################
+# Deploy Bicep template for storage account
+RESULT=$(az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file 0010-deploy-storage.bicep \
+    --parameters rgName=$RG placeLock=true)
+
+STG_NAME=$(echo $RESULT | jq .properties.outputs.storageName.value -r)
+STG_ID=$(echo $RESULT | jq .properties.outputs.resourceID.value -r)
+echo Storage name is $STG_NAME
+
+########################################################################################################################
+# Deploy Bicep template for container
+az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file 0010-deploy-container.bicep --parameters rgName=$RG \
+    | jq .properties.outputs
+
+########################################################################################################################
+# Delete storage account (DANGER! ⚡🛑)
+az resource lock delete --name $STG_NAME-lock --resource $STG_ID
+az storage account delete --resource-group $RG --name $STG_NAME --yes

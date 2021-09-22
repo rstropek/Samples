@@ -1,0 +1,35 @@
+#!/bin/bash
+
+########################################################################################################################
+# Log in (not necessary in cloud shell) and select correct account
+# Discuss interactive login vs. device code
+az login --use-device-code
+
+########################################################################################################################
+# Working with Azure CLI
+
+# List accounts
+az account list
+
+# Output formats (https://docs.microsoft.com/en-us/cli/azure/format-output-azure-cli)
+az account list --output table
+
+# Process output with jq (https://stedolan.github.io/jq/)
+az account list | jq '.[] | select(.isDefault == true)'
+
+# Use built-in filtering (https://docs.microsoft.com/en-us/cli/azure/query-azure-cli)
+az account list --query "[?isDefault].{t: tenantId, n: name}"
+
+# Set current account
+az account set --subscription "<enter subscription ID here>"
+
+# Show current account
+az account show
+
+# Azure CLI interactive (https://docs.microsoft.com/en-us/cli/azure/interactive-azure-cli)
+# After starting Azure CLI interactive, try commands from before
+az interactive
+
+########################################################################################################################
+# Azure CLI reference
+# See https://docs.microsoft.com/en-us/cli/azure/reference-index

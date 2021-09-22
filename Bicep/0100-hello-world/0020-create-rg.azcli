@@ -1,0 +1,28 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="DemoResourceGroup"
+LOCATION="westeurope"
+
+########################################################################################################################
+# Check if resource group already exists
+if [[ $(az group exists --name $RG) == false* ]]
+then
+    # Create resource group
+    az group create --name $RG --location "$LOCATION"
+
+    # Set tags
+    az group update --resource-group $RG --tags Dept=IT Environment=Test
+fi
+
+# Get resource group ID and store it in variable
+RGID=$(az group show --resource-group $RG | jq .id -r)
+echo The resource group has the ID $RGID
+
+########################################################################################################################
+# Delete resource group (DANGER! ⚡🛑)
+az group delete --resource-group $RG --yes
+
+########################################################################################################################
+# Reference of all resource group-related commands
+# see https://docs.microsoft.com/en-us/cli/azure/group

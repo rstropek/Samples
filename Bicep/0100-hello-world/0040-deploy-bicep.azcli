@@ -1,0 +1,24 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="DemoResourceGroup"
+LOCATION="westeurope"
+
+########################################################################################################################
+# Convert Bicep to JSON
+# Install Bicep: https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell
+# See also https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/bicep-decompile?tabs=azure-cli
+bicep build 0040-deploy-rg.bicep --stdout
+
+########################################################################################################################
+# Deploy Bicep template on subscription-level
+az deployment sub create --name Deployment-$(date +"%Y-%m-%d") --template-file 0040-deploy-rg.bicep \
+    --location $LOCATION --parameters rgLocation=$LOCATION rgName=$RG \
+    | jq .properties.outputs
+
+# Discussion points:
+# - Bicep syntax (https://github.com/Azure/bicep/tree/main/docs/spec)
+
+########################################################################################################################
+# Delete resource group (DANGER! ⚡🛑)
+az group delete --resource-group $RG --yes
