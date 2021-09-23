@@ -1,4 +1,5 @@
 // this file can only be deployed at a subscription scope
+// Read more at https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-to-subscription?tabs=azure-cli
 targetScope = 'subscription'
 
 @description('Name of the Resource Group to create')
