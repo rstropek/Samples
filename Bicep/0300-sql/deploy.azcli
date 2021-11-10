@@ -1,0 +1,26 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="DemoResourceGroup"
+BASE="hellosql"
+
+# Find an AAD group
+ADMINGRP=$(az ad group list --display-name AzureAdmins | jq .[0].objectId -r)
+# Alternatively, you could find a single user like that:
+# az ad user list --filter "mail eq 'rainer@software-architects.at'"  | jq .[0].objectId -r
+
+########################################################################################################################
+# Some helper functions for generating random strings
+RANDSTR=""
+function randomString {
+    RANDSTR=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $1 | head -n 1)
+}
+function randomSimpleString {
+    RANDSTR=$(cat /dev/urandom | tr -dc 'a-z' | fold -w $1 | head -n 1)
+}
+
+########################################################################################################################
+# Deploy Bicep template for storage account
+az deployment group create --resource-group $RG --name Deployment-$(date +"%Y-%m-%d") \
+    --template-file deploy.bicep \
+    --parameters baseName=$BASE administratorLoginPassword=$(randomString 15 && echo $RANDSTR) aadAdminTeamId=$ADMINGRP

@@ -1,0 +1,19 @@
+# az login --use-device-code
+# az account set --subscription "<enter subscription ID here>"
+
+RG="DemoResourceGroup"
+LOCATION="westeurope"
+
+########################################################################################################################
+# Deploy ARM template on subscription-level
+# See also https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-to-subscription
+az deployment sub create --name Deployment-$(date +"%Y-%m-%d") --template-file 0030-deploy-rg.json \
+    --location $LOCATION --parameters rgLocation=$LOCATION rgName=$RG \
+    | jq .properties.outputs
+
+# Discussion points:
+# - Parameters (https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-parameters)
+
+########################################################################################################################
+# Delete resource group (DANGER! ⚡🛑)
+az group delete --resource-group $RG --yes
