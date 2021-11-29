@@ -3,18 +3,18 @@
         <TargetFramework>net6.0</TargetFramework>
         <AzureFunctionsVersion>v4</AzureFunctionsVersion>
         <Nullable>enable</Nullable>
-        <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     <ItemGroup>
         <!-- We need that reference for Startup.cs (DI) -->
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
         
-        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.0-beta.5" />
-        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.0.0-beta.5" />
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.1.0" />
         
-        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.13" />
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
         
-        <PackageReference Include="CsvHelper" Version="27.1.1" />
+        <PackageReference Include="CsvHelper" Version="27.2.1" />
     </ItemGroup>
     <ItemGroup>
         <None Update="appsettings.json">
