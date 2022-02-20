@@ -1,5 +1,6 @@
-namespace GenericMath;
 using Xunit;
+
+namespace GenericMath;
 
 public record struct Vector2d<T>(T X, T Y)
     : IAdditionOperators<Vector2d<T>, Vector2d<T>, Vector2d<T>>,
