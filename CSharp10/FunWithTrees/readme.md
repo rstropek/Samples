@@ -11,7 +11,7 @@
 
     ```xml
     <ItemGroup>
-        <PackageReference Include="SkiaSharp" Version="2.88.0-preview.155" />
+        <PackageReference Include="SkiaSharp" Version="2.88.0-preview.209" />
     </ItemGroup>
     ```
 
@@ -30,7 +30,7 @@
 
 * Add code for lines and vectors (region *Line and Vector*)
 * Discuss record structs
-  * https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/2
+  * https://slides.com/rainerstropek/csharp-10/fullscreen#/1
   * https://github.com/rstropek/Samples/blob/master/DotNet6/RecordStruct/Program.cs
 
 ## Caller Argument Expressions

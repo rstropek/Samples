@@ -97,6 +97,7 @@ const float maxLightness = 40f;
 
 using var surface = SKSurface.Create(new SKImageInfo(imageWidth, imageHeight));
 using var canvas = surface.Canvas;
+canvas.Clear(SKColors.White);
 // canvas.Translate(imageWidth / 2, imageHeight - 5);
 canvas.Translate(bounds.X1 * (-1) + 10, 100 + bounds.Height);
 #endregion
@@ -233,7 +234,7 @@ readonly record struct VectorLength(float Length)
 
 #region Line and Vector
 // Note: record structs
-//       See also https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/2
+//       See also https://slides.com/rainerstropek/csharp-10/fullscreen#/1
 //       and https://github.com/rstropek/Samples/blob/master/DotNet6/RecordStruct/Program.cs
 readonly record struct Vector(float X, float Y)
 {
