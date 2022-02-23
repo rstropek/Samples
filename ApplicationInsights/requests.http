@@ -1,0 +1,32 @@
+@host = https://localhost:7082
+#@host = https://basta-2022-bff.azurewebsites.net
+
+###
+GET {{host}}/ping
+
+###
+GET {{host}}/secret-ping
+
+###
+GET {{host}}/secret-ping
+Authorization: Basic rainer:P@ssw0rd!
+
+###
+GET {{host}}/secret-ping
+Authorization: Basic rainer:P@ssword!
+
+###
+GET {{host}}/secret-ping
+Authorization: Basic cmFpbmVyOlBAc3N3MHJIQ==
+
+###
+GET {{host}}/track-custom-event
+
+###
+GET {{host}}/logger
+
+###
+GET {{host}}/div?x=42&y=2
+
+###
+GET {{host}}/div-backend?x=42&y=0
