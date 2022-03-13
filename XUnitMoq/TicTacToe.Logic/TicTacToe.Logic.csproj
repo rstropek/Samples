@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <AnalysisLevel>Preview</AnalysisLevel>
+        <ImplicitUsings>enable</ImplicitUsings>
         <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     </PropertyGroup>
 
