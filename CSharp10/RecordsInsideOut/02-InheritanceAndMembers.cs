@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 
 public class InheritanceAndMembers
 {
+    #region Records that implement interfaces
     private interface IAmHero
     {
         string Name { get; }
@@ -18,7 +19,9 @@ public class InheritanceAndMembers
         IAmHero h = new Hero("Groot", "Marvel", false);
         Assert.Equal("Groot", h.Name);
     }
+    #endregion
 
+    #region Inheritance and records
     // Derived record with additional properties and methods
     private record RealLifeHero(string Name, string Universe, bool CanFly,
         string RealLifeName) : Hero(Name, Universe, CanFly)
@@ -46,7 +49,9 @@ public class InheritanceAndMembers
         h2 = h1 with { CharacteristicProperty = "FooBar" };
         Assert.NotEqual(h1, h2);
     }
+    #endregion
 
+    #region Combining immutable records with immutable collections
     [Fact]
     public void Immutable_Hero_Collections()
     {
@@ -63,4 +68,5 @@ public class InheritanceAndMembers
         Assert.Equal(new[] { "Homelander", "The Deep" },
             immutableArray.Select(item => item.Name));
     }
+    #endregion
 }
