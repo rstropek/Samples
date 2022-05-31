@@ -476,6 +476,49 @@ static void ListPatternsCombined()
 ListPatternsCombined();
 #endregion
 
+#region Span Matching
+ReadOnlySpan<char> span = "Homelander";
+
+// Pre-C# 11
+switch (span)
+{
+    case var _ when span == "Starlight":
+        WriteLine("We have Starlight");
+        break;
+    case var _ when span == "The Deep":
+        WriteLine("We have The Deep");
+        break;
+    case var _ when span == "Homelander":
+        WriteLine("We have Homelander");
+        break;
+    default:
+        WriteLine("We have someone else");
+        break;
+}
+
+// Now
+switch (span)
+{
+    case "Starlight":
+        WriteLine("We have Starlight");
+        break;
+    case "The Deep":
+        WriteLine("We have The Deep");
+        break;
+    case "Homelander":
+        WriteLine("We have Homelander");
+        break;
+    default:
+        WriteLine("We have someone else");
+        break;
+}
+
+if (span is "Homelander")
+{
+    WriteLine("We have Homelander");
+}
+#endregion
+
 #region Helper methods and data structures
 static void WriteHeaderLine(string message)
 {

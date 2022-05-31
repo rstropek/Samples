@@ -2,7 +2,10 @@
 #define CUSTOM_GENERIC_MATH
 // #define BUILTIN_GENERIC_MATH
 
+using System;
+
 #region Read configuration file
+
 IConfiguration? configuration = null; // Note that nullable type is for demo purposes only
 try
 {
@@ -31,7 +34,7 @@ catch (InvalidDataException e)
 // Note: Generic math (IParseable); preview feature of .NET 7
 //       (see also https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/7
 //       and https://devblogs.microsoft.com/dotnet/preview-features-in-net-6-generic-math/)
-static T? GetConfigValue<T>(IConfiguration configuration!!, string settingName) where T: struct, IParseable<T>
+static T? GetConfigValue<T>(IConfiguration configuration!!, string settingName) where T: struct, IParsable<T>
 {
     // Note: pattern matching
     // Note: Definite assignment
