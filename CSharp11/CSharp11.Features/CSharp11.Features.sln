@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.SemiAutoP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.Utf8StringLiterals", "CSharp11.Features.Utf8StringLiterals\CSharp11.Features.Utf8StringLiterals.csproj", "{99CBF55A-C93E-4634-B94C-000455219974}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.NameofParams", "CSharp11.Features.NameofParams\CSharp11.Features.NameofParams.csproj", "{823AF385-F224-4DC1-8EBD-3CFA52F83E09}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,10 +57,6 @@ Global
 		{99CBF55A-C93E-4634-B94C-000455219974}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99CBF55A-C93E-4634-B94C-000455219974}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99CBF55A-C93E-4634-B94C-000455219974}.Release|Any CPU.Build.0 = Release|Any CPU
-		{823AF385-F224-4DC1-8EBD-3CFA52F83E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{823AF385-F224-4DC1-8EBD-3CFA52F83E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{823AF385-F224-4DC1-8EBD-3CFA52F83E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{823AF385-F224-4DC1-8EBD-3CFA52F83E09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
