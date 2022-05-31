@@ -14,7 +14,7 @@ catch (InvalidDataException e)
     Console.WriteLine(e.Message);
     Console.WriteLine("Expected structure of JSON:");
 
-    // Note: Raw string literals (C# 11). Add error in appsettings.json so see its result.
+    // Note: Raw string literals (C# 11). Add error in appsettings.json to see its result.
     //       (see also https://slides.com/rainerstropek/csharp-11/fullscreen#/4)
     Console.WriteLine("""
                       {
