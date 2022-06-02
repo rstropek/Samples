@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32519.111
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VatCalculator.Api", "VatCalculator.Api\VatCalculator.Api.csproj", "{91DAB4A4-BF2C-4AB5-B536-81434467FCC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VatCalculator.Tests", "VatCalculator.Tests\VatCalculator.Tests.csproj", "{3855DD4E-1C29-4507-B732-97BFCCED9CD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26E7C61B-0F6D-4BB9-9BED-B09E1B63F4CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E7C61B-0F6D-4BB9-9BED-B09E1B63F4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E7C61B-0F6D-4BB9-9BED-B09E1B63F4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E7C61B-0F6D-4BB9-9BED-B09E1B63F4CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91DAB4A4-BF2C-4AB5-B536-81434467FCC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91DAB4A4-BF2C-4AB5-B536-81434467FCC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91DAB4A4-BF2C-4AB5-B536-81434467FCC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91DAB4A4-BF2C-4AB5-B536-81434467FCC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3855DD4E-1C29-4507-B732-97BFCCED9CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3855DD4E-1C29-4507-B732-97BFCCED9CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3855DD4E-1C29-4507-B732-97BFCCED9CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3855DD4E-1C29-4507-B732-97BFCCED9CD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4C7726B-6FB1-4F65-A6F9-07ECF69ED53C}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,143 @@
+trigger:
+  - main
+
+jobs:
+- job: DevOps
+  displayName: 🚢 Deploy Azure infrastructure
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  variables:
+    location: 'westeurope'
+    stage: 'dev'
+  
+  steps:
+  - task: AzureCLI@2
+    displayName: 🌥️ Deploy resource group
+    inputs:
+      azureSubscription: 'Azure'
+      scriptType: bash
+      scriptLocation: inlineScript
+      workingDirectory: DevOps
+      inlineScript: |
+        az deployment sub create \
+        --name Deployment-$(stage)-$(date +"%Y-%m-%dT%H-%M-%S") \
+        --template-file resource-group.bicep \
+        --location $(location)
+
+  - task: AzureCLI@2
+    displayName: 🌥️ Deploy infrastructure
+    inputs:
+      azureSubscription: 'Azure'
+      scriptType: bash
+      scriptLocation: inlineScript
+      workingDirectory: DevOps
+      inlineScript: |
+        az deployment group create \
+        --resource-group VatCalc-dev \
+        --name Deployment-$(stage)-$(date +"%Y-%m-%dT%H-%M-%S") \
+        --template-file infrastructure.bicep \
+        --parameters \
+            devopsRepositoryUrl=https://rainerdemotfs-westeu@dev.azure.com/rainerdemotfs-westeu/AzureDevEndToEnd/_git/AzureDevEndToEnd \
+            stage=$STAGE
+
+- job: Build
+  displayName: 🏗️ Build and  🧪 test code
+  dependsOn: DevOps
+  condition: succeeded()
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  variables:
+    buildConfiguration: 'Release'
+
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: 🏗️ Build backend
+    inputs:
+      workingDirectory: VatCalculator.Api
+      command: 'build'
+      configuration: $(buildConfiguration)
+    
+  - task: DotNetCoreCLI@2
+    displayName: 🧪 Run backend tests
+    inputs:
+      workingDirectory: VatCalculator.Tests
+      command: 'test'
+      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+      publishTestResults: true
+    
+  - task: PublishCodeCoverageResults@1
+    displayName: 🧪 Publish code coverage report
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+  - task: DotNetCoreCLI@2
+    displayName: 📦 Publish backend
+    inputs:
+      command: publish
+      workingDirectory: VatCalculator.Api
+      publishWebProjects: True
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: True
+
+  - script: |
+      npm install
+      npm run build-prod
+    workingDirectory: VatCalculator.Web
+    displayName: 🏗️ Build frontend
+
+  - task: ArchiveFiles@2
+    displayName: 🏗️ Zip frontend build results
+    inputs:
+      rootFolderOrFile: 'VatCalculator.Web/dist'
+      includeRootFolder: false
+      archiveFile: '$(Build.ArtifactStagingDirectory)/VatCalculator.Web.zip'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 📦 Publish build artifacts
+    inputs:
+      artifactName: 'buildResults' 
+
+- job: Deploy
+  displayName: 🚢 Deploy code
+  dependsOn: Build
+  condition: succeeded()
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - checkout: none
+
+  - task: DownloadBuildArtifacts@0
+    displayName: 📦 Download Build Artifacts
+    inputs:
+      artifactName: buildResults
+      downloadPath: $(System.DefaultWorkingDirectory)
+
+  - task: AzureWebApp@1
+    displayName: 🚢 Deploy backend to Azure
+    inputs:
+      azureSubscription: 'Azure'
+      appType: 'webAppLinux'
+      appName: 'app-7rrdjpf3fi46g'
+      package: 'buildResults/VatCalculator.Api.zip'
+
+  - task: ExtractFiles@1
+    displayName: 📦 Extract frontend files
+    inputs:
+      archiveFilePatterns: 'buildResults/VatCalculator.Web.zip'
+      destinationFolder: 'VatCalculator.Web'
+      overwriteExistingFiles:  true
+
+  - task: AzureStaticWebApp@0
+    name: DeployStaticWebApp
+    displayName: 🚢 Deploy frontend to Azure
+    inputs:
+      app_location: 'VatCalculator.Web'
+      skip_app_build: true
+      azure_static_web_apps_api_token: $(Static Webapp Deployment Token)

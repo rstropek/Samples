@@ -1,0 +1,47 @@
+#@host = http://localhost:8081
+@host=https://app-7rrdjpf3fi46g.azurewebsites.net
+
+###
+POST {{host}}/calculate
+Content-Type: application/json
+
+{
+    "valueIncl": 120,
+    "vatPercentage": 0.2
+}
+
+###
+POST {{host}}/calculate
+Content-Type: application/json
+
+{
+    "valueExcl": 100,
+    "vatPercentage": 0.2
+}
+
+###
+POST {{host}}/calculate
+Content-Type: application/json
+
+{
+    "valueExcl": 100,
+    "vatPercentage": 0.2,
+    "valueIncl": 120
+}
+
+###
+POST {{host}}/calculate
+Content-Type: application/json
+
+{
+    "valueExcl": 100
+}
+
+###
+POST {{host}}/calculate
+Content-Type: application/json
+
+{
+    "valueExcl": 100,
+    "vatPercentage": 1.2
+}

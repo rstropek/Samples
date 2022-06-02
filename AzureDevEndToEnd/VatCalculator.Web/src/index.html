@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAT Calculator</title>
+</head>
+
+<body>
+    <div class="container row justify-content-center">
+        <h1>VAT Calculator</h1>
+
+        <form>
+            <div class="mb-3">
+                <label for="valueIncl" class="form-label">Value incl.</label>
+                <input type="number" class="form-control" id="valueIncl" value="120">
+            </div>
+            <div class="mb-3">
+                <label for="vatPercentage" class="form-label">VAT %</label>
+                <input type="number" class="form-control" id="vatPercentage" value="20">
+            </div>
+            <div class="mb-3">
+                <label for="valueExcl" class="form-label">Value excl.</label>
+                <input type="number" class="form-control" id="valueExcl">
+            </div>
+            <div id="error" class="alert alert-danger" role="alert" style="display: none;"></div>
+            <button id="calculate" type="button" class="btn btn-primary">Calculate</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+LOCATION=westeurope
+STAGE=dev
+
+# Deploy resource group
+RGNAME=$(az deployment sub create \
+    --name Deployment-$STAGE-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file resource-group.bicep \
+    --location $LOCATION \
+    | jq .properties.outputs)
+RG=$(echo $RGNAME | jq -r .rgName.value)
+
+# Deploy resources
+DEPLOY_OUTPUT=$(az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$STAGE-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file infrastructure.bicep \
+    --parameters \
+        devopsRepositoryUrl=https://rainerdemotfs-westeu@dev.azure.com/rainerdemotfs-westeu/AzureDevEndToEnd/_git/AzureDevEndToEnd \
+        stage=$STAGE \
+    | jq .properties.outputs)
+echo Deployment token for static web app: $(echo $DEPLOY_OUTPUT | jq -r .deploymentToken.value)
+
+# Get static webapp deployment token
+az staticwebapp secrets list --name stapp-3wq6imkddjesc \
+    | jq .properties.apiKey -r

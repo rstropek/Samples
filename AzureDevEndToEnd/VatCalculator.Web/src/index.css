@@ -1,0 +1,12 @@
+.container {
+    margin-top: 35px;
+}
+
+h1 {
+    margin-bottom: 25px;
+}
+
+body {
+    max-width: 512px;
+    margin: 0 auto;
+}
