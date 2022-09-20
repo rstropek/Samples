@@ -224,7 +224,7 @@ static void SwitchWithTuples()
 
     var peopleRecords = new Hero[]
     {
-                new("Carl", "Lucas", "Luka Cage", HeroType.FailedExperiment, false),
+                new("Carl", "Lucas", "Luke Cage", HeroType.FailedExperiment, false),
                 new("Danny", "Rand", "Iron Fist", HeroType.Other, false)
     };
     var yearlySalaryFromRecords = peopleRecords.Select(p => p switch
@@ -265,7 +265,7 @@ static void BasicRecursivePattern()
     //  |                         +-- Relational Pattern (more will follow later)
     //  |                         |               
     //  V                         V               
-    if (somebody is Person { Age: > 40 } p) WriteLine("We have an old person.");
+    if (somebody is Person { Age: > 40 }) WriteLine("We have an old person.");
 
     //              +-- Empty Recursive Pattern (doesn't make sense here)
     //              V
@@ -456,6 +456,18 @@ static void ListPatterns()
     });
 }
 ListPatterns();
+
+static void Something()
+{
+    Span<int> numbers = new int[] { 1, 2, 3, 4 };
+
+    WriteLine(numbers switch
+    {
+        [1, .. var middle, var x, 5] => middle.Length,
+        _ => "asdf"
+    });
+
+}
 
 static void ListPatternsCombined()
 {
