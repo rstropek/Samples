@@ -1,50 +1,47 @@
-﻿using System;
+﻿namespace Spans;
 
-namespace Spans
+/// <summary>
+/// Naive implementation of a range over an array
+/// </summary>
+/// <remarks>
+/// Use this struct to illustrate the idea behind C#'s Span. This is NOT
+/// production code. You should ALWAYS prefer C#'s Span class.
+/// </remarks>
+public readonly struct MySpan<T>
 {
-    /// <summary>
-    /// Naive implementation of a range over an array
-    /// </summary>
-    /// <remarks>
-    /// Use this struct to illustrate the idea behind C#'s Span. This is NOT
-    /// production code. You should ALWAYS prefer C#'s Span class.
-    /// </remarks>
-    public readonly struct MySpan<T>
+    private readonly T[] underlyingArray;
+    private readonly int start;
+    private readonly int length;
+
+    public MySpan(T[] source) : this(source, 0, source.Length) { }
+
+    public MySpan(T[] source, int start, int length) =>
+        (underlyingArray, this.start, this.length) = (source, start, length);
+
+    public static implicit operator MySpan<T>(T[] source) => new MySpan<T>(source);
+
+    public T[] ToArray()
     {
-        private readonly T[] underlyingArray;
-        private readonly int start;
-        private readonly int length;
+        var result = new T[Length];
+        Array.Copy(underlyingArray, start, result, 0, Length);
+        return result;
+    }
 
-        public MySpan(T[] source) : this(source, 0, source.Length) { }
+    public int Length => length;
 
-        public MySpan(T[] source, int start, int length) =>
-            (underlyingArray, this.start, this.length) = (source, start, length);
+    public ref T this[int index] => ref underlyingArray[start + index];
 
-        public static implicit operator MySpan<T>(T[] source) => new MySpan<T>(source);
+    public ref T this[Index index] => ref underlyingArray[start + index.GetOffset(Length)];
 
-        public T[] ToArray()
+    public MySpan<T> this[Range range]
+    {
+        get
         {
-            var result = new T[Length];
-            Array.Copy(underlyingArray, start, result, 0, Length);
-            return result;
-        }
-
-        public int Length => length;
-
-        public ref T this[int index] => ref underlyingArray[start + index];
-
-        public ref T this[Index index] => ref underlyingArray[start + index.GetOffset(Length)];
-
-        public MySpan<T> this[Range range]
-        {
-            get
-            {
-                var startFromBegin = range.Start.GetOffset(underlyingArray.Length);
-                var endFromBegin = range.End.GetOffset(underlyingArray.Length);
-                return new MySpan<T>(underlyingArray, 
-                    startFromBegin,
-                    endFromBegin - startFromBegin);
-            }
+            var startFromBegin = range.Start.GetOffset(underlyingArray.Length);
+            var endFromBegin = range.End.GetOffset(underlyingArray.Length);
+            return new MySpan<T>(underlyingArray,
+                startFromBegin,
+                endFromBegin - startFromBegin);
         }
     }
 }
