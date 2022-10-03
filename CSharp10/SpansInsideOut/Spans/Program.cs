@@ -1,7 +1,6 @@
 ﻿using Spans;
 using static Helper;
 using System.Text.Json;
-using System.Runtime.InteropServices;
 
 // Sort some numbers in-place
 var numbers = new[] { 5, 4, 3, 2, 1 };
@@ -62,7 +61,7 @@ Console.WriteLine(number1 + number2);
 // numbersSpan = new List<int> { 5, 4, 3, 2, 1 }; -> results in an error
 
 // We cannot return a stackalloc'ed span
-Span<int> ReturnSomeNumbers() => /*stackalloc*/ new int[] { 5, 4, 3, 2, 1 };
+static Span<int> ReturnSomeNumbers() => /*stackalloc*/ new int[] { 5, 4, 3, 2, 1 };
 numbersSpan = ReturnSomeNumbers();
 BubbleSort(numbersSpan[..^2]);
 Print(numbersSpan);
@@ -128,9 +127,7 @@ public static class Helper
             {
                 if (list[i].CompareTo(list[i + 1]) > 0)
                 {
-                    T temp = list[i + 1];
-                    list[i + 1] = list[i];
-                    list[i] = temp;
+                    (list[i], list[i + 1]) = (list[i + 1], list[i]);
                     madeChanges = true;
                 }
             }
@@ -149,9 +146,7 @@ public static class Helper
             {
                 if (list[i].CompareTo(list[i + 1]) > 0)
                 {
-                    T temp = list[i + 1];
-                    list[i + 1] = list[i];
-                    list[i] = temp;
+                    (list[i], list[i + 1]) = (list[i + 1], list[i]);
                     madeChanges = true;
                 }
             }
@@ -170,9 +165,7 @@ public static class Helper
             {
                 if (list[i].CompareTo(list[i + 1]) > 0)
                 {
-                    T temp = list[i + 1];
-                    list[i + 1] = list[i];
-                    list[i] = temp;
+                    (list[i], list[i + 1]) = (list[i + 1], list[i]);
                     madeChanges = true;
                 }
             }

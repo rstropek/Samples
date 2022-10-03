@@ -9,9 +9,9 @@ public class StringQuizTests
     public void StaticStrings()
     {
         const string Greeting = "Hello";
-        const string Name = "BASTA";
+        const string Name = "CSharp";
         string result = $"{Greeting}, {Name}!";
-        Assert.Equal("Hello, BASTA!", result);
+        Assert.Equal("Hello, CSharp!", result);
     }
 
     [Fact]
@@ -20,8 +20,8 @@ public class StringQuizTests
         static string GreetingBuilder(string greeting, string name)
             => $"{greeting}, {name}!";
 
-        string result = GreetingBuilder("Hello", "BASTA");
-        Assert.Equal("Hello, BASTA!", result);
+        string result = GreetingBuilder("Hello", "CSharp");
+        Assert.Equal("Hello, CSharp!", result);
     }
 
     [Fact]
