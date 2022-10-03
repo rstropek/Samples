@@ -1,10 +1,12 @@
-﻿// Switch between custom generic math and build-in generic math (experimental)
+﻿// Switch between custom generic math and build-in generic math
 #define CUSTOM_GENERIC_MATH
-// #define BUILTIN_GENERIC_MATH
-
-using System;
+//#define BUILTIN_GENERIC_MATH
 
 #region Read configuration file
+
+#if BUILTIN_GENERIC_MATH
+using System.Numerics;
+#endif
 
 IConfiguration? configuration = null; // Note that nullable type is for demo purposes only
 try
@@ -20,22 +22,25 @@ catch (InvalidDataException e)
     // Note: Raw string literals (C# 11). Add error in appsettings.json to see its result.
     //       (see also https://slides.com/rainerstropek/csharp-11/fullscreen#/4)
     Console.WriteLine("""
-                      {
-                        "maxLevel": 13,       // Complexity of tree (beware of values > 13)
-                        "trunkLength": 100.0, // Length of trunk
-                        "boundingRect": 1     // 1 if bounding rectangle should be drawn, otherwise 0
-                      }
-                      """);
+        {
+            "maxLevel": 13,       // Complexity of tree (beware of values > 13)
+            "trunkLength": 100.0, // Length of trunk
+            "boundingRect": 1     // 1 if bounding rectangle should be drawn, otherwise 0
+        }
+        """);
     return;
 }
 
-// Note: Simplified null checking (comment `return` statement above and try with/without `!!` to see difference)
-//       (see also https://slides.com/rainerstropek/csharp-11/fullscreen#/3)
 // Note: Generic math (IParseable); preview feature of .NET 7
 //       (see also https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/7
 //       and https://devblogs.microsoft.com/dotnet/preview-features-in-net-6-generic-math/)
-static T? GetConfigValue<T>(IConfiguration configuration!!, string settingName) where T: struct, IParsable<T>
+static T? GetConfigValue<T>(IConfiguration configuration, string settingName) where T: struct, IParsable<T>
 {
+    if (configuration is null)
+    {
+        throw new ArgumentNullException(nameof(configuration));
+    }
+    
     // Note: pattern matching
     // Note: Definite assignment
     //       (see also https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/6)
@@ -60,8 +65,7 @@ const string lastName = "Stropek";
 //       (see also https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/9/1/0)
 const string name = $"{firstName}{lastName}"; 
 
-using var sha256Hash = SHA256.Create();
-var hashData = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(name));
+var hashData = SHA256.HashData(Encoding.UTF8.GetBytes(name));
 int seed = hashData
     .Chunk(4) // Note: Linq enhancements
               //       See also https://slides.com/rainerstropek/dotnet-6/fullscreen#/7
@@ -82,7 +86,8 @@ Span<Line> lines = stackalloc Line[numberOfLines]; // Note: Stack allocation of 
 static int Limit(int numberOfLines,
     // Note: New `CallerArgumentExpression` attribute
     //       (see also https://slides.com/rainerstropek/csharp-10-bettercode/fullscreen#/9)
-    [CallerArgumentExpression("numberOfLines")] string? numberOfLinesExpression = null)
+    // Note: New feature: parameter name in scope for nameof
+    [CallerArgumentExpression(nameof(numberOfLines))] string? numberOfLinesExpression = null)
 {
     int usedMemory;
     unsafe { usedMemory = sizeof(Line) * numberOfLines; }
@@ -111,13 +116,13 @@ static float ToRadians(float degree) => degree * (float)Math.PI / 180f;
 var angleChange = ToRadians(20);
 void Branch(Span<Line> lines, Vector start, float angle, float branchLength, int level)
 {
-    #region Some tree generation constants
+#region Some tree generation constants
     const float levelToLightnessFactor = 3f;
     const float levelToWeightFactor = 1.5f;
     const float branchShorteningFactor = 0.8f;
     const float randomAngleChangeFactor = 35f;
     const float randomBranchLengthChangeFactor = 25f;
-    #endregion
+#endregion
 
     // Calculate next endpoint and add it to lines
     var end = start + new Vector(
