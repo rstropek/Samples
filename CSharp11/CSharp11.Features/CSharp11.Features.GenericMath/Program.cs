@@ -1,9 +1,41 @@
 ﻿// Switch between custom generic math and build-in generic math
 //#define CUSTOM_GENERIC_MATH
 
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 #if !CUSTOM_GENERIC_MATH
 using System.Numerics;
 #endif
+
+#region IParsable
+var vectors = """
+    1,1
+    3,4
+    """;
+ParseAndPrint<Vector>(vectors);
+ParseFromSpanAndPrint<Vector>(vectors);
+
+void ParseAndPrint<T>(string text) where T : IParsable<T>
+{
+    foreach (var vectorText in text.Split('\n'))
+    {
+        Console.WriteLine(T.Parse(vectorText, CultureInfo.InvariantCulture));
+    }
+}
+
+void ParseFromSpanAndPrint<T>(ReadOnlySpan<char> text) where T : ISpanParsable<T>
+{
+    while (true)
+    {
+        var length = text.IndexOf('\n');
+        if (length == -1) { length = text.Length; }
+
+        Console.WriteLine(T.Parse(text[..length], CultureInfo.InvariantCulture));
+        if (length == text.Length) { break; }
+        text = text[(length + 1)..];
+    }
+}
+#endregion
 
 Span<Line> lines = stackalloc[]
 {
@@ -31,20 +63,70 @@ T SumOfLines<T>(Span<Line> lines)
 
 #region Basic Vector and Line types
 readonly record struct Vector(float X, float Y)
+    : IParsable<Vector>, ISpanParsable<Vector>
 {
+    #region IParsable
+    public static Vector Parse(string s, IFormatProvider? provider)
+    {
+        if (!TryParse(s, provider, out var result))
+        {
+            throw new FormatException();
+        }
+
+        return result;
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Vector result)
+    {
+        var elements = s?.Split(',');
+        if (elements == null
+            || elements.Length != 2
+            || !float.TryParse(elements[0], provider, out var x)
+            || !float.TryParse(elements[1], provider, out var y))
+        {
+            result = new();
+            return false;
+        }
+
+        result = new(x, y);
+        return true;
+    }
+    #endregion
+
+    #region ISpanParsable
+    public static Vector Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
+    {
+        if (!TryParse(s, provider, out var result))
+        {
+            throw new FormatException();
+        }
+
+        return result;
+    }
+
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Vector result)
+    {
+        var indexOfComma = s.IndexOf(',');
+        if (indexOfComma == -1
+            || !float.TryParse(s[..indexOfComma], provider, out var x)
+            || !float.TryParse(s[(indexOfComma + 1)..], provider, out var y))
+        {
+            result = new();
+            return false;
+        }
+
+        result = new(x, y);
+        return true;
+    }
+    #endregion
+
     public static Vector operator +(Vector first, Vector second)
         => new(first.X + second.X, first.Y + second.Y);
 }
 
-readonly record struct LineSettings(float Lightness, float Width)
-{
-    public LineSettings() : this(50, 1) { }
-}
-
-readonly record struct Line(Vector Start, Vector End, LineSettings Settings)
+readonly record struct Line(Vector Start, Vector End)
 {
     public Line() : this(new(0f, 0f), new(0f, 0f)) { }
-    public Line(Vector Start, Vector End) : this(Start, End, new()) { }
 }
 #endregion
 
