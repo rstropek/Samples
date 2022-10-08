@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.Utf8Strin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.Required", "CSharp11.Features.Required\CSharp11.Features.Required.csproj", "{5604654E-595A-41B4-A589-95E39CCE07DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.GenericMath", "CSharp11.Features.GenericMath\CSharp11.Features.GenericMath.csproj", "{137B31F9-5417-4BDE-BBCF-F03C12A3741B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.GenericMath", "CSharp11.Features.GenericMath\CSharp11.Features.GenericMath.csproj", "{137B31F9-5417-4BDE-BBCF-F03C12A3741B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.Nameof", "CSharp11.Features.Nameof\CSharp11.Features.Nameof.csproj", "{4D721512-36A5-419A-A18B-8E9A304EE3AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{137B31F9-5417-4BDE-BBCF-F03C12A3741B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{137B31F9-5417-4BDE-BBCF-F03C12A3741B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{137B31F9-5417-4BDE-BBCF-F03C12A3741B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D721512-36A5-419A-A18B-8E9A304EE3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D721512-36A5-419A-A18B-8E9A304EE3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D721512-36A5-419A-A18B-8E9A304EE3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D721512-36A5-419A-A18B-8E9A304EE3AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
