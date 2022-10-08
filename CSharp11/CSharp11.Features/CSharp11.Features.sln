@@ -3,21 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.Interpolations", "CSharp11.Features.Interpolations\CSharp11.Features.Interpolations.csproj", "{850D5C8E-9721-44AA-A12E-59075DC7FC9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.Interpolations", "CSharp11.Features.Interpolations\CSharp11.Features.Interpolations.csproj", "{850D5C8E-9721-44AA-A12E-59075DC7FC9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.ListPatterns", "CSharp11.Features.ListPatterns\CSharp11.Features.ListPatterns.csproj", "{DAA3EC1A-F7E0-4ADE-8DD2-B6B9557CCB82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.ListPatterns", "CSharp11.Features.ListPatterns\CSharp11.Features.ListPatterns.csproj", "{DAA3EC1A-F7E0-4ADE-8DD2-B6B9557CCB82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.NullChecking", "CSharp11.Features.NullChecking\CSharp11.Features.NullChecking.csproj", "{4483FE90-3D88-4962-BE45-3E9E4F428DBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.RawStringLiterals", "CSharp11.Features.RawStringLiterals\CSharp11.Features.RawStringLiterals.csproj", "{2A79BD24-AFFE-4EF3-A435-C1C7F0D51996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.RawStringLiterals", "CSharp11.Features.RawStringLiterals\CSharp11.Features.RawStringLiterals.csproj", "{2A79BD24-AFFE-4EF3-A435-C1C7F0D51996}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.GenericAttributes", "CSharp11.Features.GenericAttributes\CSharp11.Features.GenericAttributes.csproj", "{7C068533-6034-439C-9C02-A7000CE93BB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.GenericAttributes", "CSharp11.Features.GenericAttributes\CSharp11.Features.GenericAttributes.csproj", "{7C068533-6034-439C-9C02-A7000CE93BB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.DeconstructingDefault", "CSharp11.Features.DeconstructingDefault\CSharp11.Features.DeconstructingDefault.csproj", "{1C0B3859-B7F4-43B6-B908-A7D2F2C2ECC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.DeconstructingDefault", "CSharp11.Features.DeconstructingDefault\CSharp11.Features.DeconstructingDefault.csproj", "{1C0B3859-B7F4-43B6-B908-A7D2F2C2ECC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp11.Features.Utf8StringLiterals", "CSharp11.Features.Utf8StringLiterals\CSharp11.Features.Utf8StringLiterals.csproj", "{99CBF55A-C93E-4634-B94C-000455219974}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.SemiAutoProps", "CSharp11.Features.SemiAutoProps\CSharp11.Features.SemiAutoProps.csproj", "{B3B61FDB-0FD6-49A0-B5BA-11CDA9728493}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.Utf8StringLiterals", "CSharp11.Features.Utf8StringLiterals\CSharp11.Features.Utf8StringLiterals.csproj", "{99CBF55A-C93E-4634-B94C-000455219974}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp11.Features.Required", "CSharp11.Features.Required\CSharp11.Features.Required.csproj", "{5604654E-595A-41B4-A589-95E39CCE07DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +31,6 @@ Global
 		{DAA3EC1A-F7E0-4ADE-8DD2-B6B9557CCB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAA3EC1A-F7E0-4ADE-8DD2-B6B9557CCB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAA3EC1A-F7E0-4ADE-8DD2-B6B9557CCB82}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4483FE90-3D88-4962-BE45-3E9E4F428DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4483FE90-3D88-4962-BE45-3E9E4F428DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4483FE90-3D88-4962-BE45-3E9E4F428DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4483FE90-3D88-4962-BE45-3E9E4F428DBA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2A79BD24-AFFE-4EF3-A435-C1C7F0D51996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A79BD24-AFFE-4EF3-A435-C1C7F0D51996}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A79BD24-AFFE-4EF3-A435-C1C7F0D51996}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,14 +43,14 @@ Global
 		{1C0B3859-B7F4-43B6-B908-A7D2F2C2ECC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0B3859-B7F4-43B6-B908-A7D2F2C2ECC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0B3859-B7F4-43B6-B908-A7D2F2C2ECC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3B61FDB-0FD6-49A0-B5BA-11CDA9728493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3B61FDB-0FD6-49A0-B5BA-11CDA9728493}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3B61FDB-0FD6-49A0-B5BA-11CDA9728493}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3B61FDB-0FD6-49A0-B5BA-11CDA9728493}.Release|Any CPU.Build.0 = Release|Any CPU
 		{99CBF55A-C93E-4634-B94C-000455219974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{99CBF55A-C93E-4634-B94C-000455219974}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99CBF55A-C93E-4634-B94C-000455219974}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99CBF55A-C93E-4634-B94C-000455219974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5604654E-595A-41B4-A589-95E39CCE07DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5604654E-595A-41B4-A589-95E39CCE07DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5604654E-595A-41B4-A589-95E39CCE07DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5604654E-595A-41B4-A589-95E39CCE07DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
