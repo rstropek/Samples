@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefFields", "RefFields\RefFields.csproj", "{A85FAE62-139C-459F-BFA8-EC06B184EE27}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibImport", "LibImport\LibImport.csproj", "{BF92053E-01A7-437A-B6F0-D5AB96C2BF1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A85FAE62-139C-459F-BFA8-EC06B184EE27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A85FAE62-139C-459F-BFA8-EC06B184EE27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A85FAE62-139C-459F-BFA8-EC06B184EE27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF92053E-01A7-437A-B6F0-D5AB96C2BF1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF92053E-01A7-437A-B6F0-D5AB96C2BF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF92053E-01A7-437A-B6F0-D5AB96C2BF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF92053E-01A7-437A-B6F0-D5AB96C2BF1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
