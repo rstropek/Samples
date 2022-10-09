@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibImport", "LibImport\LibI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trimming", "Trimming\Trimming.csproj", "{18FDC2AD-8395-4A06-8694-4DCF53F37591}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonContractCustomization", "JsonContractCustomization\JsonContractCustomization.csproj", "{7B40F8D4-2FDF-4B92-91E5-270AA111654D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{18FDC2AD-8395-4A06-8694-4DCF53F37591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18FDC2AD-8395-4A06-8694-4DCF53F37591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18FDC2AD-8395-4A06-8694-4DCF53F37591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B40F8D4-2FDF-4B92-91E5-270AA111654D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B40F8D4-2FDF-4B92-91E5-270AA111654D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B40F8D4-2FDF-4B92-91E5-270AA111654D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B40F8D4-2FDF-4B92-91E5-270AA111654D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
