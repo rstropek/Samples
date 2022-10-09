@@ -9,14 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove=".gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include=".gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="parser.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
