@@ -1,4 +1,5 @@
-﻿using static System.Console;
+﻿using System.Text.Json;
+using static System.Console;
 
 #region Constant Pattern
 WriteHeaderLine("Constant Pattern");
@@ -420,7 +421,7 @@ WriteHeaderLine("List Patterns");
 
 static void ListPatterns()
 {
-    var numbers = new List<int>() { 1, 2, 3, 5, 8 };
+    var numbers = new [] { 1, 2, 3, 5, 8 };
 
     //          +--- List pattern
     //          V
@@ -434,6 +435,11 @@ static void ListPatterns()
     if (numbers is [var first, 2, 3, 5, var last] && first == 1 && last == 8)
     {
         WriteLine("Very special Fibonacci");
+    }
+
+    if (numbers is [var one, .. var someNumbers, 8])
+    {
+        WriteLine(JsonSerializer.Serialize(someNumbers));
     }
 
     // Slice pattern
@@ -451,7 +457,7 @@ static void ListPatterns()
         //  +--- Discard pattern
         //  V
         [1, _, _, ..] => "Starts with 1 and is at least 3 long",
-        [1, ..] => "Starts with 1 and is at least 1 long",
+        [1, .. var rest] => $"Starts with 1 and is followed by {rest.Length} numbers",
         _ => "WAT?"
     });
 }

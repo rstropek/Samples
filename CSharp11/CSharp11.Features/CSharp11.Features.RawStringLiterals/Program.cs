@@ -1,4 +1,7 @@
-﻿using static System.Console;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Text.Json;
+using static System.Console;
 
 // This is how Hello World can look like in C#
 {
@@ -84,3 +87,18 @@ namespace Demo
                                        """);
               """");
 }
+
+{
+    using var conn = new SqlConnection("Server=(localdb)\\mssqllocaldb;Database=master;Trusted_Connection=True;");
+    await conn.OpenAsync();
+    const string query = """
+        SELECT  TABLES.TABLE_NAME as Name
+        FROM    INFORMATION_SCHEMA.TABLES
+        ORDER BY TABLES.TABLE_NAME
+        """;
+    Console.WriteLine(query);
+    var tabs = await conn.QueryAsync<Table>(query);
+    WriteLine(JsonSerializer.Serialize(tabs, new JsonSerializerOptions { WriteIndented = true }));
+}
+
+record Table(string Name);
