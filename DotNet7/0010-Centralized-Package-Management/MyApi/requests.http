@@ -1,0 +1,8 @@
+POST http://localhost:5026/build-name
+Content-Type: application/json
+Accept: application/json
+
+{
+    "firstName": "Jane",
+    "lastName": "Doe"
+}

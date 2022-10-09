@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ContainerImageName>dotnet7api</ContainerImageName>
+    <!-- <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/aspnet:7.0-jammy-chiseled</ContainerBaseImage> -->
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Automapper" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="Microsoft.NET.Build.Containers" />
+  </ItemGroup>
+</Project>
