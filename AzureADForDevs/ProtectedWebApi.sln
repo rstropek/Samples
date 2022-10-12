@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.32916.344
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectedWebApi", "ProtectedWebApi/ProtectedWebApi.csproj", "{EC4C8023-C16D-4175-810C-4DCAC63D0668}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC4C8023-C16D-4175-810C-4DCAC63D0668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC4C8023-C16D-4175-810C-4DCAC63D0668}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC4C8023-C16D-4175-810C-4DCAC63D0668}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC4C8023-C16D-4175-810C-4DCAC63D0668}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8CA79655-8A70-4038-82F7-87FC7741FEE4}
+	EndGlobalSection
+EndGlobal

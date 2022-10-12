@@ -1,0 +1,36 @@
+# Switch to sample subscription
+# az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
+# az account show --output table
+
+# Region to use
+# If you change that, make sure to consider GDPR requirements!
+LOCATION=westeurope
+
+# Stage (dev, test, or prod)
+STAGE=dev
+
+# Deploy resource group
+RGNAMES=$(az deployment sub create \
+    --name Deployment-$STAGE-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file resource-group.bicep \
+    --location $LOCATION \
+    | jq .properties.outputs)
+RG=$(echo $RGNAMES | jq -r .rgName.value)
+
+# Deploy resources
+
+# In development and test stages, the developer needs access to data stores
+# containing customer data. The next line gets the currently signed-in user
+# and passes it to the template. The template will assign access permissions
+# to this user.
+# For production, to developer should have access to customer data by default.
+# Therefore, USERID should be empty in production.
+USERID=$(az ad signed-in-user show | jq .id -r)
+
+az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$STAGE-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file infrastructure.bicep \
+    --parameters \
+        stage=$STAGE \
+        adminPrincipalId=$USERID

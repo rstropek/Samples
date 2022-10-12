@@ -1,0 +1,46 @@
+# Switch to sample subscription
+# az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
+# az account show --output table
+
+CLIENT=AzureADForDevsClient
+API=AzureADForDevsAPI
+
+# Cleanup first, just to make sure we are starting on a clean slate
+./delete-aad-appreg.sh -d $CLIENT
+./delete-aad-appreg.sh -d $API
+
+# Create AAD client app with SPA redirect URI (standard Angular dev server port)
+./create-aad-appreg.sh -d $CLIENT -r http://localhost:4200
+
+# Add service principal
+./create-aad-appreg.sh -d $CLIENT -r http://localhost:4200 -p
+
+# Add Postman web callback URI and client secret
+./create-aad-appreg.sh -d $CLIENT -r http://localhost:4200 -p -m -c
+CLIENT_REG=$(./create-aad-appreg.sh -d $CLIENT -r http://localhost:4200 -p -m -c -s)
+CLIENT_APP_ID=$(echo $CLIENT_REG | jq .appId -r)
+
+# Create app registration for web API
+./create-aad-appreg.sh -d $API
+
+# Add API identifier
+./create-aad-appreg.sh -d $API -i
+
+# Add scopes
+./create-aad-appreg.sh -d $API -i -o -p
+API_REG=$(./create-aad-appreg.sh -d $API -i -o -p -s)
+API_APP_ID=$(echo $API_REG | jq .appId -r)
+
+# Add permissions to client
+MS_GRAPH="00000003-0000-0000-c000-000000000000"
+USER_READ=$(az ad sp show --id $MS_GRAPH | jq '.oauth2PermissionScopes[] | select(.value == "User.Read") | .id' -r)
+USER_READ_ALL=$(az ad sp show --id $MS_GRAPH | jq '.oauth2PermissionScopes[] | select(.value == "User.Read.All") | .id' -r)
+
+API_READ=$(az ad sp show --id $API_APP_ID | jq '.oauth2PermissionScopes[] | select(.value == "Read") | .id' -r)
+API_WRITE=$(az ad sp show --id $API_APP_ID | jq '.oauth2PermissionScopes[] | select(.value == "Write") | .id' -r)
+
+az ad app permission add --id $CLIENT_APP_ID --api $MS_GRAPH --api-permissions $USER_READ=Scope $USER_READ_ALL=Scope
+az ad app permission grant --id $CLIENT_APP_ID --api $MS_GRAPH --scope $USER_READ $USER_READ_ALL
+
+az ad app permission add --id $CLIENT_APP_ID --api $API_APP_ID --api-permissions $API_READ=Scope $API_WRITE=Scope
+az ad app permission grant --id $CLIENT_APP_ID --api $API_APP_ID --scope $API_READ $API_WRITE
