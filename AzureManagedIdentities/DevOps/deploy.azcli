@@ -1,0 +1,41 @@
+# Switch to correct subscription
+# az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
+# az account show --output table
+
+# Region to use
+LOCATION=westeurope
+
+# Deploy resource group
+RGNAMES=$(az deployment sub create \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file resource-group.bicep \
+    --location $LOCATION \
+    | jq .properties.outputs)
+RG=$(echo $RGNAMES | jq -r .rgName.value)
+
+# Deploy resources
+
+# In development and test stages, the developer needs access to data stores.
+# Variables should remain empty if the environment is production (i.e. no
+# access to data by devs is required).
+USERID=$(az ad signed-in-user show | jq .id -r)
+USERNAME=$(az ad signed-in-user show | jq .userPrincipalName -r)
+# USERID=''
+# USERNAME=''
+
+APPNAMES=$(az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file infrastructure.bicep \
+    --parameters \
+        adminPrincipalId=$USERID \
+        adminPrincipalName=$USERNAME \
+    | jq .properties.outputs)
+FUNCNME=$(echo $APPNAMES | jq -r .funcName.value)
+WEBAPPNAME=$(echo $APPNAMES | jq -r .webAppName.value)
+
+# Don't forget to create users in DB
+echo "CREATE USER [$FUNCNME] FROM EXTERNAL PROVIDER
+EXEC sp_addrolemember 'db_owner', [$FUNCNME]
+CREATE USER [$WEBAPPNAME] FROM EXTERNAL PROVIDER
+EXEC sp_addrolemember 'db_owner', [$WEBAPPNAME]"
