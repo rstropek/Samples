@@ -45,8 +45,8 @@ CREATE USER [$WEBAPPNAME] FROM EXTERNAL PROVIDER
 EXEC sp_addrolemember 'db_owner', [$WEBAPPNAME]"
 
 # Create app registration
-DISPLAY_NAME=BackendApi2
-APP_ID_URL=api://backend-api-2.rainertimecockpit.onmicrosoft.com
+DISPLAY_NAME=BackendApi
+APP_ID_URL=api://backend-api.rainertimecockpit.onmicrosoft.com
 # Check if app registration exists
 AADAPPREG=$(az ad app list --display-name $DISPLAY_NAME)
 if [ $(echo $AADAPPREG | jq length) == '0' ]
