@@ -23,6 +23,9 @@ USERNAME=$(az ad signed-in-user show | jq .userPrincipalName -r)
 # USERID=''
 # USERNAME=''
 
+#CONTAINER=nginx:alpine
+CONTAINER=acrsbwa7dm5lugos.azurecr.io/azmgedid:latest
+
 APPNAMES=$(az deployment group create \
     --resource-group $RG \
     --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
@@ -30,6 +33,7 @@ APPNAMES=$(az deployment group create \
     --parameters \
         adminPrincipalId=$USERID \
         adminPrincipalName=$USERNAME \
+        containerName=$CONTAINER \
     | jq .properties.outputs)
 FUNCNME=$(echo $APPNAMES | jq -r .funcName.value)
 WEBAPPNAME=$(echo $APPNAMES | jq -r .webAppName.value)

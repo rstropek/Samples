@@ -1,0 +1,42 @@
+#@host=http://localhost:5196
+@host=https://app-sbwa7dm5lugos.azurewebsites.net/
+#@backend=http://localhost:7071
+@backend=https://func-sbwa7dm5lugos.azurewebsites.net
+
+###
+GET {{host}}/ping
+
+###
+// @name copy
+POST {{host}}/copy-file
+    ?uri=https://linz.coderdojo.net/images/loeten_hu003f52725c3db9114af2e90dc9efff82_339641_1920x1200_fit_q75_box.jpg
+    &name=coderdojo.jpg
+Content-Type: application/json
+
+###
+GET {{copy.response.headers.location}}
+
+###
+POST {{host}}/keep-secret?name=mySecret&value=P@ssw0rd!123
+
+###
+GET {{host}}/get-secret?name=mySecret
+
+###
+GET {{host}}/from-db
+
+###
+GET {{backend}}/api/ping
+
+###
+GET {{backend}}/api/secureping
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiJhcGk6Ly9iYWNrZW5kLWFwaS5yYWluZXJ0aW1lY29ja3BpdC5vbm1pY3Jvc29mdC5jb20iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8wMjJlNGZhZi1jNzQ1LTQ3NWEtYmUwNi0wNmIxZTFjOWUzOWQvIiwiaWF0IjoxNjY3NDc4MTE5LCJuYmYiOjE2Njc0NzgxMTksImV4cCI6MTY2NzU2NDgxOSwiYWlvIjoiRTJaZ1lHZzFpSzc0RTNLTE9aVHQ2TGRLMjRhSEFBPT0iLCJhcHBpZCI6Ijk3YmQ2NGFhLWM4YzAtNGNmZi04NzViLWU3ZjIyODQzN2E1OCIsImFwcGlkYWNyIjoiMiIsImlkcCI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzAyMmU0ZmFmLWM3NDUtNDc1YS1iZTA2LTA2YjFlMWM5ZTM5ZC8iLCJvaWQiOiJiNjA5MzZkMi01OTJkLTQ3MjQtYmQ0OC01NTJlOWNiMDA0ZTQiLCJyaCI6IjAuQVY0QXIwOHVBa1hIV2tlLUJnYXg0Y25qblFaVkZBZ05QaVpIblB6aUwxVG5ZSWhlQUFBLiIsInN1YiI6ImI2MDkzNmQyLTU5MmQtNDcyNC1iZDQ4LTU1MmU5Y2IwMDRlNCIsInRpZCI6IjAyMmU0ZmFmLWM3NDUtNDc1YS1iZTA2LTA2YjFlMWM5ZTM5ZCIsInV0aSI6IlF4ZWpUMXFzTzA2Q21tYWx3UXdkQUEiLCJ2ZXIiOiIxLjAifQ.Ry8DDIycVxE2mOQUZxSSO6wHDqurIqRl6QYm9ATNJKXkIUnE7oEjOOXb_J8cmNxtvPR6FtJ_xlkpIfAY3bDyZ8DXCUn4tlyydKFQUq1m4C2fSN4M4EoBHzIVsx1FrAyq4Che63XAe7pYC87iCAx3EXb4szDzQtDeIp_ibptOZgumKGBMAGsruCoPkgmE_vdsR5O87NlCikPrEPZRo-blNXzAIVpyfgXXnHpaaGKbJGVU_3-oMuD2tmI2AbfcO-JN5YUCxOYDIBcx6YEkffOX7M3cZthMphGvAUirFx-K8Tdk1Dmz4xM6iFEZ64ZSuHxvgY_W_bT8kegbbqq981SYlA
+
+###
+GET {{host}}/ping-backend
+
+###
+GET {{host}}/backend-token
+
+###
+GET {{host}}/secure-ping-backend

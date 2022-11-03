@@ -1,0 +1,9 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "AadTenantId": "022e4faf-c745-475a-be06-06b1e1c9e39d",
+        "Audience": "api://backend-api.rainertimecockpit.onmicrosoft.com"
+    }
+}

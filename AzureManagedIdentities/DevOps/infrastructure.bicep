@@ -17,6 +17,9 @@ param adminPrincipalId string = ''
 @description('Optional name of admin user, this user will have access to storage services with customer data; for dev/test stages only')
 param adminPrincipalName string = ''
 
+@description('Optional name of the container to deploy to web app')
+param containerName string = 'nginx:alpine'
+
 var baseName = projectName
 var names = {
   dataStorage: 'st${uniqueString('${baseName}-data')}'
@@ -28,6 +31,7 @@ var names = {
   keyVault: 'kv-${uniqueString(baseName)}'
   sqlServer: 'sql-${uniqueString(baseName)}'
   database: 'sqldb-${uniqueString(baseName)}'
+  containerRegistry: 'acr${uniqueString(baseName)}'
 }
 var tags = {
   Project: projectName
@@ -35,7 +39,10 @@ var tags = {
 var roleIds = {
   // See https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#all
   KeyVaultSecretsUser: '4633458b-17de-408a-b874-0445c86b69e6'
+  KeyVaultSecretsOfficer: 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7'
   StorageBlobDataContributor: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+  AcrPull: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
+  AcrPush: '8311e382-0749-4cb8-b61a-304f252e45ec'
 }
 
 resource dataStorage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
@@ -137,7 +144,9 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
       AzureWebJobsDisableHomepage: 'true'
       WEBSITE_CONTENTSHARE: names.functionApp
       WEBSITE_RUN_FROM_PACKAGE: '1'
-    }
+      AadTenantId: subscription().tenantId
+      Audience: 'api://backend-api.rainertimecockpit.onmicrosoft.com'
+  }
   }
 }
 
@@ -159,6 +168,9 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
       scmMinTlsVersion: '1.2'
       http20Enabled: true
       webSocketsEnabled: false
+
+      acrUseManagedIdentityCreds: true
+      linuxFxVersion: 'DOCKER|${containerName}'
     }
   }
 
@@ -215,7 +227,7 @@ resource functionAppKeyVaultAssignment 'Microsoft.Authorization/roleAssignments@
   properties: {
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal' // This is important for managed identities to prevent timeouts
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.KeyVaultSecretsUser)
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.KeyVaultSecretsOfficer)
   }
 }
 
@@ -225,7 +237,7 @@ resource webAppKeyVaultAssignment 'Microsoft.Authorization/roleAssignments@2020-
   properties: {
     principalId: webApp.identity.principalId
     principalType: 'ServicePrincipal' // This is important for managed identities to prevent timeouts
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.KeyVaultSecretsUser)
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.KeyVaultSecretsOfficer)
   }
 }
 
@@ -234,7 +246,7 @@ resource adminKeyVaultAssignment 'Microsoft.Authorization/roleAssignments@2020-0
   scope: keyvault
   properties: {
     principalId: adminPrincipalId
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.KeyVaultSecretsUser)
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.KeyVaultSecretsOfficer)
   }
 }
 
@@ -287,6 +299,37 @@ resource sqlServer 'Microsoft.Sql/servers@2022-05-01-preview' = {
       zoneRedundant: false
       readScale: 'Disabled'
     }
+  }
+}
+
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' = {
+  name: names.containerRegistry
+  location: location
+  tags: tags
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    adminUserEnabled: false
+  }
+}
+
+resource webAppAcrAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(containerRegistry.id, webApp.id)
+  scope: containerRegistry
+  properties: {
+    principalId: webApp.identity.principalId
+    principalType: 'ServicePrincipal' // This is important for managed identities to prevent timeouts
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.AcrPull)
+  }
+}
+
+resource adminAcrAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = if (adminPrincipalId != '') {
+  name: guid(containerRegistry.id, adminPrincipalId)
+  scope: containerRegistry
+  properties: {
+    principalId: adminPrincipalId
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.AcrPush)
   }
 }
 
