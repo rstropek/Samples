@@ -23,8 +23,8 @@ USERNAME=$(az ad signed-in-user show | jq .userPrincipalName -r)
 # USERID=''
 # USERNAME=''
 
-#CONTAINER=nginx:alpine
-CONTAINER=acrsbwa7dm5lugos.azurecr.io/azmgedid:latest
+CONTAINER=nginx:alpine
+#CONTAINER=acrsbwa7dm5lugos.azurecr.io/azmgedid:latest
 
 APPNAMES=$(az deployment group create \
     --resource-group $RG \
@@ -43,3 +43,31 @@ echo "CREATE USER [$FUNCNME] FROM EXTERNAL PROVIDER
 EXEC sp_addrolemember 'db_owner', [$FUNCNME]
 CREATE USER [$WEBAPPNAME] FROM EXTERNAL PROVIDER
 EXEC sp_addrolemember 'db_owner', [$WEBAPPNAME]"
+
+# Create app registration
+DISPLAY_NAME=BackendApi2
+APP_ID_URL=api://backend-api-2.rainertimecockpit.onmicrosoft.com
+# Check if app registration exists
+AADAPPREG=$(az ad app list --display-name $DISPLAY_NAME)
+if [ $(echo $AADAPPREG | jq length) == '0' ]
+then
+    # App registration does not exist -> create it
+    AADAPPREG=$(az ad app create --display-name $DISPLAY_NAME --sign-in-audience AzureADMyOrg)
+else
+    # App registration exists -> we do not need to create a new one
+    AADAPPREG=$(echo $AADAPPREG | jq '.[0]')
+fi
+# Get app id and object id from app registration JSON
+APPID=$(jq '.appId' -r <<< $AADAPPREG)
+OBJID=$(jq '.id' -r <<< $AADAPPREG)
+
+# Update app ID URL
+az ad app update --id $APPID --identifier-uris $APP_ID_URL
+
+# DOCKER (Web App)
+az acr login --name acrsbwa7dm5lugos
+docker build -t acrsbwa7dm5lugos.azurecr.io/azmgedid .
+docker push acrsbwa7dm5lugos.azurecr.io/azmgedid
+
+# Function App (run from package)
+func azure functionapp publish func-sbwa7dm5lugos

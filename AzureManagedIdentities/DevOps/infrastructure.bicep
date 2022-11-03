@@ -146,7 +146,7 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
       WEBSITE_RUN_FROM_PACKAGE: '1'
       AadTenantId: subscription().tenantId
       Audience: 'api://backend-api.rainertimecockpit.onmicrosoft.com'
-  }
+    }
   }
 }
 
@@ -178,6 +178,12 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
     name: 'appsettings'
     properties: {
       WEBSITE_RUN_FROM_PACKAGE: '1'
+      AccountNames__Storage: 'stuu3g75ep5thny'
+      AccountNames__KeyVault: 'kv-sbwa7dm5lugos'
+      AccountNames__DbServer: 'sql-sbwa7dm5lugos'
+      AccountNames__Database: 'sqldb-sbwa7dm5lugos'
+      AccountNames__Backend: 'func-sbwa7dm5lugos.azurewebsites.net'
+      AccountNames__Audience: 'api://backend-api.rainertimecockpit.onmicrosoft.com'
     }
   }
 }

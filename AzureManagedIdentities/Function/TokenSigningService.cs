@@ -25,14 +25,14 @@ public class TokenSigningService : ITokenSigningService
 
         var validationParameters = new TokenValidationParameters
         {
-            ValidateAudience = false,
-            ValidateIssuer = false,
-            ValidateIssuerSigningKey = false,
-            ValidateLifetime = false,
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero,
 
             IssuerSigningKeys = openIdConnectConfigData.SigningKeys,
-            ValidIssuer = openIdConnectConfigData.Issuer,
+            ValidIssuer = $"https://sts.windows.net/{Environment.GetEnvironmentVariable("AadTenantId")}/",
 
             ValidAudience = Environment.GetEnvironmentVariable("Audience"),
         };

@@ -3,7 +3,9 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Storage.Blobs;
 using Azure.Storage.Sas;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.SqlClient;
+using static System.Net.Mime.MediaTypeNames;
 
 const string STORAGE_DOMAIN = "blob.core.windows.net";
 const string KEY_VAULT_DOMAIN = "vault.azure.net";
@@ -11,11 +13,30 @@ const string SQL_DOMAIN = "database.windows.net";
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
-
 var app = builder.Build();
+
+app.UseExceptionHandler(exceptionHandlerApp =>
+ {
+     exceptionHandlerApp.Run(async context =>
+     {
+         var exceptionHandlerPathFeature =context.Features.Get<IExceptionHandlerPathFeature>();
+
+         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+         context.Response.ContentType = Text.Plain;
+         if (exceptionHandlerPathFeature?.Error != null)
+         {
+             await context.Response.WriteAsync(exceptionHandlerPathFeature?.Error.Message ?? "No exception message.");
+         }
+         else
+         {
+             await context.Response.WriteAsync("An exception was thrown.");
+         }
+     });
+ });
 
 app.MapGet("/ping", () => "pong");
 
+#region Azure Storage
 app.MapGet("/storage-token", async (IConfiguration config) =>
 {
     var accountName = config["AccountNames:Storage"] ?? "stuu3g75ep5thny";
@@ -67,48 +88,6 @@ app.MapPost("/copy-file", async (string uri, string name, IHttpClientFactory htt
     return Results.Created(blobUriBuilder.ToUri(), null);
 });
 
-static SecretClient GetSecretClient(IConfiguration config)
-{
-    var keyVaultName = config["AccountNames:KeyVault"] ?? "kv-sbwa7dm5lugos";
-    var keyVaultUri = new Uri($"https://{keyVaultName}.{KEY_VAULT_DOMAIN}");
-    var credentials = new DefaultAzureCredential();
-    return new SecretClient(keyVaultUri, credentials);
-}
-
-app.MapPost("/keep-secret", async (string name, string value, IConfiguration config) =>
-{
-    var keyVaultClient = GetSecretClient(config);
-    await keyVaultClient.SetSecretAsync(name, value);
-    return Results.Created(new Uri($"/get-secret?name={name}"), null);
-});
-
-app.MapGet("/get-secret", async (string name, IConfiguration config) =>
-{
-    var keyVaultClient = GetSecretClient(config);
-    var secret = await keyVaultClient.GetSecretAsync(name);
-    return Results.Ok(new
-    {
-        Name = name,
-        Value = secret.Value.Value
-    });
-});
-
-app.MapGet("/from-db", async (IConfiguration config) =>
-{
-    var dbServerName = $"{config["AccountNames:DbServer"]}.{SQL_DOMAIN}";
-    // var connectionString = $"Server={config["AccountNames:DbServer"]}.{SQL_DOMAIN}; Authentication=Active Directory Managed Identity; Database={config["AccountName:Database"]}";
-    var connectionString = $"Server={dbServerName}; Database={config["AccountName:Database"]}";
-    using var connection = new SqlConnection(connectionString);
-    var token = await new DefaultAzureCredential().GetTokenAsync(new TokenRequestContext(new[] { "https://database.windows.net/.default" }));
-    connection.AccessToken = token.Token;
-    await connection.OpenAsync();
-
-    using var command = new SqlCommand("SELECT 42 AS ANSWER", connection);
-    int answer = (int)(await command.ExecuteScalarAsync())!;
-
-    return Results.Ok(new { Answer = answer });
-});
-
 app.MapGet("/raw-token", async (IHttpClientFactory httpClientFactory, IConfiguration config) =>
 {
     var client = httpClientFactory.CreateClient();
@@ -121,7 +100,54 @@ app.MapGet("/raw-token", async (IHttpClientFactory httpClientFactory, IConfigura
     var response = await responseMsg.Content.ReadAsStringAsync();
     return Results.Ok(response);
 });
+#endregion
 
+#region Azure Key Vault
+static SecretClient GetSecretClient(IConfiguration config)
+{
+    var keyVaultName = config["AccountNames:KeyVault"] ?? "kv-sbwa7dm5lugos";
+    var keyVaultUri = new Uri($"https://{keyVaultName}.{KEY_VAULT_DOMAIN}");
+    var credentials = new DefaultAzureCredential();
+    return new SecretClient(keyVaultUri, credentials);
+}
+
+app.MapPost("/keep-secret", async (string name, string value, IConfiguration config) =>
+{
+    var keyVaultClient = GetSecretClient(config);
+    await keyVaultClient.SetSecretAsync(name, value);
+    return Results.Created($"/get-secret?name={name}", null);
+});
+
+app.MapGet("/get-secret", async (string name, IConfiguration config) =>
+{
+    var keyVaultClient = GetSecretClient(config);
+    var secret = await keyVaultClient.GetSecretAsync(name);
+    return Results.Ok(new
+    {
+        Name = name,
+        Value = secret.Value.Value
+    });
+});
+#endregion
+
+#region Azure SQL
+app.MapGet("/from-db", async (IConfiguration config) =>
+{
+    var dbServerName = $"{config["AccountNames:DbServer"] ?? "sql-sbwa7dm5lugos"}.{SQL_DOMAIN}";
+    var connectionString = $"Server={dbServerName}; Database={config["AccountName:Database"] ?? "sqldb-sbwa7dm5lugos"}";
+    using var connection = new SqlConnection(connectionString);
+    var token = await new DefaultAzureCredential().GetTokenAsync(new TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+    connection.AccessToken = token.Token;
+    await connection.OpenAsync();
+
+    using var command = new SqlCommand("SELECT 42 AS ANSWER", connection);
+    int answer = (int)(await command.ExecuteScalarAsync())!;
+
+    return Results.Ok(new { Answer = answer });
+});
+#endregion
+
+#region Custom API
 app.MapGet("/ping-backend", async (IHttpClientFactory httpClientFactory, IConfiguration config) =>
 {
     var backendPingUri = $"https://{config["AccountNames:Backend"]}/api/ping";
@@ -151,19 +177,20 @@ app.MapGet("/secure-ping-backend", async (IHttpClientFactory httpClientFactory, 
         var responseMsg = await client.SendAsync(requestMsg);
         var response = await responseMsg.Content.ReadAsStringAsync();
 
-        return Results.Ok(response);
+        return Results.Content(response, "application/json");
     }
     catch (Exception ex)
     {
         return Results.Problem(ex.Message);
     }
 });
+#endregion
 
 app.Run();
 
 static async Task<string> GetAccessToken(string scope)
 {
-    var tokenRequestResult = await new DefaultAzureCredential().GetTokenAsync(
-        new TokenRequestContext(new[] { scope }));
+    var tokenRequestResult = await new DefaultAzureCredential()
+        .GetTokenAsync(new TokenRequestContext(new[] { scope }));
     return tokenRequestResult.Token;
 }

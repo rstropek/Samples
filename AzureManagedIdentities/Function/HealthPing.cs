@@ -23,20 +23,13 @@ public class HealthPing
     [FunctionName(nameof(SecurePing))]
     public async Task<IActionResult> SecurePing([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log)
     {
-        try
+        var principal = await tss.ValidateAuthorizationHeader(req, log);
+        if (principal != null)
         {
-            var principal = await tss.ValidateAuthorizationHeader(req, log);
-            if (principal != null)
-            {
-                var claims = principal.Claims.Select(c => new { c.Type, c.Value });
-                return new OkObjectResult(JsonSerializer.Serialize(claims));
-            }
+            var claims = principal.Claims.Select(c => new { c.Type, c.Value });
+            return new OkObjectResult(JsonSerializer.Serialize(claims));
+        }
 
-            return new UnauthorizedResult();
-        }
-        catch (Exception ex)
-        {
-            return new OkObjectResult(ex);
-        }
+        return new UnauthorizedResult();
     }
 }
