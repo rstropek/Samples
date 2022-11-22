@@ -4505,6 +4505,7 @@ for (; row < SIDE_LENGTH; row++) { level[row] = randomRows[Random.Shared.Next(0,
 
 #endregion
 
+#region Handler methods
 void Draw(SKCanvas canvas, SKImageInfo imageInfo)
 {
     // White background
@@ -4610,3 +4611,4 @@ GameApplication.Run(new(
     MouseMove: MouseMove,
     MouseWheel: MouseWheel
 ));
+#endregion
