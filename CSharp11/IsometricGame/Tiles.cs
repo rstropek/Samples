@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using SkiaSharp;
 
+#region Tiles
 /// <summary>
 /// Contains themed tile collections.
 /// </summary>
@@ -68,6 +69,89 @@ public static class TileTypes
     }
 }
 
+[Flags]
+public enum TileCategory
+{
+    None = 0,
+    Snow = 0b1,
+    Bridge = 0b10,
+    CanHavePoints = 0b100,
+    Green = 0b1000,
+    Dark = 0b1000,
+    Pink = 0b10000,
+}
+
+public static class TileArrayExtensions
+{
+    public static Tile[] CloneTiles(this Tile[] tiles) => tiles.Select(t => t with { }).ToArray();
+}
+
+// Note new generic parsable in the following type.
+
+/// <summary>
+/// Represents a decoration.
+/// </summary>
+public record Tile(string Type, TileCategory Category) : IParsable<Tile>, ISpanParsable<Tile>
+{
+    public bool IsSnow => Category.HasFlag(TileCategory.Snow);
+    public bool IsBridge => Category.HasFlag(TileCategory.Bridge);
+    public bool CanHaveDecoration => Category.HasFlag(TileCategory.CanHavePoints);
+    public bool IsEmpty => Type == string.Empty;
+
+    public Decoration? Decoration { get; set; }
+
+    public void Draw(Spritesheet sprites, SKCanvas canvas, SKSize? destSize = null)
+    {
+        if (Type == string.Empty) { return; }
+
+        canvas.Save();
+        canvas.DrawCenteredBitmap(sprites, Type, destSize);
+        if (Decoration != null)
+        {
+            canvas.Translate(0f, Decoration.TranslationY);
+            canvas.DrawCenteredBitmap(sprites, Decoration.Type);
+        }
+        canvas.Restore();
+    }
+    
+    public bool CanGoTo => !string.IsNullOrEmpty(Type) && (Decoration == null || Decoration.Reachable);
+
+    #region Parsable
+    public static Tile Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
+    {
+        if (TryParse(s, provider, out var tile))
+        {
+            return tile;
+        }
+
+        throw new FormatException($"Invalid tile: {s.ToString()}");
+    }
+
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Tile result)
+    {
+        // Note using of list pattern in the following code.
+        // See also https://slides.com/rainerstropek/csharp-11/fullscreen#/4
+        
+        result = s switch
+        {
+            ['W', .. var num] => TileTypes.GetByNumber(TileTypes.Winter, int.Parse(num)),
+            ['A', .. var num] => TileTypes.GetByNumber(TileTypes.Arctic, int.Parse(num)),
+            ['H', .. var num] => TileTypes.GetByNumber(TileTypes.Halloween, int.Parse(num)),
+            _ => null!
+        };
+        return result != null;
+    }
+
+    public static Tile Parse(string s, IFormatProvider? provider)
+        => Parse(s.AsSpan(), provider);
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Tile result)
+        => TryParse(s.AsSpan(), provider, out result);
+    #endregion
+}
+#endregion
+
+#region Decorations
 /// <summary>
 /// Contains decoration collections.
 /// </summary>
@@ -136,82 +220,4 @@ public record Decoration(string Type, float TranslationY, bool Reachable, int Va
 {
     public bool Pickable => Value > 0;
 };
-
-[Flags]
-public enum TileCategory
-{
-    None = 0,
-    Snow = 0b1,
-    Bridge = 0b10,
-    CanHavePoints = 0b100,
-    Green = 0b1000,
-    Dark = 0b1000,
-    Pink = 0b10000,
-}
-
-// Note new generic parsable in the following type.
-
-/// <summary>
-/// Represents a decoration.
-/// </summary>
-public record Tile(string Type, TileCategory Category) : IParsable<Tile>, ISpanParsable<Tile>
-{
-    public bool IsSnow => Category.HasFlag(TileCategory.Snow);
-    public bool IsBridge => Category.HasFlag(TileCategory.Bridge);
-    public bool CanHaveDecoration => Category.HasFlag(TileCategory.CanHavePoints);
-    public bool IsEmpty => Type == string.Empty;
-
-    public Decoration? Decoration { get; set; }
-
-    public void Draw(Spritesheet sprites, SKCanvas canvas, SKSize? destSize = null)
-    {
-        if (Type == string.Empty) { return; }
-
-        canvas.Save();
-        canvas.DrawCenteredBitmap(sprites, Type, destSize);
-        if (Decoration != null)
-        {
-            canvas.Translate(0f, Decoration.TranslationY);
-            canvas.DrawCenteredBitmap(sprites, Decoration.Type);
-        }
-        canvas.Restore();
-    }
-
-    public static Tile Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
-    {
-        if (TryParse(s, provider, out var tile))
-        {
-            return tile;
-        }
-
-        throw new FormatException($"Invalid tile: {s.ToString()}");
-    }
-
-    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Tile result)
-    {
-        // Note using of list pattern in the following code.
-        // See also https://slides.com/rainerstropek/csharp-11/fullscreen#/4
-        
-        result = s switch
-        {
-            ['W', .. var num] => TileTypes.GetByNumber(TileTypes.Winter, int.Parse(num)),
-            ['A', .. var num] => TileTypes.GetByNumber(TileTypes.Arctic, int.Parse(num)),
-            ['H', .. var num] => TileTypes.GetByNumber(TileTypes.Halloween, int.Parse(num)),
-            _ => null!
-        };
-        return result != null;
-    }
-
-    public static Tile Parse(string s, IFormatProvider? provider)
-        => Parse(s.AsSpan(), provider);
-
-    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Tile result)
-        => TryParse(s.AsSpan(), provider, out result);
-
-    public bool CanGoTo => !string.IsNullOrEmpty(Type) && (Decoration == null || Decoration.Reachable);
-}
-
-public static class TileArrayExtensions
-{
-    public static Tile[] CloneTiles(this Tile[] tiles) => tiles.Select(t => t with { }).ToArray();
-}
+#endregion

@@ -28,6 +28,14 @@ public record Spritesheet(
     Dictionary<string, Frame> Frames
 );
 
+// Note the use of a file-scoped types here (new in C# 11). For details see
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/file
+// and https://slides.com/rainerstropek/csharp-11/fullscreen#/3.
+
+file record SpriteFrames(
+  Dictionary<string, Frame> Frames
+);
+
 /// <summary>
 /// Class that offers methods to load spritesheets.
 /// </summary>
@@ -95,14 +103,6 @@ public static class SpritesheetLoader
         return new(image, sprites.Frames);
     }
 }
-
-// Note the use of a file-scoped types here (new in C# 11). For details see
-// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/file
-// and https://slides.com/rainerstropek/csharp-11/fullscreen#/3.
-
-file record SpriteFrames(
-  Dictionary<string, Frame> Frames
-);
 
 file class FrameDictJsonConverter : JsonConverter<Dictionary<string, Frame>>
 {

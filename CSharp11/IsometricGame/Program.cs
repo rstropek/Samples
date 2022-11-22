@@ -4466,11 +4466,23 @@ var player = new Player(sprites, $"User0{playerTileId + 1}.png", -tileSize.Heigh
 
 // Create the game board
 var level = new Tile[SIDE_LENGTH][];
+#endregion
 
+#region Level building
+/*
+// Simple level
+for (int y = 0; y < SIDE_LENGTH; y++)
+{
+    level[y] = new Tile[SIDE_LENGTH];
+    for (int x = 0; x < SIDE_LENGTH; x++)
+    {
+        level[y][x] = TileTypes.Arctic[1] with { };
+    }
+}
+*/
 // Current theme
 var theme = TileTypes.Arctic;
 
-#region Fill the level with random tiles
 // Generate 10_000 tile rows. This is for demo purposes only!
 // Obviously this would not make sense in a real-world application. We generate
 // many random rows to be able to demonstrate different variants of list patterns.
@@ -4491,6 +4503,7 @@ var row = 0;
 // See also https://slides.com/rainerstropek/csharp-11/fullscreen#/11
 level[row++] = Parse<Tile>("A2 A2 A3 A4 A4 A7 A14 A14 A15 A2");
 
+#region List patterns
 // Select random rows using list patterns.
 // See also https://slides.com/rainerstropek/csharp-11/fullscreen#/4
 level[row++] = randomRows.First(r => r is [{ IsEmpty: false, Decoration: null }, ..] && !r.Any(r => r.IsBridge)).CloneTiles();
@@ -4498,11 +4511,10 @@ level[row++] = randomRows.First(r => r is [{ IsBridge: false }, { Type: "" }, ..
 level[row++] = randomRows.First(r => r is [{ IsBridge: false }, { IsBridge: true }, { IsBridge: false }, .., { IsBridge: false }]).CloneTiles();
 level[row++] = randomRows.First(r => r is [{ IsBridge: false }, { Type: "" }, .., { IsBridge: false }]).CloneTiles();
 level[row++] = randomRows.First(r => !r.Any(r => r.IsBridge)).CloneTiles();
+#endregion
 
 // Fill up the remaining rows with random tiles
 for (; row < SIDE_LENGTH; row++) { level[row] = randomRows[Random.Shared.Next(0, randomRows.Length)].CloneTiles(); }
-#endregion
-
 #endregion
 
 #region Handler methods
@@ -4538,6 +4550,7 @@ void Draw(SKCanvas canvas, SKImageInfo imageInfo)
             var tile = level[pos.Y][pos.X];
             tile.Draw(sprites, canvas, referenceFrame.SourceSize);
 
+            #region Player drawing
             // Draw the player if it is on the current position
             if (pos == player.PlayerPosition)
             {
@@ -4555,6 +4568,7 @@ void Draw(SKCanvas canvas, SKImageInfo imageInfo)
                 // Draw the player
                 player.Draw(canvas);
             }
+            #endregion
 
             canvas.Restore();
         }
@@ -4563,6 +4577,7 @@ void Draw(SKCanvas canvas, SKImageInfo imageInfo)
     canvas.Restore();
 }
 
+#region Keyboard handling
 void KeyDown(KeyEventArgs key)
 {
     // We only care about the arrow keys
@@ -4587,7 +4602,9 @@ void KeyDown(KeyEventArgs key)
         player.PlayerPosition = nextPosition;
     }
 }
+#endregion
 
+#region Mouse handling
 void MouseWheel(float delta) => scale += delta / MOUSE_WHEEL_SENSITIVITY;
 void MouseDown(SKPoint position) => mouseDownPosition = position;
 void MouseUp(SKPoint position) => mouseDownPosition = null;
@@ -4602,6 +4619,7 @@ bool MouseMove(SKPoint position)
 
     return false;
 }
+#endregion
 
 GameApplication.Run(new(
     Draw: Draw,
