@@ -25,9 +25,9 @@
     {
     }
 
-    void MouseWheel(float delta) => { };
-    void MouseDown(SKPoint position) => { };
-    void MouseUp(SKPoint position) => { };
+    void MouseWheel(float delta) { };
+    void MouseDown(SKPoint position) { };
+    void MouseUp(SKPoint position) { };
     bool MouseMove(SKPoint position)
     {
         return false;
