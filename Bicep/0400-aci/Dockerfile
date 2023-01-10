@@ -1,12 +1,19 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0-bullseye-slim
 
-RUN apt-get update
-
-# Install various tools
-RUN apt-get install -y jq openssh-server
+# Install .NET 6, jq, SSH server, and Azure Functions Core Tools
+RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get install -y \
+        azure-functions-core-tools-4 \
+        dotnet-sdk-6.0 \
+        jq \
+        openssh-server 
 
 # Install Azure CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
+    && az bicep upgrade
 
 # Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash \
