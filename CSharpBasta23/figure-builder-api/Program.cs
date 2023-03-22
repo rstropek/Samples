@@ -62,6 +62,7 @@ app.MapPost("/build-image-url", (ImageOptions options, HttpRequest request, IIma
 .WithOpenApi(o =>
 {
     o.Responses[StatusCodes.Status201Created.ToString()].Description = "Successfully built image URL";
+    o.Responses[StatusCodes.Status201Created.ToString()].Headers.Add("Location", new() { Description = "The URL of the image", Schema = new() { Type = "string" } });
     o.Responses[StatusCodes.Status400BadRequest.ToString()].Description = "Invalid image options, see body for details.";
     return o;
 });
