@@ -1,0 +1,4 @@
+.vscode
+*.bicep
+Dockerfile
+*.azcli

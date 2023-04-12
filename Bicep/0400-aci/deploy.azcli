@@ -1,0 +1,48 @@
+# Switch to correct subscription
+# az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
+# az account show --output table
+
+# Region to use
+# If you change that, make sure to consider GDPR requirements!
+LOCATION=westeurope
+
+# Project nme
+PROJECT=teachingwithazure
+
+# Deploy resource group
+OUTPUT=$(az deployment sub create \
+    --name Deployment-$STAGE-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file resource-group.bicep \
+    --location $LOCATION \
+    --parameters \
+        projectName=$PROJECT \
+    | jq .properties.outputs)
+RG=$(echo $OUTPUT | jq -r .rgName.value)
+
+# Deploy resources
+USERID=$(az ad signed-in-user show | jq .id -r)
+
+# Deploy container registry
+OUTPUT=$(az deployment group create \
+    --resource-group $RG \
+    --name Deployment-Registry-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file containerRegistry.bicep \
+    --parameters \
+        projectName=$PROJECT \
+        adminPrincipalId=$USERID \
+    | jq .properties.outputs)
+REGISTRY=$(echo $OUTPUT | jq -r .registryName.value)
+az acr login --name $REGISTRY
+
+# Build container image and push it
+# docker build -t $REGISTRY.azurecr.io/teachingwithazure .
+# docker push $REGISTRY.azurecr.io/teachingwithazure
+az acr build --image teachingwithazure --registry $REGISTRY .
+
+az deployment group create \
+    --resource-group $RG \
+    --name Deployment-Instances-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file containerInstances.bicep \
+    --parameters \
+        projectName=$PROJECT \
+        studentCount=3

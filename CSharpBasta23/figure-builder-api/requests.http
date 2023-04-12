@@ -1,0 +1,46 @@
+@host = http://localhost:5110
+
+###################################################################
+# @name buildImageUrl
+POST {{host}}/build-image-url
+Content-Type: application/json
+
+{
+  "eye": "Open",
+  "hasHammer": true,
+  "mouth": "Happy",
+  "rightHand": "Victory",
+  "hasTail": false
+}
+
+###
+GET {{host}}/img/{{buildImageUrl.response.body.imageId}}
+
+###
+GET {{host}}/img/{{buildImageUrl.response.body.imageId}}?scale=0.25
+
+###################################################################
+# @name randomImage
+GET {{host}}/images/random
+
+###
+GET {{host}}/images/happy
+
+###
+GET {{host}}/images/sad
+
+###
+# @name randomImageUrl
+POST {{host}}/build-image-url
+Content-Type: application/json
+
+{
+  "eye": "{{randomImage.response.body.eye}}",
+  "hasHammer": {{randomImage.response.body.hasHammer}},
+  "mouth": "{{randomImage.response.body.mouth}}",
+  "rightHand": "{{randomImage.response.body.rightHand}}",
+  "hasTail": {{randomImage.response.body.hasTail}}
+}
+
+###
+GET {{host}}/img/{{randomImageUrl.response.body.imageId}}
