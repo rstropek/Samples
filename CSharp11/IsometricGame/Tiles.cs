@@ -92,7 +92,7 @@ public static class TileArrayExtensions
 // Note new generic parsable in the following type.
 
 /// <summary>
-/// Represents a decoration.
+/// Represents a tile.
 /// </summary>
 public record Tile(string Type, TileCategory Category) : IParsable<Tile>, ISpanParsable<Tile>
 {

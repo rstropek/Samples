@@ -31,22 +31,20 @@ var playerTileId = 0;
 var player = new Player(sprites, $"User0{playerTileId + 1}.png", -tileSize.Height / 2.5f);
 
 // Create the game board
-//var level = new string[SIDE_LENGTH][];
 var level = new Tile[SIDE_LENGTH][];
-#endregion
-
-#region Level building
 /*
-// Simple level
 for (int y = 0; y < SIDE_LENGTH; y++)
 {
-    level[y] = new string[SIDE_LENGTH];
+    level[y] = new Tile[SIDE_LENGTH];
     for (int x = 0; x < SIDE_LENGTH; x++)
     {
-        level[y][x] = "Arctic (15).png";
+        level[y][x] = new("Arctic (15).png", TileCategory.None);
     }
 }
 */
+#endregion
+
+#region Level building
 // Current theme
 var theme = TileTypes.Arctic;
 
@@ -153,12 +151,16 @@ void KeyDown(KeyEventArgs key)
 
     // Calculate next position
     var nextPosition = player.PlayerPosition;
-    var offset = key.Key switch
+    // Note that we use the new keyword without a data type here.
+    // This is possible because the data type (SKPointI) is inferred 
+    // from the left-hand side. With this, we do not need to write
+    // the data type SKPointI in each case of the switch expression.
+    SKPointI offset = key.Key switch
     {
-        Key.Up => new SKPointI(0, -1),
-        Key.Down => new SKPointI(0, 1),
-        Key.Left => new SKPointI(-1, 0),
-        Key.Right => new SKPointI(1, 0),
+        Key.Up => new(0, -1),
+        Key.Down => new(0, 1),
+        Key.Left => new(-1, 0),
+        Key.Right => new(1, 0),
         _ => SKPointI.Empty
     };
     nextPosition.Offset(offset);
