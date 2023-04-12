@@ -30,7 +30,7 @@ public record Spritesheet(
 
 // Note the use of a file-scoped types here (new in C# 11). For details see
 // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/file
-// and https://slides.com/rainerstropek/csharp-11/fullscreen#/3.
+// and https://slides.com/rainerstropek/csharp-11/fullscreen#/2.
 
 file record SpriteFrames(
   Dictionary<string, Frame> Frames
@@ -79,10 +79,7 @@ public static class SpritesheetLoader
                         void AddConverter<T>(JsonConverter<T> converter)
                         {
                             var properties = jsonTypeInfo.Properties.Where(p => p.PropertyType == typeof(T));
-                            foreach(var p in properties)
-                            {
-                                p.CustomConverter = converter;
-                            }
+                            foreach(var p in properties) { p.CustomConverter = converter; }
                         }
 
                         AddConverter(new SKRectJsonConverter());
@@ -104,12 +101,12 @@ public static class SpritesheetLoader
     }
 }
 
+#region Converters
 file class FrameDictJsonConverter : JsonConverter<Dictionary<string, Frame>>
 {
     public override Dictionary<string, Frame>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        // Here we have to convert an array of Frame objects to a dictionary.
-        // The filename is used as the key.
+        // Here we have to convert an array of Frame objects to a dictionary. The filename is used as the key.
         // Example JSON:
         // [
         //  { "filename": "Arctic (10).png", ... (rest of the Frame) },
@@ -182,3 +179,4 @@ file class SKRectJsonConverter : JsonConverter<SKRect>
     public override void Write(Utf8JsonWriter writer, SKRect value, JsonSerializerOptions options)
         => throw new NotImplementedException();
 }
+#endregion
