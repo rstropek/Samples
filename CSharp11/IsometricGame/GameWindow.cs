@@ -5,7 +5,7 @@ using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using SkiaSharp.Views.WPF;
 
-public record struct GameWindowHandlers(
+public record GameWindowHandlers(
     Action<SKCanvas, SKImageInfo>? Draw = null,
     Action<KeyEventArgs>? KeyDown = null,
     Action<SKPoint>? MouseDown = null,
@@ -25,7 +25,7 @@ public class GameApplication : Application
     {
         // Note: Null checking with !! was dropped for C# 11.
         // Use ArgumentNullException.ThrowIfNull (new in .NET 6) instead.
-        // See also https://slides.com/rainerstropek/csharp-11/fullscreen#/5
+        // See also https://slides.com/rainerstropek/csharp-11/fullscreen#/4
         ArgumentNullException.ThrowIfNull(handlers);
 
         Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
@@ -33,6 +33,20 @@ public class GameApplication : Application
 
         var app = new GameApplication(handlers);
         app.Run();
+    }
+}
+
+// Note the use of a file-scoped types here (new in C# 11). For details see
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/file
+file static class PointsExtensions
+{
+    // Did you know that you can add deconstructors to existing types
+    // via extension methods? Read more at
+    // https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/deconstruct#extension-methods-for-user-defined-types
+    public static void Deconstruct(this Point point, out float x, out float y)
+    {
+        x = (float)point.X;
+        y = (float)point.Y;
     }
 }
 
@@ -56,8 +70,9 @@ file class GameWindow : Window
         var window = new Window() { Content = element };
 
         // Shutdown app if main window is closed.
-        window.Closed += (_, args) => Application.Current.Shutdown();
-
+        // Note the Lambda discard parameter here. It was added in C# 9.
+        // Read more at https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/lambda-discard-parameters
+        window.Closed += (_, _) => Application.Current.Shutdown();
 
         if (handlers.KeyDown != null)
         {
@@ -71,8 +86,10 @@ file class GameWindow : Window
         {
             window.MouseLeftButtonDown += (_, args) =>
             {
-                var pos = args.GetPosition(element);
-                handlers.MouseDown(new((float)pos.X, (float)pos.Y));
+                // Here we use the deconstructor added via extension method
+                // (see above in class PointsExtensions).
+                var (x, y) = args.GetPosition(element);
+                handlers.MouseDown(new(x, y));
                 element.InvalidateVisual();
             };
         }
@@ -80,8 +97,8 @@ file class GameWindow : Window
         {
             window.MouseLeftButtonUp += (_, args) =>
             {
-                var pos = args.GetPosition(element);
-                handlers.MouseUp(new((float)pos.X, (float)pos.Y));
+                var (x, y) = args.GetPosition(element);
+                handlers.MouseUp(new(x, y));
                 element.InvalidateVisual();
             };
         }
@@ -89,11 +106,8 @@ file class GameWindow : Window
         {
             window.MouseMove += (_, args) =>
             {
-                var pos = args.GetPosition(element);
-                if (handlers.MouseMove(new((float)pos.X, (float)pos.Y)))
-                {
-                    element.InvalidateVisual();
-                }
+                var (x, y) = args.GetPosition(element);
+                if (handlers.MouseMove(new(x, y))) { element.InvalidateVisual(); }
             };
         }
         if (handlers.MouseWheel != null)

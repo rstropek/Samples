@@ -11,7 +11,7 @@
         tlp.HuffPuffBlow();
         foreach (var house in houses) { Console.WriteLine(house); }
 
-        Console.WriteLine("\n🐷🐷🐷 are smater now: 🏠🏠🏠");
+        Console.WriteLine("\n🐷🐷🐷 are smarter now: 🏠🏠🏠");
         ReadOnlySpan<PigHouse> pigsAreSmaterNow = stackalloc[] { PigHouse.Bricks, PigHouse.Bricks, PigHouse.Bricks };
         tlp.SetPigs(pigsAreSmaterNow);
         tlp.HuffPuffBlow();

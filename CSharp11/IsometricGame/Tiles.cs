@@ -54,6 +54,9 @@ public static class TileTypes
     public static Tile GetRandom(Tile[] theme)
     {
         ArgumentNullException.ThrowIfNull(theme);
+
+        // Note the use of Random.Shared here. It has been around since .NET 6, but
+        // still many people do new Random().Next().
         var tile = theme[Random.Shared.Next(theme.Length)];
         return tile with { Decoration = DecorationTypes.GetRandom(tile.Category) };
     }
@@ -75,10 +78,10 @@ public enum TileCategory
     None = 0,
     Snow = 0b1,
     Bridge = 0b10,
-    CanHavePoints = 0b100,
-    Green = 0b1000,
-    Dark = 0b1000,
-    Pink = 0b10000,
+    CanHavePoints = 0b1_00,
+    Green = 0b10_00,
+    Dark = 0b1_00_00,
+    Pink = 0b10_00_00,
 }
 
 public static class TileArrayExtensions
@@ -89,7 +92,7 @@ public static class TileArrayExtensions
 // Note new generic parsable in the following type.
 
 /// <summary>
-/// Represents a decoration.
+/// Represents a tile.
 /// </summary>
 public record Tile(string Type, TileCategory Category) : IParsable<Tile>, ISpanParsable<Tile>
 {
