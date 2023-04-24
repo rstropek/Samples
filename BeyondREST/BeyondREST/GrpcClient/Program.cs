@@ -1,8 +1,6 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcDemo;
-using System;
-using System.Threading.Tasks;
 
 AppContext.SetSwitch(
     "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
