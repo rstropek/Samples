@@ -14,11 +14,6 @@
         c.Value = 44;
         Console.WriteLine(v);
 
-        // Change internal reference that c holds.
-        var v2 = 1;
-        c.ChangeRef(ref v2);
-        Console.WriteLine(c.Value);
-
         // Set c to default. That will lead to a null reference.
         c = default;
         try
@@ -67,6 +62,4 @@ ref struct Container<T>
             this.value = value;
         }
     }
-
-    public void ChangeRef(ref T value) => this.value = ref value;
 }
