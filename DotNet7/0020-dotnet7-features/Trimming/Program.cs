@@ -5,19 +5,20 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 #endif
 
-const string data = @"
+const string data = """
     {
-        ""people"": [
+        "people": [
             {
-                ""firstName"": ""John"",
-                ""lastName"": ""Smith""
+                "firstName": "John",
+                "lastName": "Smith"
             },
             {
-                ""firstName"": ""Jane"",
-                ""lastName"": ""Smith""
+                "firstName": "Jane",
+                "lastName": "Smith"
             }       
         ]
-    }";
+    }
+    """;
 
 #if !WITH_CONTEXT
 var opt = new JsonSerializerOptions
