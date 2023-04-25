@@ -1,0 +1,23 @@
+{
+  "name": "grpcwebclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && copyfiles -f ./src/*.js ./dist && copyfiles -f ./src/google/rpc/*.js ./dist/google/rpc",
+    "start": "node ./dist/app.js",
+    "generate-client": "protoc -I=../GrpcShared greet.proto --js_out=import_style=commonjs:./src --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src && protoc -I=../GrpcShared google/rpc/status.proto --js_out=import_style=commonjs:./src --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "copyfiles": "^2.4.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "google-protobuf": "^3.21.2",
+    "grpc-web": "^1.4.2",
+    "xhr2": "^0.2.1"
+  }
+}

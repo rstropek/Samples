@@ -18,11 +18,11 @@ var app = builder.Build();
 IWebHostEnvironment env = app.Environment;
 if (env.IsDevelopment()) { app.MapGrpcReflectionService(); }
 
-app.UseGrpcWeb();
+app.UseGrpcWeb(new GrpcWebOptions {  DefaultEnabled = true });
 app.UseCors();
 
-app.MapGrpcService<GreeterService>().EnableGrpcWeb().RequireCors("AllowAll");
-app.MapGrpcService<MathGuruService>().EnableGrpcWeb().RequireCors("AllowAll");
+app.MapGrpcService<GreeterService>().RequireCors("AllowAll");
+app.MapGrpcService<MathGuruService>().RequireCors("AllowAll");
 
 app.MapGet("/", async context =>
 {
