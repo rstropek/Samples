@@ -1,10 +1,14 @@
 using GrpcServer.Services;
 using GrpcServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<MathAlgorithms>();
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
     builder.AllowAnyOrigin()
@@ -14,6 +18,11 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 }));
 
 var app = builder.Build();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 IWebHostEnvironment env = app.Environment;
 if (env.IsDevelopment()) { app.MapGrpcReflectionService(); }

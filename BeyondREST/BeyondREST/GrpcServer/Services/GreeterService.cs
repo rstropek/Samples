@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
+using System.Security.Claims;
 using Grpc.Core;
 using GrpcDemo;
-using Microsoft.Extensions.Logging;
 
 namespace GrpcServer;
 
@@ -17,9 +16,13 @@ public class GreeterService : Greeter.GreeterBase
     public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
     {
         _logger.LogInformation($"Saying hello to {request.Name}");
+
+        var user = context.GetHttpContext().User;
+        var userName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? "Unauthenticated";
+
         return Task.FromResult(new HelloReply
         {
-            Message = "Hello " + request.Name
+            Message = $"Hello {request.Name} ({userName})"
         });
     }
 }

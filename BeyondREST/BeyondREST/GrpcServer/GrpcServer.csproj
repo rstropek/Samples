@@ -8,6 +8,7 @@
 		<PackageReference Include="Grpc.AspNetCore" Version="2.52.0" />
 		<PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.52.0" />
 		<PackageReference Include="Grpc.AspNetCore.Web" Version="2.52.0" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="2.9.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\GrpcShared\GrpcShared.csproj" />
