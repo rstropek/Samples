@@ -5,7 +5,6 @@
 * Broad support on nearly every platform by nearly every vendor
   * C# only recently got native gRPC implementation
   * SignalR is an open protocol, but primarily driven by Microsoft
-  * OData is primarily driven by Microsoft
 * Robust standard
 * Lots of learning material and support
 * JSON payload is human readable, good for troubleshooting and learning
@@ -16,7 +15,7 @@
 * Code generation with *Swagger* aka *Open API*
   * Can be compared with gRPC Compiler for C#
 * Can be used directly from browser without reverse proxy
-  * gRPC needs [gRPC-Web](https://grpc.io/docs/tutorials/basic/web/) for that
+  * gRPC needs [gRPC-Web](https://learn.microsoft.com/en-us/aspnet/core/grpc/browser) for that
 * Loose coupling (principally, any HTTP is valid)
   * gRPC has strict message specification
 * Load balancing is simple because of request-response
@@ -40,13 +39,7 @@
   * *SignalR* can broadcast to receiver groups
   * Message-based communication supports topics-and-subscriptions with multiple subscribers
 * Communication partner must be online (same is true for gRPC and SignalR)
-  * Message-based communication can buffer messages until receivers come back online
+  * Messagebroker-based communication can buffer messages until receivers come back online
 * No load-leveling (same is true for gRPC and SignalR)
 * Client needs query capabilities (e.g. filtering, sorting, paging)
-  * DB backend: Add OData to support such scenarios
-  * Microservices backend: Consider GraphQL to support such scenarios
-
-## C# 8
-
-* [Async Streams](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8#asynchronous-streams)
-* [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8#nullable-reference-types)
+  * Add GraphQL/OData to support such scenarios

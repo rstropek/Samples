@@ -1,13 +1,29 @@
-import {HelloRequest, HelloReply} from './greet_pb';
-import {GreeterClient} from './GreetServiceClientPb';
-import XMLHttpRequest = require('xhr2');
+import { HelloRequest, HelloReply, FromTo, NumericResult } from "./greet_pb";
+import { GreeterClient, MathGuruClient } from "./GreetServiceClientPb";
+import XMLHttpRequest = require("xhr2");
 global.XMLHttpRequest = XMLHttpRequest;
 
-var client = new GreeterClient('http://localhost:5000');
+(async () => {
+  const client = new GreeterClient("http://localhost:5000");
 
-var request = new HelloRequest();
-request.setName('World');
+  const request = new HelloRequest();
+  request.setName("World");
 
-client.sayHello(request, {}, (err, response) => {
-  console.log(response.getMessage());
-});
+  const message = await client.sayHello(request, {});
+  console.log("Greeting:", message.getMessage());
+
+  const mathService = new MathGuruClient("http://localhost:5000");
+  const fromTo = new FromTo();
+  fromTo.setFrom(10);
+  fromTo.setTo(1000);
+  const stream = mathService.getFibonacci(fromTo, {});
+  stream.on("data", (response: NumericResult) => {
+    console.log(response.getResult());
+  });
+  stream.on("status", (status) => {
+    console.log("status");
+  });
+  stream.on("end", () => {
+    console.log("end");
+  });
+})();
