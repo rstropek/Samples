@@ -7,8 +7,16 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Grpc.Net.Client" Version="2.52.0" />
+		<PackageReference Include="Microsoft.Identity.Web.TokenAcquisition" Version="2.9.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\GrpcShared\GrpcShared.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

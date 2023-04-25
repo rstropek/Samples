@@ -1,6 +1,9 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcDemo;
+using Microsoft.Extensions.Azure;
+using Microsoft.Identity.Abstractions;
+using Microsoft.Identity.Web;
 
 AppContext.SetSwitch(
     "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
@@ -14,6 +17,16 @@ var channel = GrpcChannel.ForAddress("https://localhost:5001");
 
 await UnaryCall(channel);
 
+var tokenAcquirerFactory = TokenAcquirerFactory.GetDefaultInstance();
+tokenAcquirerFactory.Build();
+var acquirer = tokenAcquirerFactory.GetTokenAcquirer();
+var token = await acquirer.GetTokenForAppAsync("api://1ddc9f11-a5d7-4112-99aa-4a386328b54c/.default");
+var headers = new Metadata
+{
+    { "Authorization", $"Bearer {token.AccessToken}" }
+};
+await UnaryCall(channel, headers);
+
 // Tip: Reuse channel for gRPC calls, create multiple gRPC clients
 //      from it (including different types of clients).
 var mathClient = new MathGuru.MathGuruClient(channel);
@@ -24,11 +37,10 @@ await BidirectionalStreaming(mathClient);
 Console.WriteLine("Press any key to exit...");
 Console.ReadKey();
 
-
-static async Task UnaryCall(GrpcChannel channel)
+static async Task UnaryCall(GrpcChannel channel, Metadata? md = null)
 {
     var client = new Greeter.GreeterClient(channel);
-    var reply = await client.SayHelloAsync(new HelloRequest { Name = "GreeterClient" });
+    var reply = await client.SayHelloAsync(new HelloRequest { Name = "GreeterClient" }, md);
     Console.WriteLine("Greeting: " + reply.Message);
 }
 

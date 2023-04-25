@@ -18,7 +18,9 @@ public class GreeterService : Greeter.GreeterBase
         _logger.LogInformation($"Saying hello to {request.Name}");
 
         var user = context.GetHttpContext().User;
-        var userName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? "Unauthenticated";
+        var userName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value
+            ?? user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
+            ?? "Unauthenticated";
 
         return Task.FromResult(new HelloReply
         {
