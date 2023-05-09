@@ -36,7 +36,7 @@ var p = JsonSerializer.Deserialize<Person>("""
         "LastName": "Smith",
         "Age": "42"
     }
-    """, options);
+    """, options)!;
 Console.WriteLine(p.Age);
 
 class Person

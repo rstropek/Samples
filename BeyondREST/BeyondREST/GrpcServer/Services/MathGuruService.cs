@@ -1,117 +1,115 @@
-using System.Threading.Tasks;
 using Grpc.Core;
 using GrpcDemo;
 using GrpcServer.Services;
 
-namespace GrpcServer
+namespace GrpcServer;
+
+public class MathGuruService : MathGuru.MathGuruBase
 {
-    public class MathGuruService : MathGuru.MathGuruBase
+    private readonly MathAlgorithms math;
+
+    public MathGuruService(MathAlgorithms math)
     {
-        private readonly MathAlgorithms math;
+        // Note the use of ASP.NET Core's DI to get MathAlgorithms
+        this.math = math;
+    }
 
-        public MathGuruService(MathAlgorithms math)
+    public override async Task GetFibonacci(FromTo request, IServerStreamWriter<NumericResult> responseStream, ServerCallContext context)
+    {
+        // Check input parameters
+        if (request.From > request.To)
         {
-            // Note the use of ASP.NET Core's DI to get MathAlgorithms
-            this.math = math;
+            // Note simple error indication with status code and message
+            context.Status = new Status(StatusCode.InvalidArgument, "FromTo.From must be <= FromTo.To");
+            return;
         }
 
-        public override async Task GetFibonacci(FromTo request, IServerStreamWriter<NumericResult> responseStream, ServerCallContext context)
+        foreach (var current in math.GetFibonacci())
         {
-            // Check input parameters
-            if (request.From > request.To)
+            if (current < request.From)
             {
-                // Note simple error indication with status code and message
-                context.Status = new Status(StatusCode.InvalidArgument, "FromTo.From must be <= FromTo.To");
-                return;
+                // Fibonacci number is too low
+                continue;
             }
-
-            foreach (var current in math.GetFibonacci())
+            else if (current <= request.To)
             {
-                if (current < request.From)
-                {
-                    // Fibonacci number is too low
-                    continue;
-                }
-                else if (current <= request.To)
-                {
-                    // We got a Fibonacci number that the client is interested in
-                    await responseStream.WriteAsync(new NumericResult { Result = current });
+                // We got a Fibonacci number that the client is interested in
+                await responseStream.WriteAsync(new NumericResult { Result = current });
 
-                    // Simulate some long running calculation
-                    await Task.Delay(250);
-                }
-                else
-                {
-                    // Fibonacci number is too high
-                    break;
-                }
+                // Simulate some long running calculation
+                await Task.Delay(250);
+            }
+            else
+            {
+                // Fibonacci number is too high
+                break;
             }
         }
+    }
 
-        public override async Task GetFibonacciStepByStep(IAsyncStreamReader<FromTo> requestStream, IServerStreamWriter<StepByStepResult> responseStream, ServerCallContext context)
+    public override async Task GetFibonacciStepByStep(IAsyncStreamReader<FromTo> requestStream, IServerStreamWriter<StepByStepResult> responseStream, ServerCallContext context)
+    {
+        var fib = math.GetFibonacci().GetEnumerator();
+        FromTo? previousFromTo = null;
+
+        // Read requests from client
+        await foreach (var item in requestStream.ReadAllAsync())
         {
-            var fib = math.GetFibonacci().GetEnumerator();
-            FromTo? previousFromTo = null;
-
-            // Read requests from client
-            await foreach (var item in requestStream.ReadAllAsync())
+            // Check if request is valid
+            if (item.From > item.To)
             {
-                // Check if request is valid
-                if (item.From > item.To)
+                // Note returning error details using a oneof field in ProtoBuf.
+                // See also https://cloud.google.com/apis/design/errors#error_model for
+                // details about Google.Rpc.Status and Google.Rpc.Code
+                await responseStream.WriteAsync(new StepByStepResult
                 {
-                    // Note returning error details using a oneof field in ProtoBuf.
-                    // See also https://cloud.google.com/apis/design/errors#error_model for
-                    // details about Google.Rpc.Status and Google.Rpc.Code
-                    await responseStream.WriteAsync(new StepByStepResult
+                    Error = new Google.Rpc.Status
                     {
-                        Error = new Google.Rpc.Status
-                        {
-                            Code = (int)Google.Rpc.Code.InvalidArgument,
-                            Message = "To must be >= From"
-                        }
-                    });
+                        Code = (int)Google.Rpc.Code.InvalidArgument,
+                        Message = "To must be >= From"
+                    }
+                });
 
-                    // Wait for next client request
-                    continue;
-                }
+                // Wait for next client request
+                continue;
+            }
 
-                // Make sure new request is not < previous one
-                if (previousFromTo != null && item.From < previousFromTo.To)
+            // Make sure new request is not < previous one
+            if (previousFromTo != null && item.From < previousFromTo.To)
+            {
+                await responseStream.WriteAsync(new StepByStepResult
                 {
-                    await responseStream.WriteAsync(new StepByStepResult
+                    Error = new Google.Rpc.Status
                     {
-                        Error = new Google.Rpc.Status
-                        {
-                            Code = (int)Google.Rpc.Code.InvalidArgument,
-                            Message = "From must be >= previously sent To"
-                        }
-                    });
+                        Code = (int)Google.Rpc.Code.InvalidArgument,
+                        Message = "From must be >= previously sent To"
+                    }
+                });
 
-                    continue;
-                }
+                continue;
+            }
 
-                previousFromTo = item;
+            previousFromTo = item;
 
-                // Calculate Fibi
-                while (fib.Current < item.From)
+            // Calculate Fibi
+            while (fib.Current < item.From)
+            {
+                fib.MoveNext();
+            }
+
+            if (fib.Current > item.To)
+            {
+                continue;
+            }
+
+            while (fib.Current <= item.To)
+            {
+                await responseStream.WriteAsync(new StepByStepResult
                 {
-                    fib.MoveNext();
-                }
-
-                if (fib.Current > item.To)
-                {
-                    continue;
-                }
-
-                while (fib.Current <= item.To)
-                {
-                    await responseStream.WriteAsync(new StepByStepResult
-                    {
-                        Result = new NumericResult { Result = fib.Current }
-                    });
-                    fib.MoveNext();
-                    await Task.Delay(250);
-                }
+                    Result = new NumericResult { Result = fib.Current }
+                });
+                fib.MoveNext();
+                await Task.Delay(250);
             }
         }
     }

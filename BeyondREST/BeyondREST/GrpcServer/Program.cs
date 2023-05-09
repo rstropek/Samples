@@ -1,50 +1,41 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using GrpcServer.Services;
 using GrpcServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
-Host.CreateDefaultBuilder(args)
-.ConfigureWebHostDefaults(webBuilder =>
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<MathAlgorithms>();
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
-    webBuilder.ConfigureServices(services =>
-    {
-        services.AddSingleton<MathAlgorithms>();
-        services.AddGrpc();
+    builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders("Grpc-Status", "Grpc-Message");
+}));
 
-        services.AddCors(o => o.AddPolicy("AllowAll", builder =>
-        {
-            builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .WithExposedHeaders("Grpc-Status", "Grpc-Message");
-        }));
-    })
-    .Configure((context, app) =>
-    {
-        if (context.HostingEnvironment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
+var app = builder.Build();
 
-        app.UseRouting();
+app.UseRouting();
 
-        app.UseGrpcWeb();
-        app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapGrpcService<GreeterService>().EnableGrpcWeb().RequireCors("AllowAll");
-            endpoints.MapGrpcService<MathGuruService>().EnableGrpcWeb().RequireCors("AllowAll");
+IWebHostEnvironment env = app.Environment;
+if (env.IsDevelopment()) { app.MapGrpcReflectionService(); }
 
-            endpoints.MapGet("/", async context =>
-            {
-                await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-            });
-        });
-    });
-})
-.Build()
-.Run();
+app.UseGrpcWeb(new GrpcWebOptions {  DefaultEnabled = true });
+app.UseCors();
+
+app.MapGrpcService<GreeterService>().RequireCors("AllowAll");
+app.MapGrpcService<MathGuruService>().RequireCors("AllowAll");
+
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+});
+
+app.Run();

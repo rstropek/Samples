@@ -15,6 +15,6 @@ public static partial class Parser
     //public extern static int Parse(string str, int length);
 
     // This is how the new LibraryImport looks like:
-    [LibraryImport("parser.dll", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("libparser.so", StringMarshalling = StringMarshalling.Utf8)]
     public static partial int Parse(string str, int length);
 }

@@ -59,4 +59,3 @@
 * Download proper *ProtoBuf Compiler* (*protoc*) from [https://github.com/google/protobuf/releases](https://github.com/google/protobuf/releases) and make sure it is in the *PATH*
 * Install the *protoc plugin* for Go: `go get -u github.com/golang/protobuf/protoc-gen-go`
 * Make sure `$GOPATH/bin` is in the *PATH*
-
