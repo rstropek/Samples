@@ -1,9 +1,16 @@
+// ===============================================================================================
+//  Split up large Bicep files like this into modules in practice. This samples keeps everything
+//  in one file to make it easier to present and follow.
+// ===============================================================================================
+
+// The project name will be used to generate resource names, so it should be short and unique
 @description('Name of the project')
 param projectName string = 'azmgedid'
 
 @description('Location of the resources, uses resource group\'s location by default')
 param location string = resourceGroup().location
 
+// In this sample, we use a premium app service plan for the web app and the Azure Function
 @allowed([
   'P1V3'
   'P1V2'
@@ -21,7 +28,7 @@ param vmAdminUsername string = 'rainer'
 
 @description('Password for the VM admin account (VM is for demo purposes only, not needed in real life)')
 @secure()
-param vmAdminPassword string = 'P@ssw0rd!1234'
+param vmAdminPassword string
 
 @description('Optional ID of admin user, this user will have access to storage services with customer data; for dev/test stages only')
 param adminPrincipalId string = ''
@@ -34,12 +41,12 @@ param containerName string = 'nginx:alpine'
 
 var baseName = projectName
 var names = {
-  dataStorage: 'st${uniqueString('${baseName}-data')}'
-  functionStorage: 'st${uniqueString('${baseName}-functionstorage')}'
+  dataStorage: 'st${uniqueString('${baseName}-demo-data')}'
+  functionStorage: 'st${uniqueString('${baseName}-demo-functionstorage')}'
   functionIdentity: 'id-${uniqueString(baseName)}'
   appServicePlan: 'plan-${uniqueString(baseName)}'
-  functionApp: 'func-${uniqueString(baseName)}'
-  webApp: 'app-${uniqueString(baseName)}'
+  functionApp: 'func-${uniqueString('${baseName}-demo')}'
+  webApp: 'app-${uniqueString('${baseName}-demo')}'
   keyVault: 'kv-${uniqueString(baseName)}'
   sqlServer: 'sql-${uniqueString(baseName)}'
   database: 'sqldb-${uniqueString(baseName)}'
@@ -56,8 +63,8 @@ var names = {
   keyVaultPeDnsZoneName: 'privatelink.vaultcore.azure.net'
   sqlPeDnsZoneName: 'privatelink${environment().suffixes.sqlServerHostname}'
   funcPeDnsZoneName: 'privatelink.azurewebsites.net'
-  publicIpVm: 'pip-${uniqueString('${baseName}-vm')}'
-  vm: 'vm-${uniqueString('${baseName}')}'
+  publicIpVm: 'pip-${uniqueString('${baseName}-demo-vm')}'
+  vm: 'vm-${uniqueString('${baseName}-demo')}'
   nicVm: 'nic-${uniqueString('${baseName}-vm')}'
   appInsights: 'appi-${uniqueString('${baseName}')}'
   logAnalytics: 'log-${uniqueString('${baseName}')}'
@@ -81,6 +88,8 @@ var roleIds = {
   AcrPush: '8311e382-0749-4cb8-b61a-304f252e45ec'
 }
 
+// We isolate all resources in a VNet. In practice, all backend services that do not need
+// to be available from the public internet should be isolated in a VNet.
 resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   name: names.vnet
   location: location
@@ -131,6 +140,8 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2021-12-01-previ
   location: location
   tags: tags
   properties: {
+    // Consider turning off public network access for ingestion if not needed.
+    // Depends on the project's requirements.
     publicNetworkAccessForIngestion: 'Enabled'
     publicNetworkAccessForQuery: 'Enabled'
     retentionInDays: 30
@@ -154,11 +165,13 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   kind: 'web'
   properties: {
     Application_Type: 'web'
-    DisableIpMasking: false
+    DisableIpMasking: false // Change this setting according to your GDPR requirements
     WorkspaceResourceId: logAnalytics.id
   }
 }
 
+// This is our storage account that holds customer data. Therefore, it has to be protected
+// very thoroughly. We use private endpoints to access it from the backend services.
 resource dataStorage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   name: names.dataStorage
   location: location
@@ -173,6 +186,9 @@ resource dataStorage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
     allowSharedKeyAccess: false
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
+    // Disabling public network access is the right thing to do for production.
+    // In this demo scenario, we manually switch to 'Enabled' to enable interactive
+    // demonstrations.
     publicNetworkAccess: 'Disabled'
   }
 }
@@ -236,6 +252,7 @@ resource privateDnsZoneBlob 'Microsoft.Network/privateDnsZones@2020-01-01' = {
   }
 }
 
+// We allow developers to access the storage account with customer data for dev/test purposes.
 resource adminDataStorageAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = if (adminPrincipalId != '') {
   name: guid(dataStorage.id, adminPrincipalId)
   scope: dataStorage
@@ -245,6 +262,8 @@ resource adminDataStorageAssignment 'Microsoft.Authorization/roleAssignments@202
   }
 }
 
+// This storage account is for the Azure Function. It does not contain customer data, so we
+// can allow shared key access.
 resource functionStorage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   name: names.functionStorage
   location: location
@@ -262,6 +281,7 @@ resource functionStorage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
 }
 
+// We allow developers to access the storage account for dev/test purposes.
 resource adminFunctionStorageAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = if (adminPrincipalId != '') {
   name: guid(functionStorage.id, adminPrincipalId)
   scope: functionStorage
@@ -290,6 +310,9 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
   tags: tags
   kind: 'functionapp'
   identity: {
+    // Note that we use a system-assigned identity here. This will create an app
+    // registration for the function. We can assign access permissions to the
+    // app registration.
     type: 'SystemAssigned'
   }
   properties: {
@@ -305,6 +328,7 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
       functionAppScaleLimit: 5
       webSocketsEnabled: false
       publicNetworkAccess: funcPublicAccess
+      alwaysOn: true
     }
   }
 
@@ -312,10 +336,10 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
     name: 'appsettings'
     properties: {
       APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
-      AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(functionStorage.id, functionStorage.apiVersion).keys[0].value}'
+      AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${functionStorage.listKeys().keys[0].value}'
       FUNCTIONS_EXTENSION_VERSION: '~4'
       FUNCTIONS_WORKER_RUNTIME: 'dotnet'
-      WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(functionStorage.id, functionStorage.apiVersion).keys[0].value}'
+      WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${functionStorage.listKeys().keys[0].value}'
       AZURE_FUNCTIONS_ENVIRONMENT: 'Development'
       AzureWebJobsDisableHomepage: 'true'
       WEBSITE_CONTENTSHARE: names.functionApp
@@ -354,6 +378,7 @@ resource privateDnsZoneFunc 'Microsoft.Network/privateDnsZones@2020-01-01' = {
   }
 }
 
+// We use a Private Endpoint to make our Azure Function available to the web app.
 resource funcPe 'Microsoft.Network/privateEndpoints@2022-05-01' = {
   name: names.peFunc
   location: location
@@ -400,6 +425,9 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   location: location
   tags: tags
   identity: {
+    // Note that we use a system-assigned identity here. This will create an app
+    // registration for the web app. We can assign access permissions to the
+    // app registration.
     type: 'SystemAssigned'
   }
   properties: {
@@ -414,6 +442,7 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
       http20Enabled: true
       webSocketsEnabled: false
 
+      // Note that we use the web app's managed identity to pull the container image from ACR
       acrUseManagedIdentityCreds: true
       linuxFxVersion: 'DOCKER|${containerName}'
     }
@@ -424,11 +453,11 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
     properties: {
       APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
       WEBSITE_RUN_FROM_PACKAGE: '1'
-      AccountNames__Storage: 'stuu3g75ep5thny'
-      AccountNames__KeyVault: 'kv-sbwa7dm5lugos'
-      AccountNames__DbServer: 'sql-sbwa7dm5lugos'
-      AccountNames__Database: 'sqldb-sbwa7dm5lugos'
-      AccountNames__Backend: 'func-sbwa7dm5lugos.azurewebsites.net'
+      AccountNames__Storage: dataStorage.name
+      AccountNames__KeyVault: keyvault.name
+      AccountNames__DbServer: sqlServer.name
+      AccountNames__Database: names.database
+      AccountNames__Backend: '${functionApp.name}.azurewebsites.net'
       AccountNames__Audience: 'api://backend-api.rainertimecockpit.onmicrosoft.com'
       WEBSITE_DNS_SERVER: '168.63.129.16'
       WEBSITE_VNET_ROUTE_ALL: '1'
@@ -603,7 +632,7 @@ resource sqlServer 'Microsoft.Sql/servers@2022-05-01-preview' = {
     version: '12.0'
     administrators: {
       administratorType: 'ActiveDirectory'
-      azureADOnlyAuthentication: true
+      azureADOnlyAuthentication: true // We only allow ADD authentication
       principalType: 'User'
       tenantId: subscription().tenantId
       login: adminPrincipalName
@@ -705,6 +734,17 @@ resource privateDnsZoneSql 'Microsoft.Network/privateDnsZones@2020-01-01' = {
   }
 }
 
+// Here we access the publishing credentials for the web app. We need them
+// to setup the deployment web hook from ACR.
+resource publishingcreds 'Microsoft.Web/sites/config@2021-01-01' existing = {
+  parent: webApp
+  #disable-next-line BCP036
+  name: 'publishingcredentials'
+}
+
+#disable-next-line use-resource-symbol-reference
+var creds = list(publishingcreds.id, publishingcreds.apiVersion).properties.scmUri
+
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' = {
   name: names.containerRegistry
   location: location
@@ -713,10 +753,27 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-pr
     name: 'Standard'
   }
   properties: {
-    adminUserEnabled: false
+    adminUserEnabled: false // We disable admin user, only AAD is allowed
+  }
+
+  // Setup deployment webhook to update web app when new container image
+  // becomes available.
+  resource acrWebhook 'webhooks@2023-01-01-preview' = {
+    name: 'webhook'
+    location: location
+    tags: tags
+    properties: {
+      scope: 'azmgedid'
+      serviceUri: '${creds}/docker/hook'
+      status: 'enabled'
+      actions: [
+        'push'
+      ]
+    }
   }
 }
 
+// We allow the web app to pull the container image from ACR.
 resource webAppAcrAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   name: guid(containerRegistry.id, webApp.id)
   scope: containerRegistry
@@ -727,6 +784,7 @@ resource webAppAcrAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01
   }
 }
 
+// We allow the developers to push container images to ACR for dev/test purposes.
 resource adminAcrAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = if (adminPrincipalId != '') {
   name: guid(containerRegistry.id, adminPrincipalId)
   scope: containerRegistry
@@ -773,6 +831,8 @@ resource networkInterfaceName 'Microsoft.Network/networkInterfaces@2020-06-01' =
   ]
 }
 
+// Note that this VM is not required for the scenario to work. It is only used
+// for demo purposes to show how to get access tokens using Managed Identity.
 resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
   name: names.vm
   location: location

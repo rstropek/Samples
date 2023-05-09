@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Azure.Core;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -39,7 +40,7 @@ app.MapGet("/ping", () => "pong");
 #region Azure Storage
 app.MapGet("/storage-token", async (IConfiguration config) =>
 {
-    var accountName = config["AccountNames:Storage"] ?? "stuu3g75ep5thny";
+    var accountName = config["AccountNames:Storage"] ?? "stau4rvl4is2cyy";
     return Results.Ok($"{(await GetAccessToken($"https://{accountName}.${STORAGE_DOMAIN}"))[..100]}...");
 });
 
@@ -51,7 +52,7 @@ app.MapPost("/copy-file", async (string uri, string name, IHttpClientFactory htt
     var sourceStream = await responseMsg.Content.ReadAsStreamAsync();
 
     // Create blob service client
-    var accountName = config["AccountNames:Storage"] ?? "stuu3g75ep5thny";
+    var accountName = config["AccountNames:Storage"] ?? "stau4rvl4is2cyy";
     var accountUri = new Uri($"https://{accountName}.{STORAGE_DOMAIN}");
     var credentials = new DefaultAzureCredential();
     var blobServiceClient = new BlobServiceClient(accountUri, credentials);
@@ -91,7 +92,7 @@ app.MapPost("/copy-file", async (string uri, string name, IHttpClientFactory htt
 app.MapGet("/raw-token", async (IHttpClientFactory httpClientFactory, IConfiguration config) =>
 {
     var client = httpClientFactory.CreateClient();
-    var accountName = config["AccountNames:Storage"] ?? "stuu3g75ep5thny";
+    var accountName = config["AccountNames:Storage"] ?? "stau4rvl4is2cyy";
     var fullAccountName = $"{accountName}.{STORAGE_DOMAIN}";
     var requestUrl = $"http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2F{fullAccountName}%2F";
     var requestMsg = new HttpRequestMessage(HttpMethod.Get, requestUrl);
@@ -159,6 +160,7 @@ app.MapGet("/ping-backend", async (IHttpClientFactory httpClientFactory, IConfig
 app.MapGet("/backend-token", async (IConfiguration config) =>
 {
     var audience = config["AccountNames:Audience"];
+    Debug.Assert(audience != null);
     var token = await GetAccessToken(audience);
     return Results.Ok(token);
 });
@@ -168,6 +170,7 @@ app.MapGet("/secure-ping-backend", async (IHttpClientFactory httpClientFactory, 
     try
     {
         var audience = config["AccountNames:Audience"];
+        Debug.Assert(audience != null);
         var token = await GetAccessToken(audience);
 
         var backendPingUri = $"https://{config["AccountNames:Backend"]}/api/secureping";

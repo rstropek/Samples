@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Function;
+namespace AzMgedId.Functions;
 
 public interface ITokenSigningService
 {
@@ -39,12 +39,14 @@ public class TokenSigningService : ITokenSigningService
         var handler = new JwtSecurityTokenHandler();
         try
         {
+            #pragma warning disable CA1849
             var principal = handler.ValidateToken(token, validationParameters, out var securityToken);
             if (principal?.Identity?.IsAuthenticated ?? false)
             {
                 return principal;
             }
         }
+        #pragma warning disable CA1031
         catch (Exception ex)
         {
             log.LogError(ex, "Error while validating token");
@@ -55,8 +57,10 @@ public class TokenSigningService : ITokenSigningService
 
     public async Task<ClaimsPrincipal?> ValidateAuthorizationHeader(HttpRequest req, ILogger log)
     {
+        ArgumentNullException.ThrowIfNull(req);
         if (req.Headers.TryGetValue("Authorization", out var authHeaders))
         {
+            #pragma warning disable CA1310
             if (authHeaders.Count != 1 || !authHeaders[0].StartsWith("Bearer "))
             {
                 return null;

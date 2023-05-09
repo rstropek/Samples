@@ -1,7 +1,7 @@
-#@host=http://localhost:5196
-@host=https://app-sbwa7dm5lugos.azurewebsites.net/
+#@host=http://localhost:5000
+@host=https://app-owsag5bbmhyzi.azurewebsites.net/
 #@backend=http://localhost:7071
-@backend=https://func-sbwa7dm5lugos.azurewebsites.net
+@backend=https://func-owsag5bbmhyzi.azurewebsites.net
 
 ###
 GET {{host}}/ping

@@ -1,12 +1,11 @@
 using System.Text.Json;
-using Function;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 
-namespace UdoApi.Functions;
+namespace AzMgedId.Functions;
 
 public class HealthPing
 {

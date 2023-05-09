@@ -1,10 +1,9 @@
-using Function;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: FunctionsStartup(typeof(UdoApi.Functions.Startup))]
+[assembly: FunctionsStartup(typeof(AzMgedId.Functions.Startup))]
 
-namespace UdoApi.Functions;
+namespace AzMgedId.Functions;
 
 public class Startup : FunctionsStartup
 {

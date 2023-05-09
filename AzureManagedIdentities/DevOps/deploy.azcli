@@ -26,8 +26,8 @@ USERNAME=$(az ad signed-in-user show | jq .userPrincipalName -r)
 #CONTAINER=nginx:alpine
 CONTAINER=acrsbwa7dm5lugos.azurecr.io/azmgedid:latest
 
-# FUNCPUBLICACCESS=Enabled
-FUNCPUBLICACCESS=Disabled
+FUNCPUBLICACCESS=Enabled
+# FUNCPUBLICACCESS=Disabled
 
 APPNAMES=$(az deployment group create \
     --resource-group $RG \
@@ -38,6 +38,7 @@ APPNAMES=$(az deployment group create \
         adminPrincipalName=$USERNAME \
         containerName=$CONTAINER \
         funcPublicAccess=$FUNCPUBLICACCESS \
+        vmAdminPassword=P_ssw-rd+1234 \
     | jq .properties.outputs)
 FUNCNME=$(echo $APPNAMES | jq -r .funcName.value)
 WEBAPPNAME=$(echo $APPNAMES | jq -r .webAppName.value)
@@ -74,8 +75,10 @@ docker build -t acrsbwa7dm5lugos.azurecr.io/azmgedid .
 docker push acrsbwa7dm5lugos.azurecr.io/azmgedid
 
 # Function App (run from package)
-func azure functionapp publish func-sbwa7dm5lugos
+func azure functionapp publish func-owsag5bbmhyzi
 
 # Demonstrate Managed Identity with curl
+dig kv-sbwa7dm5lugos.vault.azure.net
+dig func-owsag5bbmhyzi.azurewebsites.net
 ACCESS_TOKEN=$(curl -sS --header "Metadata: true" "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net" | jq .access_token -r)
 curl -sS --header "Authorization: Bearer $ACCESS_TOKEN" https://kv-sbwa7dm5lugos.vault.azure.net/secrets/mySecret?api-version=7.3 | jq
