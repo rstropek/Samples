@@ -43,7 +43,7 @@ public class RecordStructs
 
         // Immutable record struct
         var v2 = new ImmutableVector2d(1d, 2d);
-        //v2.X += 1d; // -> doesn't work as this is a readyonly record struct
+        //v2.X += 1d; // -> doesn't work as this is a readonly record struct
         Assert.Equal(new(2d, 3d), v2.Translate(1d, 1d));
     }
     #endregion
