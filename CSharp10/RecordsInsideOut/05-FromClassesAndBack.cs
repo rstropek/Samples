@@ -34,6 +34,6 @@ public class FromClassesAndBack
 
         // Class into record
         var hero = mapper.Map<Hero>(traditionalHomelander);
-        Assert.Equal(traditionalHero.Name, homelander.Name);
+        Assert.Equal(traditionalHero.Name, hero.Name);
     }
 }
