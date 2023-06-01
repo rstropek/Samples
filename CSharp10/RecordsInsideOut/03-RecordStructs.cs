@@ -56,7 +56,7 @@ public class RecordStructs
         Assert.Equal(new ImmutableVector2d(1d, 1d).GetHashCode(),
             new ImmutableVector2d(1d, 1d).GetHashCode());
 
-        // Redonly record can be used e.g. as dict key
+        // Readonly record can be used e.g. as dict key
         var interestingLocations = new Dictionary<ImmutableVector2d, string>
         {
             [new(42d, 42d)] = "Magratheans",
