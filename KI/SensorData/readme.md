@@ -36,7 +36,7 @@
     var options = new GenerationOptions(numberOfValues, frequency, amplitude, outlierPercentage, outlierFactor);
     ```
 
-3. **Help me write a method that generates 500 random data points in C#. The generated data should roughly follow a sinus curve. However, a small number of value should be obvious, random outliers.**
+3. **Help me write a method that generates 500 random data points in C#. The generated data should follow a sinus curve with a slight, random deviation. However, a small number of values should be obvious, random outliers.**
    1. **In modern C#, you should use `Random.Shared` instead of `new Random()`.**
    2. Generate method call with Copilot
 
@@ -48,7 +48,7 @@
 
         ```xml
         <ItemGroup>
-            <PackageReference Include="ScottPlot" Version="5.0.2-beta" />
+            <PackageReference Include="ScottPlot" Version="5.0.5-beta" />
             <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.3" />
         </ItemGroup>
         ```
