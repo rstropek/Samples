@@ -876,7 +876,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
   }
 }
 
-resource vmKeyVaultAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+resource vmKeyVaultAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(keyvault.id, vm.id)
   scope: keyvault
   properties: {
