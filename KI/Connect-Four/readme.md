@@ -1,5 +1,7 @@
 # Connect Four Game in C# - Coding Exercise
 
+![Hero image](hero.png)
+
 ## Overview
 
 This exercise is designed to assess your ability to write and understand C# code and .NET framework. The goal is to create a simple, text-based version of the "Connect Four" game. 
