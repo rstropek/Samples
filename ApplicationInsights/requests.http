@@ -1,5 +1,5 @@
-@host = https://localhost:7082
-#@host = https://basta-2022-bff.azurewebsites.net
+#@host = https://localhost:7082
+@host = https://web-appinsights-bff.azurewebsites.net
 
 ###
 GET {{host}}/ping
@@ -30,3 +30,14 @@ GET {{host}}/div?x=42&y=2
 
 ###
 GET {{host}}/div-backend?x=42&y=0
+
+###
+GET https://web-appinsights-backend.azurewebsites.net/div?x=42&y=0
+
+###
+POST https://logic-appinsights.azurewebsites.net:443/api/echo/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=J6oqz7-U8i9pZSTMERLkWfRSMzhYjvdpFnRR5ZvqJVw
+Content-Type: application/json
+
+{
+    "name": "Rainer"
+}

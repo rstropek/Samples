@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Reflection;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,7 @@ builder.Services.AddAuthentication("BasicAuthentication")
 
 builder.Services.AddHttpClient("Backend", httpClient =>
 {
-    httpClient.BaseAddress = new Uri(builder.Configuration["BackendApi"], UriKind.Absolute);
+    httpClient.BaseAddress = new Uri(builder.Configuration["BackendApi"]!, UriKind.Absolute);
 });
 
 var app = builder.Build();
@@ -105,7 +106,7 @@ app.UseExceptionHandler(errorApp =>
             Detail = "This is a demo error used to demonstrate problem details",
         };
         pd.Extensions.Add("RequestId", context.TraceIdentifier);
-        await context.Response.WriteAsJsonAsync(pd, pd.GetType(), null, contentType: "application/problem+json");
+        await context.Response.WriteAsJsonAsync(pd, new JsonSerializerOptions(), "application/problem+json", CancellationToken.None);
     });
 });
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
@@ -117,7 +118,7 @@ app.MapGet("/logger", (ILogger<Program> logger) =>
     // write logs. Read more at
     // https://docs.microsoft.com/en-us/azure/azure-monitor/app/ilogger.
     // Note that ILogger logs become TraceTelemetry entries in App Insights.
-    // Yet, if you log an exception, ExecptionTelemetry entry is created.
+    // Yet, if you log an exception, ExceptionTelemetry entry is created.
     logger.LogWarning("Hmm, I am not sure everything is ok");
 
     // App Insights also supports ILogger's scope. Scope values will become
@@ -139,7 +140,7 @@ app.MapGet("/track-custom-event", (TelemetryClient telemetry) =>
     // and metrics at https://docs.microsoft.com/en-us/azure/azure-monitor/app/api-custom-events-metrics
     telemetry.TrackEvent(
         $"This is a custom event", 
-        new Dictionary<string, string>() { { "Answer", "Fortytwo" } }, 
+        new Dictionary<string, string>() { { "Answer", "Forty two" } }, 
         new Dictionary<string, double>() { { "Runtime", 42d } });
 
     return Results.Ok();
@@ -162,7 +163,18 @@ app.MapGet("/div-backend", async (int? x, int? y, IHttpClientFactory httpClientF
         logger.LogWarning("Backend responded with empty string");
     }
 
-    return Results.Ok(response ?? string.Empty);
+    return Results.Ok(response);
+});
+app.MapGet("/weather-backend", async (string city, IHttpClientFactory httpClientFactory, ILogger<Program> logger) =>
+{
+    var client = httpClientFactory.CreateClient("Backend");
+    var response = await client.GetFromJsonAsync<string>($"/weather?city={city}");
+    if (string.IsNullOrEmpty(response))
+    {
+        logger.LogWarning("Backend responded with empty string");
+    }
+
+    return Results.Ok(response);
 });
 
 logger.LogInformation("Pipeline set up successfully");

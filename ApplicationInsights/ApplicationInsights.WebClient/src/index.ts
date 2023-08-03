@@ -1,13 +1,13 @@
 import './index.css';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 
-const host = 'https://localhost:7082';
-//const host = 'https://basta-2022-bff.azurewebsites.net';
+//const host = 'https://localhost:7082';
+const host = 'https://web-appinsights-bff.azurewebsites.net';
 
 const appInsights = new ApplicationInsights({
     config: {
         connectionString:
-            'InstrumentationKey=636be64b-2d01-493e-ac61-d58cc21a743b;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/',
+            'InstrumentationKey=247de421-1bed-4c93-8dc6-74e5100fcbda;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/',
 
         // Enable correlation to get end-to-end transaction view. Read more at
         // https://docs.microsoft.com/en-us/azure/azure-monitor/app/javascript#enable-correlation
@@ -64,5 +64,18 @@ divBtn.onclick = async () => {
         divResult.innerText = `The result is ${data}`;
     } else {
         divResult.innerText = `ERROR: ${data.detail} (${data.RequestId})`;
+    }
+};
+
+const getWeatherBtn = document.getElementById('getWeather') as HTMLButtonElement;
+const city = document.getElementById('city') as HTMLInputElement;
+const divWeatherResult = document.getElementById('div-weather-result') as HTMLDivElement;
+getWeatherBtn.onclick = async () => {
+    const response = await fetch(`${host}/weather-backend?city=${city.value}`);
+    const data = await response.json();
+    if (response.ok) {
+        divWeatherResult.innerText = data;
+    } else {
+        divWeatherResult.innerText = `ERROR: ${data.detail} (${data.RequestId})`;
     }
 };

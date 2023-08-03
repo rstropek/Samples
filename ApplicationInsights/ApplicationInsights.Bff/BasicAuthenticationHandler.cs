@@ -74,7 +74,7 @@ class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOpt
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Invalid Authorization Header: {Header}", header);
+            logger.LogError(ex, "Invalid Authorization Header: {Header}", header!);
             return Task.FromResult(AuthenticateResult.Fail("Invalid Authorization Header"));
         }
 
