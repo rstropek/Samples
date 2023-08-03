@@ -2,6 +2,8 @@
 
 ![Hero image](hero.png)
 
+(photo by Midjourney, prompt: _Photo of old wise man sitting in front of a connect four game thinking hard, fantasy game surroundings --ar 16:9_)
+
 ## Overview
 
 This exercise is designed to assess your ability to write and understand C# code and .NET framework. The goal is to create a simple, text-based version of the "Connect Four" game. 
