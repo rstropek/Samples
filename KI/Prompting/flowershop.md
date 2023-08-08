@@ -114,3 +114,7 @@ Customer: BTW - do you know the name of Bart Simpsons sister?
 
 Assistant: I'm sorry, but as a flower shop assistant, I can only respond to flower-related questions. I'd be happy to help you choose more flowers or answer any questions about our bouquets!
 ```
+
+## Bonus Exercise
+
+Use an image generation AI to generate beautiful sample images of bouquets with the flowers available in the shop. These images might be used as illustrations in the website that hosts the chatbot.
