@@ -115,6 +115,10 @@ Customer: BTW - do you know the name of Bart Simpsons sister?
 Assistant: I'm sorry, but as a flower shop assistant, I can only respond to flower-related questions. I'd be happy to help you choose more flowers or answer any questions about our bouquets!
 ```
 
-## Bonus Exercise
+## Bonus Exercise 1
+
+If you have access to ChatGPT 3.5 and 4, try to use both versions and compare their performance. Which one is better at understanding the customer's intent? Which one is better at generating a response that is relevant to the customer's intent? Which one is better in generating a machine-readable response?
+
+## Bonus Exercise 2
 
 Use an image generation AI to generate beautiful sample images of bouquets with the flowers available in the shop. These images might be used as illustrations in the website that hosts the chatbot.
