@@ -3,15 +3,8 @@ public interface IImageRenderer
     byte[] Render(ImageOptions imageOptions, float scale);
 }
 
-public class ImageRenderer : IImageRenderer
+public class ImageRenderer(IImageComponentCache images) : IImageRenderer
 {
-    private readonly IImageComponentCache images;
-
-    public ImageRenderer(IImageComponentCache images)
-    {
-        this.images = images;
-    }
-
     public byte[] Render(ImageOptions imageOptions, float scale)
     {
         var width = (int)Math.Ceiling((double)(1024f * scale));

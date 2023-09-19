@@ -18,8 +18,6 @@ public class ImageOptionBuilder : IImageOptionBuilder
     private bool withTail = false;
     private bool withHammer = false;
 
-    public ImageOptionBuilder() { }
-
     public IImageOptionBuilder WithEye(EyeType eye) { withEye = eye; return this; }
     public IImageOptionBuilder WithHammer() { withHammer = true; return this; }
     public IImageOptionBuilder WithoutHammer() { withHammer = false; return this; }
@@ -27,7 +25,7 @@ public class ImageOptionBuilder : IImageOptionBuilder
     public IImageOptionBuilder WithRightHand(RightHandType rightHand) { withRightHand = rightHand; return this; }
     public IImageOptionBuilder WithTail() { withTail = true; return this; }
     public IImageOptionBuilder WithoutTail() { withTail = false; return this; }
-    public ImageOptions Build() => new ImageOptions(withEye, withHammer, withMouth, withRightHand, withTail);
+    public ImageOptions Build() => new(withEye, withHammer, withMouth, withRightHand, withTail);
 }
 
 static class IImageOptionBuilderExtensions
@@ -40,7 +38,7 @@ static class IImageOptionBuilderExtensions
             return (T)values.GetValue(System.Random.Shared.Next(values.Length))!;
         }
 
-        bool PickRandomBool() => System.Random.Shared.Next(2) == 0;
+        static bool PickRandomBool() => System.Random.Shared.Next(2) == 0;
 
         var b = builder
             .WithEye(PickRandom<EyeType>())

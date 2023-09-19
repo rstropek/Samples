@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "delegates", "delegates\delegates.csproj", "{669E05BE-503B-46EA-B300-F2DF318A8167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "figure-builder-api\api.csproj", "{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{669E05BE-503B-46EA-B300-F2DF318A8167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{669E05BE-503B-46EA-B300-F2DF318A8167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{669E05BE-503B-46EA-B300-F2DF318A8167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{669E05BE-503B-46EA-B300-F2DF318A8167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

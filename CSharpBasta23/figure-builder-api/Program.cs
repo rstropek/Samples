@@ -22,7 +22,7 @@ builder.Services
 builder.Services
     .AddSingleton<IImageOptionsProtector, ImageOptionsProtector>()
     .AddTransient<IImageOptionBuilder, ImageOptionBuilder>()
-    .AddSingleton<IImageComponentCache>((_) => new ImageComponentCache().Fill())
+    .AddSingleton((_) => new ImageComponentCache().Fill())
     .AddSingleton<IImageRenderer, ImageRenderer>()
     .AddScoped<IValidator<ImageOptions>, ImageOptionsValidator>();
 
@@ -109,18 +109,14 @@ app.MapGet("/images/random", (IImageOptionBuilder builder)
 #endregion
 
 #region API endpoint: Render image
-app.MapGet("/img/{imageId}", (string imageId, float? scale /* = 1f */, IImageOptionsProtector protector, IImageRenderer renderer) =>
+// Note default value for lambda function parameter, new in C# 12
+app.MapGet("/img/{imageId}", (string imageId, IImageOptionsProtector protector, IImageRenderer renderer, float scale = 1f) =>
 {
     // Decode and decrypt the image options
     var imageOptions = protector.Unprotect(imageId);
 
-    // Note that we need to handle default value in code. This is because the default values
-    // will only be supported in the upcoming C# version. Read more at
-    // https://github.com/dotnet/csharplang/issues/6051
-    scale ??= 1f;
-
     // Render image and return it
-    var data = renderer.Render(imageOptions, scale.Value);
+    var data = renderer.Render(imageOptions, scale);
     return Results.File(data, "image/png");
 })
 .AddEndpointFilter(async (efiContext, next) =>
@@ -142,8 +138,8 @@ app.MapGet("/img/{imageId}", (string imageId, float? scale /* = 1f */, IImageOpt
 .Produces<string>(StatusCodes.Status400BadRequest)
 .WithOpenApi(o =>
 {
-    o.Responses[((int)StatusCodes.Status200OK).ToString()].Description = "Successfully built image.";
-    o.Responses[((int)StatusCodes.Status400BadRequest).ToString()].Description = "Invalid image options, see body for details.";
+    o.Responses[StatusCodes.Status200OK.ToString()].Description = "Successfully built image.";
+    o.Responses[StatusCodes.Status400BadRequest.ToString()].Description = "Invalid image options, see body for details.";
     o.Parameters[0].Description = """
         Image ID that must have been generated with the */build-image-url* API endpoint.
         Note that image IDs created with the */build-image-url* API endpoint are **only valid for 1 minute**!

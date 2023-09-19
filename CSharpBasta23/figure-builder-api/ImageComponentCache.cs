@@ -13,16 +13,12 @@ public class ImageComponentCache : IImageComponentCache
 {
     private readonly Dictionary<Images, SKBitmap> _images = new();
 
-    public ImageComponentCache() {}
-
     public IImageComponentCache Fill()
     {
         void AddImage(Images image, string name)
         {
-            using (var imageStream = File.OpenRead(Path.Combine("Images", $"{name}.png")))
-            {
-                _images[image] = SKBitmap.Decode(imageStream);
-            }
+            using var imageStream = File.OpenRead(Path.Combine("Images", $"{name}.png"));
+            _images[image] = SKBitmap.Decode(imageStream);
         }
 
         AddImage(Images.BaseImage, "base");

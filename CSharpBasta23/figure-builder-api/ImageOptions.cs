@@ -8,10 +8,10 @@ public record ImageOptions(EyeType Eye, bool HasHammer, MouthType Mouth, RightHa
 
     public static implicit operator byte(ImageOptions dto) =>
         (byte)((int)dto.Eye
-        | (int)(dto.HasHammer ? 1 : 0) << 2
+        | (dto.HasHammer ? 1 : 0) << 2
         | (int)dto.Mouth << 3
         | (int)dto.RightHand << 5
-        | (int)(dto.HasTail ? 1 : 0) << 7);
+        | (dto.HasTail ? 1 : 0) << 7);
 
     public static implicit operator ImageOptions(byte value)
     {
@@ -51,9 +51,8 @@ class ImageOptionsValidator : AbstractValidator<ImageOptions>
     }
 }
 
-class InvalidImageOptionsException : Exception
+class InvalidImageOptionsException(string message) : Exception(message)
 {
-    public InvalidImageOptionsException(string message) : base(message) { }
     public InvalidImageOptionsException(IEnumerable<ValidationFailure> failures)
         : this(string.Join(", ", failures.Select(e => $"{e.ErrorMessage}"))) { }
 }
