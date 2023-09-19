@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "delegates", "delegates\dele
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "figure-builder-api\api.csproj", "{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalApiAot", "MinimalApiAot\MinimalApiAot.csproj", "{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14E6B863-77DD-4E6A-9C2D-59C49C8611E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
