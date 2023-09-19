@@ -1,0 +1,157 @@
+POST https://oai-4.openai.azure.com/openai/deployments/complete-4/chat/completions?api-version=2023-07-01-preview
+Content-Type: application/json
+api-key: 2e6532692d764b48b5454f0f4abf8c81
+
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user", 
+            "content": "Suggest three things to do in Vienna. Consider the current weather."
+        }
+    ],
+    "functions": [
+        {
+            "name": "get_current_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    ]
+}
+
+###
+POST https://oai-4.openai.azure.com/openai/deployments/complete-4/chat/completions?api-version=2023-07-01-preview
+Content-Type: application/json
+api-key: 2e6532692d764b48b5454f0f4abf8c81
+
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user", 
+            "content": "Suggest three things to do in Vienna. Consider the current weather and current time."
+        }
+    ],
+    "functions": [
+        {
+            "name": "get_current_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA"
+                    }
+                },
+                "required": ["location"]
+            }
+        },
+        {
+            "name": "get_current_time",
+            "description": "Get the current time for a given time zone",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "timezone": {
+                        "type": "string",
+                        "description": "The time zone e.g. CET, PST, etc."
+                    }
+                },
+                "required": ["timezone"]
+            }
+        },
+        {
+            "name": "get_time_zone_for_city",
+            "description": "Get the time zone for a given city",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "The time zone of the given city e.g. CET, PST, etc."
+                    }
+                },
+                "required": ["city"]
+            }
+        }
+    ]
+}
+
+###
+POST https://oai-4.openai.azure.com/openai/deployments/complete-4/chat/completions?api-version=2023-07-01-preview
+Content-Type: application/json
+api-key: 2e6532692d764b48b5454f0f4abf8c81
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a friendly salesperson in a flower shop. Your responses should be short and precise.\n\nIn your shop, you offer the following flowers:\n\n* Rose (red, yellow, purple)\n* Lily (yellow, pink, white)\n* Gerbera (pink, red, yellow)\n* Freesia (white, pink, red, yellow)\n* Tulips (red, yellow, purple)\n* Sunflowers (yellow)\n\nYour pricing schema:\n\n* Small bouquet for 15€ (3 flowers arranged with a little bit of green grass)\n* Medium bouquet for 25€ (5 flowers nicely arranged, including some larger green leaves as decoration)\n* Large bouquet for 35€ (10 flowers, beautifully arranged with greenery and smaller filler flowers)\n\nStart the conversation by greeting the customer. Welcomes the customer to our shop and mentions our slogan \"let flowers draw a smile on your face\". Then, ask the customer what he or she wants. Wait for their response. Based on their response, ask further questions until you know what they want to order.\n\nYour answer must always begin with a JSON data structure describing the bouquet or bouquets that the customer wants. The JSON looks like this:\n\n```json\n[\n  { \"size\": \"small | medium | large\", \"flowers\": [ \"<flower name>\", \"<color>\", \"<amount>\" ] },\n  { \"size\": \"small | medium | large\", \"flowers\": [ \"<flower name>\", \"<color>\", \"<amount>\" ] },\n  ...\n]\n```\n\nAfter the JSON, add the text you want to tell the customer.\n\nIf the customer asks anything unrelated to flowers or bouquets, tell the customer that you can only respond to flower-related questions."
+        },
+        {
+            "role": "user", 
+            "content": "I would like to have a small flower buquet with 3 red roses."
+        },
+        {
+            "role": "assistant",
+            "content": null,
+            "function_call": {
+                "name": "check_if_flower_is_available",
+                "arguments": "{\n  \"flower\": \"rose\",\n  \"color\": \"red\"\n}"
+            }
+        },
+        {
+            "role": "function",
+            "name": "check_if_flower_is_available",
+            "content": "{ \"available\": false }"
+        }
+
+    ],
+    "functions": [
+        {
+            "name": "check_if_flower_is_available",
+            "description": "Check if a flower is on stock",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "flower": {
+                        "type": "string",
+                        "description": "The kind of flower e.g. rose, lily, etc."
+                    },
+                    "color": {
+                        "type": "string",
+                        "description": "Color of the flower"
+                    }
+                },
+                "required": ["flower", "color"]
+            }
+        }
+   ]
+}
+
+###
+
+###
+POST https://oai-4.openai.azure.com/openai/deployments/embeddings/embeddings?api-version=2023-07-01-preview
+Content-Type: application/json
+api-key: 2e6532692d764b48b5454f0f4abf8c81
+
+{
+    "input": "I would like to have a small flower buquet with 3 red roses."
+}
