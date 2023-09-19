@@ -2,6 +2,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Xunit;
 
+// ==================================================================================================
+// READ MORE ABOUT PRIMARY CONSTRUCTORS AT
+// https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/instance-constructors#primary-constructors
+// ==================================================================================================
+
 public class PrimaryConstructors
 {
     // The following declaration leads to a warning as middleName is not used.
@@ -19,7 +24,6 @@ public class PrimaryConstructors
         public int age = age;
 
         // All other constructors must use primary constructor
-        public Person() : this("John", "James", "Smith") { }
         public Person(string firstName, string lastName) : this(firstName, "", lastName) { }
 
         // Allow access to the backing field of the captured ctor parameter.
@@ -62,6 +66,28 @@ public class PrimaryConstructors
         }
     }
 
+    class VipPerson(string firstName, string middleName, string lastName, int vipLevel, int age = 0)
+        : Person(firstName, middleName, lastName, age)
+    {
+        public int VipLevel => vipLevel;
+    }
+
+    // Primary constructors can be used for structs as well.
+    // You don't know Half yet? https://devblogs.microsoft.com/dotnet/introducing-the-half-type/
+    struct Point3d(Half x, Half y, Half z)
+    {
+        public readonly Half X => x;
+        public readonly Half Y => y;
+        public readonly Half Z => z;
+    }
+
+    [Fact]
+    public void NoParameterlessConstructor()
+    {
+        // Ensure that Person does not have a parameterless constructor
+        Assert.Null(typeof(Person).GetConstructor(Array.Empty<Type>()));
+    }
+
     [Fact]
     public void FullName()
     {
@@ -101,5 +127,25 @@ public class PrimaryConstructors
         p.FirstName = "Jane";
 
         Assert.Equal("Smith, Jane", p.FullName);
+    }
+
+    [Fact]
+    public void InheritClassesWithPrimaryCtors()
+    {
+        var p = new VipPerson("John", "James", "Smith", 1);
+        Assert.Equal("Smith, John", p.FullName);
+        Assert.Equal(1, p.VipLevel);
+    }
+
+    [Fact]
+    public void StructHasParameterlessCtor()
+    {
+        var p = new Point3d((Half)1, (Half)2, (Half)3);
+        Assert.Equal((Half)1, p.X);
+
+        // As Point3d is a struct, it has an auto-generated parameterless ctor
+        // initializing all fields to their default (zero) value.
+        p = new Point3d();
+        Assert.Equal((Half)0, p.X);
     }
 }
