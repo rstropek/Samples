@@ -1,4 +1,5 @@
-@host = http://localhost:5255
+#@host = http://localhost:5255
+@host = http://localhost:5000
 
 ###
 GET {{host}}/api/locations
@@ -10,5 +11,14 @@ Content-Type: application/json
 {
     "base_price": 20,
     "number_of_participants": 1
+}
+
+###
+POST {{host}}/api/quote/school
+Content-Type: application/json
+
+{
+    "base_price": 20,
+    "number_of_participants": 1000
 }
 
