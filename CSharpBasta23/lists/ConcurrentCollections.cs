@@ -1,3 +1,5 @@
+using System.Threading.Channels;
+
 namespace Lists;
 
 public class ConcurrentCollections
@@ -163,5 +165,49 @@ public class ConcurrentCollections
 
         // We should have received 10 items.
         Assert.Equal(10, numberReceived);
+    }
+
+    [Fact]
+    public void Channels()
+    {
+        var channel = Channel.CreateBounded<int>(3);
+        var numberReceived = 0;
+
+        async Task Produce()
+        {
+            // Add 10 items to the channel. Wait 2ms between each add.
+            for (int i = 0; i < 10; i++)
+            {
+                // Note that we can use async/await here. This is different
+                // from concurrent collections that we saw before.
+                await channel.Writer.WriteAsync(i);
+                await Task.Delay(2);
+            }
+
+            channel.Writer.Complete();
+        }
+
+        async Task Consume()
+        {
+            // Asynchronously read all items from the channel. Again,
+            // note await here, different from concurrent collections.
+            await foreach(var i in channel.Reader.ReadAllAsync())
+            {
+                numberReceived++;
+            }
+        }
+
+        var producer = Task.Run(Produce);
+        var consumer1 = Task.Run(Consume);
+        var consumer2 = Task.Run(Consume);
+
+        Task.WaitAll(producer, consumer1, consumer2);
+
+        // We should have received 10 items.
+        Assert.Equal(10, numberReceived);
+
+        // NOTE that there are a lot of details to learn about channels.
+        // This talk focusses on collections. If you want to dive deepter
+        // into channels, read https://learn.microsoft.com/en-us/dotnet/core/extensions/channels.
     }
 }
