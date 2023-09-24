@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "figure-builder-api\a
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalApiAot", "MinimalApiAot\MinimalApiAot.csproj", "{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lists", "Lists\Lists.csproj", "{D8355F02-70E2-4052-9577-762C44CA4523}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListsBenchmarks", "ListsBenchmarks\ListsBenchmarks.csproj", "{210D3F01-01E6-405B-9218-A15D9B066EFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B845FDD5-DA6F-438A-82C2-23CA0F89DB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8355F02-70E2-4052-9577-762C44CA4523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8355F02-70E2-4052-9577-762C44CA4523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8355F02-70E2-4052-9577-762C44CA4523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8355F02-70E2-4052-9577-762C44CA4523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{210D3F01-01E6-405B-9218-A15D9B066EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{210D3F01-01E6-405B-9218-A15D9B066EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{210D3F01-01E6-405B-9218-A15D9B066EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{210D3F01-01E6-405B-9218-A15D9B066EFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
