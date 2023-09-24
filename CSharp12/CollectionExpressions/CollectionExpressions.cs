@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Globalization;
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Xunit;
@@ -39,6 +39,7 @@ public class CollectionExpressions
         // Collection expression can be used with types that support collection initializers
         List<int> numbers = [1, 2, 3, 4, 5];
         HashSet<int> uniqueNumbers = [1, 2, 3, 4, 5];
+        ConcurrentBag<int> concurrentNumbers = [1, 2, 3, 4, 5];
 
         // The following lines will result in a List<int>
         IEnumerable<int> numberEnumerable = [1, 2, 3, 4, 5];
@@ -51,6 +52,9 @@ public class CollectionExpressions
         Dictionary<string, int> numberMap;
         numberMap = new() { ["one"] = 1, ["two"] = 2, ["three"] = 3 };
         numberMap = new() { { "one", 1 }, { "two", 2 }, { "three", 3 } };
+
+        // However, we can initialize the dictionary with an empty collection expression.
+        numberMap = [];
     }
 
     [Fact]
