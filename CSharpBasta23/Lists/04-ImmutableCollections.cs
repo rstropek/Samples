@@ -49,8 +49,45 @@ public class ImmutableCollections
         Assert.Equal(6, array4.Length);
     }
 
+    [Fact]
+    public void ImmutableListManipulation()
+    {
+        var list = ImmutableList.Create("Roses", "Tulips", "Daisies", "Forget-Me-Not", "Cactus");
+        // NOTE that an immutable list is internally a tree data structure.
+        /*
+                          Daisies
+                            |
+                +-----------+-----------+
+                |                       |
+              Tulips                  Cactus
+                |                       |
+          +-----+-----+           +-----+-----+
+          |           |           |           |
+        Roses        null   Forget-Me-Not    null
+        */
+
+        // Try the following debug expressions:
+        // - list.Root -> Daisies
+        // - list.Root.Left -> Tulips
+        // - list.Root.Left.Left -> Roses
+        // - list.Root.Left.Right -> null
+        // - list.Root.Right -> Cactus
+        // - list.Root.Right.Left -> Forget-Me-Not
+        // - list.Root.Right.Right -> null
+
+        // Now let's remember the hash codes of some nodes:
+        // - list.Root.Left.GetHashCode()
+        // - list.Root.Right.GetHashCode()
+
+        // We add a new element to the end of the list.
+        list = list.Add("Lilies");
+        // NOTE that the left subtree is reused and only the right subtree
+        // has changed -> NOTE that immutable collections are not entirely 
+        // copied when changed!
+        // - list.Root.Left.GetHashCode()
+    }
+
     // NOTE that we do not add examples for
-    // - ImmutableList
     // - ImmutableDictionary
     // - ImmutableHashSet
     // - ImmutableSortedDictionary
