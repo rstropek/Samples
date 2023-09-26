@@ -9,7 +9,7 @@ public class GenericCollections
 
         // List is an array list -> we have a capacity property that we
         // can read and write (see also TrimExcess, EnsureCapacity, etc.).
-        Assert.True(numbers.Capacity > numbers.Count);
+        Assert.True(numbers.Capacity >= numbers.Count);
 
         // We can access the elements of a list using an index.
         Assert.Equal(1, numbers[0]);
