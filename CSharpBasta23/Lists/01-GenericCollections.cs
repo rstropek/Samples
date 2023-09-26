@@ -38,6 +38,11 @@ public class GenericCollections
         // We can access the elements of a read-only collection using an index.
         Assert.Equal(1, readOnlyNumbers[0]);
 
+        // NOTE that changes in the underlying collection are visible
+        // through the read-only collection.
+        numbers.Add(6);
+        Assert.Equal(6, readOnlyNumbers.Count);
+
         // NOTE that something like this exists for Dictionaries, too
         // (ReadOnlyDictionary<TKey, TValue>).
     }
@@ -60,6 +65,27 @@ public class GenericCollections
         // Similar to list, a dictionary has a capacity that we can control.
         numbers.EnsureCapacity(100);
         numbers.TrimExcess();
+
+        // NOTE that dictionaries use the GetHashCode method of the key. If
+        // GetHashCode is broken, the dictionary will not work correctly.
+        Dictionary<WrongStruct, int> stupidDictionary = [];
+        for (var i = 0; i < 100; i++) { stupidDictionary[new(i)] = i; }
+        try
+        {
+            for (var i = 0; i < 100; i++) { Assert.Equal(i, stupidDictionary[new(i)]); }
+            Assert.Fail("This line will never be reached because of the wrong GetHashCode implementation.");
+        }
+        catch (Exception) { }
+    }
+
+    // ATTENTION: This struct implementation is WRONG. It is only used to demonstrate
+    // the importance of a good GetHashCode implementation.
+    private record struct WrongStruct(int Content)
+    {
+        // NOTE that this implementation of GetHashCode is wrong. It MUST NOT
+        // return values that change. The hash code must be stable over the
+        // lifetime of the object.
+        public override readonly int GetHashCode() => Random.Shared.Next();
     }
 
     [Fact]
@@ -195,7 +221,7 @@ public class GenericCollections
     }
 
     [Fact]
-    public void StackCollection()
+    public void Stack()
     {
         // Stack is a Last-In-First-Out (LIFO) collection.
         // Elements are pushed onto the stack and popped off the stack.
