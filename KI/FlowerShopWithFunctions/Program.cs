@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 
 var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
+var orderedBouquets = new List<Bouquet>();
+
 var config = new ConfigurationBuilder()
     .AddUserSecrets(typeof(Program).Assembly)
     .Build();
@@ -17,6 +19,8 @@ FunctionDefinition AddBouquetFunction = new()
         the user has finished configuring a flower bouquet.
         Can be called multiple times for the same order if the user
         wants to order multiple bouquets.
+
+        The method returns all bouquets that have been ordered so far.
         """,
     Parameters = BinaryData.FromObjectAsJson(
             new
@@ -28,6 +32,11 @@ FunctionDefinition AddBouquetFunction = new()
                     {
                         Type = "string",
                         Description = "The size of the bouquet. Can be 'small', 'medium', or 'large'.",
+                    },
+                    Price = new
+                    {
+                        Type = "number",
+                        Description = "The price of the bouquet.",
                     },
                     Flowers = new
                     {
@@ -132,13 +141,17 @@ while (true)
             var bouquet = JsonSerializer.Deserialize<Bouquet>(assistantMessage.FunctionCall.Arguments, jsonOptions);
             // PROBLEM: Sometimes ChatGPT sends INVALID JSON!!
 
+            orderedBouquets.Add(bouquet);
+
             Console.WriteLine($"\t{JsonSerializer.Serialize(bouquet, jsonOptions)}\n");
             completionOptions.Messages.Add(assistantMessage);
             completionOptions.Messages.Add(new()
             {
                 Role = ChatRole.Function,
                 Name = assistantMessage.FunctionCall.Name,
-                Content = "{\"result\": \"Story has successfully been saved\"}"
+                Content = JsonSerializer.Serialize(new FunctionResult(
+                    JsonSerializer.Serialize(orderedBouquets, jsonOptions)
+                ), jsonOptions)
             });
             repeat = true;
         }
@@ -147,4 +160,5 @@ while (true)
 }
 
 record Flower(string FlowerType, int Amount);
-record Bouquet(string BouquetSize, Flower[] Flowers);
+record Bouquet(string BouquetSize, decimal Price, Flower[] Flowers);
+record FunctionResult(string Result);
