@@ -1,0 +1,61 @@
+npm init
+npm install -D typescript
+npx tsc --init (esnext)
+
+I am creating a TypeScript program. My sourcecode should be in src, the compiled code in dist. What do I have to put in tsconfig?
+
+I want to have a build and a start script in package.json. Write it for me.
+
+ctrl + i: start should do a build first (show code alteration)
+
+ctrl + i: What do I need to change to get incremental build?
+
+ctrl + shift + i: There is an extension to create gitignore files. I forget it. Which is it?
+
+ctrl + shift + i: In German, there is a word "Baugruppe" representing some parts put together, but used itself as a part in larger products. What would you call that in EN?
+
+export type Part = {
+    id: string;
+    name: string;
+}
+
+export type PartOrAssembly = Part | Assembly;
+
+export type Assembly = {
+    id: string;
+    name: string;
+    parts: {
+        component: PartOrAssembly;
+        quantity: number;
+    }[];
+}
+
+Generate some sample data for an Assembly representing a simple bike.
+
+Nice. Make the wheels assemblies, too (nested data structure)
+
+function generate_bill_of_material(assembly: Assembly, quantity: number): {id: string, name: string, quantity: number}[]
+
+Seems that I need this type multiple times. Create a named type for it and change my code accordingly.
+
+This implementation returns multiple object in result for the same part. Make sure that parts in the result are unique and the quantity is aggregated accordingly.
+
+I want to add  unit testing to my project. Which testing framework do you recommend?
+
+npm install -D jest ts-jest
+npx ts-jest config:init
+testMatch: ["**/?(*.)+(spec|test).ts"],
+
+@workspace /tests Generate jest unit test for generate_bill_of_material
+
+should return an empty array when given an empty assembly
+
+should return a single part when given an assembly with a single part
+
+should return a single part when given an assembly that contains a single sub-part twice
+
+should return two parts when given an assembly that contains two different parts
+
+should handle a part that appears in two different sub-assemblies
+
+should not return sub-assemblies, only parts
