@@ -20,7 +20,7 @@ public class FrozenCollections
         // ImmutableHashSet<T> as they don't even have methods
         // that return a new set with an item added or removed.
 
-        Assert.Contains(42, numbers);
+        Assert.Contains(42, numbers.AsEnumerable());
 
         // We can use set operations.
         Assert.True(numbers.IsSupersetOf([1, 2, 3, 3]));

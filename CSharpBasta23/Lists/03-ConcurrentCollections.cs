@@ -69,7 +69,7 @@ public class ConcurrentCollections
     }
 
     [Fact]
-    public void ProducerConsumer()
+    public async Task ProducerConsumer()
     {
         var bag = new ConcurrentBag<int>();
         var done = false;
@@ -109,7 +109,7 @@ public class ConcurrentCollections
         var consumer1 = Task.Run(Consume);
         var consumer2 = Task.Run(Consume);
 
-        Task.WaitAll(producer, consumer1, consumer2);
+        await Task.WhenAll(producer, consumer1, consumer2);
 
         // We should have received 10 items.
         Assert.Equal(10, numberReceived);
@@ -121,7 +121,7 @@ public class ConcurrentCollections
     // - Stack (ConcurrentStack<T>)
 
     [Fact]
-    public void BlockingCollection()
+    public async Task BlockingCollection()
     {
         // BlockingCollection is a wrapper around a concurrent collection
         // that blocks the consumer when the collection is empty.
@@ -161,14 +161,14 @@ public class ConcurrentCollections
         var consumer1 = Task.Run(Consume);
         var consumer2 = Task.Run(Consume);
 
-        Task.WaitAll(producer, consumer1, consumer2);
+        await Task.WhenAll(producer, consumer1, consumer2);
 
         // We should have received 10 items.
         Assert.Equal(10, numberReceived);
     }
 
     [Fact]
-    public void Channels()
+    public async Task Channels()
     {
         var channel = Channel.CreateBounded<int>(3);
         var numberReceived = 0;
@@ -201,7 +201,7 @@ public class ConcurrentCollections
         var consumer1 = Task.Run(Consume);
         var consumer2 = Task.Run(Consume);
 
-        Task.WaitAll(producer, consumer1, consumer2);
+        await Task.WhenAll(producer, consumer1, consumer2);
 
         // We should have received 10 items.
         Assert.Equal(10, numberReceived);
