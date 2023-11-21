@@ -39,18 +39,21 @@ class HeroesManager
     }
 }
 
-// Note that this would typically be compiler-generated code
-[CompilerGenerated]
-static class HeroesmanagerAot
+namespace Interceptors
 {
-    // Note how we can intercept a method call from generated code.
-    [InterceptsLocation("/home/rainer/github/Samples/CSharp12/Interceptors/Program.cs", line: 29, character: 39)]
-    public static Hero[] GetHeroesWithSourceGen(this HeroesManager hm, string json)
+    // Note that this would typically be compiler-generated code
+    [CompilerGenerated]
+    static class HeroesmanagerAot
     {
-        // Deserialize JSON using source-generated JsonSerializer
-        var heroes = JsonSerializer.Deserialize(json, SourceGenerationContext.Default.HeroArray);
-        Debug.Assert(heroes is not null);
-        return heroes;
+        // Note how we can intercept a method call from generated code.
+        [InterceptsLocation("/root/github/Samples/CSharp12/Interceptors/Program.cs", line: 29, character: 39)]
+        public static Hero[] GetHeroesWithSourceGen(this HeroesManager hm, string json)
+        {
+            // Deserialize JSON using source-generated JsonSerializer
+            var heroes = JsonSerializer.Deserialize(json, SourceGenerationContext.Default.HeroArray);
+            Debug.Assert(heroes is not null);
+            return heroes;
+        }
     }
 }
 

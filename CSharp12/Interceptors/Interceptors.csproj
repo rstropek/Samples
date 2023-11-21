@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <!-- We need the experimental interceptors feature for this sample -->
     <Features>InterceptorsPreview</Features>
+    <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Interceptors</InterceptorsPreviewNamespaces>
     <!-- For demonstration purposes, we write the generated code to disk
          Read more at https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview -->
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>

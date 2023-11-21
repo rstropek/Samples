@@ -4,7 +4,7 @@ namespace Interceptor;
 static class HauntedHouseParserAot
 {
     // Note how we can intercept a method call from generated code.
-    [InterceptsLocation("/home/rainer/github/Samples/CSharp12/HauntedHouse/Program.cs", line: 12, character: 23)]
+    [InterceptsLocation("/root/github/Samples/CSharp12/HauntedHouse/Program.cs", line: 12, character: 23)]
     public static Dictionary<string, Room> GetHouseWithSourceGen(this HauntedHouseParser hhp, string json)
     {
         return new()
