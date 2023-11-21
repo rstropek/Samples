@@ -1,4 +1,6 @@
-static partial class HauntedHouse
+using HauntedHouse;
+
+static partial class HauntedHouseCreator
 {
     public static Dictionary<string, Room> GetRooms()
     {

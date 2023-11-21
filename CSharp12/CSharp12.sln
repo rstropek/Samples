@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionExpressions", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HauntedHouse", "HauntedHouse\HauntedHouse.csproj", "{43220A4D-6790-4984-AB08-1F48B1E61D06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HauntedHouse.Library", "HauntedHouse.Library\HauntedHouse.Library.csproj", "{2F63D8A1-E4F5-4174-A3F6-B95BA942C192}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,13 @@ Global
 		{43220A4D-6790-4984-AB08-1F48B1E61D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43220A4D-6790-4984-AB08-1F48B1E61D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43220A4D-6790-4984-AB08-1F48B1E61D06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F63D8A1-E4F5-4174-A3F6-B95BA942C192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F63D8A1-E4F5-4174-A3F6-B95BA942C192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F63D8A1-E4F5-4174-A3F6-B95BA942C192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F63D8A1-E4F5-4174-A3F6-B95BA942C192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B840C39-61D9-4122-9DC6-5679D2CA914F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B840C39-61D9-4122-9DC6-5679D2CA914F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B840C39-61D9-4122-9DC6-5679D2CA914F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B840C39-61D9-4122-9DC6-5679D2CA914F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
