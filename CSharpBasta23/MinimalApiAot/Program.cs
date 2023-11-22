@@ -5,11 +5,6 @@
 var builder = WebApplication.CreateSlimBuilder(args);
 
 var section = builder.Configuration.GetSection("GroupLimits");
-// Note that the following line does not work in RC 1.
-// At the time of writing, you need the nightly version of 
-// Microsoft.Extensions.Configuration.Binder. However, it will
-// be fixed in RC 2.
-// Read more at https://github.com/dotnet/runtime/issues/92273
 builder.Services.Configure<GroupLimits>(section);
 // Add the options validator to the DI container.
 builder.Services.AddSingleton<IValidateOptions<GroupLimits>, GroupLimitsValidator>();
