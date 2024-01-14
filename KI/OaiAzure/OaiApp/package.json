@@ -1,0 +1,25 @@
+{
+  "name": "oaiapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc && mkdir -p dist/views && cp src/views/*.ejs dist/views/",
+    "start": "npm run build && node dist/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.0.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "openai": "^4.24.7"
+  }
+}
