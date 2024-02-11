@@ -25,6 +25,10 @@ async function run() {
         },
     });
 
+    // Setup conversation. Note that this time, we do NOT
+    // include the conference program in the system message.
+    // The chat bot will fetch data when necessary via
+    // function tools.
     const messages: OpenAI.ChatCompletionMessageParam[] = [
         {
             role: "system",
@@ -48,16 +52,19 @@ async function run() {
         output: process.stdout,
     });
     while (true) {
+        // Ask the user for a question
         const userMessage = await ask(rl, "Enter your message (Ctrl+c to exit): ");
 
-        messages.push({
-            role: "user",
-            content: userMessage,
-        });
+        // Add the user message to the conversation history
+        messages.push({ role: "user", content: userMessage });
 
+        // Loop as long as we get tool calls
         let repeat: boolean;
         do {
             repeat = false;
+
+            // Send the conversation to OpenAI to generate an answer.
+            // Note how we equip OpenAI with function tools.
             const response = await client.chat.completions.create({
                 model: process.env.AZURE_OPENAI_DEPLOYMENT ?? "",
                 messages,
@@ -131,8 +138,11 @@ async function run() {
                 ],
             });
 
+            // Add the response to the conversation history
             messages.push(response.choices[0].message);
+
             if (response.choices[0].message.tool_calls) {
+                // Process tool calls
                 console.log("\nGot tool call(s)");
                 for (const call of response.choices[0].message.tool_calls) {
                     repeat = true;
