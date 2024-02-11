@@ -1,0 +1,22 @@
+{
+  "name": "basicchat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/app.js",
+    "postbuild": "copyfiles -u 1 -f ../data/*.json dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.2",
+    "openai": "^4.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "copyfiles": "^2.4.1",
+    "typescript": "^5.3.3"
+  }
+}
