@@ -1,0 +1,12 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - OAI_AZURE_ENDPOINT=a6oqc5m7wme54.openai.azure.com
+      - OAI_AZURE_DEPLOYMENT=oai-35-turbo
+      - PORT=8080
+    ports:
+      - 8080:8080
