@@ -49,7 +49,7 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
   resource settings 'config@2023-01-01' = {
     name: 'appsettings'
     properties: {
-      OAI_AZURE_ENDPOINT: 'a6oqc5m7wme54.openai.azure.com'
+      OAI_AZURE_ENDPOINT: '${uniqueString(projectName)}.openai.azure.com'
       OAI_AZURE_DEPLOYMENT: 'oai-35-turbo'
       PORT: '8080'
       DOCKER_REGISTRY_SERVER_URL: 'https://index.docker.io'

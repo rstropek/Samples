@@ -19,14 +19,15 @@ var roleIds = {
   cognitiveServicesUser: 'a97b65f3-24c7-4388-baec-2e87135dc908'
 }
 
+// Create OpenAI account
 resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
   name: '${abbrs.cognitiveServicesAccounts}${uniqueString(projectName)}'
   location: location
   tags: tags
   kind: 'OpenAI'
   properties: {
-    publicNetworkAccess: 'Disabled'
-    disableLocalAuth: true
+    publicNetworkAccess: 'Disabled' // Only allow access from private endpoints
+    disableLocalAuth: true // Disable local authentication (i.e. no API key, only managed identity)
     customSubDomainName: uniqueString(projectName)
     networkAcls: {
       defaultAction: 'Allow'
@@ -36,6 +37,7 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
     name: sku
   }
 
+  // Add a model deployment. Here we use ChatGPT 3.5 to save costs.
   resource deployment 'deployments@2023-10-01-preview' = {
     name: 'oai-35-turbo'
     sku: {
@@ -52,6 +54,7 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
   }
 }
 
+// Create private endpoint for the OpenAI account
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-02-01' = {
   name: '${abbrs.networkPrivateEndpoints}${uniqueString(projectName)}'
   location: location

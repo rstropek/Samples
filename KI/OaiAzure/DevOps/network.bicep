@@ -24,6 +24,7 @@ resource privateVnet 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         }
       }
       {
+        // Subnet for private endpoints
         name: 'privateendpoints'
         properties: {
           addressPrefix: '10.0.11.0/24'
@@ -32,6 +33,7 @@ resource privateVnet 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         }
       }
       {
+        // Subnet for webapps
         name: 'webapps'
         properties: {
           addressPrefix: '10.0.12.0/24'
@@ -49,6 +51,7 @@ resource privateVnet 'Microsoft.Network/virtualNetworks@2021-08-01' = {
   }
 }
 
+// Create a private DNS zone for the private link to Azure OpenAI
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.openai.azure.com'
   location: 'global'
@@ -58,6 +61,7 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   ]
 }
 
+// Link the private DNS zone to the virtual network
 resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
   parent: privateDnsZone
   name: '${privateDnsZone.name}-link'
