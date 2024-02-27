@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.22.0" />
+		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.25.0" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
 	</ItemGroup>
 

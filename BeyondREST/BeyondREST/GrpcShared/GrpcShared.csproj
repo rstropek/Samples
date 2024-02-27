@@ -3,9 +3,9 @@
 		<TargetFramework>net8</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
+		<PackageReference Include="Google.Protobuf" Version="3.25.3" />
 		<PackageReference Include="Grpc" Version="2.46.6" />
-		<PackageReference Include="Grpc.Tools" Version="2.60.0">
+		<PackageReference Include="Grpc.Tools" Version="2.62.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
