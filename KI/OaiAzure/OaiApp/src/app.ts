@@ -68,7 +68,7 @@ app.post('/submit', async (req: Request, res: Response) => {
         'api-key': useApiKey ? process.env.OAI_AZURE_API_KEY : '',
       },
       defaultQuery: {
-        'api-version': '2023-09-01-preview',
+        'api-version': '2024-02-15-preview',
       }
     });
 
