@@ -12,6 +12,10 @@ builder.WebHost.ConfigureKestrel(options =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
     });
+    options.Listen(IPAddress.Any, 5002, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1;
+    });
 });
 builder.Services.AddSingleton<MathAlgorithms>();
 builder.Services.AddGrpc();
@@ -23,7 +27,7 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
     builder.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .WithExposedHeaders("Grpc-Status", "Grpc-Message");
+            .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
 }));
 
 var app = builder.Build();
@@ -36,7 +40,7 @@ app.UseAuthorization();
 IWebHostEnvironment env = app.Environment;
 if (env.IsDevelopment()) { app.MapGrpcReflectionService(); }
 
-app.UseGrpcWeb(new GrpcWebOptions {  DefaultEnabled = true });
+app.UseGrpcWeb(new GrpcWebOptions {  DefaultEnabled = true,  });
 app.UseCors();
 
 app.MapGrpcService<GreeterService>().RequireCors("AllowAll");

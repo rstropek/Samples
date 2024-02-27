@@ -4,16 +4,8 @@ using GrpcServer.Services;
 
 namespace GrpcServer;
 
-public class MathGuruService : MathGuru.MathGuruBase
+public class MathGuruService(MathAlgorithms math) : MathGuru.MathGuruBase
 {
-    private readonly MathAlgorithms math;
-
-    public MathGuruService(MathAlgorithms math)
-    {
-        // Note the use of ASP.NET Core's DI to get MathAlgorithms
-        this.math = math;
-    }
-
     public override async Task GetFibonacci(FromTo request, IServerStreamWriter<NumericResult> responseStream, ServerCallContext context)
     {
         // Check input parameters

@@ -1,6 +1,6 @@
 import * as jspb from 'google-protobuf'
 
-import * as google_rpc_status_pb from './google/rpc/status_pb';
+import * as google_rpc_status_pb from './google/rpc/status_pb'; // proto import: "google/rpc/status.proto"
 
 
 export class HelloRequest extends jspb.Message {
