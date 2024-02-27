@@ -1,6 +1,6 @@
 import "./index.css";
-import * as signalR from "@aspnet/signalr";
-import { IPoint } from './point';
+import * as signalR from "@microsoft/signalr";
+import { Point } from './point';
 import { DrawingCanvas } from './canvas';
 
 window.onload = async () => {
@@ -10,7 +10,7 @@ window.onload = async () => {
 
     // Setting up connection to SignalR hub
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("https://localhost:5001/hub")
+        .withUrl("http://localhost:5000/hub")
         .configureLogging(signalR.LogLevel.Debug)
         .build()
 
@@ -20,7 +20,7 @@ window.onload = async () => {
     });
 
     // Handle a draw request (i.e. line drawn by another user)
-    connection.on('draw', (previousPoint: IPoint, nextPoint: IPoint, color: string) => {
+    connection.on('draw', (previousPoint: Point, nextPoint: Point, color: string) => {
         canvas.drawLine(previousPoint, nextPoint, color);
     });
 
