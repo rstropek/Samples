@@ -13,9 +13,13 @@ dotnet sln TrainStation.sln add TrainStation.Tests/TrainStation.Tests.csproj
 dotnet add TrainStation.Tests/TrainStation.Tests.csproj reference TrainStation/TrainStation.csproj
 ```
 
+## Exercise Concept
+
 I am putting together an exercise for students learning C#. The goal of the exercise is to practice dynamic data structures, enums, and exceptions. I was thinking of modelling a simple train station logic (switching of wagons and locomotives between tracks). Good idea?
 
 I am thinking of classes Wagon, Track, and TrainStation. Maybe some tracks can be accessed from east and west, some only from west. Which methods would you add to the Track class?
+
+## Refactoring, Code Generation
 
 Is it possible to simplify the methods by introducing helper methods? I want to be more DRY.
 
