@@ -10,10 +10,11 @@ test('Bubble: move', () => {
 });
 
 test('Bubble: bounceFromEdges', () => {
-  const bubble = new Bubble(new Vector(10, 10), new Vector(1, 1), 10, 'red');
-  bubble.bounceFromEdges(15, 15);
-  expect(bubble.velocity.x).toBe(-1);
+  const bubble = new Bubble(new Vector(11, 23), new Vector(1, 1), 10, 'red');
+  bubble.bounceFromEdges(25, 25);
+  expect(bubble.velocity.x).toBe(1);
   expect(bubble.velocity.y).toBe(-1);
+  expect(bubble.position.y).toBeLessThanOrEqual(20)
 });
 
 test('Bubble: doCollide', () => {
