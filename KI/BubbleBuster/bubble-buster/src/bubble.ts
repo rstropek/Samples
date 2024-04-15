@@ -1,4 +1,4 @@
-import { Vector } from "./vector";
+import { Vector } from './vector';
 
 /**
  * Class representing a bubble
@@ -7,17 +7,10 @@ import { Vector } from "./vector";
  * The color is the stroke color. The inside of bubbles is always white.
  */
 export class Bubble {
-  constructor(
-    public position: Vector,
-    public velocity: Vector,
-    public radius: number,
-    public color: string
-  ) {}
+  constructor(public position: Vector, public velocity: Vector, public radius: number, public color: string) {}
 
   /**
    * Draw the bubble on the canvas
-   *
-   * @param context - The canvas context to draw on
    */
   draw(context: CanvasRenderingContext2D) {
     context.beginPath();
@@ -25,7 +18,7 @@ export class Bubble {
     context.lineWidth = 3; // Set the line width to make the stroke thicker
     context.strokeStyle = this.color;
     context.stroke();
-    context.fillStyle = "white";
+    context.fillStyle = 'white';
     context.fill();
   }
 
@@ -34,18 +27,25 @@ export class Bubble {
   }
 
   bounceFromEdges(width: number, height: number) {
-    if (
-      this.position.x - this.radius < 0 ||
-      this.position.x + this.radius > width
-    ) {
+    if (this.position.x - this.radius < 0 || this.position.x + this.radius > width) {
       this.velocity = new Vector(-this.velocity.x, this.velocity.y);
+      while (this.position.x - this.radius < 0 || this.position.x + this.radius > width) {
+        this.move();
+      }
     }
-    if (
-      this.position.y - this.radius < 0 ||
-      this.position.y + this.radius > height
-    ) {
+    if (this.position.y - this.radius < 0 || this.position.y + this.radius > height) {
       this.velocity = new Vector(this.velocity.x, -this.velocity.y);
+      while (this.position.y - this.radius < 0 || this.position.y + this.radius > height) {
+        this.move();
+      }
     }
+  }
+
+  doCollide(other: Bubble) {
+    const distanceVector = this.position.sub(other.position);
+    const distance = distanceVector.mag();
+
+    return distance <= this.radius + other.radius;
   }
 
   /**
@@ -60,10 +60,14 @@ export class Bubble {
     }
   }
 
-  doCollide(other: Bubble) {
-    const distanceVector = this.position.sub(other.position);
-    const distance = distanceVector.mag();
+  getCircumferencePoints(): Vector[] {
+    const points: Vector[] = [];
+    for (let angle = 0; angle < 360; angle += 10) {
+      let x = this.position.x + this.radius * Math.cos((angle * Math.PI) / 180);
+      let y = this.position.y + this.radius * Math.sin((angle * Math.PI) / 180);
+      points.push(new Vector(x, y));
+    }
 
-    return distance <= this.radius + other.radius;
+    return points;
   }
 }
