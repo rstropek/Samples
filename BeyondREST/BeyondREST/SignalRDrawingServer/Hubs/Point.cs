@@ -1,8 +1,3 @@
-﻿namespace SignalRDrawingServer.Hubs
-{
-    public class Point
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-    }
-}
+﻿namespace SignalRDrawingServer.Hubs;
+
+public record Point(double X, double Y);

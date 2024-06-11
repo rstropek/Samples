@@ -1,0 +1,18 @@
+<%- include('header'); -%>
+
+<h1>Azure OpenAI Demo</h1>
+
+<p>
+  Go on and ask ChatGPT a question. It will try to answer it.
+</p>
+
+<form action="/submit" method="post">
+    <input type="text" name="inputField" placeholder="Enter something like 'Any sightseeing tips for Vienna?'" required><br/>
+    <label>
+      <input type="checkbox" name="useApiKey" id="useApiKey" />
+      Use API Key instead of Azure Managed Identity
+    </label><br/>
+  <button type="submit">Submit</button>
+</form>
+
+<%- include('footer'); -%>

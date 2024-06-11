@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && copyfiles -f ./src/*.js ./dist && copyfiles -f ./src/google/rpc/*.js ./dist/google/rpc",
-    "start": "node ./dist/app.js",
+    "start": "npm run build && node ./dist/app.js",
     "generate-client": "protoc -I=../GrpcShared greet.proto --js_out=import_style=commonjs:./src --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src && protoc -I=../GrpcShared google/rpc/status.proto --js_out=import_style=commonjs:./src --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.16.0",
+    "@types/node": "^20.11.20",
     "copyfiles": "^2.4.1",
     "typescript": "^5.0.4"
   },

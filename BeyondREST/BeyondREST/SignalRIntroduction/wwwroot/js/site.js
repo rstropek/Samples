@@ -6,7 +6,7 @@ const fib = document.getElementById("fib");
 const { fromEvent, Subject } = rxjs;
 
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:5001/hub")
+    .withUrl("http://localhost:5000/hub")
     .configureLogging(signalR.LogLevel.Debug)
     .build();
 

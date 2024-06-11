@@ -1,0 +1,10 @@
+html {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: lightgray;
+}
+
+canvas {
+  width: 800px;
+  height: 500px;
+  background-color: white;
+}

@@ -1,0 +1,24 @@
+#@host = http://localhost:5255
+@host = http://localhost:8080
+
+###
+GET {{host}}/api/locations
+
+###
+POST {{host}}/api/quote/regular?offPeak=true
+Content-Type: application/json
+
+{
+    "base_price": 20,
+    "number_of_participants": 1
+}
+
+###
+POST {{host}}/api/quote/school
+Content-Type: application/json
+
+{
+    "base_price": 20,
+    "number_of_participants": 1000
+}
+

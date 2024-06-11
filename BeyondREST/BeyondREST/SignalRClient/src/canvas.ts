@@ -1,17 +1,17 @@
-import { IPoint } from './point';
+import { Point } from './point';
 
 export class DrawingCanvas {
     private canvas: HTMLCanvasElement;
-    private bb: ( ClientRect | DOMRect );
+    private bb: DOMRect;
     private isMouseDown = false;
-    private previousPoint: IPoint;
+    private previousPoint?: Point;
     private color = "rgb(0,0,0)";
     private ctx: CanvasRenderingContext2D;
-    private cb: (prev: IPoint, next: IPoint) => void;
+    private cb: (prev: Point, next: Point) => void;
 
-    constructor(canvasId: string, drawnCallback: (prev: IPoint, next: IPoint) => void) {
+    constructor(canvasId: string, drawnCallback: (prev: Point, next: Point) => void) {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-        this.ctx = this.canvas.getContext("2d");
+        this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
         this.ctx.lineWidth = 3;
         this.bb = this.canvas.getBoundingClientRect();
         
@@ -43,7 +43,7 @@ export class DrawingCanvas {
         this.previousPoint = nextPoint;
     }
     
-    public drawLine(prev: IPoint, next: IPoint, color: string) {
+    public drawLine(prev: Point, next: Point, color: string) {
         this.ctx.strokeStyle = color;
         this.ctx.strokeStyle = color;
         this.ctx.beginPath();

@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using System.Net.Http;
+using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcDemo;
 using Microsoft.Extensions.Azure;
@@ -13,19 +14,24 @@ AppContext.SetSwitch(
 // The port number(5001) must match the port of the gRPC server.
 // Tip: In ASP.NET Core apps, use client factory (similar to
 //      IHttpClientFactory (see https://docs.microsoft.com/en-us/aspnet/core/grpc/clientfactory).
-var channel = GrpcChannel.ForAddress("https://localhost:5001");
+var httpClient = new HttpClient
+{
+    DefaultRequestVersion = new Version(2, 0)
+};
+
+var channel = GrpcChannel.ForAddress("http://localhost:5001", new GrpcChannelOptions { HttpClient = httpClient });
 
 await UnaryCall(channel);
 
-var tokenAcquirerFactory = TokenAcquirerFactory.GetDefaultInstance();
-tokenAcquirerFactory.Build();
-var acquirer = tokenAcquirerFactory.GetTokenAcquirer();
-var token = await acquirer.GetTokenForAppAsync("api://1ddc9f11-a5d7-4112-99aa-4a386328b54c/.default");
-var headers = new Metadata
-{
-    { "Authorization", $"Bearer {token.AccessToken}" }
-};
-await UnaryCall(channel, headers);
+// var tokenAcquirerFactory = TokenAcquirerFactory.GetDefaultInstance();
+// tokenAcquirerFactory.Build();
+// var acquirer = tokenAcquirerFactory.GetTokenAcquirer();
+// var token = await acquirer.GetTokenForAppAsync("api://1ddc9f11-a5d7-4112-99aa-4a386328b54c/.default");
+// var headers = new Metadata
+// {
+//     { "Authorization", $"Bearer {token.AccessToken}" }
+// };
+await UnaryCall(channel/*, headers*/);
 
 // Tip: Reuse channel for gRPC calls, create multiple gRPC clients
 //      from it (including different types of clients).

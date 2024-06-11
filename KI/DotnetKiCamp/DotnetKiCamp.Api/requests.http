@@ -1,0 +1,19 @@
+@host = http://localhost:5109
+
+###
+# @name createSession
+POST {{host}}/chat/complete
+
+###
+POST {{host}}/chat/complete/{{createSession.response.body.session_id}}/messages
+Content-Type: application/json
+
+{
+    "message": "Can you tell me the customer ID of Orlando Gee?"
+}
+
+###
+GET {{host}}/chat/complete/{{createSession.response.body.session_id}}/run-basic
+
+###
+GET {{host}}/chat/complete/{{createSession.response.body.session_id}}/run

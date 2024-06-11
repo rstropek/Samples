@@ -2,24 +2,25 @@
   "name": "signalrclient",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "source": "src/index.html",
   "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server"
+    "build": "parcel build",
+    "start": "parcel"
   },
   "author": "",
   "license": "ISC",
+  "alias": { 
+    "process": {
+      "global": "process"
+    }
+  },
   "devDependencies": {
-    "css-loader": "^4.2.1",
-    "html-webpack-plugin": "^4.3.0",
-    "mini-css-extract-plugin": "^0.10.0",
-    "ts-loader": "^8.0.2",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "buffer": "^6.0.3",
+    "parcel": "^2.11.0",
+    "process": "^0.11.10",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@aspnet/signalr": "^1.1.4"
+    "@microsoft/signalr": "^8.0.0"
   }
 }

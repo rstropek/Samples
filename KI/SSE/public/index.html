@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      img {
+        margin-top: 10px;
+      }
+
+      #openai-output {
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: smaller;
+        background: #e0e0e0;
+        padding: 11px;
+        max-width: 700px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Long-Running Request</h2>
+    <button id="long-running-regular">Execute</button>
+    <img
+      id="long-running-regular-spinner"
+      src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-css/3-dots-bounce.svg"
+      hidden
+    />
+    <pre id="long-running-regular-output"></pre>
+
+    <h2>Streaming Request</h2>
+    <button id="long-running-streaming">Execute</button>
+    <pre id="long-running-streaming-output"></pre>
+    <img
+      id="long-running-streaming-spinner"
+      src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-css/3-dots-bounce.svg"
+      hidden
+    />
+
+    <h2>SSE (Data Only)</h2>
+    <button id="sse-data-only">Execute</button>
+    <pre id="sse-data-only-output"></pre>
+    <img
+      id="sse-data-only-spinner"
+      src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-css/3-dots-bounce.svg"
+      hidden
+    />
+
+    <h2>SSE (Custom Events)</h2>
+    <button id="sse-custom-events">Execute</button>
+    <pre id="sse-custom-events-output"></pre>
+    <img
+      id="sse-custom-events-spinner"
+      src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-css/3-dots-bounce.svg"
+      hidden
+    />
+
+    <h2>SSE (Custom Events With ID)</h2>
+    <button id="sse-custom-events-id">Execute</button>
+    <pre id="sse-custom-events-id-output"></pre>
+    <img
+      id="sse-custom-events-id-spinner"
+      src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-css/3-dots-bounce.svg"
+      hidden
+    />
+
+    <h2>OpenAI</h2>
+    <p>
+      <em
+        >Give me five reasons that I can present to my manager why I have to go
+        to We Are Developers conference.</em
+      >
+    </p>
+    <button id="openai">Execute</button>
+    <p id="openai-output" hidden></p>
+
+    <script src="index.js" type="module"></script>
+  </body>
+</html>

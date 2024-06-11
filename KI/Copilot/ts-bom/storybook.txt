@@ -1,0 +1,107 @@
+npm init
+npm install -D typescript
+npx tsc --init (esnext)
+
+I am creating a TypeScript program. My sourcecode should be in src, the compiled code in dist. What do I have to put in tsconfig?
+
+I want to have a build and a start script in package.json. Write it for me.
+
+ctrl + i: start should do a build first (show code alteration)
+
+ctrl + i: What do I need to change to get incremental build?
+
+ctrl + shift + i: There is an extension to create gitignore files. I forget it. Which is it?
+
+ctrl + shift + i: In German, there is a word "Baugruppe" representing some parts put together, but used itself as a part in larger products. What would you call that in EN?
+
+export type Part = {
+    id: string;
+    name: string;
+}
+
+export type PartOrAssembly = Part | Assembly;
+
+export type Assembly = {
+    id: string;
+    name: string;
+    parts: {
+        component: PartOrAssembly;
+        quantity: number;
+    }[];
+}
+
+Generate some sample data for an Assembly representing a simple bike.
+
+Nice. Make the wheels assemblies, too (nested data structure)
+
+function generate_bill_of_material(assembly: Assembly, quantity: number): {id: string, name: string, quantity: number}[]
+
+Seems that I need this type multiple times. Create a named type for it and change my code accordingly.
+
+This implementation returns multiple object in result for the same part. Make sure that parts in the result are unique and the quantity is aggregated accordingly.
+
+I want to add  unit testing to my project. Which testing framework do you recommend?
+
+npm install -D jest ts-jest
+npx ts-jest config:init
+testMatch: ["**/?(*.)+(spec|test).ts"],
+
+@workspace /tests Generate jest unit test for generate_bill_of_material
+
+should return an empty array when given an empty assembly
+
+should return a single part when given an assembly with a single part
+
+should return a single part when given an assembly that contains a single sub-part twice
+
+should return two parts when given an assembly that contains two different parts
+
+should handle a part that appears in two different sub-assemblies
+
+should not return sub-assemblies, only parts
+
+I need to store and process an assembly hierarchy. An assembly consists of n components. Each component can be a part (e.g. a screw, a tire of a bike) or an assembly (e.g. front wheel of a bike) that itself contains components. For each component, I also have a quantity. Parts and assemblies have names and are identified by IDs.
+The algorithm I have to come up with goes through such an assembly hierarchy and puts together a bill of materials (BOM). In this BOM, each part is only contained once with the total quantity needed. Assemblies are not part of the BOM.
+Suggest possible ways how to solve this problem.
+
+Can you suggest a database structure (SQL) to store such an assembly hierarchy?
+
+How can child_id reference an assembly or a part? Didn't you create a foreign key reference to just parts?
+
+Can you generate the code for an ER diagram using mermaid.js?
+
+How would a SQL statement look like that returns top-level assemblies (i.e. assemblies that are not a component of any other assembly)?
+
+Would it be possible to generate the BOM purely in a SQL SELECT statement?
+
+I want to try that in Postgresql. Remind me, how to I start a Postgresql Docker container and connect to it?
+
+How do I create a database in Postgresql? And how to I switch to that DB?
+
+Generate a SQL CREATE script for the database tables for the assembly hierarchy
+
+Do not use a serial, use a manually entered ID.
+
+Generate INSERT statements that generate a simple hierarchy representing a bike. The bike contains of a frame and two wheels. Each wheel contains a tire (same part used for both wheels).
+
+WITH RECURSIVE BOM AS (  
+  SELECT child_id, quantity  
+  FROM AssemblyHierarchy  
+  WHERE parent_id = 1 -- ID of the assembly you're generating the BOM for  
+    
+  UNION ALL  
+    
+  SELECT ah.child_id, ah.quantity * bom.quantity  
+  FROM AssemblyHierarchy ah  
+  JOIN BOM bom ON bom.child_id = ah.parent_id  
+)  
+SELECT c.component_name, SUM(bom.quantity) as total_quantity  
+FROM BOM bom  
+JOIN Components c ON c.component_id = bom.child_id  
+WHERE c.is_part = TRUE  
+GROUP BY c.component_name  
+
+I have never accessed Postgresql from TypeScript. How could I do that?
+
+I looked at pg-promise. It is based on node-postgres. I really just want to run a single SQL query. Do I really need pg-promse? Couldn't I just use node-postgres?
+

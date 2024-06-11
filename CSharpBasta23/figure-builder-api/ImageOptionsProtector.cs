@@ -4,20 +4,13 @@ interface IImageOptionsProtector
     ImageOptions Unprotect(string data);
 }
 
-class ImageOptionsProtector : IImageOptionsProtector
+class ImageOptionsProtector(IDataProtectionProvider provider) : IImageOptionsProtector
 {
     // In this program, we use the ASP.NET Data Protection API for encrypting and decrypting data.
     // Read more: https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction
     // The following constant is the purpose string for the data protection API.
     // Read more: https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/consumer-apis/purpose-strings
     const string PROTECTION_PURPOSE = "BuildImageUrl";
-
-    private readonly IDataProtectionProvider provider;
-
-    public ImageOptionsProtector(IDataProtectionProvider provider)
-    {
-        this.provider = provider;
-    }
 
     public string Protect(ImageOptions options)
     {

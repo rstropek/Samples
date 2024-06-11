@@ -70,7 +70,7 @@ static class ServicesExtensions
         });
 
         // Just to be sure, also configure MVC JSON options
-        services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+        services.Configure<JsonOptions>(options =>
         {
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });

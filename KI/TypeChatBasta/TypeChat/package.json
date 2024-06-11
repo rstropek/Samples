@@ -1,0 +1,23 @@
+{
+  "name": "typechatbasta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/app.js",
+    "start-program": "npm run build && node dist/app.js -- program",
+    "postbuild": "copyfiles -u 1 src/**/*Schema.ts dist && copyfiles -u 1 ../data/*.json dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.2",
+    "typechat": "file:../../TypeChat"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "copyfiles": "^2.4.1",
+    "typescript": "^5.3.3"
+  }
+}
