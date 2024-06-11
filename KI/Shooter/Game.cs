@@ -21,23 +21,27 @@ public class Game
 
     public bool Paint(SKCanvas canvas, SKImageInfo info, KeyboardStatus keyboard)
     {
-        // Initialize the spaceship position if it has never been set before
+        // Initialize the spaceship position if it has never been set before.
+        // Spaceship should be centered in x axis, and at 80% of the height in y axis.
         if (SpaceshipPosition == null) { SpaceshipPosition = new(info.Width / 2, info.Height * 0.8f); }
 
+        // Black background
         canvas.Clear(SKColors.Black);
 
+        // A spaceship is a triangle with a base of SPACESHIP_WIDTH and a height of SPACESHIP_HEIGHT.
+        // The SpaceshipPosition is the center of the base of the triangle.
         var spaceshipVertices = new SKPoint[]
         {
             new(SpaceshipPosition.Value.X, SpaceshipPosition.Value.Y - SPACESHIP_HEIGHT),
             new(SpaceshipPosition.Value.X - SPACESHIP_WIDTH / 2, SpaceshipPosition.Value.Y),
             new(SpaceshipPosition.Value.X + SPACESHIP_WIDTH / 2, SpaceshipPosition.Value.Y)
         };
-        MoveSpaceship(info, keyboard);
+        MoveSpaceship(info, keyboard, ref SpaceshipPosition);
         DrawSpaceship(canvas, spaceshipVertices);
 
         if (keyboard.Shooting)
         {
-            Lasers.Add(new(SpaceshipPosition.Value.X, SpaceshipPosition.Value.Y - SPACESHIP_HEIGHT));
+            Lasers.Add(new(SpaceshipPosition!.Value.X, SpaceshipPosition.Value.Y - SPACESHIP_HEIGHT));
             keyboard.Shooting = false;
         }
 
@@ -56,15 +60,15 @@ public class Game
             return false;
         }
 
-        DrawLasers(canvas);
-        DrawMeteors(canvas);
+        DrawLasers(canvas, Lasers);
+        DrawMeteors(canvas, Meteors);
 
         return true;
     }
 
-    private void DrawMeteors(SKCanvas canvas)
+    private static void DrawMeteors(SKCanvas canvas, IEnumerable<SKPoint> meteors)
     {
-        foreach (var meteor in Meteors)
+        foreach (var meteor in meteors)
         {
             DrawGlowingCircle(canvas, meteor, METEOR_WIDTH / 2, SKColors.Orange);
         }
@@ -100,9 +104,9 @@ public class Game
         return true;
     }
 
-    private void DrawLasers(SKCanvas canvas)
+    private static void DrawLasers(SKCanvas canvas, IEnumerable<SKPoint> lasers)
     {
-        foreach (var laser in Lasers)
+        foreach (var laser in lasers)
         {
             using var laserPath = new SKPath();
             laserPath.MoveTo(laser.X, laser.Y);
@@ -127,10 +131,8 @@ public class Game
         }
     }
 
-    private void DrawSpaceship(SKCanvas canvas, SKPoint[] vertices)
+    private static void DrawSpaceship(SKCanvas canvas, SKPoint[] vertices)
     {
-        if (SpaceshipPosition is null) { throw new InvalidOperationException("SpaceshipPosition is null"); }
-
         using var spaceshipPath = new SKPath();
         spaceshipPath.MoveTo(vertices[0]);
         spaceshipPath.LineTo(vertices[1]);
@@ -190,7 +192,7 @@ public class Game
         canvas.DrawCircle(center, radius, circlePaint);
     }
 
-    private void MoveSpaceship(SKImageInfo info, KeyboardStatus keyboard)
+    private static void MoveSpaceship(SKImageInfo info, KeyboardStatus keyboard, ref SKPoint? SpaceshipPosition)
     {
         if (SpaceshipPosition is null) { throw new InvalidOperationException("SpaceshipPosition is null"); }
 
