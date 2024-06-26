@@ -27,6 +27,10 @@ body {
 }
 
 .marked {
+  background-color: orange;
+}
+
+.exploded {
   background-color: red;
 }
 

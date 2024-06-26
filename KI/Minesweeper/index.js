@@ -6,95 +6,102 @@ import { ROWS, COLS, BOMBS } from "./settings.js";
 const app = document.querySelector("#app");
 const gameStatus = document.querySelector("#game-status");
 
-const bombs = []; // 2D array with flags indicating if a cell contains a bomb
-const numberOfSurroundingBombs = []; // 2D array with the number of bombs surrounding a cell
+// 2d array containing flags indicating whether a cell is a bomb
+const bombs = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+
+// 2d array containing the number of bombs in surrounding cells
+const counts = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 
 // Create all cells
 for (let row = 0; row < ROWS; row++) {
-  bombs.push(new Array(COLS).fill(false));
-  numberOfSurroundingBombs.push(new Array(COLS).fill(0));
   for (let col = 0; col < COLS; col++) {
     const cell = document.createElement("div");
     cell.className = "cell";
 
+    // Left click to open
     cell.addEventListener("click", () => {
-      // If the player has won or the cell has already been marked, do nothing
-      if (hasWon() || isMarked(cell)) {
+      if (gameStatus.textContent) {
         return;
       }
 
-      // If the cell contains a bomb, the game is over
-      if (bombs[row][col]) {
-        gameStatus.innerText = "Game Over";
-        return;
-      }
-
-      // Open the cell
       open(cell, row, col);
+
       if (hasWon()) {
-        gameStatus.innerText = "You won! 🥳";
+        gameStatus.textContent = "You Win!";
       }
     });
 
-    cell.addEventListener("contextmenu", (e) => {
-      // Prevent the context menu from appearing
-      e.preventDefault();
+    // Rick click to mark
+    cell.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
 
-      // If the player has won or the cell has already been opened, do nothing
-      if (hasWon() || isOpened(cell)) {
+      if (isOpened(cell)) {
         return;
       }
 
-      // Toggle the cell as marked
-      cell.className = !isMarked(cell) ? "cell marked" : "cell";
+      if (isMarked(cell)) {
+        cell.className = "cell";
+      } else {
+        cell.className = "cell marked";
+      }
     });
+
     app.appendChild(cell);
   }
 }
 
 // Place bombs randomly
-let bombCount = 0;
-while (bombCount != BOMBS) {
+let numberOfBombs = 0;
+while (numberOfBombs < BOMBS) {
   const row = Math.floor(Math.random() * ROWS);
   const col = Math.floor(Math.random() * COLS);
-
   if (!bombs[row][col]) {
     bombs[row][col] = true;
-    bombCount++;
+    numberOfBombs++;
 
-    // Add bomb to number of surrounding cells
-    executeForSurroundingCells(row, col, (_, row, col) => {
-      numberOfSurroundingBombs[row][col]++;
+    // Add bomb to surrounding cells
+    executeForSurroundingCells(row, col, (i, j) => {
+      counts[i][j]++;
     });
   }
 }
 
 function open(cell, row, col) {
+  if (isOpened(cell) || isMarked(cell)) {
+    return;
+  }
+
   cell.className = "cell opened";
-  if (numberOfSurroundingBombs[row][col] > 0) {
-    cell.textContent = numberOfSurroundingBombs[row][col];
-  } else {
-    // Open surrounding cells recursively until cells with bombs nearby are found
-    executeForSurroundingCells(row, col, (cell, row, col) => {
-      if (!isOpened(cell) && !isMarked(cell)) {
-        open(cell, row, col);
-      }
+
+  if (bombs[row][col]) {
+    gameStatus.textContent = "Game Over";
+    cell.className = "cell exploded";
+    return;
+  }
+
+  if (counts[row][col] === 0) {
+    executeForSurroundingCells(row, col, (i, j) => {
+      open(app.children[i * COLS + j], i, j);
     });
+  } else {
+    cell.textContent = counts[row][col];
   }
 }
 
 function hasWon() {
-  // The player has won if all only cells with bombs remain unopened.
-  // Start by counting unopened cells
-  let unopenedCount = 0;
+  // Count number of unopened cells. If the number
+  // of unopened cells is equal to the number of bombs,
+  // the player has won.
+  let unopenedCells = 0;
+
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
-      if (!isOpened(app.childNodes[row * COLS + col])) {
-        unopenedCount++;
+      const cell = app.children[row * COLS + col];
+      if (!isOpened(cell)) {
+        unopenedCells++;
       }
     }
   }
 
-  // Check if the number of unopened cells is equal to the number of bombs
-  return unopenedCount === BOMBS;
+  return unopenedCells === BOMBS;
 }

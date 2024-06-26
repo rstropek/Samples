@@ -13,11 +13,10 @@ export function isMarked(cell) {
 export function executeForSurroundingCells(row, col, callback) {
   // Execute callback for all cells surrounding the cell at (row, col).
   // Does NOT execute callback for the cell at (row, col).
-  for (let i = -1; i <= 1; i++) {
-    for (let j = -1; j <= 1; j++) {
-      if (!(i === 0 && j === 0) && row + i >= 0 && row + i < ROWS && col + j >= 0 && col + j < COLS) {
-        const cell = app.childNodes[(row + i) * COLS + col + j];
-        callback(cell, row + i, col + j);
+  for (let i = row - 1; i <= row + 1; i++) {
+    for (let j = col - 1; j <= col + 1; j++) {
+      if (i >= 0 && i < ROWS && j >= 0 && j < COLS && (i !== row || j !== col)) {
+        callback(i, j);
       }
     }
   }
