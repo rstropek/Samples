@@ -1,0 +1,37 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#container {
+  padding: 10px;
+  border: 3px solid black;
+  width: calc(25px * 10 + 20px);
+}
+
+#app {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: calc(25px * 10);
+}
+
+.cell {
+  border: 1px solid white;
+  background-color: darkgray;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
+.opened {
+  background-color: white;
+}
+
+.marked {
+  background-color: red;
+}
+
+#game-status {
+  font-size: x-large;
+  text-align: center;
+  width: calc(25px * 10 + 20px);
+}
