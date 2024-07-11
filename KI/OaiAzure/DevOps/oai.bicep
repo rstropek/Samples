@@ -39,15 +39,15 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
 
   // Add a model deployment. Here we use ChatGPT 3.5 to save costs.
   resource deployment 'deployments@2023-10-01-preview' = {
-    name: 'oai-35-turbo'
+    name: 'oai-gpt-4'
     sku: {
       capacity: 1
       name: 'Standard'
     }
     properties: {
       model: {
-        name: 'gpt-35-turbo'
-        version: '1106'
+        name: 'gpt-4o'
+        version: '2024-05-13'
         format: 'OpenAI'
       }
     }

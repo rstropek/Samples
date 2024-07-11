@@ -6,7 +6,7 @@ param tags object
 
 var abbrs = loadJsonContent('abbreviations.json')
 
-resource privateVnet 'Microsoft.Network/virtualNetworks@2021-08-01' = {
+resource privateVnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
   name: '${abbrs.networkVirtualNetworks}${uniqueString(projectName)}'
   location: location
   tags: tags
