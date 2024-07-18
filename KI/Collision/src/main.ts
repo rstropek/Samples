@@ -1,7 +1,7 @@
 import { Bubble } from './bubble';
 
-const WIDTH = 1024;
-const HEIGHT = 1024;
+const WIDTH = 350;
+const HEIGHT = 600;
 
 const canvas = document.getElementById('app') as HTMLCanvasElement;
 canvas.width = WIDTH;
