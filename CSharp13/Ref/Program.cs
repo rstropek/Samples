@@ -13,7 +13,7 @@ Span.UnmanagedBasics();
 Span.SpanVsList();
 
 RefStructs.RefStruct();
-*/
+
 Span<int> values = stackalloc int[] { 1, 1, 2, 2, 3, 3 };
 var window = new SlidingWindow(values, 2);
 Console.WriteLine(window.Average());
@@ -26,3 +26,12 @@ while (window.Slide()) { Console.WriteLine(window.Average()); }
 var roWindow = new ReadonlySlidingWindow(values, 2);
 Console.WriteLine(roWindow.Average());
 while (roWindow.TrySlide(out roWindow)) { Console.WriteLine(roWindow.Average()); }
+
+PigsDemo.Demo();
+
+RefIterators.Iterators();
+
+await RefAsync.UseTTTBoardWithAsync();
+*/
+
+RefInterfaces.Interfaces();

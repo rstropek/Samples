@@ -16,8 +16,10 @@ ref struct Vector3
 
 ref struct Line
 {
+#pragma warning disable CS0649 // Field is never assigned to
     public Vector3 Start; // This is ok because Line is a ref struct itself
     public Vector3 End;
+#pragma warning restore CS0649 // Field is never assigned to
 }
 
 public static class RefStructs

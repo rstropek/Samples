@@ -32,6 +32,21 @@ public static class Parameters
 
     static readonly int y = 10;
 
+    // Note that this does not work (not even in C# 13) as iterators cannot have ref, in or out parameters
+    // static IEnumerable<int> GetNumbers(ref int x)
+    // {
+    //     x += 5;
+    //     yield return x;
+    // }
+
+    // Same is true for async methods -> this does not work either
+    // static async Task<int> GetNumberAsync(ref int x)
+    // {
+    //     await Task.Delay(1000);
+    //     x += 5;
+    //     return x;
+    // }
+
     public static void RefParameters()
     {
         int x = 10;
