@@ -1,5 +1,4 @@
-﻿using SkiaSharp;
-using SkiaSharp.Views.WPF;
+﻿using SkiaSharp.Views.WPF;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
