@@ -1,0 +1,14 @@
+title: Technical Documentation
+subtitle: Technical Documentation for the Asteroids Game
+date: \today
+author:
+  - Rainer Stropek
+keywords: [Game, Asteroids, Technical Documentation]
+papersize: a4
+links-as-notes: true
+toc: false
+lang: de
+titlepage: true
+footer-left: Rainer Stropek
+logo-width: 200
+table-use-row-colors: true
