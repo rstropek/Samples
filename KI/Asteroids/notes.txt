@@ -1,0 +1,94 @@
+1. mitmproxy
+   docker run --rm -it -v ~/.mitmproxy:/home/mitmproxy/.mitmproxy -p 8080:8080 -v $(pwd):/data mitmproxy/mitmproxy
+   ~u github
+
+1. Context
+- Single file
+- Multi file
+- Chat
+
+2. @workspace
+@workspace Why does this app start a dev webserver when I run `npm start`? I don't understand how that works.
+@workspace Can you create a mermaid class diagram for my app?
+
+3. @terminal
+tsc --version
+@terminal #terminalSelection Why is this 4.3.3? If you look into #file:package.json , I install version 5
+
+4. /new
+@workspace /new Add a prettierrc file for ts
+
+5. AI apply
+
+6. Technical writing
+- Markdown
+- Mermaid
+
+Take a look at #file:main.ts and #file:rocket.ts and describe how the animation of rockets work. The result will be part of the technical documentation. Give me the result in markdown sourcecode.
+
+7. Shortcuts
+accept line
+
+8. Extensions
+https://github.blog/news-insights/product-news/introducing-github-copilot-extensions/
+@docker What is a Dockerfile
+
+9. Exclude
+
+10. Experimental settings
+- Manipulate prompt
+- other settings
+
+
+
+root = true
+
+[*.{ts,js}]
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+max_line_length = 150
+
+
+
+
+
+let input = '';
+
+process.stdin.on('data', function(chunk) {
+    input += chunk;
+});
+
+process.stdin.on('end', function() {
+    processInput(input);
+});
+
+function processInput(input) {
+    // Split input by double newlines to get individual JSON documents
+    const docs = input.split('\n\n');
+
+    for (let doc of docs) {
+        doc = doc.trim();
+        if (!doc) continue;
+
+        // Remove 'data: ' prefix if present
+        if (doc.startsWith('data: ')) {
+            doc = doc.substring('data: '.length);
+        }
+
+        try {
+            const json = JSON.parse(doc);
+
+            if (json.choices && Array.isArray(json.choices)) {
+                for (let choice of json.choices) {
+                    if (choice.delta && choice.delta.content !== undefined) {
+                        process.stdout.write(choice.delta.content);
+                    }
+                }
+            }
+        } catch (e) {
+            // Ignore parsing errors and continue
+        }
+    }
+}
