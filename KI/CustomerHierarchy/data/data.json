@@ -1,0 +1,27 @@
+{
+    "Account": [
+        { "id": 1, "number": "ACC123" },
+        { "id": 2, "number": "ACC456" },
+        { "id": 3, "number": "ACC789" }
+    ],
+    "Person": [
+        { "id": 1, "type": "natural", "name": "John Doe" },
+        { "id": 2, "type": "natural", "name": "Jane Smith" },
+        { "id": 3, "type": "natural", "name": "Michael Brown" },
+        { "id": 4, "type": "natural", "name": "Bob Lee" },
+        { "id": 5, "type": "natural", "name": "Alice Johnson" },
+        { "id": 6, "type": "legal", "name": "ABC Corp" }
+    ],
+    "Holder": [
+        { "id": 1, "account_id": 1, "person_id": 1, "permission_level": "manage" },
+        { "id": 2, "account_id": 2, "person_id": 2, "permission_level": "manage" },
+        { "id": 3, "account_id": 2, "person_id": 3, "permission_level": "manage" },
+        { "id": 4, "account_id": 3, "person_id": 6, "permission_level": "manage" },
+        { "id": 5, "account_id": 3, "person_id": 4, "permission_level": "manage" }
+    ],
+    "Connection": [
+        { "id": 1, "person1_id": 2, "person2_id": 3, "type": "spouse" },
+        { "id": 2, "person1_id": 4, "person2_id": 5, "type": "spouse" },
+        { "id": 3, "person1_id": 4, "person2_id": 6, "type": "representative" }
+    ]
+}
