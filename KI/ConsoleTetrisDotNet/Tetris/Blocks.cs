@@ -1,8 +1,10 @@
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Tetris.Tests")]
+
 namespace ConsoleTetris;
 
-public class Blocks
+public static class TetrisBlockImpl
 {
-    public static readonly string[] BlockLayouts =
+    internal static readonly string[] BlockLayouts =
     [
         """
         ##
@@ -36,31 +38,41 @@ public class Blocks
         """,
     ];
 
-    public string GetRandomBlock() => Random.Shared.GetItems(BlockLayouts, 1)[0];
+    internal static string GetRandomBlockImpl() => Random.Shared.GetItems(BlockLayouts, 1)[0];
 
-    public string Rotate(string block)
+    internal static string RotateImpl(string block)
     {
-        var (width, height) = GetBlockDimensions(block);
+        var (width, height) = TetrisBlockImpl.GetBlockDimensionsImpl(block);
 
         return string.Create(width * height + (width - 1), block, (chars, originalBlock) =>
         {
             var rotatedIndex = 0;
+
+            // Iterate through each column of the original block
             for (var x = 0; x < width; x++)
             {
+                // For each column, iterate through the rows from bottom to top
+                // This effectively rotates the block 90 degrees clockwise
                 for (var y = height - 1; y >= 0; y--)
                 {
+                    // Calculate the index in the original block
+                    // This maps (x,y) coordinates to a linear index in the string
                     var index = y * (width + 1) + x;
-                    // Check if the index is within bounds
+                    
+                    // Check if the calculated index is within the original block's bounds
                     if (index < originalBlock.Length)
                     {
+                        // Copy the character from the original block to the rotated position
                         chars[rotatedIndex++] = originalBlock[index];
                     }
                     else
                     {
-                        // If out of bounds, add a space or another placeholder
+                        // If the index is out of bounds (due to irregular shapes),
+                        // fill with a space to maintain the block's rectangular form
                         chars[rotatedIndex++] = ' ';
                     }
                 }
+                // Add a newline after each column (now row) except for the last one
                 if (x < width - 1)
                 {
                     chars[rotatedIndex++] = '\n';
@@ -69,7 +81,7 @@ public class Blocks
         });
     }
 
-    public (int width, int height) GetBlockDimensions(string block)
+    public static (int width, int height) GetBlockDimensionsImpl(string block)
     {
         var width = 0;
         var height = 1;
@@ -94,7 +106,7 @@ public class Blocks
         return (width, height);
     }
 
-    public void Iterate(int x, int y, string block, Action<int, int, char> action)
+    public static void IterateOverCharsInBlockImpl(int x, int y, string block, Action<int, int, char> action)
     {
         for (int line = y, col = x, ix = 0; ix < block.Length; ix++, col++)
         {
@@ -109,4 +121,29 @@ public class Blocks
             }
         }
     }
+}
+
+#pragma warning disable CA1822 // Mark members as static
+public class TetrisBlock
+{
+    public string GetRandomBlock() => TetrisBlockImpl.GetRandomBlockImpl();
+
+    public string Rotate(string block) => TetrisBlockImpl.RotateImpl(block);
+
+    public (int width, int height) GetBlockDimensions(string block) => TetrisBlockImpl.GetBlockDimensionsImpl(block);
+                
+    public void IterateOverCharsInBlock(int x, int y, string block, Action<int, int, char> action) =>
+        TetrisBlockImpl.IterateOverCharsInBlockImpl(x, y, block, action);
+}
+#pragma warning restore CA1822 // Mark members as static
+
+public static class StringExtensions
+{
+    public static string Rotate(this string block) => TetrisBlockImpl.RotateImpl(block);
+
+    public static (int width, int height) GetBlockDimensions(this string block) => 
+        TetrisBlockImpl.GetBlockDimensionsImpl(block);
+
+    public static void IterateOverCharsInBlock(this string block, int x, int y, Action<int, int, char> action) =>
+        TetrisBlockImpl.IterateOverCharsInBlockImpl(x, y, block, action);
 }

@@ -1,42 +1,33 @@
 namespace ConsoleTetris;
 
-class Canvas(int width, int height, ITetrisConsole console, Blocks blocks)
+class Canvas(int width, int height, ITetrisConsole console, TetrisBlock blocks)
 {
     private readonly bool[,] pixels = new bool[width, height];
 
     public void SetPixel(int x, int y, string block)
     {
-        blocks.Iterate(x, y, block, (col, line, c) =>
+        blocks.IterateOverCharsInBlock(x, y, block, (col, line, c) =>
         {
             if (!char.IsWhiteSpace(c))
             {
                 pixels[col, line] = true;
-                console.SetCursorPosition(col, line);
-                console.Write(c);
             }
         });
     }
 
-    public void Draw(DrawMode mode)
+    public void Draw()
     {
         for (var y = 0; y < height; y++)
         {
+            console.SetCursorPosition(0, y);
             for (var x = 0; x < width; x++)
             {
-                console.SetCursorPosition(x, y);
-                if (pixels[x, y])
-                {
-                    console.Write(mode == DrawMode.Normal ? '#' : ' ');
-                }
-                else
-                {
-                    console.Write(' ');
-                }
+                console.Write(pixels[x, y] ? '#' : ' ');
             }
         }
     }
 
-    public void Shift()
+    public int Shift()
     {
         bool IsLineFull(int y)
         {
@@ -50,41 +41,32 @@ class Canvas(int width, int height, ITetrisConsole console, Blocks blocks)
             return true;
         }
 
-        var anyLinesFull = false;
-        for (var y = height - 1; y >= 0; y--)
+        var removed = 0;
+        for (var y = height - 1; y >= 0; )
         {
             if (IsLineFull(y))
             {
-                anyLinesFull = true;
-            }
-        }
-
-        if (anyLinesFull)
-        {
-            Draw(DrawMode.Remove);
-
-            for (var y = height - 1; y >= 0; y--)
-            {
-                if (IsLineFull(y))
+                for (var line = y; line > 0; line--)
                 {
-                    for (var line = y; line > 0; line--)
-                    {
-                        for (var x = 0; x < width; x++)
-                        {
-                            pixels[x, line] = pixels[x, line - 1];
-                        }
-                    }
                     for (var x = 0; x < width; x++)
                     {
-                        pixels[x, 0] = false;
+                        pixels[x, line] = pixels[x, line - 1];
                     }
-
-                    y++;
                 }
-            }
+                for (var x = 0; x < width; x++)
+                {
+                    pixels[x, 0] = false;
+                }
 
-            Draw(DrawMode.Normal);
+                removed++;
+            }
+            else
+            {
+                y--;
+            }
         }
+
+        return removed;
     }
 
     public bool Fits(int x, int y, string block)
@@ -95,7 +77,7 @@ class Canvas(int width, int height, ITetrisConsole console, Blocks blocks)
         }
 
         var doesFit = true;
-        blocks.Iterate(x, y, block, (col, line, c) =>
+        blocks.IterateOverCharsInBlock(x, y, block, (col, line, c) =>
         {
             if (col >= width || line >= height || (pixels[col, line] && !char.IsWhiteSpace(c)))
             {

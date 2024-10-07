@@ -15,8 +15,8 @@ public class BlocksTests
     [InlineData(6, 3, 2)] // Z block
     public void GetBlockDimensions_ReturnsCorrectDimensions(int blockIndex, int expectedWidth, int expectedHeight)
     {
-        var block = Blocks.BlockLayouts[blockIndex];
-        var (width, height) = new Blocks().GetBlockDimensions(block);
+        var block = TetrisBlock.BlockLayouts[blockIndex];
+        var (width, height) = new TetrisBlock().GetBlockDimensions(block);
         Assert.Equal(expectedWidth, width);
         Assert.Equal(expectedHeight, height);
     }
@@ -26,7 +26,7 @@ public class BlocksTests
     public void RotateFourTimes_ShouldReturnOriginalBlock(string block)
     {
         // Arrange
-        var blocks = new Blocks();
+        var blocks = new TetrisBlock();
 
         // Act
         var rotated = block;
@@ -44,7 +44,7 @@ public class BlocksTests
         get
         {
             var data = new TheoryData<string>();
-            foreach (var layout in Blocks.BlockLayouts)
+            foreach (var layout in TetrisBlock.BlockLayouts)
             {
                 data.Add(layout);
             }

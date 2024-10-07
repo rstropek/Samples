@@ -8,12 +8,11 @@ const int HEIGHT = 10;
 
 var services = new ServiceCollection();
 services.AddSingleton<ITetrisConsole, TetrisConsole>();
-services.AddSingleton<Blocks>();
+services.AddSingleton<TetrisBlock>();
 services.AddSingleton<AsciiDrawing>();
-
 var serviceProvider = services.BuildServiceProvider();
 var asciiDrawing = serviceProvider.GetRequiredService<AsciiDrawing>();
-var blocks = serviceProvider.GetRequiredService<Blocks>();
+var blocks = serviceProvider.GetRequiredService<TetrisBlock>();
 var console = serviceProvider.GetRequiredService<ITetrisConsole>();
 var canvas = new Canvas(WIDTH, HEIGHT, console, blocks);
 
@@ -26,12 +25,28 @@ console.TranslateY = TOP;
 int x = 0, y = 0;
 string block;
 var quit = false;
+var lines = 0;
+object drawingLock = new();
 
-void NewBlock()
+bool NewBlock()
 {
     block = blocks.GetRandomBlock();
     x = WIDTH / 2;
     y = 0;
+    return canvas.Fits(x, y, block);
+}
+
+void Redraw()
+{
+    lock (drawingLock)
+    {
+        asciiDrawing.ClearRectangle(WIDTH, HEIGHT);
+        canvas.Draw();
+        asciiDrawing.DrawBlock(x, y, block);
+        console.SetCursorPosition(WIDTH + 5, 1);
+        console.Write($"Removed lines: {lines}");
+
+    }
 }
 
 NewBlock();
@@ -40,13 +55,20 @@ var cts = new CancellationTokenSource();
 console.ListenForKey([ConsoleKey.LeftArrow, ConsoleKey.RightArrow, ConsoleKey.DownArrow, ConsoleKey.Escape, ConsoleKey.Spacebar], key =>
 {
     int originalX = x, originalY = y;
+    var originalBlock = block;
     switch (key.Key)
     {
         case ConsoleKey.LeftArrow:
-            x--;
+            if (canvas.Fits(x - 1, y, block))
+            {
+                x--;
+            }
             break;
         case ConsoleKey.RightArrow:
-            x++;
+            if (canvas.Fits(x + 1, y, block))
+            {
+                x++;
+            }
             break;
         case ConsoleKey.Escape:
             cts.Cancel();
@@ -56,34 +78,19 @@ console.ListenForKey([ConsoleKey.LeftArrow, ConsoleKey.RightArrow, ConsoleKey.Do
             var rotated = blocks.Rotate(block);
             if (canvas.Fits(x, y, rotated))
             {
-                asciiDrawing.DrawBlock(x, y, block, DrawMode.Remove);
                 block = rotated;
-                asciiDrawing.DrawBlock(x, y, block);
             }
             break;
         case ConsoleKey.DownArrow:
-            var newY = canvas.Drop(x, y, block);
-            if (newY != y)
-            {
-                asciiDrawing.DrawBlock(x, y, block, DrawMode.Remove);
-                y = newY;
-                asciiDrawing.DrawBlock(x, y, block);
-            }
-
+            y = canvas.Drop(x, y, block);
             break;
         default:
             break;
     }
 
-    if ((x != originalX || y != originalY) && canvas.Fits(x, y, block))
+    if (x != originalX || y != originalY || block != originalBlock)
     {
-        asciiDrawing.DrawBlock(originalX, originalY, block, DrawMode.Remove);
-        asciiDrawing.DrawBlock(x, y, block);
-    }
-    else
-    {
-        x = originalX;
-        y = originalY;
+        Redraw();
     }
 }, cts.Token);
 #pragma warning restore CS4014
@@ -92,17 +99,20 @@ try
 {
     while (!quit)
     {
-        asciiDrawing.DrawBlock(x, y, block);
+        Redraw();
         await Task.Delay(TimeSpan.FromSeconds(1), cts.Token);
         if (!canvas.Fits(x, y + 1, block))
         {
             canvas.SetPixel(x, y, block);
-            canvas.Shift();
-            NewBlock();
+            lines += canvas.Shift();
+            if (!NewBlock())
+            {
+                Redraw();
+                quit = true;
+            }
         }
         else
         {
-            asciiDrawing.DrawBlock(x, y, block, DrawMode.Remove);
             y++;
         }
     }

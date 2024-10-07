@@ -1,14 +1,8 @@
 namespace ConsoleTetris;
 
-public enum DrawMode
+public class AsciiDrawing(ITetrisConsole console, TetrisBlock blocks)
 {
-    Normal,
-    Remove
-}
-
-public class AsciiDrawing(ITetrisConsole console, Blocks blocks)
-{
-    private const char VerticalBar = '\u25AE';
+    private const char VerticalBar = '*';
 
     public void DrawLine(int x1, int y1, int x2, int y2)
     {
@@ -38,16 +32,16 @@ public class AsciiDrawing(ITetrisConsole console, Blocks blocks)
         }
     }
 
-    public void DrawBlock(int x, int y, string block, DrawMode mode = DrawMode.Normal)
+    public void DrawBlock(int x, int y, string block)
     {
         var blockSpan = block.AsSpan();
 
-        blocks.Iterate(x, y, block, (x, y, c) =>
+        blocks.IterateOverCharsInBlock(x, y, block, (x, y, c) =>
         {
-            if (!char.IsWhiteSpace(c) || mode == DrawMode.Remove)
+            if (!char.IsWhiteSpace(c))
             {
                 console.SetCursorPosition(x, y);
-                console.Write(mode == DrawMode.Remove ? ' ' : c);
+                console.Write(c);
             }
         });
     }
@@ -65,5 +59,15 @@ public class AsciiDrawing(ITetrisConsole console, Blocks blocks)
 
         // Draw right vertical line
         DrawLine(x + width + 1, y, x + width + 1, y + height + 1);
+    }
+
+    public void ClearRectangle(int width, int height)
+    {
+        var emptyLine = new string(' ', width);
+        for (var y = 0; y < height; y++)
+        {
+            console.SetCursorPosition(0, y);
+            console.Write(emptyLine);
+        }
     }
 }

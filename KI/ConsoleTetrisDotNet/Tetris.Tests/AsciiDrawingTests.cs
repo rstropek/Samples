@@ -11,7 +11,7 @@ namespace Tetris.Tests
         public AsciiDrawingTests()
         {
             _consoleMock = new Mock<ITetrisConsole>();
-            _asciiDrawing = new AsciiDrawing(_consoleMock.Object, new Blocks());
+            _asciiDrawing = new AsciiDrawing(_consoleMock.Object, new TetrisBlock());
         }
 
         [Theory]
