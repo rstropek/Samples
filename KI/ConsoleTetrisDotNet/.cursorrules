@@ -1,0 +1,23 @@
+Use `var` instead of explicit type declarations when the type is clear from the context.
+
+Good:
+```
+var name = "John";
+```
+
+Bad:
+```
+string name = "John";
+```
+
+Do not use underscores in front of private fields.
+
+Good:
+```
+private readonly string name;
+```
+
+Bad:
+```
+private readonly string _name;
+```
