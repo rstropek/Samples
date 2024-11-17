@@ -1,0 +1,22 @@
+<h2>Measurement Chart</h2>
+
+@if (measurements()) {
+  <svg width="500" height="200" viewBox="0 0 500 100">
+    <line x1="0" y1="50" x2="500" y2="50" stroke="gray" stroke-dasharray="2,2" />
+    <polyline
+      [attr.points]="dxChart()"
+      fill="none"
+      stroke="blue"
+      stroke-width="1"
+    />
+    <polyline
+      [attr.points]="dyChart()"
+      fill="none"
+      stroke="green"
+      stroke-width="1"
+    />
+  </svg>
+}
+@else {
+  <p>No data available</p>
+}
