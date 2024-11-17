@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "aaron-bond.better-comments",
+        "usernamehw.errorlens",
+        "PKief.material-icon-theme",
+        "Angular.ng-template",
+        "serayuzgur.crates",
+        "rust-lang.rust-analyzer",
+        "humao.rest-client",
+        "ms-vscode.hexeditor",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb",
+        "Codeium.codeium"
+    ]
+}
