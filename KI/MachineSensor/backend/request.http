@@ -1,0 +1,10 @@
+@host = http://localhost:3000
+
+###
+GET {{host}}/ping
+
+###
+GET {{host}}/measurements
+
+###
+POST {{host}}/measurement/measure-now
