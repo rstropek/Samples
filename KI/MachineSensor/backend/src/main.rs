@@ -1,9 +1,10 @@
 use std::{sync::Arc, time::Duration};
 
-use axum::{extract::State, routing::{get, post}, Json, Router};
+use axum::{extract::State, http::{HeaderValue, Method}, routing::{get, post}, Json, Router};
 use ring_buffer::RingBuffer;
 use sensor::{Measurement, RotatingDiskSimulatorBuilder, RotationSensor};
 use tokio::sync::RwLock;
+use tower_http::cors::CorsLayer;
 
 mod sensor;
 mod ring_buffer;
@@ -40,7 +41,12 @@ async fn main() {
         .route("/measurements", get(get_measurements))
         .route("/measurement/measure-now", post(measure))
         .with_state(state.clone())
-        .with_state(state);
+        .with_state(state)
+        .layer(
+            CorsLayer::new()
+                .allow_origin("*".parse::<HeaderValue>().unwrap())
+                .allow_methods([Method::GET, Method::POST])
+        );
 
     // run it
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")

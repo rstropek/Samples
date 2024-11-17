@@ -17,6 +17,7 @@ pub struct RotatingDiskSimulator {
 
 #[derive(Debug, Clone, Copy, Serialize)]
 pub struct Measurement {
+    pub timestamp: f64,
     pub dx: f64,
     pub dy: f64
 }
@@ -41,7 +42,7 @@ impl RotationSensor for RotatingDiskSimulator {
         let angle = self.angular_velocity * t;
         let dx = self.radius * angle.cos();
         let dy = self.radius * angle.sin();
-        Measurement { dx, dy }
+        Measurement { timestamp: t, dx, dy }
     }
 }
 
