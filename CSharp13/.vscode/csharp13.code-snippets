@@ -82,6 +82,18 @@
       ""
     ]
   },
+  "0045-span-string": {
+    "prefix": "cs",
+    "body": [
+      "ReadOnlySpan<char> text = \"Temp: 15° C\";",
+      "text = text[(text.IndexOf(' ') + 1)..];",
+      "text = text[..(text.IndexOf(' ') - 1)];",
+      "if (int.TryParse(text, out var temperature)) ",
+      "{",
+      "    Console.WriteLine(temperature);",
+      "}"
+    ]
+  },
   "0050-params-collections": {
     "prefix": "0050-params-collections",
     "body": [
