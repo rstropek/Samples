@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Ref;
 
@@ -27,7 +28,7 @@ public static class Span
             } while (madeChanges);
         }
 
-        void BubbleSortSpan<T>(Span<T> list) where T : IComparable
+        void BubbleSortSpan<T>(scoped Span<T> list) where T : IComparable
         {
             bool madeChanges;
             int itemCount = list.Length;
@@ -52,19 +53,19 @@ public static class Span
         // We have a list of numbers and want to sort them
         byte[] numbers = [55, 34, 21, 13, 8, 5, 3, 2, 1];
         BubbleSort(numbers);
-        foreach (var n in numbers) { Console.WriteLine(n); }
+        Console.WriteLine(string.Join(", ", numbers));
 
         // Now we want to sort a part of the array -> we have to copy
         numbers = [55, 34, 21, 13, 8, 5, 3, 2, 1];
         var someNumbers = new byte[numbers.Length - 2];
         for (var i = 1; i < numbers.Length - 1; i++) { someNumbers[i - 1] = numbers[i]; }
         BubbleSort(someNumbers);
-        //foreach (var n in someNumbers) { Console.WriteLine(n); }
+        Console.WriteLine(string.Join(", ", someNumbers));
 
         // Span solves our problem
         Span<byte> numbersSpan = [55, 34, 21, 13, 8, 5, 3, 2, 1];
         BubbleSortSpan(numbersSpan[1..^1]);
-        foreach (var n in numbersSpan) { Console.WriteLine(n); }
+        foreach (var n in numbersSpan) { Console.Write($"{n} "); }
     }
 
     public static void SpanBasics()
@@ -118,6 +119,91 @@ public static class Span
         ReadOnlySpan<char> answerSpan = answer.AsSpan();
         // Note that int.Parse accepts a ReadOnlySpan<char> as well
         Console.WriteLine("\t" + int.Parse(answerSpan[answerSpan.IndexOf('4')..]));
+
+        // A span can be constructed from a single value
+        PrintHeadline("Single-value span:");
+        int singleValue = 42;
+        Span<int> singleValueSpan = new(ref singleValue);
+        Console.WriteLine($"\tLength: {singleValueSpan.Length}, Value: {singleValueSpan[0]}");
+
+        // Spans can be easily filled and cleared
+        // Note the use of the new string.Join overload. Starting with .NET 9, string.Join
+        // can take a ReadOnlySpan as an input.
+        PrintHeadline("Clearning and filling:");
+        Span<string?> greetings = new string[3];
+        greetings.Fill("Hello");
+        Console.WriteLine($"\t{string.Join(", ", greetings)}");
+        greetings.Clear();
+        Console.WriteLine($"\t{greetings[0] ?? "null"}");
+
+        // scoped parameters. We can pass the stack-allocated array directly to the method
+        // because the parameter of the method is scoped.
+        ReadOnlySpan<int> numbers = stackalloc int[] { 1, 2, 3, 4, 5 };
+        var consumer = new SpanAggregator();
+        consumer.RememberSum(numbers);
+        Console.WriteLine($"\tSum: {consumer.Sum}");
+    }
+
+    ref struct SpanAggregator
+    {
+        public int Sum { get; private set; }
+
+        // public ReadOnlySpan<int> SourceNumbers { get; private set; }
+
+        // Note scoped parameter. This is important to make sure
+        // that the span is not used after the method returns.
+        public int RememberSum(scoped ReadOnlySpan<int> numbers)
+        {
+            // The following line is not allwed because the span is scoped.
+            // SourceNumbers = numbers;
+
+            var sum = 0;
+            foreach (var number in numbers) { sum += number; }
+            return sum;
+        }
+    }
+
+    public static void SlicesInStandardLibrary()
+    {
+        // New in .NET 9: File helpers supporting spans
+        PrintHeadline("File helpers with spans:");
+        ReadOnlySpan<char> text = stackalloc char[] { 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd' };
+        File.WriteAllText("hello.txt", text);
+        Console.WriteLine($"\t{File.ReadAllText("hello.txt")}");
+        File.Delete("hello.txt");
+
+        // Lots of string functions support Spans
+        ReadOnlySpan<char> part1 = stackalloc char[] { 'H', 'e', 'l', 'l', 'o' };
+        ReadOnlySpan<char> separator = stackalloc char[] { ' ' };
+        ReadOnlySpan<char> part2 = stackalloc char[] { 'W', 'o', 'r', 'l', 'd' };
+        Console.WriteLine($"\t{string.Concat(part1, separator, part2)}");
+
+        ReadOnlySpan<string?> parts = [ "Hello", "World" ];
+        Console.WriteLine($"\t{string.Join(", ", parts)}");
+
+        // The MemoryExtensions class provides tons of useful extension methods
+        // for spans and memory. Take the time to study them! Here is an example
+        // of a brand new extension method for splitting a span.
+        // https://learn.microsoft.com/en-us/dotnet/api/system.memoryextensions.split?view=net-9.0#system-memoryextensions-split-1(system-readonlyspan((-0))-0)
+        ReadOnlySpan<char> data = "25° C;36° F;16° C";
+        var regex = new Regex(@"\d+°"); // Note: Use GeneratedRegex attribute in practice to speed up regex
+                                        //       Here, we focus on spans, not regex -> we keep it simple
+        foreach (var segmentRange in data.Split(';'))
+        {
+            var segment = data[segmentRange];
+            int? degrees = null;
+            foreach(var match in regex.EnumerateMatches(segment))
+            {
+                var value = segment[match.Index..(match.Index + match.Length)];
+                degrees ??= int.Parse(value[..^1]);
+            }
+
+            Console.WriteLine($"\t{segmentRange.Start} - {segmentRange.End}: {segment} -> {degrees}");
+        }
+
+        // Here is another new extension method for span that checks if a span starts with a given value.
+        ReadOnlySpan<int> numbers = stackalloc int[] { 1, 2, 3, 4, 5 };
+        Console.WriteLine($"\tDoes it start with 1? {numbers.StartsWith(1)}");
     }
 
     public static void BadIdeas()
@@ -218,14 +304,8 @@ public static class Span
 
     static void PrintHeadline(string text)
     {
-        var oldBackground = Console.BackgroundColor;
-        var oldForeground = Console.ForegroundColor;
-
-        Console.BackgroundColor = ConsoleColor.Red;
-        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine();
         Console.WriteLine(text);
-
-        Console.BackgroundColor = oldBackground;
-        Console.ForegroundColor = oldForeground;
+        Console.WriteLine(new string('=', text.Length));
     }
 }
