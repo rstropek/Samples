@@ -71,5 +71,31 @@ public static class RefInterfaces
             data[0]++;
             Console.WriteLine(data[0]);
         }
+
+        var agg = new Aggregator<AnotherVector2>();
+        agg.Add(new AnotherVector2(1, 2));
+        agg.Add(new AnotherVector2(3, 4));
+        
+        Console.WriteLine(agg.TotalLength);
     }
+}
+
+interface IHaveLength
+{
+    float GetLength();
+}
+
+// ref struct implementing interface is new in C# 13.
+ref struct AnotherVector2(float x, float y) : IHaveLength
+{
+    public float X = x;
+    public float Y = y;
+
+    public float GetLength() => MathF.Sqrt(X * X + Y * Y);
+}
+
+class Aggregator<T> where T: IHaveLength, allows ref struct {
+    public float TotalLength { get; private set; }
+
+    public void Add(T item) => TotalLength += item.GetLength();
 }

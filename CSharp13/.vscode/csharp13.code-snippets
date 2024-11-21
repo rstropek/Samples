@@ -95,7 +95,7 @@
     ]
   },
   "0050-params-collections": {
-    "prefix": "0050-params-collections",
+    "prefix": "cs",
     "body": [
       "using System;",
       "using System.Collections.Generic;",
@@ -366,7 +366,7 @@
     ]
   },
   "0150-spans-in-std": {
-    "prefix": "",
+    "prefix": "cs",
     "body": [
       "// New in .NET 9: File helpers supporting spans",
       "using System.Text.RegularExpressions;",

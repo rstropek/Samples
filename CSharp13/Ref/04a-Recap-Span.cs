@@ -120,6 +120,15 @@ public static class Span
         // Note that int.Parse accepts a ReadOnlySpan<char> as well
         Console.WriteLine("\t" + int.Parse(answerSpan[answerSpan.IndexOf('4')..]));
 
+        // Strings, spans, and ranges
+        ReadOnlySpan<char> text = "Temp: 15° C";
+        text = text[(text.IndexOf(' ') + 1)..];
+        text = text[..(text.IndexOf(' ') - 1)];
+        if (int.TryParse(text, out var temperature)) 
+        {
+            Console.WriteLine(temperature);
+        }
+
         // A span can be constructed from a single value
         PrintHeadline("Single-value span:");
         int singleValue = 42;
