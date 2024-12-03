@@ -8,7 +8,7 @@ param subnetId string
 
 var abbrs = loadJsonContent('abbreviations.json')
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: '${abbrs.webServerFarms}${uniqueString(projectName)}'
   location: location
   tags: tags
@@ -22,7 +22,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   }
 }
 
-resource webApp 'Microsoft.Web/sites@2023-01-01' = {
+resource webApp 'Microsoft.Web/sites@2024-04-01' = {
   name: '${abbrs.webSitesAppService}${uniqueString(projectName)}'
   location: location
   tags: tags
@@ -46,11 +46,11 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
     vnetRouteAllEnabled: true
   }
 
-  resource settings 'config@2023-01-01' = {
+  resource settings 'config@2024-04-01' = {
     name: 'appsettings'
     properties: {
       OAI_AZURE_ENDPOINT: '${uniqueString(projectName)}.openai.azure.com'
-      OAI_AZURE_DEPLOYMENT: 'oai-35-turbo'
+      OAI_AZURE_DEPLOYMENT: 'oai-gpt-4'
       PORT: '8080'
       DOCKER_REGISTRY_SERVER_URL: 'https://index.docker.io'
     }

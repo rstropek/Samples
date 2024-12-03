@@ -1,10 +1,10 @@
-FROM node:lts-alpine AS build
+FROM node:alpine AS build
 WORKDIR /app
 COPY . .
 RUN npm install \
     && npm run build
 
-FROM node:lts-alpine
+FROM node:alpine
 WORKDIR /app
 COPY --from=build /app/dist/ .
 COPY package.json .

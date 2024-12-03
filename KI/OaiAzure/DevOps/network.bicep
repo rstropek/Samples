@@ -6,7 +6,7 @@ param tags object
 
 var abbrs = loadJsonContent('abbreviations.json')
 
-resource privateVnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
+resource privateVnet 'Microsoft.Network/virtualNetworks@2024-03-01' = {
   name: '${abbrs.networkVirtualNetworks}${uniqueString(projectName)}'
   location: location
   tags: tags
@@ -52,7 +52,7 @@ resource privateVnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
 }
 
 // Create a private DNS zone for the private link to Azure OpenAI
-resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+resource privateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
   name: 'privatelink.openai.azure.com'
   location: 'global'
   properties: {}
@@ -62,7 +62,7 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 }
 
 // Link the private DNS zone to the virtual network
-resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01' = {
   parent: privateDnsZone
   name: '${privateDnsZone.name}-link'
   location: 'global'

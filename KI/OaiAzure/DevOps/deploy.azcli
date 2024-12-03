@@ -1,5 +1,5 @@
 # Switch to correct subscription
-# az login
+# az login --use-device-code
 # az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
 # az account show --output table
 
@@ -7,7 +7,7 @@
 LOCATION=swedencentral
 
 # Name of the project. All resource names will be derived from that name
-PROJECT_NAME=oaiazure
+PROJECT_NAME=oaiazure1
 
 # Deploy resource group
 RGNAMES=$(az deployment sub create \

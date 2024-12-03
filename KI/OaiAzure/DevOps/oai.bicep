@@ -20,7 +20,7 @@ var roleIds = {
 }
 
 // Create OpenAI account
-resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
+resource account 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: '${abbrs.cognitiveServicesAccounts}${uniqueString(projectName)}'
   location: location
   tags: tags
@@ -38,7 +38,7 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
   }
 
   // Add a model deployment. Here we use ChatGPT 3.5 to save costs.
-  resource deployment 'deployments@2023-10-01-preview' = {
+  resource deployment 'deployments@2023-05-01' = {
     name: 'oai-gpt-4'
     sku: {
       capacity: 1
@@ -55,7 +55,7 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
 }
 
 // Create private endpoint for the OpenAI account
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-02-01' = {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2024-03-01' = {
   name: '${abbrs.networkPrivateEndpoints}${uniqueString(projectName)}'
   location: location
   tags: tags
@@ -77,7 +77,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-02-01' = {
   }
 }
 
-resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-05-01' = {
+resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2024-03-01' = {
   name: 'pvtEndpointDnsGroup'
   parent: privateEndpoint
   properties: {
