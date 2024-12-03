@@ -79,6 +79,10 @@ public static class RefIterators
             // However, board cannot be a Span<char> because it would be preserved across yield boundaries.
             // So we use Memory<char> instead. However, that means that we cannot put the
             // board content on the stack.
+            //
+            // Note that we can work with ref and the ref struct here :-)
+            // Even if you do not write your own ref structs, you will benefit because
+            // starting with C# 13, you can use spans in more places!
             var ttt = new TicTacToeBoardWithSpans(board.Span);
             ref var field = ref ttt[(row, column)];
             field = player;

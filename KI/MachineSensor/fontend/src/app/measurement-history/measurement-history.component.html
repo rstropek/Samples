@@ -1,0 +1,14 @@
+<h1>Measurement History</h1>
+
+<app-measurement-chart></app-measurement-chart>
+
+@if (measurements()) {
+<div id="measurements">
+  <div class="dx header">dX</div>
+  <div class="dx header">dY</div>
+  @for(measurement of measurements(); track measurement.timestamp) {
+    <div class="dx">{{ measurement.dx | number: '1.2-2' }}</div>
+    <div class="dy">{{ measurement.dy | number: '1.2-2' }}</div>
+  }
+</div>
+}

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockObject", "LockObject\Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Params", "Params\Params.csproj", "{4DD3DC7A-5772-4745-A869-4BAEA30D4C2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{16C32DFE-694B-4244-A22D-BB46D48524E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{4DD3DC7A-5772-4745-A869-4BAEA30D4C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DD3DC7A-5772-4745-A869-4BAEA30D4C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DD3DC7A-5772-4745-A869-4BAEA30D4C2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16C32DFE-694B-4244-A22D-BB46D48524E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16C32DFE-694B-4244-A22D-BB46D48524E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16C32DFE-694B-4244-A22D-BB46D48524E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16C32DFE-694B-4244-A22D-BB46D48524E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -11,16 +11,10 @@ interface IAddable<T> where T : allows ref struct
 }
 
 // In C# 13, ref structs can implement interfaces.
-ref struct Vector2 : IAddable<Vector2>
+ref struct Vector2(float x, float y) : IAddable<Vector2>
 {
-    public float X;
-    public float Y;
-
-    public Vector2(float x, float y)
-    {
-        X = x;
-        Y = y;
-    }
+    public float X = x;
+    public float Y = y;
 
     public static Vector2 Add(Vector2 left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
 }
@@ -63,7 +57,7 @@ public static class RefInterfaces
     public static void Interfaces()
     {
         Vector2 v1 = new(1, 2);
-        // IAddable<Vector2> addable = v1; // This is not allowed as it would lead to boxing.
+        // var addable = v1 as IAddable<Vector2>; // This is not allowed as it would lead to boxing.
         Vector2 v2 = new(3, 4);
         Vector2 v3 = Vector2.Add(v1, v2);
 
@@ -77,5 +71,31 @@ public static class RefInterfaces
             data[0]++;
             Console.WriteLine(data[0]);
         }
+
+        var agg = new Aggregator<AnotherVector2>();
+        agg.Add(new AnotherVector2(1, 2));
+        agg.Add(new AnotherVector2(3, 4));
+        
+        Console.WriteLine(agg.TotalLength);
     }
+}
+
+interface IHaveLength
+{
+    float GetLength();
+}
+
+// ref struct implementing interface is new in C# 13.
+ref struct AnotherVector2(float x, float y) : IHaveLength
+{
+    public float X = x;
+    public float Y = y;
+
+    public float GetLength() => MathF.Sqrt(X * X + Y * Y);
+}
+
+class Aggregator<T> where T: IHaveLength, allows ref struct {
+    public float TotalLength { get; private set; }
+
+    public void Add(T item) => TotalLength += item.GetLength();
 }

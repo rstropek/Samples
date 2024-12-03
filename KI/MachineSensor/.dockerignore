@@ -1,0 +1,7 @@
+# Ignore everything
+*
+**/*
+
+# Except .vscode folder
+!.vscode/
+!.vscode/*
