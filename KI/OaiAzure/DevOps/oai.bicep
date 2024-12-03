@@ -36,22 +36,6 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   sku: {
     name: sku
   }
-
-  // Add a model deployment. Here we use ChatGPT 3.5 to save costs.
-  resource deployment 'deployments@2023-05-01' = {
-    name: 'oai-gpt-4'
-    sku: {
-      capacity: 1
-      name: 'Standard'
-    }
-    properties: {
-      model: {
-        name: 'gpt-4o'
-        version: '2024-05-13'
-        format: 'OpenAI'
-      }
-    }
-  }
 }
 
 // Create private endpoint for the OpenAI account
@@ -100,3 +84,5 @@ resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleIds.cognitiveServicesUser)
   }
 }]
+
+output accountName string = account.name

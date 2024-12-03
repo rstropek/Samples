@@ -48,3 +48,5 @@ module web './app-service.bicep' = {
     networkModule
   ]
 }
+
+output accountName string = oai.outputs.accountName

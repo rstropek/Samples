@@ -15,3 +15,4 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-01-01' = {
 }
 
 output rgName string = rg.name
+output subscriptionId string = subscription().subscriptionId
