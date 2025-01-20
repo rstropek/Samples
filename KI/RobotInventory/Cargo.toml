@@ -1,0 +1,8 @@
+[package]
+name = "RobotInventory"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+assert_approx_eq = "1.1.0"
+rstest = "0.24.0"
