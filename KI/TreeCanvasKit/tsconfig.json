@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"moduleDetection": "force",
+		"module": "Preserve",
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}
