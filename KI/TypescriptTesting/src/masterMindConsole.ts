@@ -7,6 +7,7 @@ export interface IMasterMindConsole {
     generateResultDots(result: { correct: number, appearing: number }): string;
     printGuessHistory(guesses: { guess: string, result: { correct: number, appearing: number } }[]): void;
     printGameOver(numberOfGuesses: number): void;
+    printCheatCode(code: string): void;
     close(): void;
 }
 
@@ -31,8 +32,8 @@ export class MasterMindConsole implements IMasterMindConsole {
     async askForGuess(): Promise<string> {
         return new Promise((resolve) => {
             const askForInput = () => {
-                this.rl.question('Enter your guess: ', (guess) => {
-                    if (this.guessingLogic.isValidGuess(guess)) {
+                this.rl.question('Enter your guess (or "cheat" to reveal the code): ', (guess) => {
+                    if (guess.toLowerCase() === 'cheat' || this.guessingLogic.isValidGuess(guess)) {
                         resolve(guess);
                     } else {
                         console.log('Invalid guess. Please enter a 4-digit number using digits 1-6.');
@@ -63,6 +64,11 @@ export class MasterMindConsole implements IMasterMindConsole {
     printGameOver(numberOfGuesses: number): void {
         console.log(`Correct! You solved it in ${numberOfGuesses} ${numberOfGuesses === 1 ? 'guess' : 'guesses'}!`);
         this.rl.close();
+    }
+
+    printCheatCode(code: string): void {
+        console.log(` The hidden code is: ${code}`);
+        console.log();
     }
 
     // Helper method for cleanup in tests

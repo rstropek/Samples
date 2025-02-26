@@ -18,6 +18,12 @@ export class Game {
 
         while (true) {
             const guess = await this.console.askForGuess();
+            
+            if (guess.toLowerCase() === 'cheat') {
+                this.console.printCheatCode(this.hiddenCode);
+                continue;
+            }
+
             const result = this.guessingLogic.evaluateGuess(guess, this.hiddenCode);
             
             this.guessHistory.push({ guess, result });

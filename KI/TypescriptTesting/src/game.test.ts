@@ -22,6 +22,7 @@ describe('Game', () => {
             generateResultDots: jest.fn(),
             printGuessHistory: jest.fn(),
             printGameOver: jest.fn(),
+            printCheatCode: jest.fn(),
             close: jest.fn(),
         };
 
@@ -100,5 +101,18 @@ describe('Game', () => {
 
         // Complete the game
         await playPromise;
+    });
+
+    it('should handle cheat command', async () => {
+        mockGuessingLogic.generateHiddenCode.mockReturnValue('1234');
+        mockConsole.askForGuess
+            .mockResolvedValueOnce('cheat')
+            .mockResolvedValueOnce('1234');
+        mockGuessingLogic.evaluateGuess.mockReturnValue({ correct: 4, appearing: 0 });
+
+        await game.play();
+
+        expect(mockConsole.printCheatCode).toHaveBeenCalledWith('1234');
+        expect(mockConsole.printGameOver).toHaveBeenCalledWith(1);
     });
 });
