@@ -1,6 +1,4 @@
-# Console Mastermind
-
-## Generate hidden code
+# Generate hidden code
 
 In the class `GuessingLogic`, write a function `generateHiddenCode` that generates a random 4-digit code using the digits 1..6.
 

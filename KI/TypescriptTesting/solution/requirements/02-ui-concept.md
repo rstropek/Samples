@@ -1,6 +1,4 @@
-# Console Mastermind
-
-## UI Concept
+# UI Concept
 
 The following text shows an example of the expected user interface when running the application.
 

@@ -1,8 +1,6 @@
-# Console Mastermind
+# Evaluator
 
-## Evaluator
-
-In the class `GuessingLogic`, write a function `evaluateGuess`that evaluates a guess and returns the feedback for the user.
+In the class `GuessingLogic`, write a function `evaluateGuess` that evaluates a guess and returns the feedback for the user.
 
 First, the method must calculate the number of digits that are correctly positioned (_correct_). Next, the method iterates over digits that are not correctly positioned and checks whether they appear in the secret sequence on a different position (_appearing_).
 

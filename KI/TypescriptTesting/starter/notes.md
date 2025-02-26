@@ -19,3 +19,4 @@ Implement the logic for the requirements in @07-basic-game-loop.md with correspo
 Finally, bring everything together in _src/app.ts_. Create instances of @GuessingLogic , @MasterMindConsole , and @Game and run the game so we can play it.
 
 Add a cheat feature. If the uses guesses "cheat", the program should display the hidden code.
+

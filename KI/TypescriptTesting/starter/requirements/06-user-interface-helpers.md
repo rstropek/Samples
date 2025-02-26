@@ -1,6 +1,4 @@
-# Console Mastermind
-
-## User Interface Module
+# User Interface Module
 
 Write a class `MasterMindConsole` that offers functions for our game's user interface. You can find details about the UI concept [here](./02-ui-concept.md).
 

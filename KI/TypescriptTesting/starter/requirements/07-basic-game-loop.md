@@ -1,6 +1,4 @@
-# Console Mastermind
-
-## Basic Game Loop
+# Basic Game Loop
 
 Write a class `Game` that implements a basic game loop:
 

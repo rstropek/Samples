@@ -1,0 +1,12 @@
+title: Console Mastermind
+subtitle: An exercise for coding with AI
+date: \today
+author:
+  - Rainer Stropek
+keywords: [TypeScript, AI, Game]
+papersize: a4
+toc: true
+lang: en
+titlepage: true
+footer-left: Rainer Stropek
+table-use-row-colors: true

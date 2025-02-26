@@ -1,6 +1,4 @@
-# Console Mastermind
-
-## Evaluator
+# Guess Checker
 
 In the class `GuessingLogic`, write a function `isValidGuess` that checks whether a guess is a valid guess.
 
@@ -26,6 +24,7 @@ export class GuessingLogic {
         // ..
     }
 }
+```
 
 ## Acceptance Criteria
 
