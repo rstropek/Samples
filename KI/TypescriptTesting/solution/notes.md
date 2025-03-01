@@ -1,3 +1,5 @@
+Create a mermaidjs class diagram from all interfaces and classes. Ignore tests.
+
 Write the jest tests for the spec in @03-checker.md in src/guessingLogic.test.ts. You can find a working sample test in @dummy.test.ts .
 
 Now write the code for the given specs. You can run the tests with `npm test`.
