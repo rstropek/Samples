@@ -4,9 +4,14 @@ import compression from 'compression';
 import { promises as fs } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = parseInt(process.env.PORT || '3000');
+
+// Get directory path equivalent to __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Cache for sessions data
 interface SessionsCache {
@@ -157,6 +162,20 @@ app.get('/sessions/:code/file', async (req: express.Request, res: express.Respon
         res.json({ content });
     } catch (error) {
         res.status(404).json({ error: 'File not found' });
+    }
+});
+
+// Serve static files from the public directory
+// This middleware is added after all API routes to only handle requests that weren't matched
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Fallback route for SPA (Single Page Applications)
+app.get('*', (req, res) => {
+    // Only handle HTML requests, not API requests
+    if (req.accepts('html')) {
+        res.sendFile(path.join(__dirname, '../public/index.html'));
+    } else {
+        res.status(404).json({ error: 'Not found' });
     }
 });
 

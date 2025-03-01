@@ -87,9 +87,12 @@ class FileViewer {
       clearInterval(this.refreshInterval);
     }
 
+    // Remember the currently selected file before loading new files
+    const previouslySelectedFile = this.fileSelect.value;
+
     try {
       const response = await fetch(
-        `http://localhost:3000/sessions/${this.currentSessionId}`
+        `sessions/${this.currentSessionId}`
       );
       const data: FileListResponse = await response.json();
 
@@ -101,6 +104,10 @@ class FileViewer {
         .join('');
 
       if (data.files.length > 0) {
+        // Check if previously selected file still exists in the new file list
+        if (previouslySelectedFile && data.files.includes(previouslySelectedFile)) {
+          this.fileSelect.value = previouslySelectedFile;
+        }
         this.loadSelectedFile();
         this.setupAutoRefresh();
       }
@@ -121,7 +128,7 @@ class FileViewer {
       }
 
       const response = await fetch(
-        `http://localhost:3000/sessions/${
+        `sessions/${
           this.currentSessionId
         }/file?file=${encodeURIComponent(selectedFile)}`,
         { headers }
