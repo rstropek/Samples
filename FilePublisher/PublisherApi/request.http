@@ -1,4 +1,5 @@
-@host = http://localhost:8081
+@host = http://dev-01:8081
+#@host = https://dev-01.rstropek.com/files
 
 ###
 GET {{host}}/ping

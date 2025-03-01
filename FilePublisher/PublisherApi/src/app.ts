@@ -51,6 +51,19 @@ app.use(cors({
 app.use(compression());
 app.use(express.json());
 
+// Request logging middleware
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const start = Date.now();
+    
+    // Log when the request completes
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        console.log(`${new Date().toISOString()} | ${req.method} ${req.originalUrl} | ${res.statusCode} | ${duration}ms`);
+    });
+    
+    next();
+});
+
 // Routes
 app.get('/ping', (req: express.Request, res: express.Response) => {
     res.json({ message: 'pong' });
