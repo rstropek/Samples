@@ -1,0 +1,26 @@
+{
+  "name": "publisherapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file .env ./src/app.ts",
+    "build-docker": "docker build -t publisherapi .",
+    "run-docker": "docker run -p 8081:80 -v $(pwd)/sessions.json:/usr/src/app/sessions.json:ro -v /home/rainer/github/Samples/MediatR/:/home/rainer/github/Samples/MediatR/:ro publisherapi"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.8"
+  }
+}

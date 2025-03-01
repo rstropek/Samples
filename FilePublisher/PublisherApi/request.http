@@ -1,0 +1,10 @@
+@host = http://localhost:8081
+
+###
+GET {{host}}/ping
+
+###
+GET {{host}}/sessions/B2025CS
+
+###
+GET {{host}}/sessions/B2025CS/file?file=DataAccess/Model.cs
