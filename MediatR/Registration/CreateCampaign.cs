@@ -1,10 +1,11 @@
 using DataAccess;
+using FluentResults;
 using FluentValidation;
 using MediatR;
 
 namespace Registration.CreateCampaign;
 
-public record CreateCampaign(CreateCampaignRequest Request) : IRequest<CreateCampaignResponse>;
+public record CreateCampaign(CreateCampaignRequest Request) : IRequest<Result<CreateCampaignResponse>>;
 
 public record CreateCampaignRequest(
        string Name,
@@ -44,34 +45,13 @@ public class CreateCampaignRequestValidator : AbstractValidator<CreateCampaignRe
 {
     public CreateCampaignRequestValidator()
     {
-        RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Campaign name must be set");
-
-        RuleFor(x => x.Organizer)
-            .NotEmpty().WithMessage("Campaign organizer must be set");
-
-        RuleFor(x => x.ReservedRatioForGirls)
-            .InclusiveBetween(0, 1)
-            .When(x => x.ReservedRatioForGirls.HasValue)
-            .WithMessage("Reserved ratio for girls must be between 0 and 1");
-
-        RuleFor(x => x.PurgeDate)
-            .Must(date => date > DateOnly.FromDateTime(DateTimeOffset.Now.Date))
-            .When(x => x.PurgeDate.HasValue)
-            .WithMessage("Purge date for campaign must be in the future");
-
-        RuleFor(x => x)
-            .Must(x => !x.Dates!.Any(d => d.Date >= x.PurgeDate!.Value))
-            .When(x => x.PurgeDate.HasValue && x.Dates != null)
-            .WithMessage("Purge date for campaign must be after all dates");
-
-        RuleFor(x => x.Dates)
-            .Must(dates => !dates!.GroupBy(d => d.Date).Any(g => g.Count() > 1))
-            .When(x => x.Dates != null)
-            .WithMessage("Duplicate dates found");
-
-        RuleForEach(x => x.Dates)
-            .SetValidator(new CreateDateRequestValidator());
+        RuleFor(x => x.Name).MustBeValidCampaignName();
+        RuleFor(x => x.Organizer).MustBeValidCampaignOrganizer();
+        RuleFor(x => x.ReservedRatioForGirls).MustBeValidReservedRatioForGirls();
+        RuleFor(x => x.PurgeDate).MustBeFuturePurgeDate();
+        RuleFor(x => x.PurgeDate).PurgeDateMustBeAfterAllDates(x => x.Dates?.Select(d => d.Date));
+        RuleFor(x => x.Dates).MustNotHaveDuplicateDates(x => x?.Select(d => d.Date));
+        RuleForEach(x => x.Dates).SetValidator(new CreateDateRequestValidator());
     }
 }
 
@@ -79,17 +59,9 @@ public class CreateDateRequestValidator : AbstractValidator<CreateDateRequest>
 {
     public CreateDateRequestValidator()
     {
-        RuleFor(x => x.Date)
-            .Must(date => date >= DateOnly.FromDateTime(DateTimeOffset.Now.Date))
-            .WithMessage("Date must be in the future");
-
-        RuleFor(x => x)
-            .Must(x => x.StartTime < x.EndTime)
-            .When(x => x.StartTime.HasValue && x.EndTime.HasValue)
-            .WithMessage("Start time must be before end time");
-
-        RuleForEach(x => x.DepartmentAssignments)
-            .SetValidator(new DepartmentAssignmentRequestValidator());
+        RuleFor(x => x.Date).MustBeFutureDate();
+        RuleFor(x => x.StartTime).MustBeBefore(x => x.EndTime);
+        RuleForEach(x => x.DepartmentAssignments).SetValidator(new DepartmentAssignmentRequestValidator());
     }
 }
 
@@ -97,23 +69,15 @@ public class DepartmentAssignmentRequestValidator : AbstractValidator<Department
 {
     public DepartmentAssignmentRequestValidator()
     {
-        RuleFor(x => x.DepartmentName)
-            .NotEmpty().WithMessage("Department name must be set");
-
-        RuleFor(x => x.NumberOfSeats)
-            .GreaterThan((short)0)
-            .WithMessage("Number of seats must be greater than 0");
-
-        RuleFor(x => x.ReservedRatioForGirls)
-            .InclusiveBetween(0, 1)
-            .When(x => x.ReservedRatioForGirls.HasValue)
-            .WithMessage("Reserved ratio for girls must be between 0 and 1");
+        RuleFor(x => x.DepartmentName).MustBeValidDepartmentName();
+        RuleFor(x => x.NumberOfSeats).MustBeValidNumberOfSeats();
+        RuleFor(x => x.ReservedRatioForGirls).MustBeValidReservedRatioForGirls();
     }
 }
 
-public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHandler<CreateCampaign, CreateCampaignResponse>
+public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHandler<CreateCampaign, Result<CreateCampaignResponse>>
 {
-    public async Task<CreateCampaignResponse> Handle(CreateCampaign createCampaign, CancellationToken _)
+    public async Task<Result<CreateCampaignResponse>> Handle(CreateCampaign createCampaign, CancellationToken _)
     {
         var request = createCampaign.Request;
         var campaign = new Campaign
@@ -143,6 +107,6 @@ public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHan
 
         await repository.Create(campaign.IdString, campaign);
 
-        return new CreateCampaignResponse(campaign.Id);
+        return Result.Ok(new CreateCampaignResponse(campaign.Id));
     }
 }

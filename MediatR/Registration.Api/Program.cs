@@ -13,10 +13,10 @@ app.UseExceptionHandler();
 
 app.MapGet("/ping", () => "pong");
 
-app.MapPost("/campaigns", async (CreateCampaignRequest request, IMediator mediator) =>
+app.MapPost("/campaigns", async (CreateCampaignRequest request, IMediator mediator, ResultConverter converter) =>
 {
     var result = await mediator.Send(new CreateCampaign(request));
-    return Results.Ok(result);
+    return converter.ToResult(result);
 });
 
 app.Run();

@@ -1,0 +1,303 @@
+using DataAccess;
+using FluentValidation;
+using MediatR;
+
+namespace Registration.UpdateCampaign;
+
+public record UpdateCampaign(Guid CampaignId, UpdateCampaignRequest Request) : IRequest<UpdateCampaignResponse>;
+
+public record UpdateCampaignRequest(
+    string Name,
+    string Organizer,
+    UpdateDateRequest[]? Dates = null,
+    decimal? ReservedRatioForGirls = null,
+    DateOnly? PurgeDate = null,
+    CampaignStatus Status = CampaignStatus.Inactive,
+    DateTimeOffset UpdatedAt = default);
+
+public record UpdateDateRequest(
+    DateOnly Date,
+    UpdateDepartmentAssignmentRequest[]? DepartmentAssignments = null,
+    TimeOnly? StartTime = null,
+    TimeOnly? EndTime = null,
+    CampaignDateStatus Status = CampaignDateStatus.Hidden
+);
+
+public record UpdateDepartmentAssignmentRequest(
+    string DepartmentName,
+    short NumberOfSeats,
+    decimal? ReservedRatioForGirls = null
+);
+
+public record UpdateCampaignResponse(
+    Campaign Campaign
+);
+
+public class UpdateCampaignValidator : AbstractValidator<UpdateCampaign>
+{
+    public UpdateCampaignValidator()
+    {
+        RuleFor(x => x.CampaignId)
+            .NotEmpty().WithMessage("Campaign ID must be provided");
+
+        RuleFor(x => x.Request)
+            .SetValidator(new UpdateCampaignRequestValidator());
+    }
+}
+
+public class UpdateCampaignRequestValidator : AbstractValidator<UpdateCampaignRequest>
+{
+    public UpdateCampaignRequestValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Campaign name must be set");
+
+        RuleFor(x => x.Organizer)
+            .NotEmpty().WithMessage("Campaign organizer must be set");
+
+        RuleFor(x => x.ReservedRatioForGirls)
+            .InclusiveBetween(0, 1)
+            .When(x => x.ReservedRatioForGirls.HasValue)
+            .WithMessage("Reserved ratio for girls must be between 0 and 1");
+
+        RuleFor(x => x)
+            .Must(x => !x.Dates!.Any(d => d.Date >= x.PurgeDate!.Value))
+            .When(x => x.PurgeDate.HasValue && x.Dates != null)
+            .WithMessage("Purge date for campaign must be after all dates");
+
+        RuleFor(x => x.Dates)
+            .Must(dates => !dates!.GroupBy(d => d.Date).Any(g => g.Count() > 1))
+            .When(x => x.Dates != null)
+            .WithMessage("Duplicate dates found");
+
+        RuleFor(x => x.Status)
+            .IsInEnum().WithMessage("Invalid campaign status");
+
+        RuleForEach(x => x.Dates)
+            .SetValidator(new UpdateDateRequestValidator());
+    }
+}
+
+public class UpdateDateRequestValidator : AbstractValidator<UpdateDateRequest>
+{
+    public UpdateDateRequestValidator()
+    {
+        RuleFor(x => x)
+            .Must(x => x.StartTime < x.EndTime)
+            .When(x => x.StartTime.HasValue && x.EndTime.HasValue)
+            .WithMessage("Start time must be before end time");
+
+        RuleFor(x => x.Status)
+            .IsInEnum().WithMessage("Invalid campaign date status");
+
+        RuleForEach(x => x.DepartmentAssignments)
+            .SetValidator(new UpdateDepartmentAssignmentRequestValidator());
+    }
+}
+
+public class UpdateDepartmentAssignmentRequestValidator : AbstractValidator<UpdateDepartmentAssignmentRequest>
+{
+    public UpdateDepartmentAssignmentRequestValidator()
+    {
+        RuleFor(x => x.DepartmentName)
+            .NotEmpty().WithMessage("Department name must be set");
+
+        RuleFor(x => x.NumberOfSeats)
+            .GreaterThan((short)0)
+            .WithMessage("Number of seats must be greater than 0");
+
+        RuleFor(x => x.ReservedRatioForGirls)
+            .InclusiveBetween(0, 1)
+            .When(x => x.ReservedRatioForGirls.HasValue)
+            .WithMessage("Reserved ratio for girls must be between 0 and 1");
+    }
+}
+
+public class UpdateCampaignHandler : IRequestHandler<UpdateCampaign, UpdateCampaignResponse>
+{
+    private readonly IJsonFileRepository _repository;
+    private readonly string _problemDetailsUriPrefix;
+
+    public UpdateCampaignHandler(IJsonFileRepository repository, string problemDetailsUriPrefix = "https://example.com/problems")
+    {
+        _repository = repository;
+        _problemDetailsUriPrefix = problemDetailsUriPrefix;
+    }
+
+    public async Task<UpdateCampaignResponse> Handle(UpdateCampaign updateCampaign, CancellationToken cancellationToken)
+    {
+        var campaignId = updateCampaign.CampaignId;
+        var request = updateCampaign.Request;
+
+        using var campaignStream = await _repository.Open(campaignId.ToString("N"), true);
+        if (campaignStream is null)
+        {
+            throw new NotFoundException($"Campaign with ID {campaignId} not found");
+        }
+
+        var campaign = await _repository.Get<Campaign>(campaignStream)
+            ?? throw new InvalidOperationException($"Could not read campaign with id {campaignId} from repository");
+
+        // Optimistic concurrency check
+        if (campaign.UpdatedAt != request.UpdatedAt)
+        {
+            throw new ConcurrencyException("Optimistic concurrency control failed, campaign has been updated by another user");
+        }
+
+        // Check if trying to activate an inactive campaign
+        if (campaign.Status == CampaignStatus.Inactive && request.Status == CampaignStatus.Active)
+        {
+            throw new ForbiddenException("Campaigns cannot be activated using this endpoint. Use the ActivateCampaign endpoint instead.");
+        }
+
+        // Update campaign properties
+        campaign.Name = request.Name;
+        campaign.Organizer = request.Organizer;
+        campaign.ReservedRatioForGirls = request.ReservedRatioForGirls;
+        campaign.PurgeDate = request.PurgeDate;
+        campaign.Status = request.Status;
+
+        // Update dates
+        var updateResult = MergeCampaignDates(request.Dates, campaign.Dates);
+        if (updateResult != null)
+        {
+            throw new ForbiddenException(updateResult.Title, updateResult.Instance);
+        }
+
+        campaign.UpdatedAt = DateTimeOffset.UtcNow;
+        campaign.UpdatedBy = "Admin API"; // TODO: Set the current user here
+
+        await _repository.Update(campaignStream, campaign);
+
+        return new UpdateCampaignResponse(campaign);
+    }
+
+    private ProblemDetails? MergeCampaignDates(IEnumerable<UpdateDateRequest>? dto, List<CampaignDate> dates)
+    {
+        var deletedDates = dates.Where(date => !(dto?.Any(d => d.Date == date.Date) ?? false)).ToArray();
+        foreach (var date in deletedDates)
+        {
+            if (date.DepartmentAssignments.Any(da => da.Registrations.Any()))
+            {
+                return new ProblemDetails
+                {
+                    Title = "Cannot delete date with registrations",
+                    Instance = date.Date.ToString("O")
+                };
+            }
+
+            dates.Remove(date);
+        }
+
+        foreach (var dtoDate in dto ?? [])
+        {
+            var existingDate = dates.FirstOrDefault(d => d.Date == dtoDate.Date);
+            if (existingDate is null)
+            {
+                dates.Add(new CampaignDate
+                {
+                    Date = dtoDate.Date,
+                    StartTime = dtoDate.StartTime,
+                    EndTime = dtoDate.EndTime,
+                    Status = dtoDate.Status,
+                    DepartmentAssignments = [.. dtoDate.DepartmentAssignments?.Select(a => new DepartmentAssignment
+                    {
+                        DepartmentName = a.DepartmentName,
+                        NumberOfSeats = a.NumberOfSeats,
+                        ReservedRatioForGirls = a.ReservedRatioForGirls,
+                        Registrations = []
+                    }) ?? []]
+                });
+            }
+            else
+            {
+                var result = UpdateCampaignDate(dtoDate, existingDate);
+                if (result is not null) { return result; }
+            }
+        }
+
+        return null;
+    }
+
+    private ProblemDetails? UpdateCampaignDate(UpdateDateRequest dto, CampaignDate date)
+    {
+        date.StartTime = dto.StartTime;
+        date.EndTime = dto.EndTime;
+        date.Status = dto.Status;
+        var mergeResult = MergeDepartmentAssignments(dto.DepartmentAssignments, date.DepartmentAssignments);
+        if (mergeResult is not null)
+        {
+            mergeResult.Instance = $"{date.Date:O}/{mergeResult.Instance}";
+            return mergeResult;
+        }
+
+        return null;
+    }
+
+    private ProblemDetails? MergeDepartmentAssignments(IEnumerable<UpdateDepartmentAssignmentRequest>? dto, List<DepartmentAssignment> assignments)
+    {
+        var deletedAssignments = assignments.Where(a => !(dto?.Any(b => b.DepartmentName == a.DepartmentName) ?? false)).ToArray();
+        foreach (var deletedAssignment in deletedAssignments)
+        {
+            if (deletedAssignment.Registrations.Any())
+            {
+                return new ProblemDetails
+                {
+                    Title = "Cannot delete department with registrations",
+                    Instance = deletedAssignment.DepartmentName
+                };
+            }
+
+            assignments.Remove(deletedAssignment);
+        }
+
+        foreach (var assignment in dto ?? [])
+        {
+            var existingAssignment = assignments.FirstOrDefault(a => a.DepartmentName == assignment.DepartmentName);
+            if (existingAssignment is null)
+            {
+                assignments.Add(new DepartmentAssignment
+                {
+                    DepartmentName = assignment.DepartmentName,
+                    NumberOfSeats = assignment.NumberOfSeats,
+                    ReservedRatioForGirls = assignment.ReservedRatioForGirls,
+                    Registrations = []
+                });
+            }
+            else
+            {
+                UpdateDepartmentAssignment(assignment, existingAssignment);
+            }
+        }
+
+        return null;
+    }
+
+    private void UpdateDepartmentAssignment(UpdateDepartmentAssignmentRequest dto, DepartmentAssignment assignment)
+    {
+        assignment.DepartmentName = dto.DepartmentName;
+        assignment.NumberOfSeats = dto.NumberOfSeats;
+        assignment.ReservedRatioForGirls = dto.ReservedRatioForGirls;
+    }
+}
+
+// Custom exceptions
+public class NotFoundException : Exception
+{
+    public NotFoundException(string message) : base(message) { }
+}
+
+public class ConcurrencyException : Exception
+{
+    public ConcurrencyException(string message) : base(message) { }
+}
+
+public class ForbiddenException : Exception
+{
+    public string? Instance { get; }
+
+    public ForbiddenException(string message, string? instance = null) : base(message)
+    {
+        Instance = instance;
+    }
+}

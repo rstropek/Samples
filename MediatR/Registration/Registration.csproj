@@ -8,6 +8,7 @@
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.2" />
+    <PackageReference Include="FluentResults" Version="3.16.0" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -19,11 +19,11 @@ public static class DependencyInjectionExtensions
 
     public static IServiceCollection AddMediatR(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining(typeof(ValidationBehavior<>));
+        services.AddValidatorsFromAssemblyContaining(typeof(ValidationResultBehavior<,>));
         services.AddMediatR(cfg =>
         {
             cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
-            cfg.AddOpenRequestPreProcessor(typeof(ValidationBehavior<>));
+            cfg.AddOpenBehavior(typeof(ValidationResultBehavior<,>));
             cfg.RegisterServicesFromAssemblyContaining<CreateCampaign.CreateCampaign>();
         });
         services.AddProblemDetails(options =>
@@ -33,6 +33,7 @@ public static class DependencyInjectionExtensions
                 ctx.ProblemDetails.Extensions.Add("trace-id", ctx.HttpContext.TraceIdentifier);
             };
         });
+        services.AddSingleton<ResultConverter>();
 
         return services;
     }

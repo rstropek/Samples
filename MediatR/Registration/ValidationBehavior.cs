@@ -1,24 +1,57 @@
+using FluentResults;
 using FluentValidation;
-using MediatR.Pipeline;
+using FluentValidation.Results;
+using MediatR;
+using System.Collections.Concurrent;
+using System.Reflection;
 
 namespace Registration;
 
-public class ValidationBehavior<TRequest>(IEnumerable<IValidator<TRequest>> validators) : IRequestPreProcessor<TRequest> where TRequest: notnull
+public class ValidationErrors(IEnumerable<ValidationFailure> errors) : Error
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
+    public IEnumerable<ValidationFailure> Errors { get; } = errors;
+}
 
-    public async Task Process(TRequest request, CancellationToken cancellationToken)
+public class ValidationResultBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+{
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _failMethodCache = new();
+
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        if (_validators.Any())
+        if (validators.Any())
         {
             var context = new ValidationContext<TRequest>(request);
-            var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+            var validationResults = await Task.WhenAll(validators.Select(v => v.ValidateAsync(context, cancellationToken)));
             var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
-
             if (failures.Count != 0)
             {
+                if (typeof(TResponse).IsGenericType && typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
+                {
+                    var validationErrors = new ValidationErrors(failures);
+                    var resultType = typeof(TResponse);
+                    var genericArgType = resultType.GetGenericArguments()[0];
+                    
+                    // Get or create the generic fail method from cache
+                    var genericFailMethod = _failMethodCache.GetOrAdd(genericArgType, type => {
+                        var failMethods = typeof(Result).GetMethods()
+                            .Where(m => m.Name == nameof(Result.Fail) &&
+                                    m.IsGenericMethod &&
+                                    m.GetParameters().Length == 1 &&
+                                    m.GetParameters()[0].ParameterType == typeof(IError))
+                            .First();
+                        return failMethods.MakeGenericMethod(type);
+                    });
+                    
+                    var result = genericFailMethod.Invoke(null, [validationErrors]);
+                    return (TResponse)result!;
+                }
+
+                // If not a Result<T>, throw exception as before
                 throw new ValidationException(failures);
             }
         }
+
+        var response = await next();
+        return response;
     }
 }
