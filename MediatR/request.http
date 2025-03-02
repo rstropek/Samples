@@ -19,11 +19,18 @@ Content-Type: application/json
                 {
                     "departmentName": "Informatik",
                     "numberOfSeats": 10
+                },
+                {
+                    "departmentName": "MT",
+                    "numberOfSeats": 5
                 }
             ]
         }
     ]
 }
+
+###
+GET {{host}}/campaigns
 
 ###
 # @name GetCampaign

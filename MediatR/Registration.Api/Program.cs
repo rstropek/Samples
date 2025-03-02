@@ -41,4 +41,10 @@ app.MapPost("/campaigns/{id}/activate", async (Guid id, IMediator mediator, Resu
     return converter.ToResult(result);
 });
 
+app.MapGet("/campaigns", async (IMediator mediator, ResultConverter converter) =>
+{
+    var result = await mediator.Send(new GetCampaigns());
+    return converter.ToResult(result);
+});
+
 app.Run();
