@@ -74,9 +74,9 @@ public class DepartmentAssignmentRequestValidator : AbstractValidator<Department
     }
 }
 
-public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHandler<CreateCampaign, Result<CreateCampaignResponse>>
+public class CreateCampaignHandler(IJsonFileRepository repository, IMediator mediator) : IRequestHandler<CreateCampaign, Result<CreateCampaignResponse>>
 {
-    public async Task<Result<CreateCampaignResponse>> Handle(CreateCampaign createCampaign, CancellationToken _)
+    public async Task<Result<CreateCampaignResponse>> Handle(CreateCampaign createCampaign, CancellationToken cancellationToken)
     {
         var request = createCampaign.Request;
         var createdTimestamp = DateTimeOffset.UtcNow;
@@ -106,6 +106,7 @@ public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHan
         };
 
         await repository.Create(campaign.IdString, campaign);
+        await mediator.Publish(new CampaignChangedNotification(campaign.Id), cancellationToken);
 
         return Result.Ok(new CreateCampaignResponse(campaign.Id));
     }

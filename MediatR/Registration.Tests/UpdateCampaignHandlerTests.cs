@@ -1,5 +1,6 @@
 using System.Text.Json;
 using DataAccess;
+using MediatR;
 using Moq;
 
 namespace Registration.Tests;
@@ -7,12 +8,16 @@ namespace Registration.Tests;
 public class UpdateCampaignHandlerTests
 {
     private readonly Mock<IJsonFileRepository> _mockRepository;
+
+    private readonly Mock<IMediator> _mockMediator;
+    
     private readonly UpdateCampaignHandler _handler;
 
     public UpdateCampaignHandlerTests()
     {
         _mockRepository = new Mock<IJsonFileRepository>();
-        _handler = new UpdateCampaignHandler(_mockRepository.Object);
+        _mockMediator = new Mock<IMediator>();
+        _handler = new UpdateCampaignHandler(_mockRepository.Object, _mockMediator.Object);
     }
 
     [Fact]
@@ -61,6 +66,7 @@ public class UpdateCampaignHandlerTests
         Assert.True(capturedCampaign.UpdatedAt > originalCampaign.UpdatedAt);
         
         _mockRepository.Verify(r => r.Update(mockStream.Object, It.IsAny<Campaign>()), Times.Once);
+        _mockMediator.Verify(m => m.Publish(It.IsAny<CampaignChangedNotification>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

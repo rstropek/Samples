@@ -1,5 +1,6 @@
 using DataAccess;
 using FluentResults;
+using MediatR;
 using Moq;
 
 namespace Registration.Tests;
@@ -7,12 +8,16 @@ namespace Registration.Tests;
 public class CreateCampaignHandlerTests
 {
     private readonly Mock<IJsonFileRepository> _mockRepository;
+
+    private readonly Mock<IMediator> _mockMediator;
+    
     private readonly CreateCampaignHandler _handler;
 
     public CreateCampaignHandlerTests()
     {
         _mockRepository = new Mock<IJsonFileRepository>();
-        _handler = new CreateCampaignHandler(_mockRepository.Object);
+        _mockMediator = new Mock<IMediator>();
+        _handler = new CreateCampaignHandler(_mockRepository.Object, _mockMediator.Object);
     }
 
     [Fact]
@@ -36,6 +41,7 @@ public class CreateCampaignHandlerTests
         Assert.True(result.IsSuccess);
         Assert.NotEqual(Guid.Empty, result.Value.Id);
         _mockRepository.Verify(r => r.Create(It.IsAny<string>(), It.IsAny<Campaign>()), Times.Once);
+        _mockMediator.Verify(m => m.Publish(It.IsAny<CampaignChangedNotification>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

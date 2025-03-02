@@ -77,7 +77,7 @@ public class UpdateDepartmentAssignmentRequestValidator : AbstractValidator<Upda
     }
 }
 
-public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHandler<UpdateCampaign, Result<UpdateCampaignResponse>>
+public class UpdateCampaignHandler(IJsonFileRepository repository, IMediator mediator) : IRequestHandler<UpdateCampaign, Result<UpdateCampaignResponse>>
 {
     public async Task<Result<UpdateCampaignResponse>> Handle(UpdateCampaign updateCampaign, CancellationToken cancellationToken)
     {
@@ -109,6 +109,7 @@ public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHan
         if (updateResult.IsFailed) { return updateResult; }
 
         await repository.Update(campaignStream, campaign);
+        await mediator.Publish(new CampaignChangedNotification(campaignId), cancellationToken);
 
         return Result.Ok(new UpdateCampaignResponse(campaign));
     }
