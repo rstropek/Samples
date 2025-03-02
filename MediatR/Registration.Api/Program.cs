@@ -1,6 +1,6 @@
 using MediatR;
+using Registration;
 using Registration.Api;
-using Registration.CreateCampaign;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddJsonFileRepository();

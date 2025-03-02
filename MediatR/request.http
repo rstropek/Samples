@@ -1,4 +1,4 @@
-@host = http://dev-01:5000
+@host = http://localhost:5000
 
 ###
 # @name CreateCampaign
@@ -7,7 +7,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "name": "Test Campaign",
+    "name": "",
     "organizer": "Test Organizer",
     "reservedRatioForGirls": -1,
     "dates": [

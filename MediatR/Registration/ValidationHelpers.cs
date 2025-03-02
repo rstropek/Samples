@@ -41,4 +41,5 @@ public static class ValidationHelpers
     }
     public static IRuleBuilderOptions<T, string> MustBeValidDepartmentName<T>(this IRuleBuilder<T, string> ruleBuilder) => ruleBuilder.NotEmpty().WithMessage("Department name must be set");
     public static IRuleBuilderOptions<T, short> MustBeValidNumberOfSeats<T>(this IRuleBuilder<T, short> ruleBuilder) => ruleBuilder.Must(x => x > 0).WithMessage("Number of seats must be greater than 0");
+    public static IRuleBuilderOptions<T, Guid> MustBeValidCampaignId<T>(this IRuleBuilder<T, Guid> ruleBuilder) => ruleBuilder.NotEmpty().WithMessage("Campaign ID must be set");
 }

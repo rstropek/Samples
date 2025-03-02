@@ -24,7 +24,7 @@ public static class DependencyInjectionExtensions
         {
             cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
             cfg.AddOpenBehavior(typeof(ValidationResultBehavior<,>));
-            cfg.RegisterServicesFromAssemblyContaining<CreateCampaign.CreateCampaign>();
+            cfg.RegisterServicesFromAssemblyContaining<CreateCampaign>();
         });
         services.AddProblemDetails(options =>
         {

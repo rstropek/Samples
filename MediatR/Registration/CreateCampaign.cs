@@ -3,7 +3,7 @@ using FluentResults;
 using FluentValidation;
 using MediatR;
 
-namespace Registration.CreateCampaign;
+namespace Registration;
 
 public record CreateCampaign(CreateCampaignRequest Request) : IRequest<Result<CreateCampaignResponse>>;
 
@@ -37,8 +37,7 @@ public class CreateCampaignValidator : AbstractValidator<CreateCampaign>
 {
     public CreateCampaignValidator()
     {
-        RuleFor(x => x.Request)
-            .SetValidator(new CreateCampaignRequestValidator());
+        RuleFor(x => x.Request).SetValidator(new CreateCampaignRequestValidator());
     }
 }
 public class CreateCampaignRequestValidator : AbstractValidator<CreateCampaignRequest>
