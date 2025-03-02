@@ -26,7 +26,13 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{host}}/campaigns/{{CreateCampaign.response.body.id}}
+# @name GetCampaign
+GET {{host}}/campaigns/{{CreateCampaign.response.body.id}}
+Accept: application/json
+Content-Type: application/json
+
+###
+PATCH {{host}}/campaigns/{{GetCampaign.response.body.id}}
 Accept: application/json
 Content-Type: application/json
 
@@ -49,5 +55,8 @@ Content-Type: application/json
   "reservedRatioForGirls": null,
   "purgeDate": null,
   "status": "Inactive",
-  "updatedAt": "2025-03-02T17:49:51.4027243+00:00"
+  "updatedAt": "{{GetCampaign.response.body.updatedAt}}"
 }
+
+###
+POST {{host}}/campaigns/{{GetCampaign.response.body.id}}/activate

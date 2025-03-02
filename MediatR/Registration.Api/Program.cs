@@ -23,9 +23,21 @@ app.MapPost("/campaigns", async (CreateCampaignRequest request, IMediator mediat
     return converter.ToResult(result);
 });
 
+app.MapGet("/campaigns/{id}", async (Guid id, IMediator mediator, ResultConverter converter) =>
+{
+    var result = await mediator.Send(new GetCampaign(id));
+    return converter.ToResult(result);
+});
+
 app.MapPatch("/campaigns/{id}", async (Guid id, UpdateCampaignRequest request, IMediator mediator, ResultConverter converter) =>
 {
     var result = await mediator.Send(new UpdateCampaign(id, request));
+    return converter.ToResult(result);
+});
+
+app.MapPost("/campaigns/{id}/activate", async (Guid id, IMediator mediator, ResultConverter converter) =>
+{
+    var result = await mediator.Send(new ActivateCampaign(id));
     return converter.ToResult(result);
 });
 

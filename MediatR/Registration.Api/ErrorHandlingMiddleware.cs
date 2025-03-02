@@ -9,9 +9,9 @@ public class ExceptionToProblemDetailsHandler(IProblemDetailsService pds, IConfi
     {
         var problemDetailsUriPrefix = config?.GetValue<string>("ProblemDetailsUriPrefix") ?? "https://example.com/errors";
 
-        if (exception is FluentValidation.ValidationException vex)
+        return exception switch
         {
-            return await pds.TryWriteAsync(new ProblemDetailsContext
+            FluentValidation.ValidationException vex => await pds.TryWriteAsync(new ProblemDetailsContext
             {
                 HttpContext = context,
                 ProblemDetails = new ValidationProblemDetails()
@@ -21,18 +21,31 @@ public class ExceptionToProblemDetailsHandler(IProblemDetailsService pds, IConfi
                     Instance = context.Request.Path,
                     Errors = vex.Errors.Select(e => new KeyValuePair<string, string[]>(e.PropertyName, [e.ErrorMessage])).ToDictionary(),
                 }
-            });
-        }
-
-        return await pds.TryWriteAsync(new ProblemDetailsContext
-        {
-            HttpContext = context,
-            ProblemDetails = new ProblemDetails
+            }),
+            BadHttpRequestException bre => await pds.TryWriteAsync(new ProblemDetailsContext
             {
-                Type = $"{problemDetailsUriPrefix}/internal-server-error",
-                Title = "An error occurred processing your request",
-                Status = StatusCodes.Status500InternalServerError,
-            }
-        });
+                HttpContext = context,
+                ProblemDetails = new ProblemDetails()
+                {
+                    Title = "Bad Request",
+                    Type = $"{problemDetailsUriPrefix}/bad-request",
+                    Detail = bre.Message,
+                    Status = StatusCodes.Status400BadRequest,
+                    Extensions = {
+                        ["innerMessage"] = bre.InnerException?.Message,
+                    },
+                }
+            }),
+            _ => await pds.TryWriteAsync(new ProblemDetailsContext
+            {
+                HttpContext = context,
+                ProblemDetails = new ProblemDetails
+                {
+                    Type = $"{problemDetailsUriPrefix}/internal-server-error",
+                    Title = "An error occurred processing your request",
+                    Status = StatusCodes.Status500InternalServerError,
+                }
+            }),
+        };
     }
 }

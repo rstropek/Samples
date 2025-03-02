@@ -18,10 +18,10 @@ public record UpdateCampaignRequest(
 
 public record UpdateDateRequest(
     DateOnly Date,
+    CampaignDateStatus Status,
     UpdateDepartmentAssignmentRequest[]? DepartmentAssignments = null,
     TimeOnly? StartTime = null,
-    TimeOnly? EndTime = null,
-    CampaignDateStatus Status = CampaignDateStatus.Hidden
+    TimeOnly? EndTime = null
 );
 
 public record UpdateDepartmentAssignmentRequest(
