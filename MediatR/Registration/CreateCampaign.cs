@@ -79,6 +79,7 @@ public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHan
     public async Task<Result<CreateCampaignResponse>> Handle(CreateCampaign createCampaign, CancellationToken _)
     {
         var request = createCampaign.Request;
+        var createdTimestamp = DateTimeOffset.UtcNow;
         var campaign = new Campaign
         {
             Id = Guid.NewGuid(),
@@ -100,8 +101,8 @@ public class CreateCampaignHandler(IJsonFileRepository repository) : IRequestHan
             }) ?? []],
             ReservedRatioForGirls = request.ReservedRatioForGirls,
             PurgeDate = request.PurgeDate,
-            CreatedAt = DateTimeOffset.UtcNow,
-            UpdatedAt = DateTimeOffset.UtcNow,
+            CreatedAt = createdTimestamp,
+            UpdatedAt = createdTimestamp,
         };
 
         await repository.Create(campaign.IdString, campaign);

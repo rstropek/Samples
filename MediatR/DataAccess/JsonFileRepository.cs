@@ -59,7 +59,7 @@ public interface IJsonFileRepository
     /// The caller is responsible for disposing the stream. <see cref="Update"/> 
     /// will dispose the stream after the update.
     /// </returns>
-    Task<FileStream?> Open(string id, bool forWriting);
+    Task<Stream?> Open(string id, bool forWriting);
 
     /// <summary>
     /// Retrieves an entity by its ID.
@@ -73,7 +73,7 @@ public interface IJsonFileRepository
     /// <returns>
     /// The entity stored in the stream.
     /// </returns>
-    Task<T?> Get<T>(FileStream stream);
+    Task<T?> Get<T>(Stream stream);
 
     /// <summary>
     /// Updates an entity in the repository using the provided file stream.
@@ -85,7 +85,7 @@ public interface IJsonFileRepository
     /// The stream must be obtained using the <see cref="Open"/> method to ensure proper locking.
     /// The stream will be cleared and its position reset before writing the updated entity.
     /// </remarks>
-    Task Update<T>(FileStream stream, T entity);
+    Task Update<T>(Stream stream, T entity);
 
     /// <summary>
     /// Deletes an entity from the repository.
@@ -145,7 +145,7 @@ public class JsonFileRepository(RepositorySettings settings) : IJsonFileReposito
             .Select(file => new Item(Path.GetFileNameWithoutExtension(file), file));
 
     /// <inheritdoc />
-    public async Task<FileStream?> Open(string id, bool forWriting)
+    public async Task<Stream?> Open(string id, bool forWriting)
     {
         ThrowIfInvalidFileName(id);
         EnsureDirectoryExists(settings.DataFolder);
@@ -179,14 +179,14 @@ public class JsonFileRepository(RepositorySettings settings) : IJsonFileReposito
     }
 
     /// <inheritdoc />
-    public async Task<T?> Get<T>(FileStream stream)
+    public async Task<T?> Get<T>(Stream stream)
     {
         stream.Position = 0;
         return await JsonSerializer.DeserializeAsync<T>(stream, jsonSerializerOptions);
     }
 
     /// <inheritdoc />
-    public async Task Update<T>(FileStream stream, T entity)
+    public async Task Update<T>(Stream stream, T entity)
     {
         stream.Position = 0;
         stream.SetLength(0);

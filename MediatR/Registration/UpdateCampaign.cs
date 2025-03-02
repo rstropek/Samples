@@ -105,7 +105,16 @@ public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHan
             return Result.Fail(new Forbidden("Campaigns cannot be activated using this endpoint. Use the ActivateCampaign endpoint instead."));
         }
 
-        // Update campaign properties
+        var updateResult = UpdateCampaign(request, campaign);
+        if (updateResult.IsFailed) { return updateResult; }
+
+        await repository.Update(campaignStream, campaign);
+
+        return Result.Ok(new UpdateCampaignResponse(campaign));
+    }
+
+    internal static Result UpdateCampaign(UpdateCampaignRequest request, Campaign campaign)
+    {
         campaign.Name = request.Name;
         campaign.Organizer = request.Organizer;
         campaign.ReservedRatioForGirls = request.ReservedRatioForGirls;
@@ -118,12 +127,10 @@ public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHan
 
         campaign.UpdatedAt = DateTimeOffset.UtcNow;
 
-        await repository.Update(campaignStream, campaign);
-
-        return Result.Ok(new UpdateCampaignResponse(campaign));
+        return Result.Ok();
     }
 
-    private static Result MergeCampaignDates(IEnumerable<UpdateDateRequest>? dto, List<CampaignDate> dates)
+    internal static Result MergeCampaignDates(IEnumerable<UpdateDateRequest>? dto, List<CampaignDate> dates)
     {
         var deletedDates = dates.Where(date => !(dto?.Any(d => d.Date == date.Date) ?? false)).ToArray();
         foreach (var date in deletedDates)
@@ -166,7 +173,7 @@ public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHan
         return Result.Ok();
     }
 
-    private static Result UpdateCampaignDate(UpdateDateRequest dto, CampaignDate date)
+    internal static Result UpdateCampaignDate(UpdateDateRequest dto, CampaignDate date)
     {
         date.StartTime = dto.StartTime;
         date.EndTime = dto.EndTime;
@@ -176,9 +183,9 @@ public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHan
         return Result.Ok();
     }
 
-    private static Result MergeDepartmentAssignments(IEnumerable<UpdateDepartmentAssignmentRequest>? dto, List<DepartmentAssignment> assignments)
+    internal static Result MergeDepartmentAssignments(IEnumerable<UpdateDepartmentAssignmentRequest>? dto, List<DepartmentAssignment> assignments)
     {
-        var deletedAssignments = assignments.Where(a => !(dto?.Any(b => b.DepartmentName == a.DepartmentName) ?? false));
+        var deletedAssignments = assignments.Where(a => !(dto?.Any(b => b.DepartmentName == a.DepartmentName) ?? false)).ToArray();
         foreach (var deletedAssignment in deletedAssignments)
         {
             if (deletedAssignment.Registrations.Count != 0)
@@ -211,7 +218,7 @@ public class UpdateCampaignHandler(IJsonFileRepository repository) : IRequestHan
         return Result.Ok();
     }
 
-    private static void UpdateDepartmentAssignment(UpdateDepartmentAssignmentRequest dto, DepartmentAssignment assignment)
+    internal static void UpdateDepartmentAssignment(UpdateDepartmentAssignmentRequest dto, DepartmentAssignment assignment)
     {
         assignment.DepartmentName = dto.DepartmentName;
         assignment.NumberOfSeats = dto.NumberOfSeats;

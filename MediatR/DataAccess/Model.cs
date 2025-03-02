@@ -45,7 +45,7 @@ public class DepartmentAssignment
     public required string DepartmentName { get; set; }
     public required short NumberOfSeats { get; set; }
     public decimal? ReservedRatioForGirls { get; set; }
-    public List<Registration> Registrations { get; set; } = [];
+    public List<AttendeeRegistration> Registrations { get; set; } = [];
 }
 
 public enum Gender
@@ -61,7 +61,7 @@ public enum RegistrationStatus
     Pending
 }
 
-public class Registration
+public class AttendeeRegistration
 {
     public required string Id { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

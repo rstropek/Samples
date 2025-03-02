@@ -7,9 +7,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "name": "",
+    "name": "Demo",
     "organizer": "Test Organizer",
-    "reservedRatioForGirls": -1,
+    "reservedRatioForGirls": 0.1,
     "dates": [
         {
             "date": "2025-06-01",
@@ -23,4 +23,31 @@ Content-Type: application/json
             ]
         }
     ]
+}
+
+###
+PATCH {{host}}/campaigns/{{CreateCampaign.response.body.id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Test Campaign",
+  "organizer": "Test Organizer 2",
+  "dates": [
+    {
+            "date": "2025-06-01",
+            "startTime": "10:00",
+            "endTime": "13:00",
+            "departmentAssignments": [
+                {
+                    "departmentName": "MT",
+                    "numberOfSeats": 10
+                }
+            ]
+        }
+  ],
+  "reservedRatioForGirls": null,
+  "purgeDate": null,
+  "status": "Inactive",
+  "updatedAt": "2025-03-02T17:49:51.4027243+00:00"
 }
