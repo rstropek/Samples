@@ -40,6 +40,7 @@ public class CreateCampaignValidator : AbstractValidator<CreateCampaign>
         RuleFor(x => x.Request).SetValidator(new CreateCampaignRequestValidator());
     }
 }
+
 public class CreateCampaignRequestValidator : AbstractValidator<CreateCampaignRequest>
 {
     public CreateCampaignRequestValidator()
