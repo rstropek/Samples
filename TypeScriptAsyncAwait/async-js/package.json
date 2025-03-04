@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.0.0",
-    "mongodb": "^3.0.0"
+    "mongodb": "^3.1.13"
   },
   "devDependencies": {
     "@types/async": "^2.0.49",
