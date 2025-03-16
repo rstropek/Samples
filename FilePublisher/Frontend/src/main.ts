@@ -13,9 +13,11 @@ class FileViewer {
   private sessionInput!: HTMLInputElement;
   private fileSelect!: HTMLSelectElement;
   private contentDisplay!: HTMLPreElement;
+  private copyButton!: HTMLButtonElement;
   private currentSessionId: string = '';
   private currentETag: string = '';
   private refreshInterval: number | null = null;
+  private rawFileContent: string = '';
 
   constructor() {
     this.setupUI();
@@ -38,6 +40,7 @@ class FileViewer {
           <button id="load-files">Load Files</button>
           <select id="file-select"></select>
           <button id="refresh-file">Refresh File</button>
+          <button id="copy-content">Copy to Clipboard</button>
         </div>
       </div>
       <div class="content-area">
@@ -51,6 +54,8 @@ class FileViewer {
       document.querySelector<HTMLSelectElement>('#file-select')!;
     this.contentDisplay =
       document.querySelector<HTMLPreElement>('#content-display')!;
+    this.copyButton =
+      document.querySelector<HTMLButtonElement>('#copy-content')!;
   }
 
   private setupEventListeners() {
@@ -60,6 +65,9 @@ class FileViewer {
     document
       .querySelector('#refresh-file')!
       .addEventListener('click', () => this.loadSelectedFile());
+    document
+      .querySelector('#copy-content')!
+      .addEventListener('click', () => this.copyContentToClipboard());
     this.fileSelect.addEventListener('change', () => {
       this.loadSelectedFile();
       this.setupAutoRefresh();
@@ -145,6 +153,7 @@ class FileViewer {
       }
 
       const data: FileContentResponse = await response.json();
+      this.rawFileContent = data.content; // Store the raw content
 
       const code = this.contentDisplay.querySelector('code')!;
       code.textContent = data.content;
@@ -154,6 +163,30 @@ class FileViewer {
     } catch (error) {
       console.error('Error loading file content:', error);
       this.contentDisplay.textContent = 'Error loading file content';
+      this.rawFileContent = ''; // Reset raw content on error
+    }
+  }
+
+  private async copyContentToClipboard() {
+    // Use the stored raw content instead of getting it from the DOM
+    if (!this.rawFileContent) {
+      return;
+    }
+    
+    try {
+      await navigator.clipboard.writeText(this.rawFileContent);
+      
+      // Visual feedback remains unchanged
+      const originalText = this.copyButton.textContent;
+      this.copyButton.textContent = 'Copied!';
+      this.copyButton.disabled = true;
+      
+      setTimeout(() => {
+        this.copyButton.textContent = originalText;
+        this.copyButton.disabled = false;
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy content: ', error);
     }
   }
 }
