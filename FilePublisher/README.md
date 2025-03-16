@@ -59,6 +59,10 @@ The system consists of two main components:
 
 1. Clone the repository
 2. Install dependencies for both the backend and frontend
+   ```bash
+   npm --prefix PublisherApi install
+   npm --prefix Frontend install
+   ```
 3. Create a `sessions.json` file in the root of the PublisherApi directory with the following format:
    ```json
    {
@@ -66,5 +70,11 @@ The system consists of two main components:
      "session2": "/path/to/directory2"
    }
    ```
-5. Build the frontend (`npm run build`, copies _dist_ into backend server)
-4. Start the backend server
+4. Build the frontend (`npm run build`, copies _dist_ into backend server)
+   ```bash
+   npm --prefix Frontend run build
+   ```
+5. Start the backend server
+   ```bash
+   npm --prefix PublisherApi start
+   ```
