@@ -1,139 +1,171 @@
-### SQL Initialisierungs Script
-```sql
--- create database WizardAcademy
-
-IF NOT EXISTS (SELECT name
-               FROM sys.databases
-               WHERE name = 'WizardAcademy')
-    BEGIN
-        CREATE DATABASE WizardAcademy;
-    END
-GO
-
--- set scheme
-
-USE WizardAcademy;
-GO
-
 -- Tables
 
 -- Houses
-CREATE TABLE Houses
-(
-    HouseID         INT IDENTITY (1,1) PRIMARY KEY,
-    Name            NVARCHAR(50) UNIQUE NOT NULL,
-    FoundingYear    INT CHECK (FoundingYear >= 0),
-    SpecialFeatures NVARCHAR(MAX)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Houses')
+BEGIN
+    CREATE TABLE Houses
+    (
+        HouseID         INT IDENTITY (1,1) PRIMARY KEY,
+        Name            NVARCHAR(50) UNIQUE NOT NULL,
+        FoundingYear    INT CHECK (FoundingYear >= 0),
+        SpecialFeatures NVARCHAR(MAX)
+    );
+END
 
 -- Wizards
-CREATE TABLE Wizards
-(
-    WizardID   INT IDENTITY (1,1) PRIMARY KEY,
-    Name       NVARCHAR(100) NOT NULL,
-    Birthdate  DATE,
-    HouseID    INT,
-    MentorID   INT,
-    Magic_Rank NVARCHAR(20) CHECK (Magic_Rank IN ('Apprentice', 'Mage', 'Archmage')),
-    FOREIGN KEY (HouseID) REFERENCES Houses (HouseID),
-    FOREIGN KEY (MentorID) REFERENCES Wizards (WizardID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Wizards')
+BEGIN
+    CREATE TABLE Wizards
+    (
+        WizardID   INT IDENTITY (1,1) PRIMARY KEY,
+        Name       NVARCHAR(100) NOT NULL,
+        Birthdate  DATE,
+        HouseID    INT,
+        MentorID   INT,
+        Magic_Rank NVARCHAR(20) CHECK (Magic_Rank IN ('Apprentice', 'Mage', 'Archmage')),
+        FOREIGN KEY (HouseID) REFERENCES Houses (HouseID),
+        FOREIGN KEY (MentorID) REFERENCES Wizards (WizardID)
+    );
+END
 
 -- Spells
-CREATE TABLE Spells
-(
-    SpellID         INT IDENTITY (1,1) PRIMARY KEY,
-    Name            NVARCHAR(100) UNIQUE NOT NULL,
-    DifficultyLevel NVARCHAR(10) CHECK (DifficultyLevel IN ('Easy', 'Medium', 'Hard')),
-    Element         NVARCHAR(10) CHECK (Element IN ('Fire', 'Water', 'Earth', 'Air', 'Dark', 'Light')),
-    Description     NVARCHAR(MAX)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Spells')
+BEGIN
+    CREATE TABLE Spells
+    (
+        SpellID         INT IDENTITY (1,1) PRIMARY KEY,
+        Name            NVARCHAR(100) UNIQUE NOT NULL,
+        DifficultyLevel NVARCHAR(10) CHECK (DifficultyLevel IN ('Easy', 'Medium', 'Hard')),
+        Element         NVARCHAR(10) CHECK (Element IN ('Fire', 'Water', 'Earth', 'Air', 'Dark', 'Light')),
+        Description     NVARCHAR(MAX)
+    );
+END
 
 -- Wizards_Spells (M:N relationship between Wizards and Spells)
-CREATE TABLE Wizards_Spells
-(
-    WizardID     INT,
-    SpellID      INT,
-    MasteryLevel INT CHECK (MasteryLevel BETWEEN 1 AND 100),
-    PRIMARY KEY (WizardID, SpellID),
-    FOREIGN KEY (WizardID) REFERENCES Wizards (WizardID),
-    FOREIGN KEY (SpellID) REFERENCES Spells (SpellID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Wizards_Spells')
+BEGIN
+    CREATE TABLE Wizards_Spells
+    (
+        WizardID     INT,
+        SpellID      INT,
+        MasteryLevel INT CHECK (MasteryLevel BETWEEN 1 AND 100),
+        PRIMARY KEY (WizardID, SpellID),
+        FOREIGN KEY (WizardID) REFERENCES Wizards (WizardID),
+        FOREIGN KEY (SpellID) REFERENCES Spells (SpellID)
+    );
+END
 
 -- Creature Types
-CREATE TABLE CreatureTypes
-(
-    TypeID   INT IDENTITY (1,1) PRIMARY KEY,
-    TypeName NVARCHAR(50) UNIQUE NOT NULL
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CreatureTypes')
+BEGIN
+    CREATE TABLE CreatureTypes
+    (
+        TypeID   INT IDENTITY (1,1) PRIMARY KEY,
+        TypeName NVARCHAR(50) UNIQUE NOT NULL
+    );
+END
 
 -- Magical Creatures
-CREATE TABLE MagicalCreatures
-(
-    CreatureID         INT IDENTITY (1,1) PRIMARY KEY,
-    Name               NVARCHAR(100) NOT NULL,
-    TypeID             INT           NOT NULL,
-    Magic_Level        INT CHECK (Magic_Level BETWEEN 1 AND 100),
-    RelationshipStatus NVARCHAR(10) CHECK (RelationshipStatus IN ('Wild', 'Tamed', 'Allied')),
-    FOREIGN KEY (TypeID) REFERENCES CreatureTypes (TypeID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'MagicalCreatures')
+BEGIN
+    CREATE TABLE MagicalCreatures
+    (
+        CreatureID         INT IDENTITY (1,1) PRIMARY KEY,
+        Name               NVARCHAR(100) NOT NULL,
+        TypeID             INT           NOT NULL,
+        Magic_Level        INT CHECK (Magic_Level BETWEEN 1 AND 100),
+        RelationshipStatus NVARCHAR(10) CHECK (RelationshipStatus IN ('Wild', 'Tamed', 'Allied')),
+        FOREIGN KEY (TypeID) REFERENCES CreatureTypes (TypeID)
+    );
+END
 
 -- Wizards_Creatures (M:N relationship)
-CREATE TABLE Wizards_Creatures
-(
-    WizardID     INT,
-    CreatureID   INT,
-    BondStrength INT CHECK (BondStrength BETWEEN 1 AND 100),
-    PRIMARY KEY (WizardID, CreatureID),
-    FOREIGN KEY (WizardID) REFERENCES Wizards (WizardID),
-    FOREIGN KEY (CreatureID) REFERENCES MagicalCreatures (CreatureID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Wizards_Creatures')
+BEGIN
+    CREATE TABLE Wizards_Creatures
+    (
+        WizardID     INT,
+        CreatureID   INT,
+        BondStrength INT CHECK (BondStrength BETWEEN 1 AND 100),
+        PRIMARY KEY (WizardID, CreatureID),
+        FOREIGN KEY (WizardID) REFERENCES Wizards (WizardID),
+        FOREIGN KEY (CreatureID) REFERENCES MagicalCreatures (CreatureID)
+    );
+END 
 
 -- Artifacts
-CREATE TABLE Artifacts
-(
-    ArtifactID INT IDENTITY (1,1) PRIMARY KEY,
-    Name       NVARCHAR(100) UNIQUE NOT NULL,
-    Magic_Type NVARCHAR(10) CHECK (Magic_Type IN ('Protection', 'Attack', 'Healing', 'Curse')),
-    OwnerID    INT,
-    FOREIGN KEY (OwnerID) REFERENCES Wizards (WizardID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Artifacts')
+BEGIN
+    CREATE TABLE Artifacts
+    (
+        ArtifactID INT IDENTITY (1,1) PRIMARY KEY,
+        Name       NVARCHAR(100) UNIQUE NOT NULL,
+        Magic_Type NVARCHAR(10) CHECK (Magic_Type IN ('Protection', 'Attack', 'Healing', 'Curse')),
+        OwnerID    INT,
+        FOREIGN KEY (OwnerID) REFERENCES Wizards (WizardID)
+    );
+END 
 
 -- Classes (with recursive structure)
-CREATE TABLE Classes
-(
-    ClassID          INT IDENTITY (1,1) PRIMARY KEY,
-    Subject          NVARCHAR(100) UNIQUE NOT NULL,
-    InstructorID     INT,
-    Max_Participants INT,
-    PrerequisiteID   INT,
-    FOREIGN KEY (InstructorID) REFERENCES Wizards (WizardID),
-    FOREIGN KEY (PrerequisiteID) REFERENCES Classes (ClassID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Classes')
+BEGIN
+    CREATE TABLE Classes
+    (
+        ClassID          INT IDENTITY (1,1) PRIMARY KEY,
+        Subject          NVARCHAR(100) UNIQUE NOT NULL,
+        InstructorID     INT,
+        Max_Participants INT,
+        PrerequisiteID   INT,
+        FOREIGN KEY (InstructorID) REFERENCES Wizards (WizardID),
+        FOREIGN KEY (PrerequisiteID) REFERENCES Classes (ClassID)
+    );
+END
 
 -- Enrollments (M:N relationship between Wizards and Classes)
-CREATE TABLE Enrollments
-(
-    WizardID INT,
-    ClassID  INT,
-    Result   NVARCHAR(12) CHECK (Result IN ('Passed', 'Failed', 'In Progress')),
-    PRIMARY KEY (WizardID, ClassID),
-    FOREIGN KEY (WizardID) REFERENCES Wizards (WizardID),
-    FOREIGN KEY (ClassID) REFERENCES Classes (ClassID)
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Enrollments')
+BEGIN
+    CREATE TABLE Enrollments
+    (
+        WizardID INT,
+        ClassID  INT,
+        Result   NVARCHAR(12) CHECK (Result IN ('Passed', 'Failed', 'In Progress')),
+        PRIMARY KEY (WizardID, ClassID),
+        FOREIGN KEY (WizardID) REFERENCES Wizards (WizardID),
+        FOREIGN KEY (ClassID) REFERENCES Classes (ClassID)
+    );
+END 
+
+GO
+
+DBCC CHECKIDENT ('Houses', RESEED, 0);
+DBCC CHECKIDENT ('Wizards', RESEED, 0);
+DBCC CHECKIDENT ('Spells', RESEED, 0);
+DBCC CHECKIDENT ('CreatureTypes', RESEED, 0);
+DBCC CHECKIDENT ('MagicalCreatures', RESEED, 0);
+DBCC CHECKIDENT ('Artifacts', RESEED, 0);
+DBCC CHECKIDENT ('Classes', RESEED, 0);
+
+GO
 
 -- trigger so no wild creature can be assigned to a wizard
+IF EXISTS (SELECT * FROM sys.triggers WHERE name = 'PreventWildCreatures')
+BEGIN
+    DROP TRIGGER PreventWildCreatures;
+END
+
+GO
+
 CREATE TRIGGER PreventWildCreatures
     ON Wizards_Creatures
     INSTEAD OF INSERT
     AS
 BEGIN
     IF EXISTS (SELECT 1
-               FROM inserted i
+            FROM inserted i
                         JOIN MagicalCreatures mc ON i.CreatureID = mc.CreatureID
-               WHERE mc.RelationshipStatus = 'Wild')
+            WHERE mc.RelationshipStatus = 'Wild')
         BEGIN
-            THROW 50000, 'Cannot assign wild creatures to wizards.', 1;
+            RAISERROR('Cannot assign wild creatures to wizards.', 16, 1);
             RETURN;
         END;
 
@@ -143,7 +175,9 @@ BEGIN
     FROM inserted;
 END;
 
-    -- Inserting data
+GO
+
+-- Inserting data
 
 -- Insert Creature Types
     INSERT INTO CreatureTypes (TypeName)
@@ -621,5 +655,3 @@ END;
            (48, 1, 'Passed'),
            (48, 2, 'Passed'),
            (48, 9, 'Passed');
-
-```
