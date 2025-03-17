@@ -5,6 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import mime from 'mime';
 
 const app = express();
 const port = parseInt(process.env.PORT || '3000');
@@ -165,9 +166,16 @@ app.get('/sessions/:code/file', async (req: express.Request, res: express.Respon
     }
 });
 
-// Serve static files from the public directory
-// This middleware is added after all API routes to only handle requests that weren't matched
-app.use(express.static(path.join(__dirname, '../public')));
+// Serve static files from the public directory with correct MIME types
+app.use('/files', express.static(path.join(__dirname, '../public'), {
+    setHeaders: (res, filePath) => {
+        const mimeType = mime.getType(filePath);
+        console.log(`Serving file: ${filePath} with MIME type: ${mimeType}`);
+        if (mimeType) {
+            res.setHeader('Content-Type', mimeType);
+        }
+    }
+}));
 
 // Fallback route for SPA (Single Page Applications)
 app.get('*', (req, res) => {
