@@ -89,6 +89,32 @@ To boost performance, research _k-dimensional trees_ (k-d trees) and their abili
 
 Consider calling in an AI assistant for help—it might just make your solution out of this world.
 
+## 🚀 Bonus Challenge 2: Visualize Potential Collisions in Google Earth (KML Export)
+
+### 🧠 Background Story
+Your boss recently hired a new data analyst who is skeptical about the accuracy of your space debris collision predictions. They believe that *"seeing is believing"* and insist on a visual representation of your results. To restore your reputation and help them understand the risks, you've been asked to generate a 3D visualization of satellites and debris using **Google Earth**.
+
+### 🛰️ Task
+Extend the project by exporting the positions of satellites and debris objects as a **KML (Keyhole Markup Language)** file. This file should be compatible with Google Earth and display the objects in their actual orbital positions.
+
+### ✅ Requirements
+- Research the **KML file format**, especially how to define Placemarks with 3D coordinates (latitude, longitude, altitude).
+- Create a feature that generates a `.kml` file containing:
+  - All satellites and debris pieces used in the current simulation.
+  - Optionally: different colors or icons for satellites vs. debris.
+  - Optionally: label objects by name or ID.
+- Ensure the data is correctly transformed to **latitude, longitude, and altitude** coordinates that Google Earth understands.
+- Add KML generation as a menu option or CLI argument in your simulation.
+- Document the feature in the `README.md`.
+
+### 💡 Hints
+- Use AI tools (like ChatGPT or GitHub Copilot) to help understand the KML format and generate code snippets.
+- Consider using external libraries for KML generation (or generate the XML manually).
+- Remember: Google Earth uses WGS84 (lat/lon/alt in degrees/meters).
+
+### 🏆 Optional Challenge
+Highlight potential collision points in red or with a custom icon.
+
 ## Need Help
 
 * [Sample solutions for conversion functions](./converter.py)
