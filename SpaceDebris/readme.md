@@ -54,10 +54,10 @@ Use this to write a conversion routine. Round all X, Y, and Z values to two deci
 
 You can verify your implementation using the following test data:
 
-| Input (Latitude, Longitude, Altitude) | Output (X, Y, Z)                     |
-| ------------------------------------- | ------------------------------------ |
-| 11.628889, -145.839167, 1795.59       | -6625344.32, -4495961.62, 1639159.98 |
-| 90°3'28N, 143°42'18W, 1245.93         | 6214.0, 4563.8, 7602678.43           |
+| Input (Latitude, Longitude, Altitude [km]) | Output (X, Y, Z)                     |
+| ------------------------------------------ | ------------------------------------ |
+| 11.628889, -145.839167, 1795.59            | -6625344.32, -4495961.62, 1639159.98 |
+| 90°3'28N, 143°42'18W, 1245.93              | 6214.0, 4563.8, 7602678.43           |
 
 Once your converter is working:
 
