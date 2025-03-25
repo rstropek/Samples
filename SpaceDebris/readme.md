@@ -91,8 +91,15 @@ Consider calling in an AI assistant for help—it might just make your solution 
 
 ## Need Help
 
+### Python
+
 * [Sample solutions for conversion functions](./converter.py)
 * [Sample solutions for challenge 1](./01_process_debris.py)
 * [Sample solutions for challenge 2](./02_to_ecef.py)
 * [Sample solutions for challenge 3](./03_find_satelites_near_debris.py)
 * [Sample solutions for bonus challenge](./04_kd_tree.py)
+
+### TypeScript/Node
+
+* [Sample solutions for conversion functions](./node/src/convert.ts)
+* [Sample solutions for challenges 1-3](./node/src/app.ts)
