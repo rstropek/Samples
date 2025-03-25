@@ -81,13 +81,39 @@ You've conquered the coordinate systems — now it's time for the real mission: 
 
 If you detect three satellites each with one dangerously close debris and your total distance equals **1500 m**, mission accomplished.
 
-## Bonus Challenge: Speed up the Alert System
+## Bonus Challenge 1: Speed up the Alert System
 
 Still craving a challenge? Your current alert system works—but it’s not fast enough.
 
 To boost performance, research _k-dimensional trees_ (k-d trees) and their ability to speed up nearest-neighbor searches. Implement a k-d tree-based approach and compare it to the brute-force method.
 
 Consider calling in an AI assistant for help—it might just make your solution out of this world.
+## 🚀 Bonus Challenge 2: Visualize Potential Collisions in Google Earth (KML Export)
+
+### 🧠 Background Story
+Your boss recently hired a new data analyst who is skeptical about the accuracy of your space debris collision predictions. They believe that *"seeing is believing"* and insist on a visual representation of your results. To restore your reputation and help them understand the risks, you've been asked to generate a 3D visualization of satellites and debris using **Google Earth**.
+
+### 🛰️ Task
+Extend the project by exporting the positions of satellites and debris objects as a **KML (Keyhole Markup Language)** file. This file should be compatible with Google Earth and display the objects in their actual orbital positions.
+
+### ✅ Requirements
+- Research the **KML file format**, especially how to define Placemarks with 3D coordinates (latitude, longitude, altitude).
+- Create a feature that generates a `.kml` file containing:
+  - All satellites and debris pieces used in the current simulation.
+  - Optionally: different colors or icons for satellites vs. debris.
+  - Optionally: label objects by name or ID.
+- Ensure the data is correctly transformed to **latitude, longitude, and altitude** coordinates that Google Earth understands.
+- Add KML generation as a menu option or CLI argument in your simulation.
+- Document the feature in the `README.md`.
+
+### 💡 Hints
+- Use AI tools (like ChatGPT or GitHub Copilot) to help understand the KML format and generate code snippets.
+- Consider using external libraries for KML generation (or generate the XML manually).
+- Remember: Google Earth uses WGS84 (lat/lon/alt in degrees/meters).
+
+### 🏆 Optional Challenge
+Highlight potential collision points in red or with a custom icon. Bonus points if you can animate object movement using `<gx:Track>` or similar features in Google Earth.
+
 
 ## Need Help
 
