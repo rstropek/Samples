@@ -1,0 +1,5 @@
+#file:01-SeatPlan.md defines the seat plan for our theatre. #file:02-SeatGenerator.md defines requirements for a seat generator. Create the requested interface in BestSeating.Logic and add an EMPTY implementation (we will add this code later). Write unit tests ONLY for the requested acceptance criteria in #file:02-SeatGenerator.md. When writing the code, consider the existing data structure in #file:Seat.cs (do not change it).
+
+Implement #file:02-SeatGenerator.md in #file:TheatreSeatGenerator.cs based on the requirements in #file:01-SeatPlan.md. When writing the code, consider the existing data structure in #file:Seat.cs (do not change it).
+
+I want to implement the best seat selector as specified in #file:03-BestSeatSelection.md. Over time, there will be mulitple selectors with different algorithms. Generate an abstraction (interface) for the selector and implement one based on the business rules in #file:03-BestSeatSelection.md. Also, write unit tests ONLY for the requested acceptance criteria.
