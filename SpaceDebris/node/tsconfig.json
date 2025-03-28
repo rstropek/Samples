@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"moduleDetection": "force",
+		"module": "Preserve",
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+        "verbatimModuleSyntax": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"sourceMap": true,
+	},
+	"include": ["src/**/*"]
+}
