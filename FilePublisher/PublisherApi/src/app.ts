@@ -167,7 +167,8 @@ app.get('/sessions/:code/file', async (req: express.Request, res: express.Respon
 });
 
 // Serve static files from the public directory with correct MIME types
-app.use('/files', express.static(path.join(__dirname, '../public'), {
+const subpath = process.env.SUBPATH || '';
+app.use(`/${subpath}`, express.static(path.join(__dirname, '../public'), {
     setHeaders: (res, filePath) => {
         const mimeType = mime.getType(filePath);
         console.log(`Serving file: ${filePath} with MIME type: ${mimeType}`);

@@ -100,7 +100,7 @@ class FileViewer {
 
     try {
       const response = await fetch(
-        `sessions/${this.currentSessionId}`
+        `files/sessions/${this.currentSessionId}`
       );
       const data: FileListResponse = await response.json();
 
@@ -136,7 +136,7 @@ class FileViewer {
       }
 
       const response = await fetch(
-        `sessions/${
+        `files/sessions/${
           this.currentSessionId
         }/file?file=${encodeURIComponent(selectedFile)}`,
         { headers }

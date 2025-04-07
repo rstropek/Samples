@@ -1,5 +1,5 @@
-docker run -d --restart=always -p 8081:80 \
+docker run -d --restart=always -p 8081:8081 \
     -v $(pwd)/sessions.json:/usr/src/app/sessions.json:ro \
-    -v /home/rainer/live/basta2025/CSharpWorkshop/:/home/rainer/live/basta2025/CSharpWorkshop/:ro \
+    -v /home/rainer/live/:/home/rainer/live/:ro \
     --name publisherapi publisherapi
     

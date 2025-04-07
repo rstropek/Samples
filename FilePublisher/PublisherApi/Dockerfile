@@ -8,15 +8,15 @@ RUN addgroup --system --gid 1001 nodejs \
     && chown -R nodeuser:nodejs /usr/src/app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 RUN chown -R nodeuser:nodejs /usr/src/app
 USER nodeuser
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=80
-EXPOSE 80
+ENV PORT=8081
+EXPOSE 8081
 
 # Start the application
-CMD ["npm", "start"] 
+CMD ["npx", "tsx", "--env-file", ".env", "./src/app.ts"] 
