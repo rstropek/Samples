@@ -1,0 +1,30 @@
+{
+    "printWidth": 150,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "overrides": [
+      {
+        "files": ["*.ts", "*.tsx"],
+        "options": {
+          "parser": "typescript"
+        }
+      },
+      {
+        "files": ["*.html"],
+        "options": {
+          "parser": "html"
+        }
+      },
+      {
+        "files": ["*.css"],
+        "options": {
+          "parser": "css"
+        }
+      }
+    ]
+  }
