@@ -1,0 +1,771 @@
+{
+	"frames": [
+		{
+			"filename": "skeleton-Destroy_0.png",
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_1.png",
+			"frame": {
+				"x": 598,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_10.png",
+			"frame": {
+				"x": 1196,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_11.png",
+			"frame": {
+				"x": 1794,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_12.png",
+			"frame": {
+				"x": 0,
+				"y": 483,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_13.png",
+			"frame": {
+				"x": 598,
+				"y": 483,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_14.png",
+			"frame": {
+				"x": 1196,
+				"y": 483,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_15.png",
+			"frame": {
+				"x": 1794,
+				"y": 483,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_16.png",
+			"frame": {
+				"x": 0,
+				"y": 966,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_17.png",
+			"frame": {
+				"x": 598,
+				"y": 966,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_18.png",
+			"frame": {
+				"x": 1196,
+				"y": 966,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_19.png",
+			"frame": {
+				"x": 1794,
+				"y": 966,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_2.png",
+			"frame": {
+				"x": 0,
+				"y": 1449,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_20.png",
+			"frame": {
+				"x": 598,
+				"y": 1449,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_21.png",
+			"frame": {
+				"x": 1196,
+				"y": 1449,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_3.png",
+			"frame": {
+				"x": 1794,
+				"y": 1449,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_4.png",
+			"frame": {
+				"x": 0,
+				"y": 1932,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_5.png",
+			"frame": {
+				"x": 598,
+				"y": 1932,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_6.png",
+			"frame": {
+				"x": 1196,
+				"y": 1932,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_7.png",
+			"frame": {
+				"x": 1794,
+				"y": 1932,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_8.png",
+			"frame": {
+				"x": 2392,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-Destroy_9.png",
+			"frame": {
+				"x": 2392,
+				"y": 483,
+				"w": 598,
+				"h": 483
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 598,
+				"h": 483
+			},
+			"sourceSize": {
+				"w": 598,
+				"h": 483
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_0.png",
+			"frame": {
+				"x": 2990,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_1.png",
+			"frame": {
+				"x": 2990,
+				"y": 273,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_10.png",
+			"frame": {
+				"x": 2990,
+				"y": 546,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_11.png",
+			"frame": {
+				"x": 2990,
+				"y": 819,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_12.png",
+			"frame": {
+				"x": 2392,
+				"y": 1092,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_13.png",
+			"frame": {
+				"x": 2657,
+				"y": 1092,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_2.png",
+			"frame": {
+				"x": 2922,
+				"y": 1092,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_3.png",
+			"frame": {
+				"x": 2392,
+				"y": 1365,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_4.png",
+			"frame": {
+				"x": 2657,
+				"y": 1365,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_5.png",
+			"frame": {
+				"x": 2922,
+				"y": 1365,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_6.png",
+			"frame": {
+				"x": 2392,
+				"y": 1638,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_7.png",
+			"frame": {
+				"x": 2657,
+				"y": 1638,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_8.png",
+			"frame": {
+				"x": 2922,
+				"y": 1638,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		},
+		{
+			"filename": "skeleton-MovingNIdle_9.png",
+			"frame": {
+				"x": 2392,
+				"y": 1911,
+				"w": 265,
+				"h": 273
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 273
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 273
+			}
+		}
+	],
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 3255,
+			"h": 2415
+		},
+		"scale": "1"
+	}
+}
