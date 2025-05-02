@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/mongodb": "^3.0.18",
-    "mongodb": "^3.0.0",
+    "mongodb": "^3.1.13",
     "typescript": "^3.1.3"
   }
 }
