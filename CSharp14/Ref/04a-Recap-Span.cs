@@ -26,7 +26,7 @@ public static class Span
             } while (madeChanges);
         }
 
-        void BubbleSortSpan<T>(scoped Span<T> list) where T : IComparable
+        void BubbleSortSpan<T>(Span<T> list) where T : IComparable
         {
             bool madeChanges;
             int itemCount = list.Length;
