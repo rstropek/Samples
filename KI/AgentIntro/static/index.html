@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #chat-container {
+            height: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        #input-container {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .user-message {
+            background-color: #e6f7ff;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .bot-message {
+            background-color: #f1f1f1;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Tutor Chat</h1>
+    <div id="chat-container"></div>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Ask a question...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        let eventSource = null;
+
+        function addMessage(message, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = isUser ? 'user-message' : 'bot-message';
+            messageDiv.textContent = message;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, true);
+            userInput.value = '';
+
+            // Close any existing connection
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            // Create a message container for the bot response
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'bot-message';
+            chatContainer.appendChild(botMessageDiv);
+            
+            // Connect to SSE endpoint
+            eventSource = new EventSource(`/chat?user_input=${encodeURIComponent(message)}`);
+            let fullResponse = '';
+
+            eventSource.onmessage = function(event) {
+                // Check if the message contains the [END] marker
+                if (event.data.includes('[END]')) {
+                    // Remove the [END] marker from the displayed text
+                    const cleanedData = event.data.replace('[END]', '');
+                    
+                    if (cleanedData.trim()) {
+                        fullResponse += cleanedData;
+                        botMessageDiv.textContent = fullResponse;
+                    }
+                    
+                    // Close the connection
+                    eventSource.close();
+                } else {
+                    fullResponse += event.data;
+                    botMessageDiv.textContent = fullResponse;
+                }
+                
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            };
+
+            eventSource.onerror = function(error) {
+                console.error('EventSource error:', error);
+                eventSource.close();
+                if (fullResponse === '') {
+                    botMessageDiv.textContent = 'Error connecting to the server.';
+                }
+            };
+
+            eventSource.addEventListener('end', function() {
+                eventSource.close();
+            });
+        }
+
+        // Allow Enter key to send message
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html> 
