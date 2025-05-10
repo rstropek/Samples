@@ -1,5 +1,4 @@
 # Standard library imports
-import asyncio
 from typing import AsyncGenerator
 import os
 import json
