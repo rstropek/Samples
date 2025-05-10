@@ -104,15 +104,15 @@
                     const cleanedData = event.data.replace('[END]', '');
                     
                     if (cleanedData.trim()) {
-                        fullResponse += cleanedData;
-                        botMessageDiv.textContent = fullResponse;
+                        fullResponse += JSON.parse(cleanedData);
+                        botMessageDiv.innerHTML = fullResponse.replace(/\n/g, '<br/>');
                     }
                     
                     // Close the connection
                     eventSource.close();
                 } else {
-                    fullResponse += event.data;
-                    botMessageDiv.textContent = fullResponse;
+                    fullResponse += JSON.parse(event.data);
+                    botMessageDiv.innerHTML = fullResponse.replace(/\n/g, '<br/>');
                 }
                 
                 chatContainer.scrollTop = chatContainer.scrollHeight;
