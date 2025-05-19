@@ -95,7 +95,7 @@ app.get('/sessions/:code', async (req: express.Request, res: express.Response) =
             
             for (const entry of entries) {
                 // Skip node_modules folder and files/folders starting with a dot
-                const skipDirs = ['node_modules', 'dist', 'bin', 'obj'];
+                const skipDirs = ['node_modules', 'dist', 'bin', 'obj', 'target'];
                 if (skipDirs.includes(entry.name) || entry.name.startsWith('.')) {
                     continue;
                 }
