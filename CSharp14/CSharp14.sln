@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ref", "Ref\Ref.csproj", "{C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{F732939A-4452-41C1-BC26-591E8FF8A1E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fields", "Fields\Fields.csproj", "{075E3171-85C4-4893-9E85-CF99FE52944C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{F732939A-4452-41C1-BC26-591E8FF8A1E0}.Release|x64.Build.0 = Release|Any CPU
 		{F732939A-4452-41C1-BC26-591E8FF8A1E0}.Release|x86.ActiveCfg = Release|Any CPU
 		{F732939A-4452-41C1-BC26-591E8FF8A1E0}.Release|x86.Build.0 = Release|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Debug|x64.Build.0 = Debug|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Debug|x86.Build.0 = Debug|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x64.ActiveCfg = Release|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x64.Build.0 = Release|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x86.ActiveCfg = Release|Any CPU
+		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

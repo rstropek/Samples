@@ -31,6 +31,8 @@ namespace MultipleStringExtensions
     {
         extension(string emailAddress)
         {
+            // Note that we cannot declare fields in extension blocks
+
             public bool IsValidEmail()
             {
                 if (string.IsNullOrWhiteSpace(emailAddress)) { return false; }
