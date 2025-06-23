@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fields", "Fields\Fields.csproj", "{075E3171-85C4-4893-9E85-CF99FE52944C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpanConversions", "SpanConversions\SpanConversions.csproj", "{C626027E-E351-4697-96DB-9D01602495E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x64.Build.0 = Release|Any CPU
 		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x86.ActiveCfg = Release|Any CPU
 		{075E3171-85C4-4893-9E85-CF99FE52944C}.Release|x86.Build.0 = Release|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Debug|x64.Build.0 = Debug|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Debug|x86.Build.0 = Debug|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Release|x64.Build.0 = Release|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{C626027E-E351-4697-96DB-9D01602495E3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
