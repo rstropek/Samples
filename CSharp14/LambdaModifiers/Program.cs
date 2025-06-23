@@ -26,4 +26,7 @@ TryParseCsv tryParseCsvNew = (input, out result) => {
     return false;
 };
 
+// Note: Works with other parameter modifiers, too (e.g. ref, in, out, scoped),
+//       not for params modifier.
+
 delegate bool TryParseCsv(string input, out List<int> result);
