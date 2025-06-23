@@ -9,15 +9,7 @@ guardrail_agent = Agent(
     model="gpt-4o-mini",
     name="Guardrail check",
     instructions="""
-        Check if the user asks coding-related questions. Also make sure
-        that the user is not asking us to do their entire homework assignment.
-        It is ok to answer small, detailed questions about the homework.
-        It is not ok to answer questions that are essentially the entire
-        homework assignment.
-
-        Return True if the user asked a coding-related question
-        and did NOT ask us to do their entire homework assignment.
-        Otherwise, return False.
+        Check if the user asks coding-related questions.
         """,
     output_type=CodingOutput,
 )
