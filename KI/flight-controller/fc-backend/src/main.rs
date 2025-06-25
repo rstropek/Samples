@@ -14,6 +14,7 @@ use once_cell::sync::Lazy;
 use serde::Serialize;
 use tokio::{net::TcpListener, time::interval};
 use tokio_stream::StreamExt as _;
+use tower_http::cors::{Any, CorsLayer};
 
 use crate::planes::{calculate_airplane_positions, check_all_alerts, generate_demo_airplanes, Airplane, Alert};
 
@@ -39,7 +40,8 @@ async fn main() {
         }
     });
 
-    let router = Router::new().route("/sse", get(sse_handler));
+    let router = Router::new().route("/sse", get(sse_handler))
+        .layer(CorsLayer::new().allow_methods(Any).allow_headers(Any));
 
     let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
     axum::serve(listener, router).await.unwrap();
