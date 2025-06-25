@@ -4,7 +4,7 @@ Read #01-general.md carefully. Are the requirements clear? Do you need additiona
 
 ## Trigger
 
-Yes, please generate the code.
+Yes, please generate the code. Note that I need the structures that represent Airplanes and Alerts to be serializable (Serde).
 
 ## Run Tests
 
