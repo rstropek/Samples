@@ -41,7 +41,7 @@ async fn main() {
     });
 
     let router = Router::new().route("/sse", get(sse_handler))
-        .layer(CorsLayer::new().allow_methods(Any).allow_headers(Any));
+        .layer(CorsLayer::new().allow_methods(Any).allow_headers(Any).allow_origin(Any));
 
     let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
     axum::serve(listener, router).await.unwrap();
