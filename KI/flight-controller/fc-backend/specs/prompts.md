@@ -30,8 +30,4 @@ Do not change configuration files (e.g. tsconfig. vite config). I have setup the
 
 ## Zooming
 
-Take a look at the backend in the fc-backend/src folder. I need a frontend using vanillaJS for that app. Put it in fc-frontend. The project has already been set up with vite and TypeScript.
-
-The UI should look similar to the provided screen designs.
-
-For the UI, I do not need unit tests.
+Can you add zooming possibility? Zooming in should reduce the displayed radius by 20km. The max zoom levels should be 20km and 100km. Zooming should be done with two buttons (+ and -) at the left upper corner of the visualization.
