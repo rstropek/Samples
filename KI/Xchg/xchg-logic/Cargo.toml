@@ -1,0 +1,22 @@
+[package]
+name = "xchg-logic"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = []
+api = ["reqwest", "serde", "serde_json", "tokio"]
+
+[dependencies]
+chrono = "0.4.41"
+thiserror = "2.0.12"
+
+reqwest = { version = "0.12", features = ["json"], optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros"], optional = true }
+
+[dev-dependencies]
+# For testing, always include these
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
+serde_json = "1.0"
