@@ -1,0 +1,86 @@
+# Production Permission Rules
+# These rules control access to media content based on user properties
+
+# Rule 1: Disabled users can only access the "Testvideos" series
+# First deny all access for inactive users
+- media_filter: {}
+  user_filter:
+    is_active: false
+  access: "denied"
+# Then allow access to "Testvideos" series for inactive users
+- media_filter:
+    series: "Testvideos"
+  user_filter:
+    is_active: false
+  access: "allowed"
+
+# Rule 2: "ORF Lokalsender" series is only available in Austria
+# First deny access to "ORF Lokalsender" for all users
+- media_filter:
+    series: "ORF Lokalsender"
+  user_filter: {}
+  access: "denied"
+# Then allow access to "ORF Lokalsender" for users in Austria
+- media_filter:
+    series: "ORF Lokalsender"
+  user_filter:
+    country_iso_code: "AT"
+  access: "allowed"
+
+# Rule 3: "movie" category is only available with premium streaming package
+# First deny access to all movies
+- media_filter:
+    category: "movie"
+  user_filter: {}
+  access: "denied"
+# Then allow access to movies for premium subscribers
+- media_filter:
+    category: "movie"
+  user_filter:
+    streaming_package: "premium"
+  access: "allowed"
+
+# Rule 4: Special premium series - "Game of Thrones" only for premium users
+# First deny access to "Game of Thrones" for all users
+- media_filter:
+    series: "Game of Thrones"
+  user_filter: {}
+  access: "denied"
+# Then allow access to "Game of Thrones" for premium subscribers
+- media_filter:
+    series: "Game of Thrones"
+  user_filter:
+    streaming_package: "premium"
+  access: "allowed"
+
+# Rule 5: Special premium series - "House of Cards" only for premium users
+# First deny access to "House of Cards" for all users
+- media_filter:
+    series: "House of Cards"
+  user_filter: {}
+  access: "denied"
+# Then allow access to "House of Cards" for premium subscribers
+- media_filter:
+    series: "House of Cards"
+  user_filter:
+    streaming_package: "premium"
+  access: "allowed"
+
+# Rule 6: "sport_live" category is available for sports and premium packages
+# First deny access to all sport_live content
+- media_filter:
+    category: "sport_live"
+  user_filter: {}
+  access: "denied"
+# Then allow access to sport_live for sports subscribers
+- media_filter:
+    category: "sport_live"
+  user_filter:
+    streaming_package: "sports"
+  access: "allowed"
+# Then allow access to sport_live for premium subscribers
+- media_filter:
+    category: "sport_live"
+  user_filter:
+    streaming_package: "premium"
+  access: "allowed"
