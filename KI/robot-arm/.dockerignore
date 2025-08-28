@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.git
+.gitignore
+.next
+.vercel
+.idea
+specifications
