@@ -12,7 +12,8 @@
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "three": "^0.179.1"
+    "three": "^0.179.1",
+    "three-stdlib": "^2.36.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

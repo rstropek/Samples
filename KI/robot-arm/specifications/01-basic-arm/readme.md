@@ -37,10 +37,10 @@ A “pleasant” display pose that looks naturally folded and clear of the base.
 
 * Joint order: **J0 (base yaw), J1 (shoulder pitch), J2 (elbow pitch), J3 (wrist pitch), J4 (pipette tilt)**
 * **J0 (yaw around world Y):** `0°` (looking along +Z)
-* **J1 (shoulder pitch around local X):** `60°`
-* **J2 (elbow pitch around local X):** `40°`
-* **J3 (wrist pitch around local X):** `25°`
-* **J4 (pipette tilt around local X):** `45°`
+* **J1 (shoulder pitch around local X):** `75°`
+* **J2 (elbow pitch around local X):** `45°`
+* **J3 (wrist pitch around local X):** `15°`
+* **J4 (pipette tilt around local X):** `10°`
 
 ## Visual details
 
