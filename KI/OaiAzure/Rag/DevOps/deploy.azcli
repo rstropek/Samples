@@ -1,0 +1,68 @@
+# Switch to correct subscription
+# az login --use-device-code
+# az account set --subscription b33f0285-db27-4896-ac5c-df22004b0aba
+# az account show --output table
+
+# Region to use
+LOCATION=swedencentral
+
+# Name of the project. All resource names will be derived from that name
+PROJECT_NAME=oaiazure3
+
+# Deploy resource group
+RGNAMES=$(az deployment sub create \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file resource-group.bicep \
+    --location $LOCATION \
+    --parameters \
+        projectName=$PROJECT_NAME \
+        location=$LOCATION \
+    | jq .properties.outputs)
+RG=$(echo $RGNAMES | jq -r .rgName.value)
+SUBSCRIPTION=$(echo $RGNAMES | jq -r .subscriptionId.value)
+echo "Resource group: $RG"
+echo "Subscription ID: $SUBSCRIPTION"
+
+# Deploy resources
+DEPLOY_RESULT=$(az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file main.bicep \
+    --parameters \
+        projectName=$PROJECT_NAME \
+        location=$LOCATION \
+        oaiPrincipals='["81686fe2-9ab8-4640-862c-af20fca5b6ed", "8fc6792d-6d25-4377-81a8-eb2a4a0b8889", "1654dbd4-c179-468d-aef9-78cb5c2fdb0a"]' \
+    | jq .properties.outputs)
+ACCOUNT_NAME=$(echo $DEPLOY_RESULT | jq -r .accountName.value)
+echo "Account name: $ACCOUNT_NAME"
+
+# Add content filtering policy
+# See also https://learn.microsoft.com/en-us/rest/api/aiservices/accountmanagement/rai-policies/create-or-update
+RAI_POLICY_NAME=rai-policy-strict
+az rest --method put \
+    --url https://management.azure.com/subscriptions/$SUBSCRIPTION/resourceGroups/$RG/providers/Microsoft.CognitiveServices/accounts/$ACCOUNT_NAME/raiPolicies/$RAI_POLICY_NAME?api-version=2024-10-01 \
+    --body "
+    {
+        \"properties\": {
+            \"basePolicyName\": \"Microsoft.Default\",
+            \"contentFilters\": [
+                {
+                    \"name\": \"Jailbreak\",
+                    \"blocking\": true,
+                    \"source\": \"Prompt\",
+                    \"enabled\": true
+                }
+            ],
+            \"mode\": \"Asynchronous_filter\"
+        }
+    }"
+
+# Deploy resources
+az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file oai-deploy.bicep \
+    --parameters \
+        accountName=$ACCOUNT_NAME \
+        raiPolicyName=$RAI_POLICY_NAME \
+    | jq .properties.outputs

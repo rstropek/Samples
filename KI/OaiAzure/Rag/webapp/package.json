@@ -1,0 +1,30 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/app.js",
+    "docker-build": "docker build -t rstropek/rag-webapp .",
+    "docker-push": "docker push rstropek/rag-webapp",
+    "docker-start": "docker run -t -p 3000:3000 rstropek/rag-webapp"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@azure/identity": "^4.11.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.1",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@azure/search-documents": "^12.1.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "openai": "^5.19.1"
+  }
+}

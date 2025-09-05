@@ -1,0 +1,14 @@
+#@host = http://localhost:3000
+@host = https://app-a6oqc5m7wme54.azurewebsites.net
+
+###
+GET {{host}}/
+
+###
+GET {{host}}/ping
+
+###
+GET {{host}}/search/indexes
+
+###
+GET {{host}}/openai/query
