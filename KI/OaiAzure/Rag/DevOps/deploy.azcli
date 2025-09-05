@@ -7,7 +7,7 @@
 LOCATION=swedencentral
 
 # Name of the project. All resource names will be derived from that name
-PROJECT_NAME=oaiazure3
+PROJECT_NAME=oaiazure4
 
 # Deploy resource group
 RGNAMES=$(az deployment sub create \

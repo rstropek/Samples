@@ -1,5 +1,5 @@
 #@host = http://localhost:3000
-@host = https://app-a6oqc5m7wme54.azurewebsites.net
+@host = https://app-3ct4keuyzyv2m.azurewebsites.net
 
 ###
 GET {{host}}/

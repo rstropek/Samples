@@ -3,8 +3,6 @@ param modelVersion string = '2025-04-14'
 param raiPolicyName string
 param accountName string
 
-var abbrs = loadJsonContent('abbreviations.json')
-
 // OpenAI account
 resource account 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = {
   name: accountName
