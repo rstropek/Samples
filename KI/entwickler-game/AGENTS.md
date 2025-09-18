@@ -23,6 +23,10 @@ describe('dummy', () => {
 });
 ```
 
+Run tests using `npm test`.
+
 Do not write CSS in HTML files. Use separate CSS files instead.
 
 You can always assume that I ran `npm install` in the project folder. You do not need to do that again. You can also assume that TypeScript, Jest, and Vite are configured properly.
+
+When you are done, do not start the app. Just tell me that you are done. I will test the app for you and provide feedback if necessary.
