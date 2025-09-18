@@ -1,0 +1,16 @@
+{
+  "name": "entwickler-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "vite"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6"
+  }
+}
