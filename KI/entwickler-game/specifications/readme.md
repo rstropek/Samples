@@ -43,3 +43,7 @@ It is fine to have a rough collision detection using rectangles.
 ## Technology
 
 Do not use a Canvas. Use HTML elements and CSS for the rendering.
+
+## Testing
+
+Please write unit tests for the collision detection logic. No need for unit tests for other parts of the code.

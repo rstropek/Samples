@@ -15,7 +15,6 @@
     "exactOptionalPropertyTypes": true,
 
     "strict": true,
-    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
