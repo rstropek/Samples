@@ -35,6 +35,9 @@ export default function RootLayout({
                 University Tools
               </Link>
               <div className="flex gap-6">
+                <Link href="/invoice-categorizer" className="hover:text-blue-100 transition-colors">
+                  Invoice Processor
+                </Link>
                 <Link href="/demo" className="hover:text-blue-100 transition-colors">
                   Demo Tool
                 </Link>
