@@ -41,6 +41,8 @@ In this initial milestone, the app does **not** yet process prompts — it serve
 - Displayed under the input field.
 - Provides 3–5 visually distinct “sample prompts” as cards or buttons.
   - Current placeholders: _Sample Prompt 1_, _Sample Prompt 2_, _Sample Prompt 3_.
+  - Only display a short title of the prompt suggestions.
+  - If the user clicks on a sample prompt, it populates the input field with that prompt. For now, add a _Lorem Ipsum_ placeholder text if clicked.
   - In later stages, these will be clickable and auto-fill the input field.
 
 3. **Output Area**
