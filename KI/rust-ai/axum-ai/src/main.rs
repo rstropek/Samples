@@ -3,7 +3,10 @@ use askama::Template;
 use async_openai::{
     Client,
     error::{OpenAIError, StreamError},
-    types::{ReasoningEffort, responses::{CreateResponseArgs, ReasoningConfig, ReasoningConfigArgs, ResponseEvent}},
+    types::{
+        ReasoningEffort,
+        responses::{CreateResponseArgs, ReasoningConfigArgs, ResponseEvent},
+    },
 };
 use axum::{
     Router,
@@ -102,7 +105,12 @@ async fn chat_handler() -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
         let request = CreateResponseArgs::default()
             .model("gpt-5")
             .stream(true)
-            .reasoning(ReasoningConfigArgs::default().effort(ReasoningEffort::Minimal).build().unwrap())
+            .reasoning(
+                ReasoningConfigArgs::default()
+                    .effort(ReasoningEffort::Minimal)
+                    .build()
+                    .unwrap(),
+            )
             .instructions("You are a helpful assistant")
             .input("Are Dolphins fish?")
             .build()
