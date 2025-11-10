@@ -95,10 +95,12 @@ async fn main() -> Result<(), anyhow::Error> {
     let openai_client = openai::Client::from_env();
 
     let add_agent = openai_client
-        .agent(providers::openai::GPT_4_1)
+        .agent("gpt-5")
+        .additional_params(json!({ "reasoning": { "effort": "minimal"} }))
         .preamble(
             "You are a calculator here to help the user perform add
             operations. Use the tools provided to answer the user's question.
+            Include a brief explanation of how you arrived at the answer.
             Add your name ('Adder') to the beginning of your answer.",
         )
         .tool(Adder)
