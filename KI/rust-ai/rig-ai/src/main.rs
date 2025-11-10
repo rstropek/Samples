@@ -6,7 +6,6 @@ use schemars::{schema_for, JsonSchema};
 use rig::{completion::ToolDefinition, providers, streaming::StreamingPrompt, tool::Tool};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use dotenvy;
 
 #[derive(Deserialize, JsonSchema)]
 struct OperationArgs {
@@ -78,30 +77,59 @@ impl Tool for Subtract {
     }
 }
 
+#[derive(Serialize, Deserialize, JsonSchema)]
+enum Operation {
+    Add,
+    Subtract
+}
+
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct TriageResult {
+    operation: Operation
+}
+
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
     dotenvy::dotenv().ok();
 
-    // Create agent with a single context prompt and two tools
-    let calculator_agent = providers::openai::Client::from_env()
+    let openai_client = openai::Client::from_env();
+
+    let add_agent = openai_client
         .agent(providers::openai::GPT_4_1)
         .preamble(
-            "You are a calculator here to help the user perform arithmetic
+            "You are a calculator here to help the user perform add
             operations. Use the tools provided to answer the user's question.
-            make your answer long, so we can test the streaming functionality,
-            like 20 words",
+            Add your name ('Adder') to the beginning of your answer.",
         )
-        .max_tokens(1024)
         .tool(Adder)
+        .build();
+
+    let sub_agent = openai_client
+        .agent(providers::openai::GPT_4_1)
+        .preamble(
+            "You are a calculator here to help the user perform subtract
+            operations. Use the tools provided to answer the user's question.
+            Add your name ('Subtracter') to the beginning of your answer.",
+        )
         .tool(Subtract)
         .build();
 
-    let mut stream = calculator_agent.stream_prompt("Calculate 2 - 5").await;
+    let triage_agent = openai_client
+        .extractor::<TriageResult>(openai::GPT_4_1_MINI)
+        .build();
 
-    let res = stream_to_stdout(&mut stream).await?;
+    const QUESTION: &str = "Please add the numbers 22 and 20";
 
-    println!("Token usage response: {usage:?}", usage = res.usage());
-    println!("Final text response: {message:?}", message = res.response());
+    let calculator_agent = match triage_agent
+        .extract(QUESTION).await.unwrap()
+        .operation {
+            Operation::Add => add_agent,
+            Operation::Subtract => sub_agent,
+        };
+
+    let mut stream = calculator_agent.stream_prompt(QUESTION).await;
+
+    let _ = stream_to_stdout(&mut stream).await?;
 
     Ok(())
 }
