@@ -1,12 +1,4 @@
-Add Playwright end-to-end tests to the Angular frontend project. Read the `angular-frontend` skills for setup and coding guidelines.
-
-## Setup
-
-* Install Playwright in the `Frontend` folder using `pnpm`.
-* Configure Playwright to run against the local dev server URL provided by Aspire (read the `aspire` skill to understand how to start the application and discover service URLs).
-* Store Playwright config and tests under `Frontend/e2e/`.
-
-## Tests
+Playwright is used in the Angular app for end-to-end tests. Read the `angular-frontend` skills for setup and coding guidelines.
 
 Write one Playwright test covering the **questionnaire creation** workflow:
 
@@ -19,6 +11,7 @@ Write one Playwright test covering the **questionnaire creation** workflow:
 
 ## After making changes
 
-* Build the Angular project (`pnpm run build` in the Frontend folder)
+Follow the Quality Assurance steps in AGENTS.md. Additionally:
+
 * Start the Aspire application (read the `aspire` skill for CLI details)
 * Run the Playwright tests and ensure they pass

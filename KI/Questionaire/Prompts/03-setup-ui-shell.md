@@ -14,13 +14,16 @@ Install Angular FontAwesome following the instructions at `https://raw.githubuse
 ## Visual Design
 
 * Pick a professional, modern color theme — not the Angular default colors. Use CSS custom properties (variables) in `styles.css` for the palette so it is easy to adjust later.
-* Choose a clean sans-serif Google Font (e.g. Inter, Source Sans 3, or similar). Import it in `index.html` or `styles.css`.
+* Choose a clean sans-serif Google Font. Import it in `index.html` or `styles.css`.
 * The nav bar should have a subtle bottom border or shadow to separate it from the content area.
 * Active route link should be visually distinct (e.g. different color, underline, or background).
 
+Note: The `angular-frontend` CSS guidelines take precedence over `frontend-design` when they conflict.
+
 ## After making changes
 
-* Build the Angular project (`pnpm run build` in the Frontend folder)
+Follow the Quality Assurance steps in AGENTS.md. Additionally:
+
 * Start the Aspire application and verify the frontend loads correctly using the Aspire CLI (read the `aspire` skill for CLI details)
 * Smoke test with Playwright CLI to ensure that everything renders properly
 

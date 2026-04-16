@@ -31,5 +31,6 @@ Separate non-UI logic from components using Angular services. Components should 
 
 ## After making changes
 
-* Build the Angular project (`pnpm run build` in the Frontend folder)
+Follow the Quality Assurance steps in AGENTS.md. Additionally:
+
 * Start the Aspire application (see `aspire` skill) and verify with Playwright CLI that the UI renders and basic interactions work

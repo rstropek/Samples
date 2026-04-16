@@ -12,3 +12,7 @@ Focus on things that are **non-obvious** and **hard to infer** from just reading
 Create the `docs` folder if it does not exist. Write clean, well-structured markdown. No fluff — every sentence should save a future agent at least one tool call.
 
 Refer to the documentation file in AGENTS.md.
+
+## After making changes
+
+Follow the Quality Assurance steps in AGENTS.md.

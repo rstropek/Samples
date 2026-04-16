@@ -13,10 +13,18 @@ Add proper error handling to the Web API using RFC 9457 ProblemDetails. Research
   * Known error cases (e.g. not-found, validation failure) return a ProblemDetails JSON response with the correct `application/problem+json` content type.
   * The dummy throw endpoint returns a ProblemDetails response (not a raw 500 or stack trace).
 
+## Angular Error Handling
+
+* Add an HTTP interceptor that detects `application/problem+json` responses.
+* Parse the ProblemDetails body and surface `title`, `detail`, and `errors` (for validation) to the UI via a shared error service or signal.
+* Update the questionnaire editor and answer form to display validation errors from ProblemDetails responses.
+
+## Self-Improving Skill
+
+After implementing ProblemDetails, update the `aspnet-webapi` skill (`SKILL.md`) to include the ProblemDetails configuration pattern you just applied, so future projects benefit from it automatically.
+
 ## After making changes
 
-* Compile the solution (`dotnet build` in the root)
-* Run C# code analysis, fix any warnings
-* Run all .NET tests (`dotnet test` in the root)
+Follow the Quality Assurance steps in AGENTS.md. Additionally:
+
 * Regenerate the Angular API client (`pnpm run generate-web-api` in the Frontend folder)
-* Build the Angular project (`pnpm run build` in the Frontend folder)

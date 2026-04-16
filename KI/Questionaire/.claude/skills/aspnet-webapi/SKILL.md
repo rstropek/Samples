@@ -1,6 +1,6 @@
 ---
 name: aspnet-webapi
-description: Guidelines for creating and configuring up a new ASP.NET Core Minimal API project. Use when creating a new web API project or when asked to configure an existing one.
+description: Guidelines for creating and configuring a new ASP.NET Core Minimal API project. Use when creating a new web API project or when asked to configure an existing one.
 metadata:
   author: Rainer Stropek
 ---
@@ -14,7 +14,7 @@ If not asked otherwise, add Open API Specification:
   * `Swashbuckle.AspNetCore.SwaggerUI`
   * `Microsoft.Extensions.ApiDescription.Server`
   Add Open API services to DI (`builder.Services.AddOpenApi();`)
-  * d Swagger UI middleware (`app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));`)
+  * Add Swagger UI middleware (`app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));`)
 * Add entry to `PropertyGroup` in `.csproj` to generate Open API specification on build (`<OpenApiDocumentsDirectory>.</OpenApiDocumentsDirectory>`)
 
 This will generate an Open API specification file (`<project-name>.json`) in the project directory on build

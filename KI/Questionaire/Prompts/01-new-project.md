@@ -6,14 +6,12 @@ Add a single `ping` endpoint to the web API that returns `pong`. Remove all othe
 
 Remove the default home page from the Angular frontend. Replace it with code that uses the generated API client to call the `ping` endpoint and display the result.
 
-After generating the new project or after making significant configuration changes, always:
+## After making changes
 
-* Compile the solution (`dotnet build` in the root)
-* Run C# Code Analysis and ensure no warnings
-* Run .NET unit tests
-* Generate the backend API in the Angular project from Swagger
-* Build the Angular project (`npm run build` in the Angular project)
-* Start the Aspire application (`dotnet run --proect AppHost` in the root)
+Follow the Quality Assurance steps in AGENTS.md. Additionally:
+
+* Generate the Angular API client (`pnpm run generate-web-api` in the Frontend folder)
+* Start the Aspire application (`dotnet run --project AppHost` in the root)
 * Use Aspire CLI to verify that everything is running:
   * Read the corresponding skill to learn about the Aspire CLI
   * Use `aspire describe` to get the URLs of the running services

@@ -15,6 +15,13 @@ If you are looking for general information about Angular, read the official `ang
 
 Add environment-related configuration (`ng generate environments`)
 
+## Playwright End-to-End Tests
+
+We do **not** use Cypress for end-to-end testing. Instead, we use Playwright. Note: The `angular-developer` skill's e2e-testing reference covers Cypress — ignore it. This project uses Playwright exclusively. See the `playwright-cli` skill.
+
+* Install Playwright in the Angular app.
+* Store Playwright config and tests in the Angular app under the `e2e` folder.
+
 ## Aspire Integration
 
 Add a JS script `build/set-env.js` that updates the `environment.apiBaseUrl` environment setting according to the Aspire environment variables (`process.env.services__webapi__https__0 || process.env.services__webapi__http__0`). The script must write to **both** `src/environments/environment.ts` **and** `src/environments/environment.development.ts`. Call this JS script in the package.json `start` script before starting the Angular development server.
@@ -22,6 +29,8 @@ Add a JS script `build/set-env.js` that updates the `environment.apiBaseUrl` env
 The `start` script must pass the `PORT` environment variable to the Angular development server (`ng serve --port $PORT`), so that it works correctly in the Aspire environment.
 
 Use the `Aspire.Hosting.NodeJs` NuGet package in the Aspire AppHost to host the Angular application. Use `AddNpmApp` to add the Angular project to the AppHost (with a reference to the web API).
+
+Configure Playwright to run against the local dev server URL provided by Aspire (read the aspire skill to understand how to start the application and discover service URLs).
 
 ## API Client Generation
 
@@ -61,7 +70,7 @@ In `app.config.ts`:
 
 * Use modern CSS (with nested selectors, CSS variables, etc.)
 * Prefer module-scoped styles over global styles. Use global styles only for truly global concerns (e.g. typography, color variables, etc.).
-* Avoid CSS frameworks like SCSS or Tailwind
+* Avoid CSS preprocessors (SCSS, Less) and utility-first CSS frameworks (Tailwind). Use plain modern CSS.
 
 ### Angular Best Practices
 
@@ -85,7 +94,7 @@ In `app.config.ts`:
 - Use `computed()` for derived state
 - Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
 - Prefer inline templates for small components
-- Prefer Reactive forms instead of Template-driven ones
+- For new forms, prefer Signal Forms (Angular v21+; see the `angular-developer` skill). For Angular v20 or existing code, prefer Reactive forms over Template-driven ones.
 - Do NOT use `ngClass`, use `class` bindings instead
 - Do NOT use `ngStyle`, use `style` bindings instead
 - When using external templates/styles, use paths relative to the component TS file.
@@ -101,7 +110,7 @@ In `app.config.ts`:
 
 - Keep templates simple and avoid complex logic
 - Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Use the async pipe to handle observables
+- Convert observables to signals using `toSignal()` from `@angular/core/rxjs-interop`. Use the async pipe only when signal conversion is impractical.
 - Do not assume globals like (`new Date()`) are available.
 
 ## Services

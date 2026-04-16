@@ -41,6 +41,8 @@ Once you are done with changing/adding code, always:
 * Run Code Analysis/Linter
   * For .NET projects, run `dotnet format style --no-restore --verify-no-changes --severity info` to catch IDE-level diagnostics (e.g. collection initializer suggestions, namespace mismatches) that `dotnet build` alone does not report. Fix all findings.
   * For Angular projects, run `pnpm ng lint` in the Frontend folder. Fix all findings.
+  * For Angular projects, run `pnpm run build` in the Frontend folder to verify the build succeeds.
+  * If the Web API was changed, regenerate the Angular API client (`pnpm run generate-web-api` in the Frontend folder).
 * Compile
 * Run tests (unit and integration)
 * Everything must be warning- and error free

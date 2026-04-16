@@ -30,9 +30,7 @@ Add successful and failure cases (e.g. missing required answer, invalid question
 
 ## After making changes
 
-* Compile the solution (`dotnet build` in the root)
-* Run C# code analysis, fix any warnings
-* Run all .NET tests (`dotnet test` in the root)
+Follow the Quality Assurance steps in AGENTS.md. Additionally:
+
 * Regenerate the Angular API client (`pnpm run generate-web-api` in the Frontend folder)
-* Build the Angular project (`pnpm run build` in the Frontend folder)
 * Start the Aspire application (see `aspire` skill) and check the logs for any errors
