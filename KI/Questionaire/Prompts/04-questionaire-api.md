@@ -7,7 +7,7 @@ Build a Web API for questionnaire management. Read the `aspnet-webapi` skill for
 * Questionnaires are **versioned** — every update creates a new version with the full question list replaced (no partial updates).
 * Deletion is **soft delete**.
 * Users submit answers for a questionnaire. The full set of answers is posted in one request and validated against the questionnaire definition before storing.
-* Repository lives in the `DataAccess` project using `ConcurrentDictionary` (in-memory, no database for now).
+* Repository lives in the `DataAccess` project using `ConcurrentDictionary` (in-memory, no database for now). However, design it in a way that swapping out the storage mechanism later (e.g. to a database) would be straightforward (e.g. generate primary keys automatically).
 * RESTful endpoints as Minimal API, grouped under `/api/questionnaires`. Include sub-resources for versions and answers.
 * Separate questionnaire endpoints and answer endpoints into their own files using C# 14 extension blocks on `IEndpointRouteBuilder` (e.g. `QuestionnaireEndpoints.cs` and `AnswerEndpoints.cs`).
 * Unit tests in `DataAccessTests`, integration tests in `WebApiTests` (using the existing Aspire test fixture).
