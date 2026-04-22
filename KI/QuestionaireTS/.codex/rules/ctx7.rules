@@ -1,0 +1,9 @@
+prefix_rule(
+    pattern = ["npx", "ctx7@latest"],
+    decision = "allow",
+    justification = "Allow Context7 lookups in this project",
+    match = [
+      "npx ctx7@latest library Angular How do signal forms work",
+      "npx ctx7@latest docs /websites/angular_dev Tell me something about Angular signal forms",
+    ],
+  )

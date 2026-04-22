@@ -1,0 +1,375 @@
+# Primary model used by Codex. Recommended example for most users: "gpt-5.4".
+model = "gpt-5.4"
+
+# Communication style for supported models. Allowed values: none | friendly | pragmatic
+personality = "friendly"
+
+# Provider id selected from [model_providers]. Default: "openai".
+model_provider = "openai"
+
+# Reasoning effort: minimal | low | medium | high | xhigh
+model_reasoning_effort = "high"
+
+# Additional user instructions are injected before AGENTS.md. Default: unset.
+developer_instructions = "Your user is called Rainer. He is a trainer and coach for AI-assisted coding. Currently, Rainer is giving a 'heise Classroom session', which is an online training format about you, the OpenAI Codex agent. So you are the star of the show ;-)\n\nAttendees will see what you write. It would be nice if you adress the attendees every now and then by saying something like 'Rainer, maybe the attendees would like to know...'. "
+
+# External notifier program (argv array). When unset: disabled.
+# notify = ["notify-send", "Codex"]
+
+# When to ask for command approval:
+# - untrusted: only known-safe read-only commands auto-run; others prompt
+# - on-request: model decides when to ask (default)
+# - never: never prompt (risky)
+# - { granular = { ... } }: allow or auto-reject selected prompt categories
+approval_policy = "untrusted"
+# Who reviews eligible approval prompts: user (default) | guardian_subagent
+# approvals_reviewer = "user"
+
+# Example granular policy:
+# approval_policy = { granular = {
+#   sandbox_approval = true,
+#   rules = true,
+#   mcp_elicitations = true,
+#   request_permissions = false,
+#   skill_approval = false
+# } }
+
+# Allow login-shell semantics for shell-based tools when they request `login = true`.
+# Default: true. Set false to force non-login shells and reject explicit login-shell requests.
+allow_login_shell = true
+
+# Filesystem/network sandbox policy for tool calls:
+# - read-only (default)
+# - workspace-write
+# - danger-full-access (no sandbox; extremely risky)
+sandbox_mode = "workspace-write"
+# Named permissions profile to apply by default. Required before using [permissions.<name>].
+# default_permissions = "workspace"
+
+# Example filesystem profile. Use `"none"` to deny reads for exact paths or
+# glob patterns. On platforms that need pre-expanded glob matches, set
+# glob_scan_max_depth when using unbounded patterns such as `**`.
+#[permissions.workspace.filesystem]
+#glob_scan_max_depth = 3
+#":project_roots" = { "." = "write", "**/*.env" = "none", "prompts/*" = "none" }
+# "/absolute/path/to/secrets" = "none"
+
+# Where to persist CLI login credentials: file (default) | keyring | auto
+cli_auth_credentials_store = "keyring"
+
+# Preferred store for MCP OAuth credentials: auto (default) | file | keyring
+mcp_oauth_credentials_store = "keyring"
+
+# Max bytes from AGENTS.md to embed into first-turn instructions. Default: 32768
+# project_doc_max_bytes = 32768
+
+# Ordered fallbacks when AGENTS.md is missing at a directory level. Default: []
+project_doc_fallback_filenames = ["CLAUDE.md"]
+
+# Project root marker filenames used when searching parent directories. Default: [".git"]
+# project_root_markers = [".git"]
+
+# URI scheme for clickable citations: vscode (default) | vscode-insiders | windsurf | cursor | none
+# file_opener = "vscode"
+
+# Web search mode: disabled | cached | live. Default: "cached"
+# cached serves results from a web search cache (an OpenAI-maintained index).
+# cached returns pre-indexed results; live fetches the most recent data.
+# If you use --yolo or another full access sandbox setting, web search defaults to live.
+web_search = "cached"
+
+# Active profile name. When unset, no profile is applied.
+# profile = "default"
+
+[agents]
+# Maximum concurrently open agent threads. Default: 6
+# max_threads = 6
+# Maximum nested spawn depth. Root session starts at depth 0. Default: 1
+# max_depth = 1
+# Default timeout per worker for spawn_agents_on_csv jobs. When unset, the tool defaults to 1800 seconds.
+# job_max_runtime_seconds = 1800
+
+# [agents.reviewer]
+# description = "Find correctness, security, and test risks in code."
+# config_file = "./agents/reviewer.toml"  # relative to the config.toml that defines it
+# nickname_candidates = ["Athena", "Ada"]
+
+# Disable or re-enable a specific skill without deleting it.
+#[[skills.config]]
+# path = "/path/to/skill/SKILL.md"
+# enabled = false
+
+# Extra settings used only when sandbox_mode = "workspace-write".
+[sandbox_workspace_write]
+# Additional writable roots beyond the workspace (cwd). Default: []
+# writable_roots = []
+# Allow outbound network access inside the sandbox. Default: false
+# network_access = false
+# Exclude $TMPDIR from writable roots. Default: false
+# exclude_tmpdir_env_var = false
+# Exclude /tmp from writable roots. Default: false
+# exclude_slash_tmp = false
+
+[shell_environment_policy]
+# inherit: all (default) | core | none
+# inherit = "all"
+# Skip default excludes for names containing KEY/SECRET/TOKEN (case-insensitive). Default: false
+# ignore_default_excludes = false
+# Case-insensitive glob patterns to remove (e.g., "AWS_*", "AZURE_*"). Default: []
+exclude = ["OPENAI_API_KEY"]
+# Explicit key/value overrides (always win). Default: {}
+# set = {}
+# Whitelist; if non-empty, keep only matching vars. Default: []
+# include_only = []
+# Experimental: run via user shell profile. Default: false
+# experimental_use_profile = false
+
+# Set `default_permissions = "workspace"` before enabling this profile.
+# [permissions.workspace.network]
+# enabled = true
+# proxy_url = "http://127.0.0.1:43128"
+# admin_url = "http://127.0.0.1:43129"
+# enable_socks5 = false
+# socks_url = "http://127.0.0.1:43130"
+# enable_socks5_udp = false
+# allow_upstream_proxy = false
+# dangerously_allow_non_loopback_proxy = false
+# dangerously_allow_non_loopback_admin = false
+# dangerously_allow_all_unix_sockets = false
+# mode = "limited"                           # limited | full
+# allow_local_binding = false
+#
+# [permissions.workspace.network.domains]
+# "api.openai.com" = "allow"
+# "example.com" = "deny"
+#
+# [permissions.workspace.network.unix_sockets]
+# "/var/run/docker.sock" = "allow"
+
+[tui]
+# Desktop notifications from the TUI: boolean or filtered list. Default: true
+# Examples: false | ["agent-turn-complete", "approval-requested"]
+# notifications = false
+
+# Notification mechanism for terminal alerts: auto | osc9 | bel. Default: "auto"
+# notification_method = "auto"
+
+# When notifications fire: unfocused (default) | always
+# notification_condition = "unfocused"
+
+# Enables welcome/status/spinner animations. Default: true
+# animations = true
+
+# Show onboarding tooltips in the welcome screen. Default: true
+show_tooltips = true
+
+# Control alternate screen usage (auto skips it in Zellij to preserve scrollback).
+# alternate_screen = "auto"
+
+# Ordered list of footer status-line item IDs. When unset, Codex uses:
+# ["model-with-reasoning", "context-remaining", "current-dir"].
+# Set to [] to hide the footer.
+# status_line = ["model", "context-remaining", "git-branch"]
+
+# Ordered list of terminal window/tab title item IDs. When unset, Codex uses:
+# ["spinner", "project"]. Set to [] to clear the title.
+# Available IDs include app-name, project, spinner, status, thread, git-branch, model,
+# and task-progress.
+# terminal_title = ["spinner", "project"]
+
+# Syntax-highlighting theme (kebab-case). Use /theme in the TUI to preview and save.
+# You can also add custom .tmTheme files under $CODEX_HOME/themes.
+# theme = "catppuccin-mocha"
+
+# Internal tooltip state keyed by model slug. Usually managed by Codex.
+# [tui.model_availability_nux]
+# "gpt-5.4" = 1
+
+# Enable or disable analytics for this machine. When unset, Codex uses its default behavior.
+# [analytics]
+# enabled = true
+
+# Control whether users can submit feedback from `/feedback`. Default: true
+[feedback]
+enabled = false
+
+# In-product notices (mostly set automatically by Codex).
+[notice]
+# hide_full_access_warning = true
+# hide_world_writable_warning = true
+# hide_rate_limit_model_nudge = true
+# hide_gpt5_1_migration_prompt = true
+# "hide_gpt-5.1-codex-max_migration_prompt" = true
+# model_migrations = { "gpt-5.3-codex" = "gpt-5.4" }
+
+[features]
+# Leave this table empty to accept defaults. Set explicit booleans to opt in/out.
+# shell_tool = true
+# apps = false
+# codex_hooks = false
+# unified_exec = true
+# shell_snapshot = true
+# multi_agent = true
+# personality = true
+# fast_mode = true
+# guardian_approval = false
+# enable_request_compression = true
+# skill_mcp_dependency_install = true
+# prevent_idle_sleep = false
+
+# Enable memories with [features].memories, then tune memory behavior here.
+# [memories]
+# generate_memories = true
+# use_memories = true
+# disable_on_external_context = false # legacy alias: no_memories_if_mcp_or_web_search
+
+[mcp_servers]
+[mcp_servers.next-devtools]
+command = "npx"
+args = ["-y", "next-devtools-mcp@latest"]
+
+[mcp_servers.next-devtools.tools.init]
+approval_mode = "approve"
+
+[mcp_servers.next-devtools.tools.nextjs_docs]
+approval_mode = "approve"
+
+[mcp_servers.next-devtools.tools.nextjs_index]
+approval_mode = "approve"
+
+[mcp_servers.next-devtools.tools.nextjs_call]
+approval_mode = "approve"
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+enabled = false
+
+[model_providers]
+
+# --- Example: OpenAI data residency with explicit base URL or headers ---
+# [model_providers.openaidr]
+# name = "OpenAI Data Residency"
+# base_url = "https://us.api.openai.com/v1"        # example with 'us' domain prefix
+# wire_api = "responses"                           # only supported value
+# # requires_openai_auth = true                    # use only for providers backed by OpenAI auth
+# # request_max_retries = 4                        # default 4; max 100
+# # stream_max_retries = 5                         # default 5; max 100
+# # stream_idle_timeout_ms = 300000                # default 300_000 (5m)
+# # supports_websockets = true                     # optional
+# # experimental_bearer_token = "sk-example"       # optional dev-only direct bearer token
+# # http_headers = { "X-Example" = "value" }
+# # env_http_headers = { "OpenAI-Organization" = "OPENAI_ORGANIZATION", "OpenAI-Project" = "OPENAI_PROJECT" }
+
+# --- Example: Azure/OpenAI-compatible provider ---
+# [model_providers.azure]
+# name = "Azure"
+# base_url = "https://YOUR_PROJECT_NAME.openai.azure.com/openai"
+# wire_api = "responses"
+# query_params = { api-version = "2025-04-01-preview" }
+# env_key = "AZURE_OPENAI_API_KEY"
+# env_key_instructions = "Set AZURE_OPENAI_API_KEY in your environment"
+# # supports_websockets = false
+
+# --- Example: command-backed bearer token auth ---
+# [model_providers.proxy]
+# name = "OpenAI using LLM proxy"
+# base_url = "https://proxy.example.com/v1"
+# wire_api = "responses"
+#
+# [model_providers.proxy.auth]
+# command = "/usr/local/bin/fetch-codex-token"
+# args = ["--audience", "codex"]
+# timeout_ms = 5000
+# refresh_interval_ms = 300000
+
+# --- Example: Local OSS (e.g., Ollama-compatible) ---
+# [model_providers.local_ollama]
+# name = "Ollama"
+# base_url = "http://localhost:11434/v1"
+# wire_api = "responses"
+
+# Optional per-app controls.
+[apps]
+# [_default] applies to all apps unless overridden per app.
+# [apps._default]
+# enabled = true
+# destructive_enabled = true
+# open_world_enabled = true
+#
+# [apps.google_drive]
+# enabled = false
+# destructive_enabled = false            # block destructive-hint tools for this app
+# default_tools_enabled = true
+# default_tools_approval_mode = "prompt" # auto | prompt | approve
+#
+# [apps.google_drive.tools."files/delete"]
+# enabled = false
+# approval_mode = "approve"
+
+# Optional tool suggestion allowlist for connectors or plugins Codex can offer to install.
+# [tool_suggest]
+# discoverables = [
+#   { type = "connector", id = "gmail" },
+#   { type = "plugin", id = "figma@openai-curated" },
+# ]
+
+[profiles]
+
+# [profiles.default]
+# model = "gpt-5.4"
+# model_provider = "openai"
+# approval_policy = "on-request"
+# sandbox_mode = "read-only"
+# service_tier = "flex"
+# oss_provider = "ollama"
+# model_reasoning_effort = "medium"
+# plan_mode_reasoning_effort = "high"
+# model_reasoning_summary = "auto"
+# model_verbosity = "medium"
+# personality = "pragmatic" # or "friendly" or "none"
+# chatgpt_base_url = "https://chatgpt.com/backend-api/"
+# model_catalog_json = "./models.json"
+# model_instructions_file = "/absolute/or/relative/path/to/instructions.txt"
+# experimental_compact_prompt_file = "./compact_prompt.txt"
+# tools_view_image = true
+# features = { unified_exec = false }
+
+[projects]
+# Mark specific worktrees as trusted or untrusted.
+# [projects."/absolute/path/to/project"]
+# trust_level = "trusted"  # or "untrusted"
+
+[tools]
+# view_image = true
+
+#[otel]
+# Include user prompt text in logs. Default: false
+#log_user_prompt = true
+# Environment label applied to telemetry. Default: "dev"
+#environment = "demo"
+# Exporter: none (default) | otlp-http | otlp-grpc
+# Logs
+#exporter = { otlp-http = { endpoint = "http://localhost:4318/v1/logs", protocol = "binary" }}
+
+# Traces
+#trace_exporter = { otlp-http = { endpoint = "http://localhost:4318/v1/traces", protocol = "binary" }}
+
+# Metrics
+#metrics_exporter = { otlp-http = { endpoint = "http://localhost:4318/v1/metrics", protocol = "binary" }}
+# [otel.exporter."otlp-http".headers]
+# "x-otlp-api-key" = "${OTLP_TOKEN}"
+
+# [otel.exporter."otlp-http".tls]
+# ca-certificate = "certs/otel-ca.pem"
+# client-certificate = "/etc/codex/certs/client.pem"
+# client-private-key = "/etc/codex/certs/client-key.pem"
+
+# Example OTLP/gRPC trace exporter configuration
+# [otel.trace_exporter."otlp-grpc"]
+# endpoint = "https://otel.example.com:4317"
+# headers = { "x-otlp-meta" = "abc123" }
+
+[windows]
+# Native Windows sandbox mode (Windows only): unelevated | elevated
+# sandbox = "unelevated"

@@ -1,0 +1,8 @@
+prefix_rule(
+    pattern = ["pnpm", ["run", "outdated", "update", "create"]],
+    decision = "allow",
+    justification = "Allow common pnpm commands",
+    match = [
+      "pnpm run dev"
+    ],
+  )

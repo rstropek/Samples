@@ -1,0 +1,9 @@
+prefix_rule(
+    pattern = ["playwright-cli"],
+    decision = "allow",
+    justification = "Allow Playwright testing in this repo",
+    match = [
+      "playwright-cli open https://localhost:8080/",
+      "playwright-cli type \"Buy groceries\"",
+    ],
+  )
