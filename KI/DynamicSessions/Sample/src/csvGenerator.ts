@@ -5,7 +5,7 @@ const TOTAL_ROWS = 10_000;
 const FIRST_YEAR_ROW_COUNT = 5_000;
 const MIN_REVENUE = 10_000;
 const MAX_REVENUE = 12_000;
-const INPUT_FILE_NAME = "customer-revenue.csv";
+export const INPUT_FILE_NAME = "customer-revenue.csv";
 
 export type CustomerRevenueCsvResult = {
   created: boolean;

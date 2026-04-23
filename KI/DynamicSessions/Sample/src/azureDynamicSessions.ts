@@ -10,7 +10,25 @@ const EXECUTIONS_API_VERSION = "2025-10-02-preview";
 const FILES_API_VERSION = "2025-10-02-preview";
 const SESSION_DELETE_API_VERSION = "2025-10-02-preview";
 
-type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
+export type JsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+export type ExecutionOutput = {
+  executionResult: string;
+  stderr: string;
+  stdout: string;
+};
+
+export type SessionFile = {
+  lastModifiedAt: string | null;
+  name: string;
+  sizeInBytes: number | null;
+};
 
 class HttpError extends Error {
   constructor(
@@ -87,6 +105,24 @@ export async function executePython(
   });
 }
 
+export function extractExecutionOutput(executionResponse: JsonValue): ExecutionOutput {
+  const resultObject = getObjectProperty(executionResponse, "result");
+  if (resultObject) {
+    return {
+      executionResult:
+        getStringCandidate(resultObject, ["executionResult", "result", "output"]) ?? "",
+      stderr: getStringCandidate(resultObject, ["stderr"]) ?? "",
+      stdout: getStringCandidate(resultObject, ["stdout"]) ?? "",
+    };
+  }
+
+  return {
+    executionResult: findFirstStringValue(executionResponse, ["executionResult", "output"]),
+    stderr: findFirstStringValue(executionResponse, ["stderr"]),
+    stdout: findFirstStringValue(executionResponse, ["stdout"]),
+  };
+}
+
 export async function stopDynamicSession(
   poolManagementEndpoint: string,
   sessionId: string,
@@ -138,6 +174,27 @@ export async function uploadFileToSession(
       body: formData,
     },
   );
+}
+
+export async function listFilesInSession(
+  poolManagementEndpoint: string,
+  sessionId: string,
+  accessToken: string,
+): Promise<SessionFile[]> {
+  const response = await sendJsonRequest(
+    buildUrl(poolManagementEndpoint, "/files", {
+      "api-version": FILES_API_VERSION,
+      identifier: sessionId,
+    }),
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  return extractSessionFiles(response);
 }
 
 export async function downloadFileFromSession(
@@ -248,4 +305,123 @@ function getStringProperty(
 
   const propertyValue = value[propertyName];
   return typeof propertyValue === "string" ? propertyValue : null;
+}
+
+function getNumberProperty(
+  value: { [key: string]: JsonValue } | null,
+  propertyName: string,
+): number | null {
+  if (!value) {
+    return null;
+  }
+
+  const propertyValue = value[propertyName];
+  return typeof propertyValue === "number" ? propertyValue : null;
+}
+
+function findFirstStringValue(value: JsonValue, propertyNames: string[]): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const nestedValue = findFirstStringValue(item, propertyNames);
+      if (nestedValue) {
+        return nestedValue;
+      }
+    }
+
+    return "";
+  }
+
+  if (typeof value !== "object" || value === null) {
+    return "";
+  }
+
+  for (const propertyName of propertyNames) {
+    const propertyValue = value[propertyName];
+    if (typeof propertyValue === "string") {
+      return propertyValue;
+    }
+  }
+
+  for (const nestedValue of Object.values(value)) {
+    const nestedString = findFirstStringValue(nestedValue, propertyNames);
+    if (nestedString) {
+      return nestedString;
+    }
+  }
+
+  return "";
+}
+
+function extractSessionFiles(value: JsonValue): SessionFile[] {
+  const extractedFiles = new Map<string, SessionFile>();
+  collectSessionFiles(value, extractedFiles);
+  return [...extractedFiles.values()].sort((left, right) => left.name.localeCompare(right.name));
+}
+
+function collectSessionFiles(value: JsonValue, extractedFiles: Map<string, SessionFile>): void {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectSessionFiles(item, extractedFiles);
+    }
+    return;
+  }
+
+  if (typeof value !== "object" || value === null) {
+    return;
+  }
+
+  const fileName = getFileNameCandidate(value);
+  if (fileName) {
+    extractedFiles.set(fileName, {
+      lastModifiedAt: getStringCandidate(value, [
+        "lastModifiedAt",
+        "lastModifiedTime",
+        "lastModifiedTimeUtc",
+        "modifiedTime",
+        "updatedAt",
+      ]),
+      name: fileName,
+      sizeInBytes: getNumberCandidate(value, ["sizeInBytes", "size", "length"]),
+    });
+  }
+
+  for (const nestedValue of Object.values(value)) {
+    collectSessionFiles(nestedValue, extractedFiles);
+  }
+}
+
+function getFileNameCandidate(value: { [key: string]: JsonValue }): string | null {
+  return getStringCandidate(value, ["name", "fileName", "filename"]);
+}
+
+function getStringCandidate(
+  value: { [key: string]: JsonValue },
+  propertyNames: string[],
+): string | null {
+  for (const propertyName of propertyNames) {
+    const propertyValue = getStringProperty(value, propertyName);
+    if (propertyValue) {
+      return propertyValue;
+    }
+  }
+
+  return null;
+}
+
+function getNumberCandidate(
+  value: { [key: string]: JsonValue },
+  propertyNames: string[],
+): number | null {
+  for (const propertyName of propertyNames) {
+    const propertyValue = getNumberProperty(value, propertyName);
+    if (propertyValue !== null) {
+      return propertyValue;
+    }
+  }
+
+  return null;
 }
