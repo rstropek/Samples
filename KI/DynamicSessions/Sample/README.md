@@ -21,12 +21,14 @@ The sample uses a code-interpreter session pool, uploads a CSV file into the ses
 
 ## Project Structure
 
-- [src/app.ts](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/src/app.ts:1): CLI entry point and mode switch
-- [src/simpleMode.ts](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/src/simpleMode.ts:1): direct workflow without an agent
-- [src/agentMode.ts](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/src/agentMode.ts:1): OpenAI Agents SDK workflow with REPL and custom tool
-- [src/azureDynamicSessions.ts](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/src/azureDynamicSessions.ts:1): Azure authentication and Dynamic Sessions REST helpers
-- [src/csvGenerator.ts](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/src/csvGenerator.ts:1): local CSV generation/reuse logic
-- [data](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/data): generated input/output files
+- [src/app.ts](./src/app.ts): CLI entry point and mode switch
+- [src/simpleMode.ts](./src/simpleMode.ts): direct workflow without an agent
+- [src/agentMode.ts](./src/agentMode.ts): OpenAI Agents SDK workflow with REPL and custom tool
+- [src/azureDynamicSessions.ts](./src/azureDynamicSessions.ts): Azure authentication and Dynamic Sessions REST helpers
+- [src/csvGenerator.ts](./src/csvGenerator.ts): local CSV generation/reuse logic
+- [src/runtimeConfig.ts](./src/runtimeConfig.ts): environment loading and session-id resolution
+- [system-prompt.md](./system-prompt.md): system prompt template for `agent` mode (supports `{{VAR}}` placeholders)
+- [data](./data): generated input/output files
 
 ## Data Flow
 
@@ -36,7 +38,7 @@ The sample uses a code-interpreter session pool, uploads a CSV file into the ses
 2. Acquire an Entra token for `https://dynamicsessions.io/.default`.
 3. Start a dynamic session implicitly by issuing the first execution request.
 4. Upload the CSV to `/mnt/data/customer-revenue.csv` inside the session.
-5. Run Python with `pandas` to compute a yearly revenue summary.
+5. Run Python with `pandas` to compute the average revenue per customer grouped by year.
 6. Download `customer-revenue-summary.csv` back into `./data`.
 7. Delete the session.
 
@@ -71,11 +73,15 @@ If the file already exists, it is reused.
 
 ## Environment
 
-The sample expects these values in [.env.example](/Users/rstropek/github/Samples/KI/DynamicSessions/Sample/.env.example:1):
+The sample expects these values (see [.env.example](./.env.example)):
 
 - `POOL_MANAGEMENT_ENDPOINT`: Azure Dynamic Sessions pool management endpoint
 - `OPENAI_API_KEY`: required for `agent` mode
+- `AZURE_TENANT_ID`: optional Entra tenant ID for `DefaultAzureCredential`
 - `DYNAMIC_SESSION_ID`: optional fixed session identifier
+- `EXECUTIONS_API_VERSION`: optional override for the `/executions` API version (default `2025-10-02-preview`)
+- `FILES_API_VERSION`: optional override for the files API version (default `2025-10-02-preview`)
+- `SESSION_DELETE_API_VERSION`: optional override for the `DELETE /session` API version (default `2025-10-02-preview`)
 
 The project uses Node's built-in `.env` loading through:
 
@@ -143,6 +149,17 @@ DELETE /session?api-version=2025-10-02-preview&identifier=<SESSION_ID>
 - a custom function tool that runs Python inside Azure Dynamic Sessions instead of OpenAI-hosted Code Interpreter
 
 The important architectural point is that the model does not execute code locally and does not execute code on OpenAI infrastructure for this sample. The model only decides what Python to run. The actual execution happens in Azure Dynamic Sessions through the custom tool.
+
+## System Prompt
+
+The agent's system prompt lives in [system-prompt.md](./system-prompt.md) and is loaded at startup. The file supports `{{VAR}}` placeholders which are substituted from values supplied in [src/agentMode.ts](./src/agentMode.ts). The current template uses `{{INPUT_FILE_NAME}}` so the prompt stays in sync with the filename defined by [src/csvGenerator.ts](./src/csvGenerator.ts).
+
+The prompt tells the agent that:
+
+- the code-interpreter kernel is persistent across tool calls within the conversation, so state (imports, DataFrames) survives between executions
+- the tool only returns `stdout` and `stderr`, so values must be `print`ed
+- any file written under `/mnt/data` is automatically synced to the local `./data` folder after each turn
+- `pandas` is the preferred tool for tabular work
 
 ## Presentation-Friendly Logging
 

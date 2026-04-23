@@ -4,11 +4,11 @@ import { DefaultAzureCredential } from "@azure/identity";
 import type { RequestInit } from "undici";
 import { FormData, fetch } from "undici";
 
-const TENANT_ID = "022e4faf-c745-475a-be06-06b1e1c9e39d";
 const TOKEN_SCOPE = "https://dynamicsessions.io/.default";
-const EXECUTIONS_API_VERSION = "2025-10-02-preview";
-const FILES_API_VERSION = "2025-10-02-preview";
-const SESSION_DELETE_API_VERSION = "2025-10-02-preview";
+const DEFAULT_API_VERSION = "2025-10-02-preview";
+const EXECUTIONS_API_VERSION = process.env.EXECUTIONS_API_VERSION ?? DEFAULT_API_VERSION;
+const FILES_API_VERSION = process.env.FILES_API_VERSION ?? DEFAULT_API_VERSION;
+const SESSION_DELETE_API_VERSION = process.env.SESSION_DELETE_API_VERSION ?? DEFAULT_API_VERSION;
 
 export type JsonValue =
   | null
@@ -41,9 +41,9 @@ class HttpError extends Error {
   }
 }
 
-export async function getAccessToken(): Promise<string> {
-  const credential = new DefaultAzureCredential({ tenantId: TENANT_ID });
-  const token = await credential.getToken(TOKEN_SCOPE, { tenantId: TENANT_ID });
+export async function getAccessToken(tenantId?: string): Promise<string> {
+  const credential = new DefaultAzureCredential(tenantId ? { tenantId } : undefined);
+  const token = await credential.getToken(TOKEN_SCOPE, tenantId ? { tenantId } : undefined);
 
   if (!token) {
     throw new Error("Failed to acquire an Azure access token.");

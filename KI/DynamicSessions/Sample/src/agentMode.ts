@@ -1,4 +1,4 @@
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
@@ -35,13 +35,13 @@ export async function runAgentMode(): Promise<void> {
   requireEnv("OPENAI_API_KEY");
   setTracingDisabled(true);
 
-  const { dataDirectory, poolManagementEndpoint, sessionId } = getRuntimeConfig("agent");
+  const { dataDirectory, poolManagementEndpoint, sessionId, tenantId } = getRuntimeConfig("agent");
   await mkdir(dataDirectory, { recursive: true });
 
   const csvResult = await ensureCustomerRevenueCsv(dataDirectory);
   const uploadedCsvFileName = basename(csvResult.filePath);
   const downloadedFileNames = new Set([uploadedCsvFileName]);
-  const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken(tenantId);
 
   logSection("Agent Mode");
   logInfo(`Using session ID: ${sessionId}`);
@@ -63,18 +63,13 @@ export async function runAgentMode(): Promise<void> {
     await uploadFileToSession(poolManagementEndpoint, sessionId, accessToken, csvResult.filePath);
     logSuccess(`Uploaded ${uploadedCsvFileName} to /mnt/data/${uploadedCsvFileName}.`);
 
+    const systemPrompt = await loadSystemPrompt({
+      INPUT_FILE_NAME: uploadedCsvFileName,
+    });
+
     const revenueAgent = new Agent({
       name: "Revenue Analyst",
-      instructions: [
-        "You are a data analyst working inside an Azure Container Apps dynamic session.",
-        "The uploaded CSV file is available at /mnt/data/customer-revenue.csv.",
-        "Use the execute_python_in_dynamic_session tool whenever you need to inspect or process data.",
-        "For any question that depends on the CSV contents, use the tool instead of guessing.",
-        "The tool only returns stdout and stderr, so your script must print any values you need.",
-        "If you generate files such as CSV outputs, charts, or images, you MUST write them into /mnt/data.",
-        "Use pandas for tabular work unless there is a strong reason not to.",
-        "Keep responses concise and answer based on actual tool results.",
-      ].join(" "),
+      instructions: systemPrompt,
       model: "gpt-5.4",
       tools: [
         tool({
@@ -216,6 +211,14 @@ async function downloadNewSessionFiles(
   if (downloadedFileCount === 0) {
     logInfo("No new generated files to download.");
   }
+}
+
+async function loadSystemPrompt(variables: Record<string, string>): Promise<string> {
+  const promptPath = join(process.cwd(), "system-prompt.md");
+  const template = await readFile(promptPath, "utf-8");
+  return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, key: string) => {
+    return key in variables ? variables[key] : match;
+  });
 }
 
 function formatAgentResponse(finalOutput: unknown): string {

@@ -15,7 +15,7 @@ import { getRuntimeConfig } from "./runtimeConfig.js";
 const SUMMARY_FILE_NAME = "customer-revenue-summary.csv";
 
 export async function runSimpleMode(): Promise<void> {
-  const { dataDirectory, poolManagementEndpoint, sessionId } = getRuntimeConfig("simple");
+  const { dataDirectory, poolManagementEndpoint, sessionId, tenantId } = getRuntimeConfig("simple");
   const summaryFilePath = join(dataDirectory, SUMMARY_FILE_NAME);
 
   console.log(`Using session ID: ${sessionId}`);
@@ -28,7 +28,7 @@ export async function runSimpleMode(): Promise<void> {
       : `Reusing input CSV at ${csvResult.filePath}.`,
   );
 
-  const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken(tenantId);
 
   console.log("Starting dynamic session...");
   await startDynamicSession(poolManagementEndpoint, sessionId, accessToken);

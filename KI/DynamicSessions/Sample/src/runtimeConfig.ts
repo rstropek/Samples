@@ -7,6 +7,7 @@ export type RuntimeConfig = {
   dataDirectory: string;
   poolManagementEndpoint: string;
   sessionId: string;
+  tenantId: string | undefined;
 };
 
 export function getRuntimeConfig(mode: string): RuntimeConfig {
@@ -14,6 +15,7 @@ export function getRuntimeConfig(mode: string): RuntimeConfig {
     dataDirectory: join(process.cwd(), DATA_DIRECTORY_NAME),
     poolManagementEndpoint: requireEnv("POOL_MANAGEMENT_ENDPOINT"),
     sessionId: process.env.DYNAMIC_SESSION_ID ?? `${mode}-${randomUUID()}`,
+    tenantId: process.env.AZURE_TENANT_ID,
   };
 }
 
