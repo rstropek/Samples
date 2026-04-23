@@ -1,10 +1,13 @@
+import { readFile, writeFile } from "node:fs/promises";
+import { basename } from "node:path";
 import { DefaultAzureCredential } from "@azure/identity";
 import type { RequestInit } from "undici";
-import { fetch } from "undici";
+import { FormData, fetch } from "undici";
 
 const TENANT_ID = "022e4faf-c745-475a-be06-06b1e1c9e39d";
 const TOKEN_SCOPE = "https://dynamicsessions.io/.default";
 const EXECUTIONS_API_VERSION = "2025-10-02-preview";
+const FILES_API_VERSION = "2025-10-02-preview";
 const SESSION_DELETE_API_VERSION = "2025-10-02-preview";
 
 type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
@@ -110,6 +113,62 @@ export async function stopDynamicSession(
   }
 
   console.log(`Stopped session ${sessionId}.`);
+}
+
+export async function uploadFileToSession(
+  poolManagementEndpoint: string,
+  sessionId: string,
+  accessToken: string,
+  localFilePath: string,
+): Promise<JsonValue> {
+  const fileContents = await readFile(localFilePath);
+  const formData = new FormData();
+  formData.append("file", new Blob([fileContents], { type: "text/csv" }), basename(localFilePath));
+
+  return sendJsonRequest(
+    buildUrl(poolManagementEndpoint, "/files", {
+      "api-version": FILES_API_VERSION,
+      identifier: sessionId,
+    }),
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    },
+  );
+}
+
+export async function downloadFileFromSession(
+  poolManagementEndpoint: string,
+  sessionId: string,
+  accessToken: string,
+  remoteFileName: string,
+  localFilePath: string,
+): Promise<void> {
+  const response = await fetch(
+    buildUrl(poolManagementEndpoint, `/files/${encodeURIComponent(remoteFileName)}/content`, {
+      "api-version": FILES_API_VERSION,
+      identifier: sessionId,
+    }),
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    throw new Error(
+      `Failed to download ${remoteFileName} from session ${sessionId}. Status ${response.status} ${response.statusText}: ${responseText}`,
+    );
+  }
+
+  const fileContents = Buffer.from(await response.arrayBuffer());
+  await writeFile(localFilePath, fileContents);
 }
 
 function buildUrl(

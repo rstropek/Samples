@@ -13,13 +13,15 @@
 
 * Whenever code changes are made, run the relevant QA commands before finishing.
 * For this project, run `npm run check` and `npm run build` after code changes unless the user explicitly asks not to.
+* If code changes affect Azure API calls, file upload/download, or dynamic-session execution flow, run `npm start` in addition to `npm run check` and `npm run build` unless the user explicitly asks not to.
 * If a QA step cannot be run, clearly state that in the final response.
 
 ## Documentation and Research Guidelines
 
-* If you need information about Azure-related topics, use the `microsoft-docs` and `microsoft-code-reference` skills. Do NOT use the Microsoft Lean MCP server, use the Microsoft Learn CLI instead.
-* Before researching on Azure Container Apps Dynamic Sessions, read the `dynamic-sessions` skill as it summarizes key concepts and code samples on that topic.
-* Before researching on how to acquire Azure access tokens (during development or in code), read the `azure-identity-defaultazurecredential` skill as it provides detailed guidance and examples.
+* For Azure Container Apps Dynamic Sessions, use the `dynamic-sessions` skill as the primary source of truth.
+* Do not use `microsoft-docs`, `microsoft-code-reference`, Microsoft Learn CLI, or web search for Dynamic Sessions unless the `dynamic-sessions` skill does not cover the required detail.
+* For Azure access token acquisition, use the `azure-identity-defaultazurecredential` skill as the primary source of truth.
+* For other Azure topics, use the `microsoft-docs` and `microsoft-code-reference` skills. Do NOT use the Microsoft Lean MCP server, use the Microsoft Learn CLI instead.
 * If you need information about OpenAI Agent SDK, read the docs at https://openai.github.io/openai-agents-js/llms.txt (contains links to further topics). Prefer this official documentation over Context7.
 * For all other topics, use the Context7 CLI based on the `find-docs` skill.
 * Only if you cannot find the necessary information using the above skills, use web search.
