@@ -1,0 +1,726 @@
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/400-italic.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+
+:root {
+  /* paper / editorial light theme, projector-friendly */
+  --bg:        #f4efe4;     /* warm cream */
+  --bg-soft:   #ece5d4;     /* card surface */
+  --ink:       #1a1714;     /* near-black with warm tint */
+  --ink-dim:   #584d3e;
+  --ink-mute:  #a59b88;
+  --line:      #c8bfae;
+  --line-soft: #ddd3bf;
+  --green:     #2f6a36;     /* forest */
+  --green-dim: #6a9b70;
+  --red:       #b23a48;     /* burgundy */
+  --red-dim:   #d39aa2;
+  --cyan:      #1e6f86;
+  --warm:      #b8873e;     /* antique gold, the editorial accent */
+  --warm-soft: #e2c387;
+
+  --font-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-out:   cubic-bezier(.2, .7, .2, 1);
+  --ease-in:    cubic-bezier(.7, .0, .8, .3);
+  --dur-slow:   900ms;
+  --dur-med:    600ms;
+  --dur-fast:   320ms;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01", "ss02", "zero", "cv03";
+  overflow: hidden;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 1200px 700px at 50% 40%, rgba(184, 135, 62, 0.06), transparent 70%),
+    radial-gradient(ellipse 800px 500px at 85% 80%, rgba(47, 106, 54, 0.05), transparent 70%),
+    var(--bg);
+}
+
+/* subtle paper grain */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  opacity: .15;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(58,50,38,.05) 0 1px, transparent 1px 3px);
+}
+
+.stage {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+}
+
+/* ============ NO-ANIM GUARD (prevents load-time flicker) ============ */
+.stage.no-anim,
+.stage.no-anim *,
+.stage.no-anim *::before,
+.stage.no-anim *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ============ CHROME ============ */
+
+.chrome {
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.chrome-top {
+  border-bottom: 1px solid var(--line);
+}
+
+.chrome-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 260px;
+}
+.chrome-id-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--warm);
+  box-shadow: 0 0 0 4px rgba(184,135,62,.15);
+}
+
+.chrome-title {
+  text-align: center;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 22px;
+}
+.title-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  display: block;
+  margin-bottom: 2px;
+}
+.kicker-s2 { display: none; }
+.stage.scenario-2 .kicker-s1 { display: none; }
+.stage.scenario-2 .kicker-s2 { display: inline; }
+.title-main {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 34px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+.title-main em {
+  font-style: italic;
+  color: var(--warm);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+
+.chrome-approach {
+  display: inline-flex;
+  gap: 14px;
+  min-width: 260px;
+  justify-content: flex-end;
+}
+.approach {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  font-size: 12px;
+  letter-spacing: .18em;
+  color: var(--ink-mute);
+  transition: color .4s var(--ease-out), border-color .4s, background .4s;
+}
+.approach-num { color: var(--ink-mute); font-weight: 600; }
+.stage.approach-1 .approach-1 { color: var(--red); border-color: var(--red); background: rgba(178,58,72,.08); }
+.stage.approach-1 .approach-1 .approach-num { color: var(--red); }
+.stage.approach-2 .approach-2 { color: var(--green); border-color: var(--green); background: rgba(47,106,54,.08); }
+.stage.approach-2 .approach-2 .approach-num { color: var(--green); }
+
+/* ============ CANVAS ============ */
+
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.grid-dot { fill: rgba(26, 23, 20, 0.07); }
+
+/* ---------- database ---------- */
+
+.db { color: var(--ink); }
+.db-top       { fill: var(--bg-soft); stroke: var(--ink); stroke-width: 2; }
+.db-top-ring  { fill: none; stroke: var(--ink); stroke-width: 2; }
+.db-side      { fill: var(--bg-soft); stroke: var(--ink); stroke-width: 2; }
+.db-ring      { fill: none; stroke: var(--ink-dim); stroke-width: 1.25; stroke-dasharray: 2 4; opacity: .85; }
+.db-label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  fill: var(--ink-dim);
+}
+
+/* ---------- csv document ---------- */
+
+.doc-body  { fill: var(--bg); stroke: var(--ink); stroke-width: 2.5; }
+.doc-fold  { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+.doc-label { font-family: var(--font-mono); font-size: 14px; fill: var(--ink); letter-spacing: .04em; font-weight: 600; }
+.doc-size  { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-dim); letter-spacing: .1em; }
+.doc-rows rect { fill: var(--ink-dim); opacity: .85; }
+.doc-pii rect  { fill: rgba(178,58,72,.1); stroke: var(--red); stroke-width: 1.5; }
+.doc-pii text  { font-family: var(--font-mono); font-size: 11px; fill: var(--red); letter-spacing: .22em; font-weight: 700; }
+.doc-code rect { fill: var(--green); opacity: .85; }
+
+/* csv placement: starts inside db */
+.csv-layer {
+  transform: translate(220px, 400px);
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+.csv { transition: transform var(--dur-slow) var(--ease-out); transform-origin: center; }
+
+/* ---------- prompt ---------- */
+
+.prompt-layer {
+  transform: translate(400px, 370px);
+  opacity: 0;
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+.prompt-bg {
+  fill: var(--bg-soft);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.prompt-text {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "SOFT" 20;
+  font-style: italic;
+  font-size: 26px;
+  fill: var(--ink);
+  opacity: 0;
+  transition: opacity .35s var(--ease-out);
+}
+.prompt-text-a { opacity: 1; }
+.hl-green {
+  fill: var(--green);
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* ---------- metadata card ---------- */
+
+.meta-layer {
+  transform: translate(380px, 410px) scale(.8);
+  opacity: 0;
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+.meta-bg {
+  fill: var(--bg-soft);
+  stroke: var(--ink-dim);
+  stroke-width: 1.25;
+  stroke-dasharray: 3 3;
+}
+.meta-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  fill: var(--cyan);
+  letter-spacing: .14em;
+  font-weight: 600;
+}
+.meta-sep { stroke: var(--line); stroke-width: 1; }
+.meta-rows text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink-dim);
+  letter-spacing: .02em;
+}
+.meta-rows .t { fill: var(--cyan); font-weight: 600; }
+
+/* ---------- cloud (LLM) ---------- */
+
+.cloud-shape {
+  fill: var(--bg-soft);
+  stroke: var(--ink);
+  stroke-width: 2.25;
+  transition: fill var(--dur-fast), stroke var(--dur-fast);
+}
+.cloud-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 32px;
+  fill: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+.cloud-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink-mute);
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+/* error tags */
+.errors { pointer-events: none; }
+.err {
+  opacity: 0;
+  transform: translate(0, -10px);
+  transition: opacity var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out);
+}
+.err rect { fill: rgba(178,58,72,.12); stroke: var(--red); stroke-width: 1.5; }
+.err text { font-family: var(--font-mono); font-size: 12px; fill: var(--red); letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
+
+/* ---------- sandbox ---------- */
+
+.sandbox {
+  opacity: 0;
+  transform: translate(800px, 430px) scale(.94);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+.sandbox-bg {
+  fill: rgba(47, 106, 54, 0.05);
+  stroke: var(--green);
+  stroke-width: 1.75;
+  stroke-dasharray: 8 6;
+}
+.sandbox-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  fill: var(--green);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.sandbox-dots circle { fill: var(--green); opacity: .75; }
+
+/* result chart inside sandbox */
+.result { opacity: 0; transition: opacity var(--dur-slow) var(--ease-out) .4s; }
+.result-bg { fill: var(--bg); stroke: var(--ink-dim); stroke-width: 1.25; }
+.result-title { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-dim); letter-spacing: .14em; font-weight: 600; }
+.result-axis { stroke: var(--ink-dim); stroke-width: 1; }
+.bar {
+  fill: var(--warm);
+  transform-origin: bottom;
+  transform-box: fill-box;
+  transform: scaleY(0);
+  transition: transform .6s var(--ease-out);
+}
+
+/* ---------- script glyph ---------- */
+.script-layer {
+  transform: translate(1380px, 330px) scale(.6);
+  opacity: 0;
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+
+/* ---------- final result-out ---------- */
+.final-layer {
+  transform: translate(800px, 430px) scale(.7);
+  opacity: 0;
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+.final-bg {
+  fill: var(--warm-soft);
+  stroke: var(--warm);
+  stroke-width: 2;
+  filter: drop-shadow(0 8px 28px rgba(184, 135, 62, 0.35));
+}
+.final-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 32px;
+  fill: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+}
+.final-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink-dim);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.final-mini rect { fill: var(--ink); opacity: .85; }
+
+/* ---------- arcs ---------- */
+.arc {
+  fill: none;
+  stroke: var(--ink-dim);
+  stroke-width: 1.75;
+  stroke-dasharray: 5 7;
+  stroke-dashoffset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-med);
+}
+
+/* ================================================================
+   STATE TRANSITIONS
+   ================================================================ */
+
+/* approach 1 label shown via .approach-1 class on stage */
+
+/* s-prompt: prompt bubble appears near db */
+.stage.s-prompt .prompt-layer {
+  opacity: 1;
+  transform: translate(560px, 280px);
+}
+
+/* s-csv-docked: csv leaves db, attaches to left of prompt (as attachment chip) */
+.stage.s-csv-docked .csv-layer {
+  transform: translate(350px, 280px) scale(.42);
+}
+
+/* s-flying-bad: prompt + csv fly to cloud */
+.stage.s-flying-bad .prompt-layer {
+  transform: translate(1100px, 220px) scale(.85);
+}
+.stage.s-flying-bad .csv-layer {
+  transform: translate(950px, 220px) scale(.32);
+}
+.stage.s-flying-bad .arc-prompt-to-cloud {
+  opacity: .7;
+  animation: dashflow 2s linear infinite;
+  stroke: var(--red);
+}
+@keyframes dashflow {
+  to { stroke-dashoffset: -48; }
+}
+
+/* s-error: cloud red, errors appear, shake */
+.stage.s-error .cloud-shape {
+  fill: rgba(178,58,72,.1);
+  stroke: var(--red);
+}
+.stage.s-error .cloud-label,
+.stage.s-error .cloud-sub {
+  fill: var(--red);
+}
+.stage.s-error .cloud {
+  animation: shake .5s ease-in-out 2;
+}
+@keyframes shake {
+  0%,100% { transform: translate(1380px, 330px); }
+  25% { transform: translate(1388px, 328px); }
+  50% { transform: translate(1372px, 332px); }
+  75% { transform: translate(1384px, 326px); }
+}
+.stage.s-error .err-1 { opacity: 1; transform: translate(-90px, 90px); transition-delay: .2s; }
+.stage.s-error .err-2 { opacity: 1; transform: translate(90px, 140px); transition-delay: .45s; }
+.stage.s-error .prompt-layer { opacity: .4; }
+.stage.s-error .csv-layer    { opacity: .4; }
+
+/* s-metadata: metadata extracted from csv; csv stays in db */
+.stage.s-metadata .meta-layer {
+  opacity: 1;
+  transform: translate(380px, 560px) scale(1);
+}
+
+/* s-metadata-docked: metadata attaches to left of prompt */
+.stage.s-metadata-docked .meta-layer {
+  transform: translate(340px, 280px) scale(.48);
+}
+
+/* s-prompt-scripted: swap prompt text */
+.stage.s-prompt-scripted .prompt-text-a { opacity: 0; }
+.stage.s-prompt-scripted .prompt-text-b { opacity: 1; }
+
+/* s-flying-good: prompt + metadata fly to cloud (good) */
+.stage.s-flying-good .prompt-layer {
+  transform: translate(1100px, 220px) scale(.85);
+}
+.stage.s-flying-good .meta-layer {
+  transform: translate(940px, 220px) scale(.42);
+  opacity: .9;
+}
+.stage.s-flying-good .arc-prompt-to-cloud {
+  opacity: .7;
+  animation: dashflow 2s linear infinite;
+  stroke: var(--green);
+}
+.stage.s-cloud-ok .cloud-shape {
+  fill: rgba(47,106,54,.08);
+  stroke: var(--green);
+}
+.stage.s-cloud-ok .cloud-label { fill: var(--green); }
+
+/* s-script-emit: script glyph emitted from cloud */
+.stage.s-script-emit .script-layer {
+  opacity: 1;
+  transform: translate(1240px, 380px) scale(.75);
+}
+
+/* s-sandbox: sandbox materializes */
+.stage.s-sandbox .sandbox {
+  opacity: 1;
+  transform: translate(800px, 430px) scale(1);
+}
+.stage.s-ingest .arc-cloud-to-sandbox,
+.stage.s-ingest-gen .arc-cloud-to-sandbox {
+  opacity: .6;
+  animation: dashflow 2s linear infinite;
+}
+.stage.s-ingest .arc-db-to-sandbox {
+  opacity: .6;
+  animation: dashflow 2s linear infinite;
+}
+
+/* s-ingest: csv + script move INTO sandbox */
+.stage.s-ingest .csv-layer {
+  transform: translate(720px, 420px) scale(.42);
+}
+.stage.s-ingest .script-layer {
+  transform: translate(880px, 420px) scale(.7);
+}
+
+/* s-compute: result chart renders inside sandbox */
+.stage.s-compute .result { opacity: 1; }
+.stage.s-compute .bar    { transform: scaleY(1); }
+.stage.s-compute .bar:nth-child(1) { transition-delay: .1s; }
+.stage.s-compute .bar:nth-child(2) { transition-delay: .2s; }
+.stage.s-compute .bar:nth-child(3) { transition-delay: .3s; }
+.stage.s-compute .bar:nth-child(4) { transition-delay: .4s; }
+.stage.s-compute .bar:nth-child(5) { transition-delay: .5s; }
+.stage.s-compute .bar:nth-child(6) { transition-delay: .6s; }
+.stage.s-compute .bar:nth-child(7) { transition-delay: .7s; }
+
+/* s-out: final result flies out toward viewer */
+.stage.s-out .final-layer {
+  opacity: 1;
+  transform: translate(800px, 480px) scale(1);
+}
+.stage.s-out .sandbox {
+  opacity: .3;
+  transform: translate(800px, 430px) scale(.92);
+}
+.stage.s-out .result { opacity: .3; }
+.stage.s-out .csv-layer { opacity: .2; }
+.stage.s-out .script-layer { opacity: .2; }
+.stage.s-out .prompt-layer { opacity: 0; }
+.stage.s-out .meta-layer { opacity: 0; }
+.stage.s-out .arc { opacity: 0; animation: none; }
+
+/* ============ CHROME BOTTOM ============ */
+
+.chrome-bottom {
+  border-top: 1px solid var(--line);
+  gap: 32px;
+}
+
+.hints {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+  color: var(--ink-mute);
+}
+.key {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0;
+  text-transform: none;
+  background: var(--bg-soft);
+}
+.key-label { font-size: 11px; margin-right: 14px; letter-spacing: .22em; }
+
+.track {
+  flex: 1;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 6px;
+  height: 3px;
+}
+.track-cell {
+  background: var(--line);
+  height: 2px;
+  transition: background .3s var(--ease-out), height .3s;
+}
+.track-cell.on { background: var(--ink); height: 4px; align-self: center; }
+.track-cell.current {
+  background: var(--warm);
+  height: 7px;
+  align-self: center;
+  box-shadow: 0 0 0 3px rgba(184,135,62,.18);
+}
+
+.counter {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 26px;
+  font-variation-settings: "opsz" 144;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 80px;
+  justify-content: flex-end;
+}
+.counter-sep { color: var(--ink-mute); }
+#counter-total { color: var(--ink-mute); font-size: 16px; }
+
+/* ============ CAPTION ============ */
+
+.caption {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 100px;
+  max-width: 1100px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-size: 34px;
+  line-height: 1.3;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .5s var(--ease-out), transform .5s var(--ease-out);
+  pointer-events: none;
+}
+.caption.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.caption .mark-red   { color: var(--red);   font-style: normal; font-family: var(--font-mono); font-size: 20px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
+.caption .mark-green { color: var(--green); font-style: normal; font-family: var(--font-mono); font-size: 20px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
+.caption .mark-ink   { color: var(--ink); }
+
+/* ================================================================
+   SCENARIO 2
+   ================================================================ */
+
+/* hide the original scenario-1 csv entirely in scenario 2 */
+.stage.scenario-2 .csv-layer { opacity: 0; }
+/* scenario-2 hides scenario-1 final card too */
+.stage.scenario-2 .final-layer { opacity: 0 !important; transform: translate(800px, 430px) scale(.7); }
+
+/* prompt text variants c & d */
+.prompt-text-c, .prompt-text-d { opacity: 0; }
+.stage.s-gen-prompt    .prompt-text-a { opacity: 0; }
+.stage.s-gen-prompt    .prompt-text-c { opacity: 1; }
+.stage.s-gen-scripted  .prompt-text-a { opacity: 0; }
+.stage.s-gen-scripted  .prompt-text-d { opacity: 1; }
+
+/* generated CSV — starts hidden inside the cloud, grows out */
+.gen-csv-layer {
+  transform: translate(1380px, 330px) scale(0);
+  opacity: 0;
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+
+/* s-prompt-flying: prompt travels to cloud alone (no attachment) */
+.stage.s-prompt-flying .prompt-layer {
+  transform: translate(1100px, 220px) scale(.85);
+}
+.stage.s-prompt-flying .arc-prompt-to-cloud {
+  opacity: .7;
+  animation: dashflow 2s linear infinite;
+}
+.stage.s-prompt-flying.approach-1 .arc-prompt-to-cloud { stroke: var(--red); }
+.stage.s-prompt-flying.approach-2 .arc-prompt-to-cloud { stroke: var(--green); }
+
+/* s-llm-emit-csv: the LLM produces a CSV at its edge */
+.stage.s-llm-emit-csv .gen-csv-layer {
+  opacity: 1;
+  transform: translate(1230px, 500px) scale(.85);
+}
+
+/* s-llm-csv-bad: the emitted CSV is oversized + red, errors appear */
+.stage.s-llm-csv-bad .gen-csv-layer {
+  opacity: 1;
+  transform: translate(1070px, 500px) scale(1.35);
+}
+.stage.s-llm-csv-bad .gen-csv .doc-body,
+.stage.s-llm-csv-bad .gen-csv .doc-fold {
+  stroke: var(--red);
+}
+.stage.s-llm-csv-bad .gen-csv .doc-label { fill: var(--red); }
+.stage.s-llm-csv-bad .cloud-shape {
+  fill: rgba(178,58,72,.1);
+  stroke: var(--red);
+}
+.stage.s-llm-csv-bad .cloud-label,
+.stage.s-llm-csv-bad .cloud-sub { fill: var(--red); }
+.stage.s-llm-csv-bad .cloud { animation: shake .5s ease-in-out 2; }
+/* reuse err-1 "Context window exceeded" */
+.stage.s-llm-csv-bad .err-1 {
+  opacity: 1;
+  transform: translate(-310px, 370px) scale(1.35);
+  transition-delay: .2s;
+}
+.stage.s-llm-csv-bad .prompt-layer { opacity: .35; }
+
+/* scenario-2 ingest: only the script goes into sandbox (CSV is generated there) */
+.stage.s-ingest-gen .script-layer {
+  transform: translate(720px, 420px) scale(.7);
+}
+/* in scenario 2 the original csv-layer is hidden; make sure s-ingest doesn't leak */
+
+/* s-gen-csv-sandbox: a freshly generated CSV appears inside the sandbox */
+.stage.s-gen-csv-sandbox .gen-csv-layer {
+  opacity: 1;
+  transform: translate(720px, 420px) scale(.7);
+}
+
+/* s-gen-csv-to-db: generated CSV flies back into the warehouse */
+.stage.s-gen-csv-to-db .gen-csv-layer {
+  opacity: 1;
+  transform: translate(220px, 400px) scale(1);
+}
+.stage.s-gen-csv-to-db .arc-db-to-sandbox {
+  opacity: .55;
+  animation: dashflow 2s linear infinite;
+  stroke: var(--green);
+}
+
+/* s-out-gen: success card */
+.final-gen-layer {
+  transform: translate(800px, 220px) scale(.7);
+  opacity: 0;
+  transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-med);
+}
+.stage.s-out-gen .final-gen-layer {
+  transform: translate(800px, 240px) scale(1);
+  opacity: 1;
+}
+.stage.s-out-gen .sandbox    { opacity: .3; }
+.stage.s-out-gen .script-layer { opacity: .15; }
+.stage.s-out-gen .prompt-layer { opacity: 0; }
+.stage.s-out-gen .meta-layer   { opacity: 0; }
+.stage.s-out-gen .arc { opacity: 0; animation: none; }
