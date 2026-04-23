@@ -1,0 +1,29 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "check": "biome check .",
+    "check:write": "biome check --write .",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "lint:write": "biome lint --write .",
+    "start": "node --env-file=.env dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.12",
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.13.0",
+    "undici": "^8.1.0"
+  }
+}
