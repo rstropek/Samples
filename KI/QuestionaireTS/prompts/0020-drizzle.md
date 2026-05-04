@@ -42,7 +42,7 @@ Add Drizzle ORM with SQLite (via `better-sqlite3`) to the existing Next.js proje
 * Add a `ping` command that calls `getDbStatus` and prints the result to stdout. This serves as a simple health check.
 * Add a `list` command that calls `listQuestionaires` and prints the result to stdout.
 
-Add a skill to `./.claude/skills` describing how to use the CLI.
+Add a skill to `./.agents/skills` describing how to use the CLI.
 
 * Name of the skill: `questionaire-cli`
 * Description: "Use this skill to interact with the Questionaire CLI."
