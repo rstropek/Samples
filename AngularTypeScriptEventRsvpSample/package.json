@@ -14,7 +14,7 @@
     "angular-route": "^1.4.6",
     "bootstrap": "^3.3.5",
     "express": "^4.13.3",
-    "jquery": "^2.1.4"
+    "jquery": "^3.5.0"
   },
   "devDependencies": {
     "del": "^2.0.2",
