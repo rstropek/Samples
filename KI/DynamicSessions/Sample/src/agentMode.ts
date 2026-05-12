@@ -146,6 +146,15 @@ export async function runAgentMode(): Promise<void> {
 
         logSection("User Turn");
         logUser(userInput);
+
+        await ensureCsvUploaded({
+          accessToken,
+          fileName: uploadedCsvFileName,
+          localFilePath: csvResult.filePath,
+          poolManagementEndpoint,
+          sessionId,
+        });
+
         logInfo("Running agent...");
         const result = await run(revenueAgent, userInput, {
           session: conversationSession,
@@ -175,6 +184,27 @@ export async function runAgentMode(): Promise<void> {
     logSection("Session Shutdown");
     await stopDynamicSession(poolManagementEndpoint, sessionId, accessToken);
   }
+}
+
+async function ensureCsvUploaded(params: {
+  accessToken: string;
+  fileName: string;
+  localFilePath: string;
+  poolManagementEndpoint: string;
+  sessionId: string;
+}): Promise<void> {
+  const { accessToken, fileName, localFilePath, poolManagementEndpoint, sessionId } = params;
+
+  logDebug(`Verifying ${fileName} is present in the dynamic session...`);
+  const sessionFiles = await listFilesInSession(poolManagementEndpoint, sessionId, accessToken);
+  if (sessionFiles.some((file) => file.name === fileName)) {
+    logDebug(`${fileName} is present in the dynamic session.`);
+    return;
+  }
+
+  logInfo(`${fileName} missing from session (likely recycled). Re-uploading...`);
+  await uploadFileToSession(poolManagementEndpoint, sessionId, accessToken, localFilePath);
+  logSuccess(`Re-uploaded ${fileName} to /mnt/data/${fileName}.`);
 }
 
 async function downloadNewSessionFiles(
