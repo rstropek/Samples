@@ -1,4 +1,4 @@
-Set up the basic UI shell in the Angular frontend project. Read the `frontend-design` skill for guidelines.
+Set up the basic UI shell in the Next.js frontend project. Read the `frontend-design` skill for guidelines.
 
 ## Requirements
 
