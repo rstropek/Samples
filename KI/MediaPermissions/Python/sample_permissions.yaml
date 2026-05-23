@@ -1,0 +1,32 @@
+# Sample permissions file with examples from the introduction
+# Example 1: Deny access to all inactive users, then allow access to "4K Testvideos" for all users
+- media_filter: {}
+  user_filter:
+    is_active: false
+  access: "denied"
+- media_filter:
+    series: "4K Testvideos"
+  user_filter: {}
+  access: "allowed"
+
+# Example 2: Deny access to a specific series for all users, then allow access for users in Austria
+- media_filter:
+    series: "ORF - Zeit im Bild 2"
+  user_filter: {}
+  access: "denied"
+- media_filter:
+    series: "ORF - Zeit im Bild 2"
+  user_filter:
+    country_iso_code: "AT"
+  access: "allowed"
+
+# Example 3: Deny access to all movies for all users, then allow access for users with premium package
+- media_filter:
+    category: "movie"
+  user_filter: {}
+  access: "denied"
+- media_filter:
+    category: "movie"
+  user_filter:
+    streaming_package: "premium"
+  access: "allowed"

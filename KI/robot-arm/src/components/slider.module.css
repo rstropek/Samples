@@ -1,0 +1,235 @@
+/* Slider Component Styles */
+.sliderContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: var(--background-secondary, #f8f9fa);
+  border: 1px solid var(--border-color, #e0e0e0);
+  transition: box-shadow 0.2s ease;
+}
+
+.sliderContainer:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary, #333);
+  margin-bottom: 0.25rem;
+  user-select: none;
+}
+
+.sliderWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.minValue,
+.maxValue {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #666);
+  font-weight: 500;
+  min-width: 2rem;
+  text-align: center;
+  user-select: none;
+}
+
+.slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--slider-track, #ddd);
+  border-radius: 3px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.slider:hover {
+  background: var(--slider-track-hover, #ccc);
+}
+
+.slider:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.slider:disabled:hover {
+  background: var(--slider-track, #ddd);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--slider-thumb, #007bff);
+  cursor: pointer;
+  border: 2px solid var(--slider-thumb-border, #fff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: var(--slider-thumb-hover, #0056b3);
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.slider:disabled::-webkit-slider-thumb {
+  background: var(--slider-thumb-disabled, #999);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Firefox */
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--slider-thumb, #007bff);
+  cursor: pointer;
+  border: 2px solid var(--slider-thumb-border, #fff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  background: var(--slider-thumb-hover, #0056b3);
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.slider:disabled::-moz-range-thumb {
+  background: var(--slider-thumb-disabled, #999);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.slider::-moz-range-track {
+  background: var(--slider-track, #ddd);
+  border-radius: 3px;
+  height: 6px;
+}
+
+.valueDisplay {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.currentValue {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary, #333);
+  background: var(--value-background, #e9ecef);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  min-width: 3rem;
+  text-align: center;
+  border: 1px solid var(--value-border, #dee2e6);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .sliderContainer {
+    background-color: var(--background-secondary, #2d2d2d);
+    border-color: var(--border-color, #444);
+  }
+
+  .label {
+    color: var(--text-primary, #fff);
+  }
+
+  .minValue,
+  .maxValue {
+    color: var(--text-secondary, #ccc);
+  }
+
+  .currentValue {
+    color: var(--text-primary, #fff);
+    background: var(--value-background, #444);
+    border-color: var(--value-border, #555);
+  }
+
+  .slider {
+    background: var(--slider-track, #555);
+  }
+
+  .slider:hover {
+    background: var(--slider-track-hover, #666);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sliderContainer {
+    padding: 0.75rem;
+  }
+
+  .sliderWrapper {
+    gap: 0.5rem;
+  }
+
+  .minValue,
+  .maxValue {
+    font-size: 0.7rem;
+    min-width: 1.5rem;
+  }
+
+  .slider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Robot Arm Sliders Container */
+.robotArmContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: var(--container-background, #ffffff);
+  border: 2px solid var(--container-border, #007bff);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+}
+
+.robotArmContainer .sliderContainer {
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem;
+  box-shadow: none;
+}
+
+.robotArmContainer .sliderContainer:hover {
+  box-shadow: none;
+  background-color: var(--slider-hover-background, rgba(0, 123, 255, 0.05));
+  border-radius: 6px;
+}
+
+/* Dark theme support for robot arm container */
+@media (prefers-color-scheme: dark) {
+  .robotArmContainer {
+    background-color: var(--container-background, #1a1a1a);
+    border-color: var(--container-border, #007bff);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  }
+
+  .robotArmContainer .sliderContainer:hover {
+    background-color: var(--slider-hover-background, rgba(0, 123, 255, 0.1));
+  }
+}

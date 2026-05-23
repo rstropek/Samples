@@ -1,0 +1,23 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+#game {
+  position: relative;
+}
+
+#game-content {
+  position: absolute;
+}
+
+#player {
+  background-image: url('https://cddataexchange.blob.core.windows.net/data-exchange/sokoban/Player/player_05.png');
+  transform: translate(0px, 0px);
+  transition: transform 0.3s ease;
+}
+
+.cell {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+}

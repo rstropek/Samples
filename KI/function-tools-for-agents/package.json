@@ -1,0 +1,16 @@
+{
+  "name": "function-tools-for-agents",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "othello-cli",
+    "othello-game",
+    "othello-bot"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "cd othello-game && npm run test"
+  },
+  "devDependencies": {}
+}
+

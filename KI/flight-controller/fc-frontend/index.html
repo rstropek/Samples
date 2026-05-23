@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Traffic Control</title>
+    <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+    <div id="app">
+        <div id="radar-container">
+            <div id="zoom-controls">
+                <button id="zoom-in" class="zoom-btn">+</button>
+                <button id="zoom-out" class="zoom-btn">-</button>
+                <div id="zoom-level">100km</div>
+            </div>
+            <canvas id="radar-canvas" width="800" height="800"></canvas>
+            <div id="aircraft-details" class="aircraft-popup">
+                <button id="close-details" class="close-btn">×</button>
+                <div class="aircraft-info">
+                    <h3 id="aircraft-callsign">UAL123</h3>
+                    <div class="info-row">
+                        <span class="label">MODEL:</span>
+                        <span id="aircraft-model">B737-800</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">SPEED:</span>
+                        <span id="aircraft-speed">280 KT</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">HEADING:</span>
+                        <span id="aircraft-heading">45°</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">ALT:</span>
+                        <span id="aircraft-altitude">8500 FT</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">POS:</span>
+                        <span id="aircraft-position">34.3000°N<br/>-118.1000°E</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="alerts-panel">
+            <h3>ALERTS</h3>
+            <div id="alerts-list"></div>
+        </div>
+    </div>
+    
+    <script type="module" src="/src/index.ts"></script>
+</body>
+</html>

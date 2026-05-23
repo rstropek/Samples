@@ -1,0 +1,11 @@
+@host = http://dev-01:8081
+#@host = https://dev-01.rstropek.com/files
+
+###
+GET {{host}}/ping
+
+###
+GET {{host}}/sessions/B2025CS
+
+###
+GET {{host}}/sessions/B2025CS/file?file=DataAccess/Model.cs

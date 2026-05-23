@@ -1,0 +1,112 @@
+[
+  {
+    "programName": "Quanten-Kaffee-Engineering",
+    "officeHours": {
+      "dayOfWeek": "Dienstag",
+      "time": "10:00",
+      "durationHours": 1.5
+    },
+    "restrictions": "Findet ganzjährig statt, nicht jedoch an Feiertagen.",
+    "location": "Labor für Quantengetränke, Campus Nord, Raum Q-1.23",
+    "priorRegistrationRequired": "ja"
+  },
+  {
+    "programName": "Dramaturgie für Unsichtbare Schauspieler",
+    "officeHours": {
+      "dayOfWeek": "Mittwoch",
+      "time": "14:30",
+      "durationHours": 2
+    },
+    "restrictions": "Nicht während Ferien und Feiertagen; Aufführungswochen nach individueller Absprache.",
+    "location": "Theaterzentrum 'Nullraum', Probebühne 3 (unsichtbarer Flügel)",
+    "priorRegistrationRequired": "ja"
+  },
+  {
+    "programName": "Terraforming von Minigolfplätzen",
+    "officeHours": {
+      "dayOfWeek": "Montag",
+      "time": "09:15",
+      "durationHours": 1
+    },
+    "restrictions": "Nur während der Vorlesungszeit; keine Sprechstunde bei Starkregen-Simulationen.",
+    "location": "Terraforming-Labor, Außenversuchsfläche 'Mini-Planet A', Container T-7",
+    "priorRegistrationRequired": "nein"
+  },
+  {
+    "programName": "Historische Einhornforschung",
+    "officeHours": {
+      "dayOfWeek": "Donnerstag",
+      "time": "11:00",
+      "durationHours": 1.5
+    },
+    "restrictions": "Findet ganzjährig statt, nicht jedoch an Feiertagen und am 'Tag des Glitzersturms' (fakultätsinterner Feiertag).",
+    "location": "Mythobiologisches Archiv, Turm E, Lesesaal Einhorn-West",
+    "priorRegistrationRequired": "ja"
+  },
+  {
+    "programName": "Robotische Haushaltsphilosophie",
+    "officeHours": {
+      "dayOfWeek": "Freitag",
+      "time": "13:00",
+      "durationHours": 2
+    },
+    "restrictions": "Nicht während Wartungsfenstern der Haushaltsroboter (Termine werden per Rundmail bekanntgegeben).",
+    "location": "Institut für Automatisierte Sinnfragen, Denk-Labor R-2D",
+    "priorRegistrationRequired": "nein"
+  },
+  {
+    "programName": "Intergalaktische Bürokratie",
+    "officeHours": {
+      "dayOfWeek": "Dienstag",
+      "time": "16:00",
+      "durationHours": 1
+    },
+    "restrictions": "Nicht während intergalaktischer Stichtage und temporaler Systemupdates.",
+    "location": "Verwaltungsblock Hyperraum, Schalterhalle G-∞, Kabine 42B",
+    "priorRegistrationRequired": "ja"
+  },
+  {
+    "programName": "Kulinarische Geräuschkulisse",
+    "officeHours": {
+      "dayOfWeek": "Montag",
+      "time": "17:30",
+      "durationHours": 1.5
+    },
+    "restrictions": "Nur in der Vorlesungszeit; keine Sprechstunde während Live-Klang-Degustationen.",
+    "location": "Audiogastronomisches Studio, Campus Süd, Klangküche K-5",
+    "priorRegistrationRequired": "nein"
+  },
+  {
+    "programName": "Emotionale Architektur",
+    "officeHours": {
+      "dayOfWeek": "Donnerstag",
+      "time": "15:00",
+      "durationHours": 2
+    },
+    "restrictions": "Findet ganzjährig statt; bei 'beleidigtem Gebäudezustand' kann der Ort kurzfristig wechseln.",
+    "location": "Atelier für Empathische Raumgestaltung, Gebäude 'Aura', Ebene 2",
+    "priorRegistrationRequired": "ja"
+  },
+  {
+    "programName": "Drachenökonomie",
+    "officeHours": {
+      "dayOfWeek": "Mittwoch",
+      "time": "10:30",
+      "durationHours": 1.5
+    },
+    "restrictions": "Nicht während aktiver Drachenflugmanöver oder Schatzinventuren; kurzfristige Ausfälle möglich.",
+    "location": "Institut für Fantastische Makroökonomie, Schatzkammer-Seminarraum D-Draco",
+    "priorRegistrationRequired": "ja"
+  },
+  {
+    "programName": "Pädagogik für Zeitreisende",
+    "officeHours": {
+      "dayOfWeek": "Freitag",
+      "time": "09:00",
+      "durationHours": 2
+    },
+    "restrictions": "Findet ganzjährig statt, ausgenommen paradox-relevante Zeitfenster und universitäre Feiertage.",
+    "location": "Online-Meeting über das temporale Konferenzsystem 'UAA-Meet ChronoRoom' (Link wird nach Anmeldung verschickt).",
+    "priorRegistrationRequired": "ja"
+  }
+]

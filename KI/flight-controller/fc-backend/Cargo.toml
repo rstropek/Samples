@@ -1,0 +1,15 @@
+[package]
+name = "fc-backend"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.4"
+axum-extra = { version = "0.10", features = ["typed-header"] }
+tokio = { version = "1.0", features = ["full"] }
+tokio-stream = "0.1"
+rand = "0.9.1"
+futures-util = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+once_cell = "1"
+tower-http = { version = "0.6.1", features = ["cors"] }

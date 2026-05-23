@@ -1,0 +1,41 @@
+[project]
+name = "dataanalysis"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Rainer Stropek",email = "rainer@software-architects.at"}
+]
+readme = "README.md"
+requires-python = ">=3.14,<4.0"
+dependencies = [
+]
+
+[tool.poetry]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "mypy (>=1.18.2,<2.0.0)",
+    "taskipy (>=1.14.1,<2.0.0)",
+    "black (>=25.9.0,<26.0.0)",
+    "pytest (>=8.4.2,<9.0.0)"
+]
+
+[tool.taskipy.tasks]
+format = "black ."
+format-check = "black --check ."
+typecheck = "mypy ."
+start = "python src/main.py"
+
+[tool.mypy]
+python_version = "3.14"
+ignore_missing_imports = true
+strict = true
+
+[tool.black]
+line-length = 150
+target-version = ["py313"]
+skip-string-normalization = false

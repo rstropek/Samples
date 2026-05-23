@@ -1,0 +1,21 @@
+#measurements {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+}
+
+.dx, .dy {
+  min-width: 4rem;
+  font-size: smaller;
+  text-align: right;
+}
+
+.header {
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+#measurements > div:nth-child(4n+3),
+#measurements > div:nth-child(4n+4) {
+  background-color: #cecece;
+}

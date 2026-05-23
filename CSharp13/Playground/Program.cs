@@ -1,0 +1,1 @@
+﻿System.Console.WriteLine("I 💗 Spans, ref structs");

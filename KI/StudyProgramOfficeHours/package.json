@@ -1,0 +1,28 @@
+{
+  "name": "studyprogramofficehours",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && cp OfficeHours.json dist/",
+    "start": "node dist/index.js",
+    "docker:build": "docker build -t rstropek/studyprogramofficehours .",
+    "docker:build:multi": "docker buildx build --platform linux/amd64,linux/arm64 -t rstropek/studyprogramofficehours:0.1.0 .",
+    "docker:push": "docker push rstropek/studyprogramofficehours:0.1.0",
+    "docker:run": "docker run -p 3000:3000 rstropek/studyprogramofficehours:0.1.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.23.0",
+    "express": "^5.1.0",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}

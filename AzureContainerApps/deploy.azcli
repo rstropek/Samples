@@ -1,0 +1,74 @@
+# Switch to correct subscription
+# az login --use-device-code
+# az account set --subscription ...
+# az account show --output table
+
+# Resource group name
+RG=container-apps-demo
+
+# Location of the resources
+# Adjust if necessary
+LOCATION=westeurope
+
+# Name of the project. All resource names will be derived from that name
+PROJECT_NAME=container-apps-demo
+STAGE=dev
+
+# Deploy Managed Identity
+# Probably done by peope with higher privileges
+DEPLOY_RESULT=$(az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file managed-identity.bicep \
+    --parameters \
+        location=$LOCATION \
+        projectName=$PROJECT_NAME \
+        stage=$STAGE \
+        tags="{\"Project\":\"$PROJECT_NAME\", \"Stage\":\"$STAGE\"}" \
+    | jq .properties.outputs)
+MANAGED_ID_NAME=$(echo $DEPLOY_RESULT | jq -r .managedIdName.value)
+MANAGED_ID=$(echo $DEPLOY_RESULT | jq -r .managedIdPrincipalId.value)
+MANAGED_ID_CLIENT_ID=$(echo $DEPLOY_RESULT | jq -r .managedIdClientId.value)
+echo "Managed Identity Name: $MANAGED_ID_NAME"
+echo "Managed Identity Principal ID: $MANAGED_ID"
+echo "Managed Identity Client ID: $MANAGED_ID_CLIENT_ID"
+
+# Deploy Central Infrastructure (ACR, Log Workspace)
+# Maybe used for other projects as well. Adjust the name accordingly if necessary.
+DEPLOY_RESULT=$(az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file central-infra.bicep \
+    --parameters \
+        location=$LOCATION \
+        projectName=$PROJECT_NAME \
+        stage=$STAGE \
+        tags="{\"Project\":\"$PROJECT_NAME\", \"Stage\":\"$STAGE\"}" \
+        managedIdPrincipalId=$MANAGED_ID \
+    | jq .properties.outputs)
+REGISTRY_NAME=$(echo $DEPLOY_RESULT | jq -r .registryName.value)
+WORKSPACE_NAME=$(echo $DEPLOY_RESULT | jq -r .workspaceName.value)
+WORKSPACE_ID=$(echo $DEPLOY_RESULT | jq -r .workspaceId.value)
+ENVIRONMENT_NAME=$(echo $DEPLOY_RESULT | jq -r .environmentName.value)
+echo "Container Registry Name: $REGISTRY_NAME"
+echo "Log Analytics Workspace Name: $WORKSPACE_NAME"
+echo "Log Analytics Workspace ID: $WORKSPACE_ID"
+echo "Container Apps Environment Name: $ENVIRONMENT_NAME"
+
+# Now you can build and push image to ACR
+#az acr login --name cr47n5jlwl3wb2c
+#az acr build --image demo-app:latest --registry cr47n5jlwl3wb2c .
+
+# Deploy Project Infrastructure
+az deployment group create \
+    --resource-group $RG \
+    --name Deployment-$(date +"%Y-%m-%dT%H-%M-%S") \
+    --template-file project-infra.bicep \
+    --parameters \
+        location=$LOCATION \
+        projectName=$PROJECT_NAME \
+        stage=$STAGE \
+        tags="{\"Project\":\"$PROJECT_NAME\"}" \
+        managedIdName=$MANAGED_ID_NAME \
+        registryName=$REGISTRY_NAME \
+        environmentName=$ENVIRONMENT_NAME

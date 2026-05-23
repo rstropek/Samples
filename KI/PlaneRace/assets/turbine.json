@@ -1,0 +1,309 @@
+{
+	"frames": [
+		{
+			"filename": "skeleton-animation_0.png",
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_1.png",
+			"frame": {
+				"x": 277,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_10.png",
+			"frame": {
+				"x": 0,
+				"y": 145,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_11.png",
+			"frame": {
+				"x": 277,
+				"y": 145,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_12.png",
+			"frame": {
+				"x": 0,
+				"y": 290,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_13.png",
+			"frame": {
+				"x": 277,
+				"y": 290,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_2.png",
+			"frame": {
+				"x": 0,
+				"y": 435,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_3.png",
+			"frame": {
+				"x": 277,
+				"y": 435,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_4.png",
+			"frame": {
+				"x": 0,
+				"y": 580,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_5.png",
+			"frame": {
+				"x": 277,
+				"y": 580,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_6.png",
+			"frame": {
+				"x": 554,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_7.png",
+			"frame": {
+				"x": 554,
+				"y": 145,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_8.png",
+			"frame": {
+				"x": 554,
+				"y": 290,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		},
+		{
+			"filename": "skeleton-animation_9.png",
+			"frame": {
+				"x": 554,
+				"y": 435,
+				"w": 277,
+				"h": 145
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 277,
+				"h": 145
+			},
+			"sourceSize": {
+				"w": 277,
+				"h": 145
+			}
+		}
+	],
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 831,
+			"h": 725
+		},
+		"scale": "1"
+	}
+}

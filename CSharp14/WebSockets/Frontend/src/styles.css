@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 1.2em;
+}
+
+.connection-section,
+.message-section,
+.output-section {
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+    font-weight: 500;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #0066cc;
+}
+
+input[type="text"]:disabled {
+    background: #f0f0f0;
+    color: #999;
+}
+
+button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+button:hover:not(:disabled) {
+    background: #0052a3;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+#disconnectBtn {
+    background: #dc3545;
+}
+
+#disconnectBtn:hover:not(:disabled) {
+    background: #c82333;
+}
+
+.status {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8d7da;
+    color: #721c24;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.status.connected {
+    background: #d4edda;
+    color: #155724;
+}
+
+#messages {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.message {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.message.sent {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.message.received {
+    background: #f1f8e9;
+    color: #558b2f;
+}
+
+.message.system {
+    background: #fff3e0;
+    color: #e65100;
+}

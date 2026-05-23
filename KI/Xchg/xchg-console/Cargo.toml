@@ -1,0 +1,9 @@
+[package]
+name = "xchg-console"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenvy = "0.15.7"
+xchg-logic = { path = "../xchg-logic", features = ["api"] }
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
