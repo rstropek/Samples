@@ -1,0 +1,14 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+
+# Angular / Node
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.angular/
+Frontend/src/app/api/
+
+# OpenAPI generated spec
+WebApi/WebApi.json

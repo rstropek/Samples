@@ -1,0 +1,9 @@
+prefix_rule(
+    pattern = ["pnpm", ["i", "install", "add"]],
+    decision = "prompt",
+    justification = "Prompt before installing dependencies",
+    match = [
+      "pnpm install @fortawesome/react-fontawesome",
+      "pnpm i -D @angular/cli",
+    ],
+  )

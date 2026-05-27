@@ -1,0 +1,27 @@
+{
+  "enabledPlugins": {
+    "microsoft-docs@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Skill(playwright-cli)",
+      "mcp__plugin_microsoft-docs_microsoft-learn__microsoft_docs_search",
+      "mcp__plugin_microsoft-docs_microsoft-learn__microsoft_docs_fetch",
+      "Bash(dotnet *)",
+      "Bash(* --version)",
+      "Bash(* --help)",
+      "Bash(ls:*)",
+      "Bash(npx ng:*)",
+      "Bash(ng version:*)",
+      "Bash(pnpm run:*)",
+      "Bash(aspire *)",
+      "Bash(playwright-cli *)"
+    ],
+    "deny": [
+      "Bash(git push *)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "angular-cli"
+  ]
+}

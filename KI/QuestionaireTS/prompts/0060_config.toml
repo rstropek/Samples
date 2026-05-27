@@ -1,0 +1,6 @@
+[mcp_servers.questionnaires]
+command = "zsh"
+args = [
+  "-lc",
+  "export NVM_DIR=\"$HOME/.nvm\"; [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"; cd /Users/rstropek/live/2026-04-codex && nvm use --silent >/dev/null && exec pnpm --silent --filter @questionnaires/console start mcp --db /Users/rstropek/live/2026-04-codex/questionnaire.db",
+]

@@ -1,0 +1,7 @@
+node_modules
+dist
+package-lock.json
+.env
+data/*.csv
+data/*.png
+__pycache__
