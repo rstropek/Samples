@@ -144,3 +144,4 @@ UpgradeLog*.XML
 *.backup
 
 nupkg
+.fake
