@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>RuntimeAsyncEnabled</RootNamespace>
+    <!-- Opt in to Runtime Async (preview). The runtime, not the compiler,
+         manages suspension/resumption; no state-machine types are emitted. -->
+    <Features>$(Features);runtime-async=on</Features>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
+  </PropertyGroup>
+</Project>

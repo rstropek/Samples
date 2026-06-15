@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>RuntimeAsyncClassic</RootNamespace>
+    <!-- No runtime-async: the C# compiler emits IAsyncStateMachine state machines (the default). -->
+  </PropertyGroup>
+</Project>

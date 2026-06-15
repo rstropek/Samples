@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/01_Basics/01_Basics.csproj" />
+    <Project Path="src/02_ResultOption/02_ResultOption.csproj" />
+    <Project Path="src/03_RecursiveExpr/03_RecursiveExpr.csproj" />
+    <Project Path="src/04_DomainModeling/04_DomainModeling.csproj" />
+    <Project Path="src/05_PatternShowcase/05_PatternShowcase.csproj" />
+    <Project Path="src/06_Lowering/06_Lowering.csproj" />
+    <Project Path="src/07_CollectionExprArgs/07_CollectionExprArgs.csproj" />
+    <Project Path="src/08_RuntimeAsync_Classic/08_RuntimeAsync_Classic.csproj" />
+    <Project Path="src/09_RuntimeAsync_Enabled/09_RuntimeAsync_Enabled.csproj" />
+    <Project Path="src/10_ResultOptionUsage/10_ResultOptionUsage.csproj" />
+    <Project Path="src/11_UnionWithMembers/11_UnionWithMembers.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Csharp15.Tests/Csharp15.Tests.csproj" />
+  </Folder>
+</Solution>
