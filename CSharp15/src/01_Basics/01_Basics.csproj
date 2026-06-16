@@ -3,4 +3,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Basics</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OneOf" Version="3.0.271" />
+  </ItemGroup>
 </Project>

@@ -48,6 +48,9 @@ internal static class Program
         // --- 5. The escape hatch: every union exposes `object? Value` --------
         object? raw = a.Value;           // the boxed/stored case instance
         Console.WriteLine($"\nUnderlying runtime type of `a`: {raw?.GetType().Name}");
+
+        // --- 6. For contrast: how this was modelled BEFORE C# 15 (see docs §1) -
+        Alternatives.AllDemos.Run();
     }
 
     // Exhaustive over { Cat, Dog, Bird }. Add a 4th case type to the union and

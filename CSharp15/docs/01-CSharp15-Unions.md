@@ -35,10 +35,10 @@ so I've built the whole talk around getting there.
 
 Before C# 15 I modelled "one of N types" with workarounds, and each one cost me something:
 
-- **Abstract base + sealed subclasses** — No exhaustiveness guarantee; `switch` needs a `default`/throw; the hierarchy is open unless you fight the language.
-- **`object` + `is` checks** — No type safety, no exhaustiveness, easy to forget a case.
-- **Nullable fields on one big class** — "Illegal states" are representable (two fields set at once); invariants live in comments.
-- **`OneOf<T0,T1,...>` NuGet library** — Positional (`.IsT0`), no real pattern integration, generic noise, third-party dependency.
+- **Abstract base + sealed subclasses** — No exhaustiveness guarantee; `switch` needs a `default`/throw; the hierarchy is open unless you fight the language. [Sample Code](../src/01_Basics/Alternatives.cs#L29)
+- **`object` + `is` checks** — No type safety, no exhaustiveness, easy to forget a case. [Sample Code](../src/01_Basics/Alternatives.cs#L61)
+- **Nullable fields on one big class** — "Illegal states" are representable (two fields set at once); invariants live in comments. [Sample Code](../src/01_Basics/Alternatives.cs#L90)
+- **`OneOf<T0,T1,...>` NuGet library** — Positional (`.IsT0`), no real pattern integration, generic noise, third-party dependency. [Sample Code](../src/01_Basics/Alternatives.cs#L125)
 - **F# `type Shape = Circle | Rectangle`** — Great, but only in F#.
 
 Unions bring the F#/Rust/TypeScript ergonomics — a closed set of shapes plus an exhaustive match
