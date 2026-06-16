@@ -563,6 +563,8 @@ If the Rust comparison comes up (it will):
 - A future BCL `Option`/`Result` isn't ruled out, but it would be a separate proposal and isn't
   part of the C# 15 / .NET 11 deliverable. I'll treat any such claim as speculation.
 
+A runnable side-by-side lives in [`src/00_Rust`](../src/00_Rust/README.md): the same `Pet` enum and `Option`/`Result` demos in Rust, so the audience can see exactly what C# 15 is catching up to (`cargo run`).
+
 ---
 
 ## 6. Bonus C# 15 feature — Collection expression arguments

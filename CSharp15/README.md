@@ -22,6 +22,7 @@ docs/
   01-CSharp15-Unions.md           # concept: union types
   02-RuntimeAsync.md              # concept: runtime async (state machine vs runtime, pseudo-code + IL)
 src/
+  00_Rust/                        # [rust]   the same demos in Rust (enum + Option/Result); not in the .slnx
   01_Basics/                      # [unions] console — declaration, conversion, exhaustive switch
   02_ResultOption/                # [unions] classlib — Option<T> / Result<T,E> + combinators (extension blocks)
   03_RecursiveExpr/               # [unions] console — recursive AST evaluator + printer
@@ -59,6 +60,9 @@ dotnet run --project src/10_ResultOptionUsage
 # Deep dives
 src/06_Lowering/decompile.sh                   # union -> struct + IUnion, switch IL
 src/runtime-async-compare.sh                   # state machine vs runtime async
+
+# Rust counterpart (needs a Rust toolchain, https://rustup.rs)
+(cd src/00_Rust && cargo run)                  # enum + Option/Result, parallels 01_Basics & 02
 ```
 
 ## One-line reminder for each feature

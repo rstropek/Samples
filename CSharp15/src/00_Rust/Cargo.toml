@@ -1,0 +1,11 @@
+[package]
+name = "csharp15_rust"
+version = "0.1.0"
+edition = "2021"
+
+# A tiny console crate. Mirrors src/01_Basics and the Option/Result basics
+# from src/02_ResultOption, so the talk can show how close C# 15 unions are
+# to Rust's enums (which Rust has had from day one).
+[[bin]]
+name = "csharp15_rust"
+path = "src/main.rs"
