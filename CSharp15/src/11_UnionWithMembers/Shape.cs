@@ -7,7 +7,7 @@
 //  Inside the body, switch over `this` (the UNION) so that union exhaustiveness
 //  applies — matching the case types is then enough. (Switching over the raw
 //  `Value` property, typed `object?`, would NOT be exhaustive and warns CS8509
-//  'not null not covered'. The `null` arm handles the default/empty union.)
+//  "the pattern '_' is not covered". The `null` arm handles the default/empty union.)
 // ============================================================================
 namespace UnionMembers;
 

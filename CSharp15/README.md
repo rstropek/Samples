@@ -9,15 +9,16 @@ Each doc has my notes: a feature walkthrough, a deep dive into the implementatio
 plus IL from `ilspycmd`), a set of runnable samples, the gotchas I ran into, and a demo running
 order.
 
-> Built and run against .NET 11 SDK `11.0.100-preview.5.26302.115`, `LangVersion=preview`,
-> June 2026. Every code block and IL listing in the docs was compiled and run.
+> Originally written against .NET 11 SDK `11.0.100-preview.5.26302.115` (June 2026); re-verified
+> against the .NET 11 GA SDK `11.0.100` (November 2026) with the default language version (C# 15,
+> no `LangVersion=preview`). Every code block and IL listing in the docs was compiled and run.
 
 ## Layout
 
 ```
 CSharp15.slnx                     # .NET 11 XML solution
-Directory.Build.props             # shared: net11.0, LangVersion=preview, nullable
-global.json                       # pins the .NET 11 preview SDK
+Directory.Build.props             # shared: net11.0 (C# 15 by default), nullable
+global.json                       # pins the .NET 11 GA SDK (11.0.100, roll forward to latest feature band)
 docs/
   01-CSharp15-Unions.md           # concept: union types
   02-RuntimeAsync.md              # concept: runtime async (state machine vs runtime, pseudo-code + IL)
@@ -41,7 +42,7 @@ tests/
 
 ## Prerequisites
 
-* .NET 11 preview SDK (`global.json` pins the exact version I used).
+* .NET 11 SDK (`11.0.100` or later feature band; see `global.json`).
 * For the IL deep dives: `dotnet tool install -g ilspycmd`.
 
 ## Build, test, run

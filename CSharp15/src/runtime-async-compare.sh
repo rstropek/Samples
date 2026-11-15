@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build both runtime-async sample projects and show the difference in
 #   (1) the live stack trace, and (2) the emitted IL (state machine vs AsyncHelpers.Await).
-# Requires .NET 11 preview SDK + `dotnet tool install -g ilspycmd`.
+# Requires .NET 11 SDK + `dotnet tool install -g ilspycmd`.
 set -euo pipefail
 cd "$(dirname "$0")"
 

@@ -2,9 +2,10 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>RuntimeAsyncEnabled</RootNamespace>
-    <!-- Opt in to Runtime Async (preview). The runtime, not the compiler,
-         manages suspension/resumption; no state-machine types are emitted. -->
+    <!-- Opt in to Runtime Async (still labelled preview in .NET 11 GA). The runtime,
+         not the compiler, manages suspension/resumption; no state-machine types are
+         emitted. Since .NET 11 GA, net11.0 projects no longer need
+         <EnablePreviewFeatures>true</EnablePreviewFeatures> for this. -->
     <Features>$(Features);runtime-async=on</Features>
-    <EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 </Project>

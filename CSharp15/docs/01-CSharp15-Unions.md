@@ -1,9 +1,10 @@
 # C# 15 — Union Types (Discriminated Unions)
 
-> Everything here was built and run against .NET 11 SDK
-> `11.0.100-preview.5.26302.115` with `<LangVersion>preview</LangVersion>` (June 2026). Every
-> code block compiles; every IL/lowering listing came out of `ilspycmd` run against the
-> `06_Lowering` project, not from memory.
+> Originally built against .NET 11 SDK `11.0.100-preview.5.26302.115` (June 2026); re-verified
+> against the .NET 11 GA SDK `11.0.100` (November 2026). C# 15 is the default language version
+> for `net11.0`, so no `<LangVersion>preview</LangVersion>` is needed anymore. Every code block
+> compiles; every IL/lowering listing came out of `ilspycmd` run against the `06_Lowering`
+> project, not from memory (the lowering is unchanged between Preview 5 and GA).
 
 ---
 
@@ -100,10 +101,13 @@ Worth flagging on stage: exhaustiveness comes back as CS8509, a _warning_, not a
 want a hard gate I set `<WarningsAsErrors>CS8509</WarningsAsErrors>`. The reason it can only be a
 warning shows up in the deep dive — it's the default/empty union.
 
-Second thing to flag: depending on the exact preview and your nullable settings, the compiler
-may instead emit CS8655 ("does not handle some null inputs") for a union switch, because a
-`default`/uninitialised union has `null` content. The fix I settled on is an explicit `null`
-arm. It documents the empty case and still leaves CS8509 firing if I later add a real case type:
+Second thing to flag: the `default`/uninitialised union has `null` content. In C# 15 GA the
+compiler does _not_ demand a `null` arm when all case types are non-nullable — such a switch
+compiles warning-free and simply throws `SwitchExpressionException` for `default(Pet)`. CS8655
+("does not handle some null inputs") only appears if a case type is nullable, e.g.
+`union NullablePet(Cat?, Dog, Bird)`. I still like an explicit `null` arm where an empty union
+is plausible: it documents the empty case and still leaves CS8509 firing if I later add a real
+case type:
 
 ```csharp
 string Describe(Pet pet) => pet switch
@@ -111,7 +115,7 @@ string Describe(Pet pet) => pet switch
     Cat c  => $"Cat {c.Name}",
     Dog d  => $"Dog {d.Name}",
     Bird b => $"Bird {b.Name}",
-    null   => "<uninitialised pet>",   // handles default(Pet); silences CS8655
+    null   => "<uninitialised pet>",   // handles default(Pet) instead of throwing
 };
 ```
 
@@ -119,9 +123,8 @@ string Describe(Pet pet) => pet switch
 
 I prefer `null =>` over a `_ =>` discard — the discard would quietly swallow any future case
 type and defeat the exhaustiveness check. The sample projects all use `null` arms for this
-reason. The one exception is `06_Lowering`, where I deliberately keep the hole (with
-`#pragma warning disable CS8655`) so the IL still shows the `ThrowSwitchExpressionException`
-safety net.
+reason (the Learn docs give the same advice). The one exception is `06_Lowering`, where I
+deliberately keep the hole so the IL still shows the `ThrowSwitchExpressionException` safety net.
 
 ### 2.4 Pattern matching reaches _through_ the union
 
@@ -180,7 +183,7 @@ public static class OptionExtensions
 }
 ```
 
-[Sample Code](../src/02_ResultOption/Option.cs#L38)
+[Sample Code](../src/02_ResultOption/Option.cs#L39)
 
 Call sites don't change (`opt.IsSome`, `opt.Map(...)`), and the members resolve across assembly
 boundaries — the xUnit project consumes them straight from the referenced library.
@@ -240,7 +243,7 @@ public struct HttpOutcome : IUnion
 The gotcha I tripped over here, and the one to call out: inside the body, switch over `this`, not
 `Value`. Switching over `this` makes the compiler apply union exhaustiveness, because the case
 types are a closed set. Switching over the raw `Value` property — which is typed `object?` — is
-not exhaustive and warns CS8509 ("the pattern 'not null' is not covered"), because `object?` is
+not exhaustive and warns CS8509 ("the pattern '_' is not covered"), because `object?` is
 open. So: `this switch { ... }`.
 
 The implicit conversions and external pattern matching behave the same whether I use the
@@ -306,8 +309,8 @@ public sealed class UnionAttribute : Attribute { }
 ```
 
 History note in case someone asks: in Preview 2 these types didn't ship in the runtime, so you
-had to declare `IUnion`/`UnionAttribute` yourself. As of Preview 5 (what I'm running) they're in
-the BCL, so the samples compile with no extra plumbing.
+had to declare `IUnion`/`UnionAttribute` yourself. Since Preview 5 — and in .NET 11 GA — they're
+in the BCL, so the samples compile with no extra plumbing.
 
 ### 3.3 The implicit conversion is just a constructor call
 
@@ -317,7 +320,7 @@ the BCL, so the samples compile with no extra plumbing.
 public static Shape MakeCircle(double r) => new Shape(new Circle(r));
 ```
 
-[Sample Code (source)](../src/06_Lowering/Unions.cs#L45)
+[Sample Code (source)](../src/06_Lowering/Unions.cs#L43)
 
 IL (`ilspycmd ... -il`):
 
@@ -346,7 +349,7 @@ public static double Area(Shape shape)
 }
 ```
 
-[Sample Code (source)](../src/06_Lowering/Unions.cs#L38)
+[Sample Code (source)](../src/06_Lowering/Unions.cs#L37)
 
 IL (abridged) — note `get_Value`, the `isinst` ladder, and the fallback throw:
 
@@ -367,17 +370,17 @@ IL_004e: call      void '<PrivateImplementationDetails>'::ThrowSwitchExpressionE
 
 1. The "empty" / `default` union is real, and it bites. Because the generated type is a `struct`,
    `default(Shape)` is always constructible and has `Value == null`. None of the `isinst` checks
-   match, so the exhaustive switch hits `ThrowSwitchExpressionException` at runtime. That's
-   exactly why exhaustiveness is CS8509 (a warning) and not an error — the compiler can't forbid
-   the default value of a struct. Verified:
+   match, so the exhaustive switch hits `ThrowSwitchExpressionException` at runtime — and with
+   non-nullable case types the compiler doesn't even warn about it. Exhaustiveness itself is
+   CS8509, a warning rather than an error, consistent with every other C# switch. Verified:
 
    ```csharp
    Result<int> def = default;          // legal
    Console.WriteLine(def.Value is null);   // True   -> no case selected
    ```
 
-   On stricter previews this same hole is what surfaces as CS8655 on a union switch; add a `null`
-   arm (see §2.3) to handle it explicitly.
+   If a case type is nullable (`union NullablePet(Cat?, Dog)`) the same hole surfaces as CS8655;
+   either way, add a `null` arm (see §2.3) to handle it explicitly.
 
 2. Value-type cases box. Storage is `object?`, so a `struct` case type gets boxed on conversion.
    I lean on `record class` cases (reference types) when allocations matter, or accept one boxing
@@ -397,16 +400,19 @@ IL_004e: call      void '<PrivateImplementationDetails>'::ThrowSwitchExpressionE
 4. No `op_Implicit`, so no implicit interface/overload tricks — conversions only fire at the
    syntactic conversion sites the compiler recognises.
 
-5. Preview limitations (Preview 5): some proposal pieces aren't implemented yet — notably _union
-   member providers_ (custom storage/representation) and the full _explicit union pattern_. The
-   shorthand `union X(...)` form is the supported path today.
+5. ~~Preview limitations~~ — resolved in GA. In Preview 5, _union member providers_ and the full
+   _explicit union pattern_ weren't implemented. In C# 15 GA I verified all of these work:
+   hand-written `[Union]` structs **and classes**, the non-boxing access pattern
+   (`HasValue` + one `TryGetValue(out T)` per case — the compiler calls those instead of `Value`,
+   no boxing), and member providers (a nested `IUnionMembers` interface with static `Create`
+   factories, allowing private constructors).
 
 ---
 
 ## 4. Sample catalogue (third part — runnable demos)
 
 All projects live under `src/`, target `net11.0`, and share settings via `Directory.Build.props`
-(`LangVersion=preview`). I kept each one small. Outputs below are the actual runs.
+(default C# 15, nullable on). I kept each one small. Outputs below are the actual runs.
 
 ### `01_Basics` — console
 
@@ -548,7 +554,7 @@ name-tagged cases.
 
 ### Will `Result`/`Option` ship in the .NET BCL?
 
-Short answer, as of June 2026: no confirmed plans. The team scoped this feature as the
+Short answer, as of the .NET 11 GA (November 2026): no `Option`/`Result` in the BCL. The team scoped this feature as the
 language/runtime mechanism for unions (the `union` keyword, `UnionAttribute`, `IUnion`), not as a
 set of blessed `Option`/`Result` types in the BCL. Mads Torgersen's design write-ups and the
 `dotnet/csharplang` discussions deliberately land on "unions of types" and leave the concrete
@@ -584,7 +590,8 @@ List<int> merged      = [with(capacity: 16), 0, .. Enumerable.Range(1, 3), 4];
 [Sample Code](../src/07_CollectionExprArgs/Program.cs#L12)
 
 One caveat I hit: dictionary collection-expressions still need a single-argument `Add`, so
-`[with(comparer), KeyValuePair.Create(...)]` does not compile in Preview 5 (CS9215).
+`[with(comparer), KeyValuePair.Create(...)]` does not compile — still true in C# 15 GA (CS9215).
+Dictionary expressions (`[k: v]`) are not part of C# 15.
 
 ---
 
@@ -601,14 +608,14 @@ One caveat I hit: dictionary collection-expressions still need a single-argument
    validation pipeline) and `03_RecursiveExpr` (AST). Optionally `04_DomainModeling`.
 6. Patterns (5 min): `05_PatternShowcase`, tuple-of-unions.
 7. Bonus (3 min): collection expression arguments.
-8. Wrap (2 min): comparison table, preview caveats, "type unions vs tagged unions".
+8. Wrap (2 min): comparison table, the `default(union)` caveat, "type unions vs tagged unions".
 
 ---
 
 ## 8. Reproduce everything
 
 ```bash
-# .NET 11 preview SDK + an IL decompiler
+# .NET 11 SDK + an IL decompiler
 dotnet tool install -g ilspycmd
 
 dotnet build  CSharp15.slnx -c Release      # 0 warnings, 0 errors

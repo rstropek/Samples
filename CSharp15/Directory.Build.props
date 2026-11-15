@@ -1,9 +1,9 @@
 <Project>
   <!-- Shared settings for every sample project in this repo.
-       C# 15 union types require LangVersion=preview on .NET 11 previews. -->
+       C# 15 is the default language version for net11.0 in the .NET 11 SDK,
+       so no <LangVersion> is needed (only the memory-safety preview needs it). -->
   <PropertyGroup>
     <TargetFramework>net11.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>

@@ -1,6 +1,6 @@
 // ============================================================================
 //  These tiny types exist to be DECOMPILED. Build this project, then run
-//  ./decompile.sh (or see TALK-CONCEPT.md) to inspect what the compiler emits.
+//  ./decompile.sh (or see docs/01-CSharp15-Unions.md §3) to inspect what the compiler emits.
 // ============================================================================
 namespace Lowering;
 
@@ -31,16 +31,14 @@ public static class Consumer
     // Watch how the implicit conversion and the exhaustive switch lower.
     // We INTENTIONALLY omit a `null` arm here: this is the exhibit that shows
     // the compiler's safety net for the default/empty union — the lowering
-    // emits a `ThrowSwitchExpressionException` fallback (see TALK-CONCEPT).
-    // On stricter previews that net is reported as CS8655; we suppress it so
-    // the teaching IL stays intact.
-#pragma warning disable CS8655 // non-exhaustive over null (the empty union) — intentional
+    // emits a `ThrowSwitchExpressionException` fallback (see docs §3.4).
+    // With non-nullable case types the C# 15 compiler reports no warning for
+    // the missing `null` arm (CS8655 only fires if a case type is nullable).
     public static double Area(Shape shape) => shape switch
     {
         Circle c    => System.Math.PI * c.Radius * c.Radius,
         Rectangle r => r.Width * r.Height,
     };
-#pragma warning restore CS8655
 
     public static Shape MakeCircle(double r) => new Circle(r); // implicit conversion
 }

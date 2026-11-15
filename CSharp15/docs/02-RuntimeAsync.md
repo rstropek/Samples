@@ -1,6 +1,7 @@
 # .NET 11 — Runtime Async
 
-> My prep notes. Built and run against .NET 11 SDK `11.0.100-preview.5.26302.115` (June 2026).
+> My prep notes. Originally built against .NET 11 SDK `11.0.100-preview.5.26302.115` (June 2026);
+> re-verified against the .NET 11 GA SDK `11.0.100` (November 2026).
 > The stack traces, frame counts, and IL listings below all came out of building the
 > `08_RuntimeAsync_Classic` and `09_RuntimeAsync_Enabled` projects and decompiling them with
 > `ilspycmd` — not from memory.
@@ -18,8 +19,9 @@ an ordinary, linear method marked with a special flag, and the runtime itself su
 resumes it. The payoff: no state-machine types, cleaner live stack traces, better debugging, and
 lower overhead.
 
-It's preview and opt-in, and it's transparent to my source code — I keep writing `async`/`await`
-exactly as before.
+In .NET 11 GA it's still labelled preview and is opt-in for my code — but the .NET runtime
+libraries themselves now ship compiled with `runtime-async=on`. It's transparent to my source
+code — I keep writing `async`/`await` exactly as before.
 
 ---
 
@@ -28,11 +30,14 @@ exactly as before.
 ```xml
 <PropertyGroup>
   <Features>$(Features);runtime-async=on</Features>
-  <EnablePreviewFeatures>true</EnablePreviewFeatures>
 </PropertyGroup>
 ```
 
 * Project must target `net11.0` and build with the .NET 11 SDK.
+* New in GA: `<EnablePreviewFeatures>true</EnablePreviewFeatures>` is no longer required for
+  `net11.0` projects (the previews needed it).
+* Opt-out switch: `<UseRuntimeAsync>false</UseRuntimeAsync>`. The old `DOTNET_RuntimeAsync` /
+  `UNSUPPORTED_RuntimeAsync` environment variables were removed.
 * No `DOTNET_RuntimeAsync=1` environment variable needed — the .NET 11 runtime runs
   runtime-async methods out of the box.
 * Supported across JIT, ReadyToRun, and NativeAOT.
@@ -245,9 +250,12 @@ runtime by checking whether the assembly contains any `IAsyncStateMachine` types
 
 ## 5. Caveats / preview status
 
-* Preview and opt-in. API and behaviour may change; not for production yet.
-* The doc page says "last updated for Preview 2", but the `runtime-async=on` switch and the BCL
-  helpers (`AsyncHelpers.Await`, `MethodImplOptions.Async`) are present and working in Preview 5.
+* Still labelled preview in .NET 11 GA (the announcement says so explicitly) and opt-in for
+  user code — but no longer gated behind `EnablePreviewFeatures`, and the BCL itself is compiled
+  with it. Expect it to become the default in a future release.
+* The `runtime-async=on` switch and the BCL helpers (`AsyncHelpers.Await`,
+  `MethodImplOptions.Async`) behave identically in GA and Preview 5; the frame counts and IL
+  below were re-checked on GA.
 * The performance story (fewer allocations, no boxed state machine) is the long-term motivation.
   I'll measure rather than quote specific numbers on stage.
 
@@ -262,7 +270,7 @@ runtime by checking whether the assembly contains any `IAsyncStateMachine` types
    `MoveNext` switch vs a single `AsyncHelpers.Await` call; `flags(2000)` = `MethodImplOptions.Async`.
 4. Be honest (2 min): exception traces are unchanged; this is about live stack/debugging/overhead.
 5. Compatibility (3 min): the `AsyncPatterns` breadth demo.
-6. Wrap (1 min): preview, opt-in, transparent, JIT/R2R/AOT.
+6. Wrap (1 min): opt-in (still preview-labelled), BCL already uses it, transparent, JIT/R2R/AOT.
 
 ---
 
@@ -278,4 +286,5 @@ src/runtime-async-compare.sh
 
 * What's new in the .NET 11 runtime (Runtime Async) — https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/runtime#runtime-async
 * .NET Runtime-Async feature tracking issue — https://github.com/dotnet/runtime/issues/109632
-* .NET 11 Preview 2 runtime release notes — https://github.com/dotnet/core/blob/main/release-notes/11.0/preview/preview2/runtime.md
+* Announcing .NET 11 — https://devblogs.microsoft.com/dotnet/announcing-dotnet-11/
+* .NET 11 Preview 2 runtime release notes (historical) — https://github.com/dotnet/core/blob/main/release-notes/11.0/preview/preview2/runtime.md

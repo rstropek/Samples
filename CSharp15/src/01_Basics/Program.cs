@@ -61,6 +61,6 @@ internal static class Program
         Dog d           => $"Dog named {d.Name}",
         Bird { CanFly: true } b  => $"Bird named {b.Name} (flies)",
         Bird b          => $"Bird named {b.Name} (grounded)",
-        null            => "<uninitialised pet>",   // the default/empty union (CS8655)
+        null            => "<uninitialised pet>",   // default(Pet) — optional, see docs §2.3
     };
 }

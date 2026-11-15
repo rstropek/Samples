@@ -32,9 +32,10 @@ public static class Option
 // (IsSome) alongside extension methods — only possible with extension blocks.
 //
 // The `null` arm handles the *default/empty* union (`default(Option<T>)`,
-// whose contents are null). It keeps the switch exhaustive for nullable
-// analysis and silences CS8655 on stricter previews, while CS8509 still fires
-// if you add a new case type and forget it.
+// whose contents are null). It is optional — with non-nullable case types the
+// compiler doesn't require it (without it, `default` throws
+// SwitchExpressionException) — but unlike `_` it doesn't swallow future case
+// types: CS8509 still fires if you add a new case type and forget it.
 public static class OptionExtensions
 {
     extension<T>(Option<T> option)
