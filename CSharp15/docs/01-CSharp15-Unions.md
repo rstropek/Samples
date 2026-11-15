@@ -67,7 +67,8 @@ public union Pet(Cat, Dog, Bird);   // <-- the headline syntax
 
 [Sample Code](../src/01_Basics/Program.cs#L14)
 
-Case types can be anything; I reach for `record class` because it keeps the demos short and
+Case types can be any type that converts to `object` — classes, structs, interfaces, type
+parameters, other unions (not `ref struct`s like `Span<T>`: CS9371). I reach for `record class` because it keeps the demos short and
 hands me value equality and deconstruction for free.
 
 ### 2.2 Implicit conversions — a `Dog` _is_ a `Pet`
@@ -98,8 +99,9 @@ warning CS8509: The switch expression does not handle all possible values of its
 ```
 
 Worth flagging on stage: exhaustiveness comes back as CS8509, a _warning_, not an error. If I
-want a hard gate I set `<WarningsAsErrors>CS8509</WarningsAsErrors>`. The reason it can only be a
-warning shows up in the deep dive — it's the default/empty union.
+want a hard gate I set `<WarningsAsErrors>CS8509</WarningsAsErrors>`. That's simply consistent
+with every other non-exhaustive C# switch expression (also a warning) — unions don't change the
+policy.
 
 Second thing to flag: the `default`/uninitialised union has `null` content. In C# 15 GA the
 compiler does _not_ demand a `null` arm when all case types are non-nullable — such a switch
@@ -119,7 +121,7 @@ string Describe(Pet pet) => pet switch
 };
 ```
 
-[Sample Code](../src/01_Basics/Program.cs#L55)
+[Sample Code](../src/01_Basics/Program.cs#L58)
 
 I prefer `null =>` over a `_ =>` discard — the discard would quietly swallow any future case
 type and defeat the exhaustiveness check. The sample projects all use `null` arms for this
@@ -205,7 +207,7 @@ public union Shape(Circle, Rectangle, Triangle)
         null        => 0,                       // the default/empty union
     };
 
-    public Shape Scaled(double f) => this switch { /* ... */ Circle c => new Circle(c.Radius*f), _ => this };
+    public Shape Scaled(double f) => this switch { /* ... */ Circle c => new Circle(c.Radius*f), null => this };
 
     public override string ToString() => this switch  // fixes the "ToString not forwarded" gotcha
     {
@@ -226,7 +228,9 @@ public partial union Temperature
     public override string ToString() => $"{AsCelsius:F1} °C";
 }
 
-// (3) Fully explicit — ANY type carrying [Union] + IUnion is a union, members and all
+// (3) Fully explicit — any class/struct with [Union], one public single-parameter constructor
+//     per case type (or a member provider, §3.6) and an `object? Value` property is a union.
+//     Implementing IUnion is optional (the generated form does it).
 [Union]
 public struct HttpOutcome : IUnion
 {
@@ -375,7 +379,7 @@ IL_004e: call      void '<PrivateImplementationDetails>'::ThrowSwitchExpressionE
    CS8509, a warning rather than an error, consistent with every other C# switch. Verified:
 
    ```csharp
-   Result<int> def = default;          // legal
+   Result<int, string> def = default;      // legal
    Console.WriteLine(def.Value is null);   // True   -> no case selected
    ```
 
@@ -390,22 +394,100 @@ IL_004e: call      void '<PrivateImplementationDetails>'::ThrowSwitchExpressionE
    not the case's `ToString()`:
 
    ```text
-   ToString of union: Result`1[System.Int32]      // NOT "Ok { Value = 7 }"
+   ToString of union: Functional.Result`2[System.Int32,System.String]   // NOT "Ok { Value = 7 }"
    ```
 
    The fix is to give the union its own `ToString()` (see §2.7 and `src/11_UnionWithMembers`) by
    switching over `this`. The shorthand `union X(...) { ... }`, a `partial union`, and an explicit
    `[Union]` struct all support custom members.
 
-4. No `op_Implicit`, so no implicit interface/overload tricks — conversions only fire at the
-   syntactic conversion sites the compiler recognises.
+4. No `op_Implicit` is emitted — the union conversion is a language-level conversion the compiler
+   applies at the use site. It still takes part in overload resolution as usual (`Call(Pet)` beats
+   `Call(object)` for a `Cat`), but it's invisible to reflection-based or other-language callers,
+   which just see the constructors.
 
 5. ~~Preview limitations~~ — resolved in GA. In Preview 5, _union member providers_ and the full
    _explicit union pattern_ weren't implemented. In C# 15 GA I verified all of these work:
    hand-written `[Union]` structs **and classes**, the non-boxing access pattern
    (`HasValue` + one `TryGetValue(out T)` per case — the compiler calls those instead of `Value`,
    no boxing), and member providers (a nested `IUnionMembers` interface with static `Create`
-   factories, allowing private constructors).
+   factories, allowing private constructors). See §3.6.
+
+### 3.6 Beyond the shorthand — custom unions without boxing
+
+The shorthand always stores `object?`, so `union Number(int, double)` boxes on every
+conversion. A hand-written `[Union]` type can opt in to the **non-boxing access pattern**:
+
+```csharp
+[Union]
+public readonly struct ValueOption<T> : IUnion
+{
+    private enum Tag : byte { Empty = 0, Some, None }
+    private readonly Tag _tag;
+    private readonly T _value;                        // unboxed storage
+
+    public ValueOption(T value) { _tag = value is null ? Tag.Empty : Tag.Some; _value = value; }
+    public ValueOption(None _)  { _tag = Tag.None; _value = default!; }
+
+    public object? Value => _tag switch { Tag.Some => _value, Tag.None => None.Instance, _ => null };
+
+    public bool HasValue => _tag != Tag.Empty;                                    // for `null`
+    public bool TryGetValue(out T value)    { value = _value; return _tag == Tag.Some; }  // for `T x`
+    public bool TryGetValue(out None value) { value = None.Instance; return _tag == Tag.None; }
+}
+```
+
+[Sample Code](../src/13_CustomUnions/ValueOption.cs#L27)
+
+The compiler now emits `TryGetValue`/`HasValue` calls instead of `get_Value` + `isinst`
+(`src/13_CustomUnions/decompile.sh`):
+
+```text
+SumBoxed (shorthand `union BoxedOption<T>(T, None)`)   SumValueOption (custom [Union] struct)
+  call  BoxedOption`1<int32>::.ctor(!0)   // boxes       call ValueOption`1<int32>::.ctor(!0)
+  call  BoxedOption`1<int32>::get_Value()                call ValueOption`1<int32>::TryGetValue(!0&)
+  isinst  System.Int32
+  unbox.any System.Int32
+```
+
+Contract to respect: `Value`, `HasValue` and `TryGetValue` must always agree — that's why a
+null `T` produces the _empty_ union rather than "Some(null)". And case types must be
+distinguishable: `ValueOption<None>` fails with CS0457.
+
+Measured over 1,000 conversions + type tests: **24,000 bytes** for the shorthand vs **0 bytes**
+for `ValueOption<int>`.
+
+**Union member providers.** Instead of public constructors, a union can implement a nested
+public `IUnionMembers` interface with static `Create` factories. That allows a private
+constructor (validation/normalisation in one place) and lets the union be a `record class` —
+value equality and a readable `ToString()` for free:
+
+```csharp
+[Union]
+public sealed record class Outcome<T> : Outcome<T>.IUnionMembers
+{
+    public interface IUnionMembers : IUnion
+    {
+        static Outcome<T> Create(Ok<T> value)    => new((object)value);
+        static Outcome<T> Create(Failure value)  => new((object)value);
+        new object? Value { get; }
+    }
+    private Outcome(object value) => Value = value;
+    public object? Value { get; }
+}
+
+Outcome<int> a = new Ok<int>(7);   // calls IUnionMembers.Create
+// a.ToString() == "Outcome { Value = Ok { Value = 7 } }", and a == new Ok<int>(7) converted -> True
+```
+
+[Sample Code](../src/13_CustomUnions/Outcome.cs#L28)
+
+Gotcha I hit: writing `=> new(value)` inside `Create` is target-typed to `Outcome<T>` — a union —
+so it becomes a union conversion that calls `Create` again → **stack overflow**. The `(object)`
+cast selects the private constructor.
+
+A class-based union also changes `null` semantics: the `null` pattern matches both a null
+_reference_ and a null `Value`.
 
 ---
 
@@ -477,16 +559,16 @@ where each state carries only its valid data, plus an exhaustive `Advance` trans
 
 ```text
 0: Draft with 2 item(s)
-1: Placed on 06/15/2026
-2: Shipped, tracking TRK-20260615-001
-3: Delivered on 06/18/2026
+1: Placed on 11/15/2026
+2: Shipped, tracking TRK-20261115-001
+3: Delivered on 11/18/2026
 ```
 
 [Sample Code](../src/04_DomainModeling/Program.cs#L15)
 
 ### `05_PatternShowcase` — console
 
-A tour of every pattern form through a union (`Shape(Circle, Rectangle, Triangle)`): type,
+A tour of the main pattern forms through a union (`Shape(Circle, Rectangle, Triangle)`): type,
 relational, property, `when` guards, and switching over a tuple of unions.
 
 ```text
@@ -520,13 +602,97 @@ members, and the "switch over `this`, not `Value`" rule (§2.7).
 Circle(r=2)                area=12.57  degenerate=False
 Rectangle(3x4)             area=12.00  degenerate=False
 Circle(r=2) scaled x3 -> Circle(r=6)
-98.6 °F body temp -> 37.0 °C
+Fahrenheit { Degrees = 98.6 } body temp -> 37.0 °C
 OK 200 (success=True)
 ```
 
 [Sample Code — Shape](../src/11_UnionWithMembers/Shape.cs#L18) · [Temperature](../src/11_UnionWithMembers/Temperature.cs#L11) · [HttpOutcome](../src/11_UnionWithMembers/ExplicitUnion.cs#L14)
 
-### `07_CollectionExprArgs` — console (bonus feature, see §6)
+### `12_ClosedHierarchies` — console (see §6)
+
+The `Pet` example as a `closed record` hierarchy: exhaustive switch without `_`, the shared
+`Name` member on the base, non-transitive closed-ness (`Puppy : Dog`), a nullable `Pet?`
+switch, a generic constraint `where TPet : Pet`, and a closed recursive `Tree<T>`.
+
+```text
+Whiskers  Cat named Whiskers           says meow
+Rex       Dog named Rex                says woof
+Bit       Dog named Bit                says woof
+Tweety    Bird named Tweety (flies)    says tweet
+<no pet>
+
+Runtime type of a Pet: Dog (no wrapper struct, no .Value)
+
+Tree sum = 6, depth = 3
+```
+
+[Sample Code](../src/12_ClosedHierarchies/Program.cs#L24)
+
+### `13_CustomUnions` — console (+ `decompile.sh`, see §3.6)
+
+A non-boxing `ValueOption<T>` struct vs the shorthand, and a record-class `Outcome<T>` with a
+member provider.
+
+```text
+Some(42) -> some int 42
+None     -> explicit none
+<empty>  -> default/empty
+shorthand union (boxes int)      sum=499500  allocated=24,000 bytes
+ValueOption<int> (TryGetValue)   sum=499500  allocated=0 bytes
+
+a = Outcome { Value = Ok { Value = 7 } }
+a == b: True
+c = FAILED: unknown error
+missing = <null>
+```
+
+[Sample Code — ValueOption](../src/13_CustomUnions/ValueOption.cs#L27) · [Outcome](../src/13_CustomUnions/Outcome.cs#L28) · [decompile.sh](../src/13_CustomUnions/decompile.sh)
+
+### `14_JsonUnions` — console (see §7)
+
+System.Text.Json with unions and closed hierarchies, all through the source generator — each
+scenario next to its C# 14 / .NET 10 equivalent (`CSharp14Way.cs`), with a check that both
+produce the same JSON.
+
+```text
+== (1) union of primitives ==
+  C# 15: [42,"sensor offline"]
+    7    -> case Int32
+    ok   -> case String
+    8    -> case Int32
+  C# 14: [42,"sensor offline"]   (custom JsonConverter, same JSON: True)
+
+== (2) union of objects, structural classifier ==
+  {"Value":1}                        C# 15 -> Ok(1)                  C# 14 -> Ok(1)
+  {"Title":"Teapot","Status":418}    C# 15 -> Problem(418 Teapot)    C# 14 -> Problem(418 Teapot)
+  {"Foo":1}                          C# 15 -> JsonException          C# 14 -> JsonException
+  serialised: {"Title":"Not found","Status":404}   (same JSON in C# 14: True)
+
+== (3) closed hierarchy, inferred $type ==
+  C# 15: [{"$type":"Circle","Radius":1.5},{"$type":"Square","Length":2},{"$type":"Triangle","Base":3,"Height":4}]
+    round-trip -> Circle { Radius = 1.5 }
+    round-trip -> Square { Length = 2 }
+    round-trip -> Triangle { Base = 3, Height = 4 }
+  C# 14: [{"$type":"Circle","Radius":1.5},{"$type":"Square","Length":2}]   ([JsonDerivedType] list)
+  C# 14 + Triangle -> NotSupportedException
+```
+
+[Sample Code](../src/14_JsonUnions/Program.cs#L21) · [C# 14 version](../src/14_JsonUnions/CSharp14Way.cs#L1)
+
+### `15_IndexersAndLabels` — console (bonus features, see §8)
+
+```text
+squares[2] = 9, squares[^1] = 100
+Sun 2026-11-15: Monday of that week = Mon 2026-11-09
+board = ...X......, board[(0,3)] = 'X'
+C# 15 labeled loops : goal at (3,3) after 11 cells
+pre-C# 15 (flag)    : goal at (3,3) after 11 cells
+processed 3 steps, 1 command(s) left after 'quit'
+```
+
+[Sample Code](../src/15_IndexersAndLabels/Program.cs#L9)
+
+### `07_CollectionExprArgs` — console (bonus feature, see §8)
 
 ```text
 List: count=3, capacity=6
@@ -541,12 +707,14 @@ Merged: [0, 1, 2, 3, 4] capacity=16
 
 ## 5. How it compares
 
-- **Declaration** — C# 15: `union Pet(Cat,Dog)`; F#: `type Pet = Cat | Dog`; OneOf: `OneOf<Cat,Dog>`; sealed hierarchy: abstract + sealed.
-- **Exhaustiveness** — C# 15: yes, a CS8509 warning; F#: yes, an error; OneOf: no; sealed hierarchy: only with sealed + warning.
-- **Pattern integration** — C# 15: full unwrap; F#: yes; OneOf: positional `.IsT0`; sealed hierarchy: yes.
-- **Named cases by type** — C# 15: yes; F#: yes; OneOf: no (index based); sealed hierarchy: yes.
-- **Runtime cost** — C# 15: one ref field, boxes value-type cases; F#: tag + fields; OneOf: wrapper object; sealed hierarchy: natural.
-- **Dependency** — C# 15: in-box (.NET 11); F#: F# only; OneOf: third-party; sealed hierarchy: none.
+- **Declaration** — C# 15 union: `union Pet(Cat,Dog)`; C# 15 closed: `closed record Pet;` + subtypes; F#: `type Pet = Cat | Dog`; OneOf: `OneOf<Cat,Dog>`; sealed hierarchy: abstract + sealed.
+- **Exhaustiveness** — union: yes, a CS8509 warning; closed: yes, CS8509; F#: yes, warning FS0025; OneOf: via `.Match(...)` (one lambda per case), not via `switch`; abstract + sealed: no — needs a `_` arm.
+- **Case types** — union: any existing types (`int`, `string`, foreign records); closed: only your own subtypes; F#: named cases; OneOf: any.
+- **Shared members** — union: only what you add to the union body; closed: inherited from the base; F#: members on the type; OneOf: none.
+- **Pattern integration** — union: full unwrap; closed: native (no wrapper); F#: yes; OneOf: positional `.IsT0`; sealed hierarchy: yes.
+- **Runtime cost** — union: one `object?` field, boxes value-type cases (custom `[Union]` can avoid it, §3.6); closed: plain objects, no wrapper; F#: tag + fields; OneOf: wrapper struct.
+- **"Empty" value** — union: `default(Pet)` with `Value == null`; closed: a `null` reference; F#: only via `Unchecked.defaultof`/interop; OneOf: `default`.
+- **Dependency** — union/closed: in-box (.NET 11); F#: F# only; OneOf: third-party; sealed hierarchy: none.
 
 The nuance I want to close on: C# unions are unions _of types_, not tagged unions. If two cases
 would be the same type, give them distinct case types. That's the part that differs from F#'s
@@ -573,7 +741,172 @@ A runnable side-by-side lives in [`src/00_Rust`](../src/00_Rust/README.md): the 
 
 ---
 
-## 6. Bonus C# 15 feature — Collection expression arguments
+## 6. Closed hierarchies — the other half of exhaustiveness
+
+C# 15 also fixes the "abstract base + sealed subclasses" workaround from §1. Mark the base
+`closed` and only the declaring assembly may derive from it _directly_; the set of direct
+subtypes is known, so switches are exhaustive:
+
+```csharp
+public closed record Pet(string Name);               // implicitly abstract
+public record Cat(string Name) : Pet(Name);
+public record Dog(string Name) : Pet(Name);
+public record Bird(string Name, bool CanFly) : Pet(Name);
+
+string Describe(Pet pet) => pet switch
+{
+    Cat c  => $"Cat named {c.Name}",
+    Dog d  => $"Dog named {d.Name}",
+    Bird b => $"Bird named {b.Name}",
+};   // no `_` arm, no warning; drop one -> CS8509
+```
+
+[Sample Code](../src/12_ClosedHierarchies/Program.cs#L24)
+
+Rules worth knowing (verified on the GA compiler; the error cases appear as comments in
+`12_ClosedHierarchies`):
+
+- In another assembly: `error CS9382: 'Hamster': cannot use a closed type 'Pet' from another
+  assembly as a base type.`
+- `closed` is not transitive. `Dog` is open, so `Puppy : Dog` is fine anywhere — and still
+  matched by the `Dog` arm.
+- `Pet?` needs a `null` arm (CS8655 otherwise).
+- A type parameter `where TPet : Pet` is treated like `Pet` for exhaustiveness.
+- Generic subtypes must use all their type parameters in the base (`Leaf<T> : Tree<T>` ✓,
+  `Const<U> : Tree<int>` ✗).
+
+**Union or closed?** A union is "one of these _existing_ types" — `int`, `string`, a record from
+another library — with a wrapper struct and no shared members. A closed hierarchy is "one of _my_
+subtypes" — no wrapper, no boxing, shared base members (`pet.Name` without a switch), but you
+must own every case type. For a domain model you own (`04_DomainModeling`, `03_RecursiveExpr`)
+`closed` is often the more natural fit; for combining types you don't own (`Result<T, E>`,
+`int | string`) only a union works.
+
+---
+
+## 7. Unions on the wire — System.Text.Json
+
+.NET 11's System.Text.Json understands unions out of the box. A union serialises as its case
+value — no wrapper object, no `$type`:
+
+```csharp
+public union Reading(int, string);
+Reading[] readings = [42, "sensor offline"];
+JsonSerializer.Serialize(readings);           // [42,"sensor offline"]
+```
+
+On deserialisation the default classifier picks the case from the JSON token kind. That can't
+distinguish two _object_ cases, so opt in to the structural classifier, which matches property
+names (zero or multiple matches → `JsonException`):
+
+```csharp
+[JsonUnion(TypeClassifier = typeof(JsonUnionTypeStructuralClassifier))]
+public union ApiResult(Ok, Problem);          // Ok(int Value) / Problem(string Title, int Status)
+```
+
+And for closed hierarchies, STJ can infer the polymorphism from the closed set — no
+`[JsonDerivedType]` list:
+
+```csharp
+[JsonPolymorphic(InferClosedTypePolymorphism = true)]
+public closed record Shape;
+// [{"$type":"Circle","Radius":1.5},{"$type":"Square","Length":2}]
+```
+
+[Sample Code](../src/14_JsonUnions/Program.cs#L21)
+
+### 7.1 How you'd write it in C# 14 / .NET 10
+
+The wire format is identical (the sample checks it), but every scenario needs hand-written
+plumbing. [`CSharp14Way.cs`](../src/14_JsonUnions/CSharp14Way.cs#L1) has the full code; the
+essence:
+
+**(1) `int` or `string`** — no union type, so: a wrapper struct, an `implicit operator` per case,
+and a custom converter that switches on the token kind
+([code](../src/14_JsonUnions/CSharp14Way.cs#L21)):
+
+```csharp
+[JsonConverter(typeof(ReadingConverter))]
+public readonly struct Reading
+{
+    public object? Value { get; }
+    private Reading(object value) => Value = value;
+    public static implicit operator Reading(int value)    => new(value);
+    public static implicit operator Reading(string value) => new(value);
+}
+
+public sealed class ReadingConverter : JsonConverter<Reading>
+{
+    public override Reading Read(ref Utf8JsonReader reader, Type t, JsonSerializerOptions o) =>
+        reader.TokenType switch
+        {
+            JsonTokenType.Number => reader.GetInt32(),
+            JsonTokenType.String => reader.GetString()!,
+            _ => throw new JsonException(...),
+        };
+
+    public override void Write(Utf8JsonWriter writer, Reading value, JsonSerializerOptions o)
+    {
+        switch (value.Value)              // object? — no exhaustiveness check
+        {
+            case int i:    writer.WriteNumberValue(i); break;
+            case string s: writer.WriteStringValue(s); break;
+            default:       throw new JsonException(...);
+        }
+    }
+}
+```
+
+**(2) `Ok` or `Problem` by shape** — a converter that buffers the object into a `JsonDocument`
+and sniffs hard-coded property names that you must keep in sync with the records by hand
+([code](../src/14_JsonUnions/CSharp14Way.cs#L66)):
+
+```csharp
+using var doc = JsonDocument.ParseValue(ref reader);
+var root = doc.RootElement;
+bool looksLikeOk      = root.TryGetProperty(nameof(Ok.Value), out _);
+bool looksLikeProblem = root.TryGetProperty(nameof(Problem.Title), out _)
+                     && root.TryGetProperty(nameof(Problem.Status), out _);
+return (looksLikeOk, looksLikeProblem) switch
+{
+    (true, false) => root.Deserialize<Ok>(options)!,
+    (false, true) => root.Deserialize<Problem>(options)!,
+    _ => throw new JsonException("Payload matches no (or more than one) ApiResult case."),
+};
+```
+
+**(3) Polymorphic hierarchy** — every subtype listed by hand
+([code](../src/14_JsonUnions/CSharp14Way.cs#L99)):
+
+```csharp
+[JsonPolymorphic]
+[JsonDerivedType(typeof(Circle), nameof(Circle))]
+[JsonDerivedType(typeof(Square), nameof(Square))]
+public abstract record Shape;
+public record Triangle(double Base, double Height) : Shape;   // added later, list not updated
+```
+
+That compiles fine — and serialising a `Triangle` throws `NotSupportedException` at **runtime**.
+With `closed` + `InferClosedTypePolymorphism`, the C# 15 `Triangle` just works.
+
+The takeaway for the audience: **C# 15 + .NET 11 replace ~70 lines of wrapper/converter code
+with three declarations and two attributes** — and the parts that used to fail at runtime
+(a forgotten case in a converter, a missing `[JsonDerivedType]`) are now either checked by the
+compiler or derived automatically.
+
+### 7.2 Notes
+
+The sample runs everything through a `JsonSerializerContext` (source generator → trimming and
+Native AOT friendly). Limits from the docs: the structural classifier doesn't support nested
+unions, polymorphic cases, or `ReferenceHandler.Preserve`. Per the .NET 11 announcement, ASP.NET
+Core Minimal APIs/MVC accept unions in JSON bodies and OpenAPI renders them as `anyOf` (not part
+of this sample).
+
+---
+
+## 8. Bonus C# 15 features
+
+### 8.1 Collection expression arguments
 
 A `with(...)` element (it has to come first) forwards arguments to the target collection's
 constructor/factory — capacity, comparers, and so on.
@@ -593,9 +926,63 @@ One caveat I hit: dictionary collection-expressions still need a single-argument
 `[with(comparer), KeyValuePair.Create(...)]` does not compile — still true in C# 15 GA (CS9215).
 Dictionary expressions (`[k: v]`) are not part of C# 15.
 
+### 8.2 Extension indexers
+
+Extension blocks (C# 14) gain indexers. Indexers are instance members, so the block needs a
+named receiver:
+
+```csharp
+extension<T>(IEnumerable<T> source)
+{
+    public T this[Index index] => index.IsFromEnd
+        ? source.Reverse().ElementAt(index.Value - 1)
+        : source.ElementAt(index.Value);
+}
+
+IEnumerable<int> squares = Squares(10);       // a lazy iterator
+squares[^1];                                  // 100
+today[DayOfWeek.Monday];                      // extension(DateOnly) indexer
+board[new Pos(0, 3)] = 'X';                   // getter + setter on List<char>
+```
+
+[Sample Code](../src/15_IndexersAndLabels/Program.cs#L116)
+
+Gotcha: element access on an **array** never falls back to an extension indexer —
+`char[] arr; arr[pos]` is `CS0029: Cannot implicitly convert type 'Pos' to 'int'`. Extend an
+interface (`IReadOnlyList<T>`) or a class instead.
+
+### 8.3 Labeled `break` / `continue`
+
+Label a loop (or `switch`) and jump to it by name — no more flags or `goto`:
+
+```csharp
+rows: for (int r = 0; r < maze.Count; r++)
+{
+    for (int c = 0; c < maze[r].Length; c++)
+    {
+        if (maze[new Pos(r, c)] == '#') continue rows;   // next ROW
+        ...
+    }
+}
+
+loop: while (commands.TryDequeue(out var cmd))
+{
+    switch (cmd)
+    {
+        case "skip": continue loop;
+        case "quit": break loop;                          // leaves the WHILE, not just the switch
+    }
+}
+```
+
+[Sample Code](../src/15_IndexersAndLabels/Program.cs#L69)
+
+The sample puts the flag-based pre-C# 15 version next to it. (IDE0410 suggests the rewrite for
+the classic `found = true; break; … if (found) break;` and `goto` shapes.)
+
 ---
 
-## 7. Demo running order (pick from these depending on time)
+## 9. Demo running order (pick from these depending on time)
 
 1. Hook (2 min): show the `OneOf`/nullable-fields pain, then the one-line `union`.
 2. Basics (5 min): `01_Basics` — implicit conversion + exhaustive switch; delete a case to
@@ -607,12 +994,18 @@ Dictionary expressions (`[k: v]`) are not part of C# 15.
 5. Real use (10 min): `02_ResultOption` + `10_ResultOptionUsage` (Option/Result, extension blocks,
    validation pipeline) and `03_RecursiveExpr` (AST). Optionally `04_DomainModeling`.
 6. Patterns (5 min): `05_PatternShowcase`, tuple-of-unions.
-7. Bonus (3 min): collection expression arguments.
-8. Wrap (2 min): comparison table, the `default(union)` caveat, "type unions vs tagged unions".
+7. Custom unions (5 min): `13_CustomUnions` — 24,000 vs 0 bytes, `decompile.sh` shows
+   `TryGetValue` instead of `isinst`; member providers and the record-class union.
+8. Closed hierarchies (5 min): `12_ClosedHierarchies` — the §1 workaround, fixed; union vs closed.
+9. On the wire (5 min): `14_JsonUnions` — bare values, structural classifier, inferred `$type`;
+   each next to its C# 14 converter/`[JsonDerivedType]` version (`CSharp14Way.cs`).
+10. Bonus (5 min): collection expression arguments, extension indexers, labeled break/continue
+    (`07`, `15`).
+11. Wrap (2 min): comparison table, the `default(union)` caveat, "type unions vs tagged unions".
 
 ---
 
-## 8. Reproduce everything
+## 10. Reproduce everything
 
 ```bash
 # .NET 11 SDK + an IL decompiler
@@ -621,13 +1014,16 @@ dotnet tool install -g ilspycmd
 dotnet build  CSharp15.slnx -c Release      # 0 warnings, 0 errors
 dotnet test   tests/Csharp15.Tests          # Passed! Failed: 0, Passed: 10
 src/06_Lowering/decompile.sh                # regenerate the IL listings in §3
+src/13_CustomUnions/decompile.sh            # TryGetValue vs get_Value/unbox (§3.6)
 ```
 
-## 9. References
+## 11. References
 
 - What's new in C# 15 — https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15
 - Union types (language reference) — https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/union
-- Unions feature specification — https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/unions
-- Proposal & spec source — https://github.com/dotnet/csharplang/blob/main/proposals/unions.md
+- Unions feature specification — https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-15.0/unions
 - Discriminated unions working group — https://github.com/dotnet/csharplang/tree/main/meetings/working-groups/discriminated-unions
 - Collection expression arguments — https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/collection-expressions#collection-expression-arguments
+- `closed` modifier — https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/closed
+- What's new in .NET 11 libraries (System.Text.Json unions) — https://learn.microsoft.com/dotnet/core/whats-new/dotnet-11/libraries
+- Announcing .NET 11 — https://devblogs.microsoft.com/dotnet/announcing-dotnet-11/

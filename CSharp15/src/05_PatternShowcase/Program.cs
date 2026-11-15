@@ -12,7 +12,7 @@ public union Shape(Circle, Rectangle, Triangle);
 
 internal static class Program
 {
-    // type + positional + property + relational + logical + `when`
+    // type + property + relational + `when` (positional patterns: see 03_RecursiveExpr)
     public static string Classify(Shape shape) => shape switch
     {
         Circle { Radius: 0 }                    => "degenerate circle",
@@ -33,7 +33,8 @@ internal static class Program
         null        => throw new InvalidOperationException("uninitialised Shape"),
     };
 
-    // Switching over a *tuple of unions* — exhaustiveness across the product.
+    // Switching over a *tuple of unions*. Without the `_` arm all 9 combinations
+    // would have to be listed — the compiler checks the full product.
     public static string Compare(Shape a, Shape b) => (a, b) switch
     {
         (Circle, Circle)        => "two circles",

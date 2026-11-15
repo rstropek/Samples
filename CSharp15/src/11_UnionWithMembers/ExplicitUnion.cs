@@ -1,6 +1,7 @@
 // ============================================================================
 //  The shorthand is just sugar. A hand-written struct that carries [Union],
-//  implements IUnion, and exposes the case constructors is ALSO a union: it
+//  exposes the case constructors and an `object? Value` property is ALSO a
+//  union (implementing IUnion is optional but documents the intent): it
 //  gets implicit conversions, pattern unwrapping, and exhaustiveness — and you
 //  control every member (storage, ToString, operators, ...).
 // ============================================================================

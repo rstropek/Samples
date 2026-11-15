@@ -11,6 +11,10 @@
     <Project Path="src/09_RuntimeAsync_Enabled/09_RuntimeAsync_Enabled.csproj" />
     <Project Path="src/10_ResultOptionUsage/10_ResultOptionUsage.csproj" />
     <Project Path="src/11_UnionWithMembers/11_UnionWithMembers.csproj" />
+    <Project Path="src/12_ClosedHierarchies/12_ClosedHierarchies.csproj" />
+    <Project Path="src/13_CustomUnions/13_CustomUnions.csproj" />
+    <Project Path="src/14_JsonUnions/14_JsonUnions.csproj" />
+    <Project Path="src/15_IndexersAndLabels/15_IndexersAndLabels.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Csharp15.Tests/Csharp15.Tests.csproj" />

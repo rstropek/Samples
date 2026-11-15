@@ -20,7 +20,8 @@ resumes it. The payoff: no state-machine types, cleaner live stack traces, bette
 lower overhead.
 
 In .NET 11 GA it's still labelled preview and is opt-in for my code — but the .NET runtime
-libraries themselves now ship compiled with `runtime-async=on`. It's transparent to my source
+libraries themselves now largely ship compiled with `runtime-async=on` (a few assemblies still
+contain classic state machines). It's transparent to my source
 code — I keep writing `async`/`await` exactly as before.
 
 ---
@@ -36,14 +37,16 @@ code — I keep writing `async`/`await` exactly as before.
 * Project must target `net11.0` and build with the .NET 11 SDK.
 * New in GA: `<EnablePreviewFeatures>true</EnablePreviewFeatures>` is no longer required for
   `net11.0` projects (the previews needed it).
-* Opt-out switch: `<UseRuntimeAsync>false</UseRuntimeAsync>`. The old `DOTNET_RuntimeAsync` /
-  `UNSUPPORTED_RuntimeAsync` environment variables were removed.
+* The old `DOTNET_RuntimeAsync` / `UNSUPPORTED_RuntimeAsync` environment variables were removed.
+  The docs also mention `<UseRuntimeAsync>false</UseRuntimeAsync>`, but it does **not** override an
+  explicit `runtime-async=on` in `<Features>` (verified on GA) — to opt out, just drop the flag.
 * No `DOTNET_RuntimeAsync=1` environment variable needed — the .NET 11 runtime runs
   runtime-async methods out of the box.
 * Supported across JIT, ReadyToRun, and NativeAOT.
 
 In my samples, project `08` omits the flag (classic) and project `09` sets it (runtime async).
-The `Program.cs` is byte-for-byte identical between them — that's the whole point of the A/B.
+The async call chain in `Program.cs` is identical between them (`09` only adds the `AsyncPatterns`
+breadth demo at the end) — that's the whole point of the A/B.
 
 ---
 
@@ -59,7 +62,7 @@ static async Task InnerAsync()
 }
 ```
 
-[Sample Code](../src/08_RuntimeAsync_Classic/Program.cs#L29) · [runtime-async variant](../src/09_RuntimeAsync_Enabled/Program.cs#L29)
+[Sample Code](../src/08_RuntimeAsync_Classic/Program.cs#L30) · [runtime-async variant](../src/09_RuntimeAsync_Enabled/Program.cs#L30)
 
 ### 2.1 Classic approach — compiler-generated state machine
 
@@ -119,9 +122,10 @@ The matching IL — the generated nested type and its fields (`ilspycmd 08_...dl
 }
 ```
 
-Why the stack trace gets noisy: every suspension/resumption goes through
-`AsyncMethodBuilderCore.Start` → `MoveNext`. When I capture a live stack inside a synchronously
-completing chain, each level shows two extra infrastructure frames. In the 3-level demo that's
+Why the stack trace gets noisy: every async method is *started* through
+`AsyncMethodBuilderCore.Start` → `MoveNext` (later resumptions are driven by the awaiter's
+continuation instead). When I capture a live stack inside a synchronously completing chain, all
+levels are still in their first `MoveNext`, so each level shows two extra infrastructure frames. In the 3-level demo that's
 13 printed frames (and 4 distinct `IAsyncStateMachine` structs in the assembly).
 
 ### 2.2 Runtime Async approach — runtime-managed suspension
@@ -145,7 +149,9 @@ The runtime owns suspension now: when `AsyncHelpers.Await` hits an incomplete ta
 captures and continues execution itself (a runtime-level continuation), so the method frame is
 the real frame — there's no `MoveNext` shim in between.
 
-The matching IL — the whole method body for `InnerAsync` (`ilspycmd 09_...dll -il`):
+The matching IL for the *minimal* `InnerAsync` above (from a stripped-down probe; the real
+sample's `InnerAsync` also prints the separator and frame count, so its body is longer — the
+await lowering is identical):
 
 ```text
 .method assembly hidebysig static
@@ -206,9 +212,16 @@ CLASSIC (13 frames)                              RUNTIME-ASYNC (5 frames)
 This helps anything that inspects the live execution stack: profilers, diagnostic logging, the
 debugger's call-stack window.
 
-Note to self: `StackTrace.FrameCount` reports a few more than the printed lines (it counts
-`[StackTraceHidden]` frames that `ToString()` collapses). Use the printed trace for the 13-vs-5
-story.
+Be precise on stage: the demo awaits only *completed* tasks, so the whole chain is still
+physically on the stack. After a real suspension (`await Task.Delay(...)`), the resumed method
+runs on a continuation and its logical callers are no longer on the physical stack — in either
+mode. Runtime async removes the infrastructure frames; it doesn't reconstruct logical call
+stacks.
+
+Note to self: `StackTrace.FrameCount` reports more than the printed lines (17 vs 13 in the
+classic build — it counts `[StackTraceHidden]` frames that `ToString()` collapses). The sample
+prints both; use the printed count for the 13-vs-5 story. (The trace above abbreviates the
+compiler-generated names, e.g. `<<Main>$>g__InnerAsync|0_2` → `g__InnerAsync|0_2`.)
 
 ### 3.2 Exception stack traces are already fine — don't oversell this
 
@@ -227,7 +240,7 @@ Project `09` also runs `AsyncPatterns.cs` to show ordinary patterns compile to r
 
 ```text
 await in a loop      -> 15
-try/catch/finally    -> caught divide-by-zero
+try/catch/finally    -> caught divide-by-zero (finally ran: True)
 ValueTask            -> 42
 Task.WhenAll         -> 1,2,3
 ```
@@ -238,9 +251,9 @@ Task.WhenAll         -> 1,2,3
 
 ## 4. Sample catalogue
 
-- **`08_RuntimeAsync_Classic`** (console) — 3-level async chain; the classic state-machine stack trace (13 frames). [Sample Code](../src/08_RuntimeAsync_Classic/Program.cs#L17)
-- **`09_RuntimeAsync_Enabled`** (console) — same source + `runtime-async=on` → 5 frames; plus the `AsyncPatterns.cs` breadth demo. [Sample Code](../src/09_RuntimeAsync_Enabled/Program.cs#L17) · [patterns](../src/09_RuntimeAsync_Enabled/AsyncPatterns.cs#L10)
-- **`src/runtime-async-compare.sh`** (script) — builds both, diffs the stack traces, and greps the IL (4 state machines vs 0; shows `AsyncHelpers.Await`). [Script](../src/runtime-async-compare.sh)
+- **`08_RuntimeAsync_Classic`** (console) — 3-level async chain; the classic state-machine stack trace (13 frames). [Sample Code](../src/08_RuntimeAsync_Classic/Program.cs#L18)
+- **`09_RuntimeAsync_Enabled`** (console) — same source + `runtime-async=on` → 5 frames; plus the `AsyncPatterns.cs` breadth demo. [Sample Code](../src/09_RuntimeAsync_Enabled/Program.cs#L18) · [patterns](../src/09_RuntimeAsync_Enabled/AsyncPatterns.cs#L10)
+- **`src/runtime-async-compare.sh`** (script) — runs both, prints the two stack traces, and greps the IL (4 state machines vs 0; shows `AsyncHelpers.Await`). [Script](../src/runtime-async-compare.sh)
 
 There's a small reflection helper in `Program.cs` (`IsRuntimeAsyncOn`) that detects the mode at
 runtime by checking whether the assembly contains any `IAsyncStateMachine` types — it prints

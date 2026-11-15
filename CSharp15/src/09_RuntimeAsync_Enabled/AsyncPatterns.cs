@@ -3,16 +3,16 @@
 //  use keeps working. These all compile to runtime-async methods (flags(2000),
 //  AsyncHelpers.Await) rather than state machines.
 // ============================================================================
-using System.Diagnostics;
-
 internal static class AsyncPatterns
 {
+    static bool _finallyRan;
+
     public static async Task RunAllAsync()
     {
         Console.WriteLine(new string('=', 60));
         Console.WriteLine("Async patterns under runtime-async:");
         Console.WriteLine($"  await in a loop      -> {await SumAsync(5)}");        // 15
-        Console.WriteLine($"  try/catch/finally    -> {await SafeDivideAsync(10, 0)}");
+        Console.WriteLine($"  try/catch/finally    -> {await SafeDivideAsync(10, 0)} (finally ran: {_finallyRan})");
         Console.WriteLine($"  ValueTask            -> {await FastPathAsync(true)}");
         Console.WriteLine($"  Task.WhenAll         -> {string.Join(",", await Task.WhenAll(One(), Two(), Three()))}");
     }
@@ -41,7 +41,7 @@ internal static class AsyncPatterns
         }
         finally
         {
-            Debug.Assert(true);               // finally still runs
+            _finallyRan = true;               // finally still runs
         }
     }
 

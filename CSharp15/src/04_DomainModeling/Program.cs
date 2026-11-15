@@ -16,12 +16,15 @@ public union OrderState(Draft, Placed, Shipped, Delivered, Cancelled);
 
 internal static class Program
 {
+    // Fixed "today" so the demo output is reproducible.
+    private static readonly DateOnly Today = new(2026, 11, 15);
+
     // A transition function. The exhaustive switch guarantees every state is
     // considered whenever the state set grows.
     public static OrderState Advance(OrderState state) => state switch
     {
         Draft { Items.Count: 0 }  => new Cancelled("Cannot place an empty order"),
-        Draft d                   => new Placed(d.Items, DateOnly.FromDateTime(DateTime.Now)),
+        Draft d                   => new Placed(d.Items, Today),
         Placed p                  => new Shipped($"TRK-{p.OrderedOn:yyyyMMdd}-001", p.OrderedOn.AddDays(1)),
         Shipped s                 => new Delivered(s.ShippedOn.AddDays(2)),
         Delivered done            => done,        // terminal

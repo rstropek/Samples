@@ -4,8 +4,9 @@
 //  completion) keeps the whole call chain on the stack so the frame count is
 //  directly comparable between the classic and runtime-async builds.
 //
-//  This file is IDENTICAL in both 08_RuntimeAsync_Classic and
-//  09_RuntimeAsync_Enabled. The ONLY difference is the .csproj:
+//  The call chain below is IDENTICAL in 08_RuntimeAsync_Classic and
+//  09_RuntimeAsync_Enabled (09 additionally runs the AsyncPatterns breadth
+//  demo at the end). The ONLY difference that matters is the .csproj:
 //      <Features>$(Features);runtime-async=on</Features>
 // ============================================================================
 using System.Diagnostics;
@@ -32,7 +33,9 @@ static async Task InnerAsync()
     var trace = new StackTrace(fNeedFileInfo: false);
     Console.WriteLine(trace);
     Console.WriteLine(new string('-', 60));
-    Console.WriteLine($"Visible frames: {trace.FrameCount}");
+    int printed = trace.ToString().Split('\n', StringSplitOptions.RemoveEmptyEntries).Length;
+    // FrameCount also counts [StackTraceHidden] frames that ToString() omits.
+    Console.WriteLine($"Printed frames: {printed} (StackTrace.FrameCount incl. hidden: {trace.FrameCount})");
 }
 
 // Heuristic: classic async emits a nested IAsyncStateMachine type for InnerAsync;

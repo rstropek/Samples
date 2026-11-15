@@ -23,8 +23,10 @@ namespace Basics.Alternatives
 
 // ---------------------------------------------------------------------------
 // (1) Abstract base + sealed subclasses (a "closed-ish" hierarchy).
-//     Cost: the compiler does NOT treat a sealed hierarchy as exhaustive yet,
-//     so the switch still needs a `_` / default arm or it warns (CS8509).
+//     Cost: the compiler does NOT treat an abstract + sealed hierarchy as
+//     exhaustive, so the switch still needs a `_` / default arm or it warns
+//     (CS8509). C# 15 fixes THIS approach too: mark the base `closed` — see
+//     12_ClosedHierarchies.
 // ---------------------------------------------------------------------------
 namespace Basics.Alternatives.ClassHierarchy
 {

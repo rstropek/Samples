@@ -15,6 +15,6 @@ Temperature t2 = new Celsius(100);
 Console.WriteLine($"{new Fahrenheit(98.6)} body temp -> {t1}");  // partial-union ToString
 Console.WriteLine($"boiling -> {t2}");
 
-// The explicit form: ANY type with [Union] + IUnion works the same way.
+// The explicit form: a type with [Union], case constructors and `object? Value` works the same way.
 // See ExplicitUnion.cs for a hand-written union struct with members.
 ExplicitDemo.Run();

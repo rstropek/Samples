@@ -2,7 +2,10 @@
 
 My working repo for a single talk covering two .NET 11 features:
 
-1. C# 15 Union Types (discriminated unions) — see [`docs/01-CSharp15-Unions.md`](docs/01-CSharp15-Unions.md)
+1. C# 15 Union Types (discriminated unions) — see [`docs/01-CSharp15-Unions.md`](docs/01-CSharp15-Unions.md),
+   including closed hierarchies, custom (non-boxing) unions, unions in System.Text.Json, and the
+   smaller C# 15 features (collection expression arguments, extension indexers, labeled
+   `break`/`continue`)
 2. .NET 11 Runtime Async — see [`docs/02-RuntimeAsync.md`](docs/02-RuntimeAsync.md)
 
 Each doc has my notes: a feature walkthrough, a deep dive into the implementation (decompiled C#
@@ -28,14 +31,18 @@ src/
   02_ResultOption/                # [unions] classlib — Option<T> / Result<T,E> + combinators (extension blocks)
   03_RecursiveExpr/               # [unions] console — recursive AST evaluator + printer
   04_DomainModeling/              # [unions] console — state machine, illegal states unrepresentable
-  05_PatternShowcase/             # [unions] console — every pattern form through a union
+  05_PatternShowcase/             # [unions] console — the main pattern forms through a union
   06_Lowering/                    # [unions] classlib — types for the IL deep dive (+ decompile.sh)
   07_CollectionExprArgs/          # [bonus]  console — collection expression arguments (with(...))
   08_RuntimeAsync_Classic/        # [async]  console — classic compiler state machine (13 frames)
   09_RuntimeAsync_Enabled/        # [async]  console — runtime-async=on (5 frames) + patterns demo
   10_ResultOptionUsage/           # [unions] console — real-world Option/Result usage (consumes 02)
   11_UnionWithMembers/            # [unions] console — union with custom ToString/methods (3 forms)
-  runtime-async-compare.sh        # builds 08 vs 09, diffs stack traces + IL
+  12_ClosedHierarchies/           # [closed] console — `closed` records: exhaustive without a union
+  13_CustomUnions/                # [unions] console — non-boxing [Union] struct, member provider (+ decompile.sh)
+  14_JsonUnions/                  # [unions] console — System.Text.Json: unions + closed polymorphism (vs C# 14 converters)
+  15_IndexersAndLabels/           # [bonus]  console — extension indexers, labeled break/continue
+  runtime-async-compare.sh        # runs 08 vs 09, prints both stack traces + greps the IL
 tests/
   Csharp15.Tests/                 # xUnit — 10 tests over Option/Result
 ```
@@ -54,12 +61,23 @@ dotnet test  tests/Csharp15.Tests              # Passed!  Passed: 10
 # Union samples
 dotnet run --project src/01_Basics
 dotnet run --project src/03_RecursiveExpr
+dotnet run --project src/04_DomainModeling
 dotnet run --project src/05_PatternShowcase
 dotnet run --project src/07_CollectionExprArgs
 dotnet run --project src/10_ResultOptionUsage
+dotnet run --project src/11_UnionWithMembers
+dotnet run --project src/12_ClosedHierarchies
+dotnet run --project src/13_CustomUnions
+dotnet run --project src/14_JsonUnions
+dotnet run --project src/15_IndexersAndLabels
+
+# Runtime async (run each directly, or both via the compare script below)
+dotnet run --project src/08_RuntimeAsync_Classic -c Release
+dotnet run --project src/09_RuntimeAsync_Enabled -c Release
 
 # Deep dives
 src/06_Lowering/decompile.sh                   # union -> struct + IUnion, switch IL
+src/13_CustomUnions/decompile.sh               # TryGetValue (no boxing) vs get_Value + unbox
 src/runtime-async-compare.sh                   # state machine vs runtime async
 
 # Rust counterpart (needs a Rust toolchain, https://rustup.rs)
@@ -70,7 +88,11 @@ src/runtime-async-compare.sh                   # state machine vs runtime async
 
 * Union types: `union Pet(Cat, Dog, Bird);` lowers to a `struct : IUnion` holding `object? Value`;
   conversions are constructor calls, `switch` is an `isinst` ladder with a `ThrowSwitchExpressionException`
-  safety net, and exhaustiveness is CS8509 (a warning).
+  safety net, and exhaustiveness is CS8509 (a warning). Hand-written `[Union]` types can add
+  `HasValue`/`TryGetValue` to avoid boxing.
+* Closed hierarchies: `closed record Pet;` — only the declaring assembly may derive directly, so a
+  switch over `Pet` is exhaustive without `_`. Unions = "one of these existing types";
+  closed = "one of my subtypes".
 * Runtime async: `<Features>runtime-async=on</Features>` makes the runtime, not the compiler,
   manage suspension — no `IAsyncStateMachine` types, `await x` becomes `AsyncHelpers.Await(x)`,
   methods are flagged `MethodImplOptions.Async`, and live stack traces shrink (13 → 5 frames here).
