@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: functional-helpers
+expected_outcome: |
+  Suggests `union Either<T0,T1>(T0,T1)` and a union-based Result with a distinct error type, warns about boxing for Option on the hot path (keep it or make it a non-boxing custom [Union]), mentions same-type ambiguity.
+context:
+  scaffold_script: place-files.sh

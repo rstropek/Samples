@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: expressions-visitor
+expected_outcome: |
+  Recommends a closed Expr hierarchy with exhaustive switch expressions (or explains the trade-off), a union or closed hierarchy for tokens, valid syntax.
+context:
+  scaffold_script: place-files.sh

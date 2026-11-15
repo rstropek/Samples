@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: billing-modernize
+expected_outcome: |
+  Recommends a closed PaymentResult (and RefundOutcome as closed hierarchy or union), removes the throw arms, keeps PaymentProvider open, uses valid C# 15 syntax without preview claims.
+context:
+  scaffold_script: place-files.sh

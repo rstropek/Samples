@@ -1002,6 +1002,8 @@ the classic `found = true; break; … if (found) break;` and `goto` shapes.)
 10. Bonus (5 min): collection expression arguments, extension indexers, labeled break/continue
     (`07`, `15`).
 11. Wrap (2 min): comparison table, the `default(union)` caveat, "type unions vs tagged unions".
+12. Optional add-on (20 min): AI agents and C# 15. The LSP raises false alarms, and a skill makes reviews
+    about 2× faster or, without tools, actually correct. Script: [`agent-skill/DEMO.md`](../agent-skill/DEMO.md).
 
 ---
 

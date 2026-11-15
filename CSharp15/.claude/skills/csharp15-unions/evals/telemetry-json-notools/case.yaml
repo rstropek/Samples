@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: telemetry-json-notools
+expected_outcome: |
+  Same review as telemetry-json, but the code is pasted into the prompt and the agent has no shell, SDK or
+  docs access (like a PR-review bot or a chat). Without the skill the model falls back to pre-C# 15 advice;
+  with the skill it recommends closed + InferClosedTypePolymorphism, a JsonUnion structural-classifier union
+  and `union SensorValue(double, string)`.

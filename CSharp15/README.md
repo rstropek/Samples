@@ -7,6 +7,8 @@ My working repo for a single talk covering two .NET 11 features:
    smaller C# 15 features (collection expression arguments, extension indexers, labeled
    `break`/`continue`)
 2. .NET 11 Runtime Async — see [`docs/02-RuntimeAsync.md`](docs/02-RuntimeAsync.md)
+3. Workshop add-on: teaching AI agents C# 15 with a skill — see [`agent-skill/README.md`](agent-skill/README.md)
+   (the skill itself is the project skill [`.claude/skills/csharp15-unions`](.claude/skills/csharp15-unions/SKILL.md))
 
 Each doc has my notes: a feature walkthrough, a deep dive into the implementation (decompiled C#
 plus IL from `ilspycmd`), a set of runnable samples, the gotchas I ran into, and a demo running

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: telemetry-json
+expected_outcome: |
+  Replaces SensorValue+converter with `union SensorValue(double,string)`, IngestResponse converter with a JsonUnion structural classifier union, JsonDerivedType list with closed + InferClosedTypePolymorphism, flags the missing DeviceRebooted registration.
+context:
+  scaffold_script: place-files.sh
