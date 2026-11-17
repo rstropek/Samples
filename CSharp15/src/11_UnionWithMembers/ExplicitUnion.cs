@@ -13,7 +13,7 @@ public record class Ok(int Code);
 public record class Fail(string Reason);
 
 [Union]
-public struct HttpOutcome : IUnion
+public readonly struct HttpOutcome : IUnion
 {
     public object? Value { get; }
     public HttpOutcome(Ok ok)    => Value = ok;

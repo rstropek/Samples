@@ -12,7 +12,7 @@ public record class Shipped(string TrackingNumber, DateOnly ShippedOn);
 public record class Delivered(DateOnly DeliveredOn);
 public record class Cancelled(string Reason);
 
-public union OrderState(Draft, Placed, Shipped, Delivered, Cancelled);
+public readonly union OrderState(Draft, Placed, Shipped, Delivered, Cancelled);
 
 internal static class Program
 {

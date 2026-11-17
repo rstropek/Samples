@@ -12,7 +12,7 @@ public record class Mul(Expr Left, Expr Right);
 public record class Div(Expr Left, Expr Right);
 public record class Neg(Expr Operand);
 
-public union Expr(Num, Add, Sub, Mul, Div, Neg);
+public readonly union Expr(Num, Add, Sub, Mul, Div, Neg);
 
 internal static class Program
 {

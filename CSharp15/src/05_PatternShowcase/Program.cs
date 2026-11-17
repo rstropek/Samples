@@ -8,7 +8,7 @@ public record class Circle(double Radius);
 public record class Rectangle(double Width, double Height);
 public record class Triangle(double Base, double Height);
 
-public union Shape(Circle, Rectangle, Triangle);
+public readonly union Shape(Circle, Rectangle, Triangle);
 
 internal static class Program
 {

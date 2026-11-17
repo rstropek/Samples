@@ -16,7 +16,7 @@ public record class Dog(string Name);
 public record class Bird(string Name, bool CanFly);
 
 // The union declaration. This single line is the headline C# 15 feature.
-public union Pet(Cat, Dog, Bird);
+public readonly union Pet(Cat, Dog, Bird);
 
 internal static class Program
 {

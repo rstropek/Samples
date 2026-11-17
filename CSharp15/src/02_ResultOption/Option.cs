@@ -15,7 +15,7 @@ public sealed record class None
     private None() { }
 }
 
-public union Option<T>(Some<T>, None);
+public readonly union Option<T>(Some<T>, None);
 
 public static class Option
 {

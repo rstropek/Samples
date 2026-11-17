@@ -8,9 +8,9 @@ namespace UnionMembers;
 public record class Celsius(double Degrees);
 public record class Fahrenheit(double Degrees);
 
-public partial union Temperature(Celsius, Fahrenheit);
+public readonly partial union Temperature(Celsius, Fahrenheit);
 
-public partial union Temperature
+public readonly partial union Temperature
 {
     public double AsCelsius => this switch
     {

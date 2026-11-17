@@ -15,7 +15,7 @@ feature, after roughly five years of design work in `dotnet/csharplang`. The who
 one line:
 
 ```csharp
-public union Pet(Cat, Dog, Bird);
+public readonly union Pet(Cat, Dog, Bird);
 ```
 
 [Sample Code](../src/01_Basics/Program.cs#L19)
@@ -62,7 +62,7 @@ public record class Cat(string Name);
 public record class Dog(string Name);
 public record class Bird(string Name, bool CanFly);
 
-public union Pet(Cat, Dog, Bird);   // <-- the headline syntax
+public readonly union Pet(Cat, Dog, Bird);   // <-- the headline syntax
 ```
 
 [Sample Code](../src/01_Basics/Program.cs#L14)
@@ -70,6 +70,12 @@ public union Pet(Cat, Dog, Bird);   // <-- the headline syntax
 Case types can be any type that converts to `object` — classes, structs, interfaces, type
 parameters, other unions (not `ref struct`s like `Span<T>`: CS9371). I reach for `record class` because it keeps the demos short and
 hands me value equality and deconstruction for free.
+
+Why `readonly union`? A union is a `struct` under the hood (§3.1), and its only state is the
+get-only `Value`, so the IDE suggests IDE0250 "Struct can be made 'readonly'". The modifier
+works on the shorthand (and on `partial union`). It lowers to a `readonly struct`, saves
+defensive copies on `in` parameters and `readonly` fields, and makes every member in the body
+implicitly `readonly`. All samples in this repo use it. Plain `union Pet(...)` works just as well.
 
 ### 2.2 Implicit conversions — a `Dog` _is_ a `Pet`
 
@@ -151,11 +157,11 @@ Type parameters work, including more than one:
 ```csharp
 public record class Some<T>(T Value);
 public sealed record class None;          // shared empty marker
-public union Option<T>(Some<T>, None);
+public readonly union Option<T>(Some<T>, None);
 
 public record class Ok<T>(T Value);
 public record class Error<E>(E Failure);
-public union Result<T, E>(Ok<T>, Error<E>);   // two type parameters
+public readonly union Result<T, E>(Ok<T>, Error<E>);   // two type parameters
 ```
 
 [Sample Code — Option](../src/02_ResultOption/Option.cs#L18) · [Result](../src/02_ResultOption/Result.cs#L10)
@@ -197,7 +203,7 @@ factories. There are three ways to do it, and I checked all three (see `src/11_U
 
 ```csharp
 // (1) Shorthand declaration WITH a body — the common case
-public union Shape(Circle, Rectangle, Triangle)
+public readonly union Shape(Circle, Rectangle, Triangle)
 {
     public double Area => this switch          // <-- switch over `this`, NOT Value
     {
@@ -221,8 +227,8 @@ public union Shape(Circle, Rectangle, Triangle)
 }
 
 // (2) `partial union` — keep declaration and logic in separate files
-public partial union Temperature(Celsius, Fahrenheit);
-public partial union Temperature
+public readonly partial union Temperature(Celsius, Fahrenheit);
+public readonly partial union Temperature
 {
     public double AsCelsius => this switch { Celsius c => c.Degrees, Fahrenheit f => (f.Degrees-32)*5/9, null => double.NaN };
     public override string ToString() => $"{AsCelsius:F1} °C";
@@ -232,7 +238,7 @@ public partial union Temperature
 //     per case type (or a member provider, §3.6) and an `object? Value` property is a union.
 //     Implementing IUnion is optional (the generated form does it).
 [Union]
-public struct HttpOutcome : IUnion
+public readonly struct HttpOutcome : IUnion
 {
     public object? Value { get; }
     public HttpOutcome(Ok ok)    => Value = ok;
@@ -267,7 +273,7 @@ Source (`src/06_Lowering/Unions.cs`):
 ```csharp
 public record class Circle(double Radius);
 public record class Rectangle(double Width, double Height);
-public union Shape(Circle, Rectangle);
+public readonly union Shape(Circle, Rectangle);
 ```
 
 [Sample Code](../src/06_Lowering/Unions.cs#L7)
@@ -278,7 +284,7 @@ Decompiled with `ilspycmd 06_Lowering.dll -t Lowering.Shape`:
 using System.Runtime.CompilerServices;
 
 [Union]
-public struct Shape : IUnion
+public readonly struct Shape : IUnion
 {
     public object? Value { get; }
 
@@ -289,7 +295,7 @@ public struct Shape : IUnion
 
 So the "opinionated" shorthand generates:
 
-- a `struct` (value type),
+- a `struct` (value type) — `readonly` here because the declaration says `readonly union`,
 - decorated with `[Union]`,
 - implementing `IUnion`,
 - storing the payload in a single `object? Value` auto-property,
@@ -790,7 +796,7 @@ must own every case type. For a domain model you own (`04_DomainModeling`, `03_R
 value — no wrapper object, no `$type`:
 
 ```csharp
-public union Reading(int, string);
+public readonly union Reading(int, string);
 Reading[] readings = [42, "sensor offline"];
 JsonSerializer.Serialize(readings);           // [42,"sensor offline"]
 ```
@@ -801,7 +807,7 @@ names (zero or multiple matches → `JsonException`):
 
 ```csharp
 [JsonUnion(TypeClassifier = typeof(JsonUnionTypeStructuralClassifier))]
-public union ApiResult(Ok, Problem);          // Ok(int Value) / Problem(string Title, int Status)
+public readonly union ApiResult(Ok, Problem);          // Ok(int Value) / Problem(string Title, int Status)
 ```
 
 And for closed hierarchies, STJ can infer the polymorphism from the closed set — no

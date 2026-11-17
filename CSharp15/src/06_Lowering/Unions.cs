@@ -8,7 +8,7 @@ public record class Circle(double Radius);
 public record class Rectangle(double Width, double Height);
 
 // A union declaration ...
-public union Shape(Circle, Rectangle);
+public readonly union Shape(Circle, Rectangle);
 
 // ... is lowered by the C# 15 compiler to roughly:
 //

@@ -63,4 +63,4 @@ public readonly struct ValueOption<T> : IUnion
 // identical constructors and fails with CS0457 (ambiguous conversion).
 
 // For comparison: the shorthand form of the same union. Always boxes `int`.
-public union BoxedOption<T>(T, None);
+public readonly union BoxedOption<T>(T, None);

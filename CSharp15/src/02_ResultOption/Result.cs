@@ -7,7 +7,7 @@ namespace Functional;
 public record class Ok<T>(T Value);
 public record class Error<E>(E Failure);
 
-public union Result<T, E>(Ok<T>, Error<E>);
+public readonly union Result<T, E>(Ok<T>, Error<E>);
 
 public static class Result
 {
