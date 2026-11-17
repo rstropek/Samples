@@ -227,6 +227,95 @@
 }
 .agenda b code { font-size: 0.9em; }
 
+/* "AI agents & C# 15": skill hint left, findings right */
+.intro {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 28px;
+  margin-top: 14px;
+  align-items: start;
+}
+.intro .label {
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.intro .slides-hint {
+  background: var(--note-bg);
+  border-top: 5px solid var(--brand);
+  padding: 16px 18px 18px;
+  border-radius: 0 0 8px 8px;
+}
+.intro .slides-hint a {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--accent) !important;
+  border-bottom: none !important;
+  margin-bottom: 12px;
+}
+.intro .slides-hint small {
+  display: block;
+  margin-top: 8px;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.intro .finding {
+  border-left: 5px solid var(--brand);
+  background: var(--note-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 7px 14px;
+  margin-bottom: 9px;
+}
+.intro .finding.bad {
+  border-left-color: var(--warn);
+  background: var(--warn-bg);
+}
+.intro .finding b {
+  display: block;
+  font-size: 21px;
+  line-height: 1.25;
+}
+.intro .finding span {
+  display: block;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+/* core message under the two columns */
+.core {
+  margin-top: 12px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 18px 12px;
+}
+.core-title {
+  font-size: 23px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.core-points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  font-size: 17px;
+  line-height: 1.35;
+}
+.core-points b {
+  font-size: 18px;
+}
+.core-points code {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
 /* cover */
 .slidev-layout.cover h1 { color: var(--accent); }
 

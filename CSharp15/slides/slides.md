@@ -41,14 +41,70 @@ Everything on the slides is in the repo and was compiled and run with the .NET 1
 # Agenda
 
 <div class="agenda">
-<div class="item"><span class="num">1</span><div><b>Union types</b><small>the feature</small></div></div>
-<div class="item"><span class="num">2</span><div><b>Under the hood</b><small>what the compiler generates, C# and IL</small></div></div>
-<div class="item"><span class="num">3</span><div><b>Custom unions</b><small>without boxing</small></div></div>
-<div class="item"><span class="num">4</span><div><b><code>closed</code> hierarchies</b><small>the other way to get exhaustiveness</small></div></div>
-<div class="item"><span class="num">5</span><div><b>Unions on the wire</b><small>System.Text.Json</small></div></div>
-<div class="item"><span class="num">6</span><div><b>Small C# 15 goodies</b><small>collection args, extension indexers, labels</small></div></div>
-<div class="item"><span class="num">7</span><div><b>Runtime async</b><small>no more compiler state machines</small></div></div>
+<div class="item"><span class="num">1</span><div><b>AI agents &amp; C# 15</b><small>a skill for the new features</small></div></div>
+<div class="item"><span class="num">2</span><div><b>Union types</b><small>the feature</small></div></div>
+<div class="item"><span class="num">3</span><div><b>Under the hood</b><small>what the compiler generates, C# and IL</small></div></div>
+<div class="item"><span class="num">4</span><div><b>Custom unions</b><small>without boxing</small></div></div>
+<div class="item"><span class="num">5</span><div><b><code>closed</code> hierarchies</b><small>the other way to get exhaustiveness</small></div></div>
+<div class="item"><span class="num">6</span><div><b>Unions on the wire</b><small>System.Text.Json</small></div></div>
+<div class="item"><span class="num">7</span><div><b>Small C# 15 goodies</b><small>collection args, extension indexers, labels</small></div></div>
+<div class="item"><span class="num">8</span><div><b>Runtime async</b><small>no more compiler state machines</small></div></div>
 </div>
+
+---
+
+# AI agents & C# 15
+
+<div class="intro">
+
+<div class="slides-hint">
+<div class="label">Agent skill</div>
+<a href="https://github.com/rstropek/Samples/tree/master/CSharp15/.claude/skills/csharp15-unions" target="_blank">.claude/skills/<br>csharp15-unions</a>
+<small>About 100 lines of verified facts: unions, <code>closed</code>, System.Text.Json</small>
+<small>Claude Code loads it automatically in this repo</small>
+<small>Evals included</small>
+</div>
+
+<div>
+<div class="label">What we measured</div>
+<v-clicks>
+
+<div class="finding ok"><b>It works without a skill</b><span>The agent checks itself: probe projects, the SDK's XML docs</span></div>
+<div class="finding ok"><b>A skill makes it faster</b><span>About 40% less time, 15% fewer tokens, same quality</span></div>
+<div class="finding bad"><b>The C# LSP currently hurts more than it helps</b><span>csharp-ls 0.28.0 reports valid <code>union</code>/<code>closed</code> code as errors</span></div>
+
+</v-clicks>
+</div>
+
+</div>
+
+<div v-click class="core">
+<div class="core-title">C# 15 makes C# more agent-friendly</div>
+<div class="core-points">
+<div><b>Unions, <code>closed</code>:</b> intent is in the types, so compiler warnings tell the agent what to fix</div>
+<div><b>Runtime async:</b> async code gets faster, and the agent doesn't have to change anything</div>
+</div>
+</div>
+
+<div class="src"><Src path="agent-skill/README.md" label="agent-skill/README.md" /><Src path=".claude/skills/csharp15-unions/SKILL.md" label=".claude/skills/csharp15-unions/SKILL.md" /></div>
+
+<!--
+The agent knows the syntax from the previews and checks the rest itself.
+Experiment: Opus 5.5, four C# 14-style libraries to review, one run per configuration.
+All configurations passed 23/23 assertions. With skill: 168 s / 68k tokens per review,
+without: 279 s / 81k tokens.
+Without tools (code pasted into the prompt), the model without the skill gave pre-C# 15
+advice; with the skill it recommended closed + InferClosedTypePolymorphism and unions.
+LSP: csharp-ls 0.28.0 (newest on NuGet, checked 2026-11-17) reports union as CS0246,
+closed as "preview", and every exhaustive switch as CS8509. The skill tells the agent
+that dotnet build is the source of truth. It uses a pre-GA Roslyn; an agent that trusts
+the errors "fixes" valid code (adds LangVersion preview, adds _ arms, drops closed).
+
+Core message: C# 15 makes C# more agent-friendly.
+- Unions and closed hierarchies let the agent state its intent clearly. A missing case is a
+  compiler warning (CS8509), so the agent sees its own mistake and fixes it.
+- Runtime async makes .NET more efficient without the agent having to do anything.
+-->
 
 ---
 layout: center
