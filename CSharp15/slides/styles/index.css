@@ -1,0 +1,242 @@
+/*
+  Projector-friendly: light, high contrast, nothing below ~14pt.
+  Canvas is 980px wide (≈ a 960pt-wide PowerPoint slide), so 1px ≈ 1pt here.
+  Smallest text on any slide: 15px (code) ≈ 14.7pt; only the GitHub links are 10px.
+*/
+:root {
+  --slidev-code-font-size: 15px;
+  --slidev-code-line-height: 1.38;
+  --slidev-code-padding: 6px 12px;
+  --slidev-code-radius: 6px;
+  --slidev-code-margin: 6px 0;
+  --slidev-code-background: #f4f6f8;
+
+  /* Colours from the organizers' template (BCNET11). #4499da is the brand blue;
+     it is too light for text on white, so text uses a darker shade of it. */
+  --brand: #4499da;
+  --brand-1: #3a8fd8;
+  --brand-2: #55aee0;
+  --brand-3: #8fc8ea;
+  --brand-4: #c5e2f3;
+  --ink: #1a1a1a;
+  --muted: #374151;
+  --accent: #1d6aab;
+  --note-bg: #eaf4fc;
+  --warn: #b42318;
+  --warn-bg: #fdeceb;
+}
+
+.slidev-layout {
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1.4;
+  padding: 18px 44px 44px;
+}
+
+.slidev-layout h1 {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  color: var(--accent);
+}
+
+/* the template's four-segment blue bar, under every slide title */
+.slidev-layout h1::after {
+  content: '';
+  display: block;
+  height: 5px;
+  margin-top: 6px;
+  background: linear-gradient(to right,
+    var(--brand-1) 0 25%, var(--brand-2) 25% 50%,
+    var(--brand-3) 50% 75%, var(--brand-4) 75% 100%);
+}
+
+/* default theme greys out the paragraph after h1; keep full contrast */
+.slidev-layout h1 + p {
+  opacity: 1;
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.slidev-layout h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+/* tight, even line spacing (default theme uses ~1.8 for lists) */
+.slidev-layout p,
+.slidev-layout li,
+.slidev-layout ul,
+.slidev-layout ol {
+  line-height: 1.35;
+}
+.slidev-layout ul,
+.slidev-layout ol {
+  margin: 6px 0;
+}
+.slidev-layout li {
+  margin: 0 0 10px;
+  padding-left: 2px;
+}
+.slidev-layout li > p {
+  margin: 0;
+}
+
+/* inline code: no extra line height, no big padding */
+.slidev-layout :not(pre) > code {
+  font-size: 0.88em;
+  line-height: 1;
+  color: #8b1a4a;
+  background: #f1f1f4;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+/* dimmed (not highlighted) code lines: dim, but still readable on a projector */
+.slidev-code .dishonored {
+  opacity: 0.4 !important;
+}
+
+/* ---- annotation boxes ---------------------------------------------------- */
+.note {
+  border-left: 5px solid var(--brand);
+  background: var(--note-bg);
+  padding: 5px 10px;
+  margin: 6px 0;
+  font-size: 18px;
+  line-height: 1.35;
+  border-radius: 0 6px 6px 0;
+}
+.note p { margin: 0; }
+.note code { white-space: normal; overflow-wrap: anywhere; }
+.note.warn {
+  border-left-color: var(--warn);
+  background: var(--warn-bg);
+}
+
+/* code left, annotations right */
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 18px;
+  align-items: start;
+}
+/* two equal columns (before/after, source/decompiled) */
+.cols2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.cols2 h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ---- links to the sample code (bottom of the slide) --------------------- */
+.src {
+  position: absolute;
+  left: 44px;
+  right: 44px;
+  bottom: 8px;
+  font-size: 10px;   /* links into GitHub: small on purpose (agreed: 10pt is fine) */
+  color: var(--muted);
+}
+.src::before {
+  content: 'Code: ';
+}
+.src-link {
+  color: var(--accent) !important;
+  border-bottom: 1px solid currentColor !important;
+  margin-right: 16px;
+  font-family: var(--slidev-code-font-family, monospace);
+}
+
+/* ---- template slide types ------------------------------------------------ */
+/* "Thema" section slide: white bold title in a brand-blue box */
+.slidev-layout.thema h1 {
+  background: var(--brand);
+  color: #fff;
+  font-size: 44px;
+  width: 840px;
+  text-align: center;
+  padding: 34px 24px;
+  margin: 0 30px;
+}
+.slidev-layout.thema h1::after { display: none; }
+
+/* "Demo: ..." slide: dark title in a brand-blue frame */
+.slidev-layout.demo h1 {
+  border: 3px solid var(--brand);
+  color: var(--ink);
+  font-size: 36px;
+  width: 840px;
+  text-align: center;
+  padding: 24px;
+  margin: 0 30px 24px;
+}
+.slidev-layout.demo h1::after { display: none; }
+.slidev-layout.demo pre { font-size: 20px; }
+.slidev-layout.demo p { text-align: center; }
+
+/* agenda: numbered cards, 1-4 left column, 5-7 right column */
+.agenda {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  gap: 20px 28px;
+  margin-top: 34px;
+}
+.agenda .item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--note-bg);
+  border-left: 5px solid var(--brand);
+  border-radius: 0 8px 8px 0;
+}
+.agenda .num {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+.agenda b {
+  display: block;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.agenda small {
+  display: block;
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+.agenda b code { font-size: 0.9em; }
+
+/* cover */
+.slidev-layout.cover h1 { color: var(--accent); }
+
+/* no programming ligatures: `=>` must look like `=>` in a C# training */
+.slidev-code, .slidev-layout code, .src-link {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+/* PDF export: show every code line at full contrast (no click-step dimming) */
+#print-container .slidev-code .dishonored {
+  opacity: 1 !important;
+}

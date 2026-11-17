@@ -1,0 +1,4 @@
+# Slidev build / export output (the PDF is committed on purpose)
+dist/
+.slidev/
+*.local
