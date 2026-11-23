@@ -49,6 +49,7 @@ Everything on the slides is in the repo and was compiled and run with the .NET 1
 <div class="item"><span class="num">6</span><div><b>Unions on the wire</b><small>System.Text.Json</small></div></div>
 <div class="item"><span class="num">7</span><div><b>Small C# 15 goodies</b><small>collection args, extension indexers, labels</small></div></div>
 <div class="item"><span class="num">8</span><div><b>Runtime async</b><small>no more compiler state machines</small></div></div>
+<div class="item"><span class="num">9</span><div><b>Memory safety</b><small>preview: <code>unsafe</code> becomes a contract</small></div></div>
 </div>
 
 ---
@@ -1352,6 +1353,84 @@ src/runtime-async-compare.sh runs both and prints the two traces.
 -->
 
 ---
+layout: center
+class: thema
+---
+
+# Memory safety (preview)
+
+---
+
+# Memory safety (preview): `unsafe` becomes a contract
+
+`LangVersion=preview` + `Features: updated-memory-safety-rules`
+
+<div class="cols" style="grid-template-columns: minmax(0, 1fr) 300px">
+<div>
+
+```csharp {all|1-2|4-7|11-17|all}
+public static unsafe int DecodeUnchecked(
+    ReadOnlySpan<char> s, Span<byte> dest)
+{
+    unsafe
+    {
+        ref byte dst = ref MemoryMarshal.GetReference(dest);
+        // loop: Unsafe.Add(ref dst, o++) = ...; no checks
+    }
+}
+
+public static int Decode(
+    ReadOnlySpan<char> s, Span<byte> dest)
+{
+    if (dest.Length < GetDecodedLength(s.Length)) throw ...;
+    // SAFETY: dest.Length checked above
+    unsafe { return DecodeUnchecked(s, dest); }
+}
+```
+
+</div>
+<div>
+
+<div v-click="1" class="note">
+
+**①** `unsafe` member = **requires-unsafe**: callers need `unsafe` (CS9362).
+
+</div>
+<div v-click="2" class="note">
+
+**②** Body needs its own `unsafe`: `Unsafe.Add`, `MemoryMarshal` are requires-unsafe.
+
+</div>
+<div v-click="3" class="note">
+
+**③** No modifier: the safe boundary to audit.
+
+</div>
+<div v-click="4" class="note warn">
+
+Wrong `dest` size: checked throws, unchecked overwrites memory.
+
+</div>
+
+</div>
+</div>
+
+<div class="src"><Src path="src/16_MemorySafety/Base45.cs" line="58" /><Src path="src/16_MemorySafety/Program.cs" line="26" /><Src path="src/16_MemorySafety/16_MemorySafety.csproj" /></div>
+
+<!--
+Preview in C# 15 / .NET 11; Microsoft says the model may still change for C# 16.
+Rust parallels: unsafe member = `unsafe fn`; body not implicitly unsafe = Rust 2024
+unsafe_op_in_unsafe_fn; safe/unsafe extern = Rust 2024 `unsafe extern` with `safe fn` items.
+Two steps: LangVersion=preview gives the syntax and the pointer relaxations (&x, fixed,
+stackalloc-to-pointer, sizeof no longer need unsafe; *p still does: CS9360; new unsafe(expr)).
+updated-memory-safety-rules adds the enforcement and records [MemorySafetyRules(2)] on the module.
+extern members must say safe or unsafe (CS9389).
+Sample: Base45 (RFC 9285), the encoding inside EU COVID certificate QR codes, over Span<T>.
+Demo B: the caller sizes dest without the trailing byte. DecodeChecked throws, Decode throws
+ArgumentException, DecodeUnchecked writes 3 bytes into a 2-byte span and overwrites the neighbour.
+-->
+
+---
 
 # Takeaways
 
@@ -1363,6 +1442,7 @@ src/runtime-async-compare.sh runs both and prints the two traces.
 - `closed` gives exhaustiveness for **your own** hierarchies, without a wrapper.
 - System.Text.Json understands both: no more hand-written converters or `[JsonDerivedType]` lists.
 - Runtime async: same code, flip a flag, the runtime owns `await`.
+- Memory safety (preview): `unsafe` marks risky operations and is a contract for callers.
 
 </v-clicks>
 

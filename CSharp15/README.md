@@ -44,6 +44,7 @@ src/
   13_CustomUnions/                # [unions] console — non-boxing [Union] struct, member provider (+ decompile.sh)
   14_JsonUnions/                  # [unions] console — System.Text.Json: unions + closed polymorphism (vs C# 14 converters)
   15_IndexersAndLabels/           # [bonus]  console — extension indexers, labeled break/continue
+  16_MemorySafety/                # [preview] console — memory safety rules: requires-unsafe, Base45 over Span<T>
   runtime-async-compare.sh        # runs 08 vs 09, prints both stack traces + greps the IL
 tests/
   Csharp15.Tests/                 # xUnit — 10 tests over Option/Result
@@ -73,6 +74,9 @@ dotnet run --project src/13_CustomUnions
 dotnet run --project src/14_JsonUnions
 dotnet run --project src/15_IndexersAndLabels
 
+# Memory safety (preview: LangVersion=preview + updated-memory-safety-rules, only in this project)
+dotnet run --project src/16_MemorySafety
+
 # Runtime async (run each directly, or both via the compare script below)
 dotnet run --project src/08_RuntimeAsync_Classic -c Release
 dotnet run --project src/09_RuntimeAsync_Enabled -c Release
@@ -98,3 +102,7 @@ src/runtime-async-compare.sh                   # state machine vs runtime async
 * Runtime async: `<Features>runtime-async=on</Features>` makes the runtime, not the compiler,
   manage suspension — no `IAsyncStateMachine` types, `await x` becomes `AsyncHelpers.Await(x)`,
   methods are flagged `MethodImplOptions.Async`, and live stack traces shrink (13 → 5 frames here).
+* Memory safety (preview): `LangVersion=preview` + `<Features>updated-memory-safety-rules</Features>`.
+  Creating pointers is fine, dereferencing needs `unsafe` (CS9360); `unsafe` on a member means
+  requires-unsafe for its callers (CS9362), including BCL APIs like `Unsafe.Add` and
+  `MemoryMarshal.GetReference`; the body needs its own `unsafe { }`; `extern` needs `safe`/`unsafe`.

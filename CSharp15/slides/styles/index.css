@@ -183,20 +183,20 @@
 .slidev-layout.demo pre { font-size: 20px; }
 .slidev-layout.demo p { text-align: center; }
 
-/* agenda: numbered cards, 1-4 left column, 5-7 right column */
+/* agenda: numbered cards, 1-5 left column, 6-9 right column */
 .agenda {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(4, auto);
+  grid-template-rows: repeat(5, auto);
   grid-auto-flow: column;
-  gap: 20px 28px;
-  margin-top: 34px;
+  gap: 12px 28px;
+  margin-top: 16px;
 }
 .agenda .item {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 14px 16px;
+  padding: 10px 16px;
   background: var(--note-bg);
   border-left: 5px solid var(--brand);
   border-radius: 0 8px 8px 0;

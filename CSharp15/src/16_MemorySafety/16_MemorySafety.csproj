@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MemorySafety</RootNamespace>
+
+    <!-- Memory safety is a PREVIEW in C# 15 / .NET 11 (the model may still change for C# 16).
+         It is switched on in two independent steps:
+           1. LangVersion=preview: new syntax (`unsafe(expr)`, `safe`) and the pointer relaxations
+              (`&x`, `fixed`, stackalloc-to-pointer, sizeof no longer need `unsafe`).
+           2. updated-memory-safety-rules: enforcement. `unsafe` on a member now means
+              "requires-unsafe" (callers need an unsafe context, CS9362), the BCL's
+              Unsafe.* / MemoryMarshal.* APIs are requires-unsafe, `extern` needs `safe` or
+              `unsafe` (CS9389), and the assembly gets [MemorySafetyRules].
+         Keep this in its own project: the rest of the repo uses the shipped C# 15. -->
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Features>$(Features);updated-memory-safety-rules</Features>
+  </PropertyGroup>
+</Project>

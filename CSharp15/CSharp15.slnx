@@ -15,6 +15,7 @@
     <Project Path="src/13_CustomUnions/13_CustomUnions.csproj" />
     <Project Path="src/14_JsonUnions/14_JsonUnions.csproj" />
     <Project Path="src/15_IndexersAndLabels/15_IndexersAndLabels.csproj" />
+    <Project Path="src/16_MemorySafety/16_MemorySafety.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Csharp15.Tests/Csharp15.Tests.csproj" />
