@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Vaccination</RootNamespace>
+    <!-- A missing case in a switch over a union or a closed hierarchy is a build
+         error here, not just a warning. That turns "we added a new vaccine" into
+         a to-do list from the compiler.
+         CS8509: a case has no arm at all.
+         CS8846: a case only has arms with a `when` guard, so some values fall through. -->
+    <WarningsAsErrors>$(WarningsAsErrors);CS8509;CS8846</WarningsAsErrors>
+  </PropertyGroup>
+</Project>

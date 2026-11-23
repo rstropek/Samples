@@ -1,0 +1,4 @@
+{
+  "email": "maria.steiner@example.at",
+  "person": { "name": "Maria Steiner", "birthDate": "1946-08-08", "insuranceNumber": "1006080846", "vaccines": ["rsv", "flu"] }
+}

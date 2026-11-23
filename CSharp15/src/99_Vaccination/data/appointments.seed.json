@@ -1,0 +1,32 @@
+[
+  {
+    "email": "karl.wimmer@example.at",
+    "start": { "date": "2026-11-25", "time": "08:00:00", "booth": 1 },
+    "patients": [
+      {
+        "person": { "insuranceNumber": "2001030450", "name": "Karl Wimmer", "birthDate": "1950-04-03", "riskFactors": false },
+        "vaccines": [ { "$type": "Influenza", "highDose": true } ]
+      }
+    ]
+  },
+  {
+    "email": "eva.bauer@example.at",
+    "start": { "date": "2026-11-25", "time": "08:30:00", "booth": 1 },
+    "patients": [
+      {
+        "person": { "insuranceNumber": "2002170962", "name": "Eva Bauer", "birthDate": "1962-09-17", "riskFactors": false },
+        "vaccines": [ { "$type": "Covid" } ]
+      }
+    ]
+  },
+  {
+    "email": "petra.lang@example.at",
+    "start": { "date": "2026-11-25", "time": "08:15:00", "booth": 2 },
+    "patients": [
+      {
+        "person": { "insuranceNumber": "2003220191", "name": "Petra Lang", "birthDate": "1991-01-22", "riskFactors": true },
+        "vaccines": [ { "$type": "Influenza", "highDose": false } ]
+      }
+    ]
+  }
+]

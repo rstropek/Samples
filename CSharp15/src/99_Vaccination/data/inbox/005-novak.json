@@ -1,0 +1,4 @@
+{
+  "email": "peter.novak@example.at",
+  "person": { "name": "Peter Novak", "insuranceNumber": "1007090377", "vaccines": ["flu"] }
+}

@@ -1,0 +1,5 @@
+[
+  { "insuranceNumber": "1005150149", "vaccine": { "$type": "Covid" }, "date": "2026-06-10" },
+  { "insuranceNumber": "1005150149", "vaccine": { "$type": "Influenza", "highDose": true }, "date": "2026-10-02" },
+  { "insuranceNumber": "1003301186", "vaccine": { "$type": "Covid" }, "date": "2026-03-01" }
+]

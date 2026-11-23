@@ -1,0 +1,8 @@
+{
+  "email": "huber.family@example.at",
+  "members": [
+    { "name": "Thomas Huber", "birthDate": "1984-07-02", "insuranceNumber": "1002020784", "vaccines": ["flu", "covid"] },
+    { "name": "Sabine Huber", "birthDate": "1986-11-30", "insuranceNumber": "1003301186", "vaccines": ["flu", "covid"], "riskFactors": true },
+    { "name": "Lena Huber", "birthDate": "2014-05-21", "insuranceNumber": "1004210514", "vaccines": ["flu"] }
+  ]
+}
