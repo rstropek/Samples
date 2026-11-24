@@ -45,7 +45,7 @@ src/
   14_JsonUnions/                  # [unions] console — System.Text.Json: unions + closed polymorphism (vs C# 14 converters)
   15_IndexersAndLabels/           # [bonus]  console — extension indexers, labeled break/continue
   16_MemorySafety/                # [preview] console — memory safety rules: requires-unsafe, Base45 over Span<T>
-  99_Vaccination/                 # [workshop] console — end-to-end: vaccination center bookings; STORYBOOK.md = live-coding script
+  99_Vaccination/                 # [workshop] console — end-to-end: vaccination center bookings; STORYBOOK.md (EN) / STORYBOOK_de.md (DE) = live-coding script
   runtime-async-compare.sh        # runs 08 vs 09, prints both stack traces + greps the IL
 tests/
   Csharp15.Tests/                 # xUnit — 10 tests over Option/Result
