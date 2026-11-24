@@ -1,8 +1,16 @@
 # Storybook: the vaccination center
 
 A presenter script for building `src/99_Vaccination` live during the full-day C# 15 workshop.
-The sample is built in five steps. Before each step you discuss the small samples that introduce
-the features, then the step shows the same features in code that looks like a real application.
+The sample is built in five steps. Each step follows the same rhythm:
+
+1. **Discuss first:** the small samples that introduce the features.
+2. **Model it first:** show the requirements and let the group design the types before any code
+   is written. Each step lists the answers you'll likely hear (often the C# 14 way), how to respond,
+   and where we land.
+3. **Code and run:** build the step and compare the result with the group's design.
+4. **Break it on purpose:** small experiments that show what each feature protects against.
+
+The day ends with a modeling exercise without code (the vaccination day itself).
 
 ## The story
 
@@ -99,16 +107,52 @@ blocks below are complete.
 
 **Goal:** read every inbox file into a typed request, whether it's for one person or a family.
 
-The portal sends two shapes and neither has a type field:
+### Model it first
 
-```json
-{ "email": "...", "person":  { "name": "...", "birthDate": "...", ... } }
-{ "email": "...", "members": [ { ... }, { ... } ] }
-```
+Show the requirements and let the group design the C# types. Collect the answers before you
+comment on them.
 
-We don't own this format, so we can't add `$type`. The records are plain transfer objects with no
-shared base. That makes this a union of existing types, and the structural classifier picks the
-case by its property names.
+> **Requirements**
+>
+> - The city's portal sends one JSON file per booking. We can't change its format.
+> - A booking is either for one person or for a family:
+>
+>   ```json
+>   { "email": "...", "person":  { "name": "...", "birthDate": "...", ... } }
+>   { "email": "...", "members": [ { ... }, { ... } ] }
+>   ```
+>
+> - No field says which of the two it is.
+> - The rest of the app only needs an email address and a list of people.
+> - Broken files must be rejected, not half-read.
+
+**Ask:**
+
+1. Which C# types would you write for a request?
+2. How does the deserializer know which of the two shapes it is reading?
+3. Where do the two shapes become "an email and a list of people"?
+4. What happens with a file that is missing a field?
+
+**Answers you'll likely hear, and how to respond:**
+
+- *"One class with a nullable `Person` and a nullable `Members`."* Ask what it means when both are
+  null, or both are set. The type allows states the portal never sends, and every consumer needs
+  null checks.
+- *"An abstract base class, two subclasses, and a custom `JsonConverter`."* That's the C# 14 answer
+  and it works. Ask who writes and maintains the converter that looks at property names
+  (`CSharp14Way.cs` in `14_JsonUnions` has one).
+- *"A closed hierarchy with `$type`."* A good instinct for our own data, but the portal's JSON has no
+  `$type` and we can't add one.
+- *"Treat a single person as a family of one."* That's what the app does internally (`Members`).
+  But the JSON still comes in two shapes, so reading it needs both.
+
+**Where we land:** two plain records, one per shape, and `union PortalRequest(SingleRequest,
+FamilyRequest)`. They don't share a base class, so this is a union of existing types. The
+structural classifier picks the case by its property names. Members in the union body turn both
+shapes into `Email` and `Members`, so nothing else in the app switches over the shape. Strict JSON
+options reject files with missing fields.
+
+### Code
 
 `PortalRequest.cs`:
 
@@ -241,14 +285,56 @@ section (3) of `14_JsonUnions`.
 
 **Goal:** for each requested vaccine, decide whether the person gets it, and if not, why not.
 
-Two modeling decisions to discuss:
+### Model it first
 
-- **Vaccines are a closed hierarchy.** We own every case, they belong together, and the compiler
-  should know the complete list. An `enum` would force a `_` arm into every switch. A closed
-  hierarchy gives exhaustiveness and lets each case carry its own data (`Influenza.HighDose`).
-- **The decision is a union.** "Yes" is answered with the `Vaccine` to give, which is an existing
-  type that can't derive from a result base. `TooSoon` carries a date, `NotRecommended` a reason.
-  Each case carries only what makes sense for it.
+> **Requirements** (simplified demo rules)
+>
+> - The center offers flu and COVID-19 vaccination. More vaccines may follow.
+> - People of 60 and over get the high-dose flu vaccine.
+> - Flu: once per season. The season starts on 1 September.
+> - COVID-19: only from 60 or with risk factors, and at most once in 12 months.
+> - Nobody under 18. Children go to their paediatrician.
+> - When the answer is no, the person needs to know why. If it's "not yet", they need the earliest
+>   date.
+
+**Ask:**
+
+1. How do we represent the vaccines?
+2. What does `Check(person, vaccine)` return?
+
+**Answers you'll likely hear for the vaccines:**
+
+- *"An enum `VaccineKind { Flu, Covid }`."* Two problems:
+  - Where does `HighDose` go? A `bool HighDose` next to the enum is meaningless for COVID-19.
+  - A switch over an enum is never exhaustive. Even with every named value handled, the compiler
+    warns with CS8524, because an enum can hold any `int`. Teams then add `_ => throw ...`, which
+    hides the next new vaccine from the compiler.
+- *"A base class with subclasses."* Close. But without `closed` the compiler can't know that the
+  list is complete, so every switch still needs a `_` arm.
+- *"A union of records."* Possible, but we own all the types, they share behavior (`ToString`),
+  and in step 4 we'll store them with a type discriminator. That is what closed hierarchies are
+  for.
+
+**Answers you'll likely hear for the result:**
+
+- *"`bool`."* Loses the reason and the date.
+- *"`(bool Ok, string? Reason, DateOnly? EarliestDate)`", or a class with nullable fields.* Ask
+  which combinations are valid. `Ok = true` with a reason? The type doesn't say.
+- *"Throw an exception."* "Not eligible" is a normal answer, not an error. And the signature
+  doesn't tell the caller which exceptions to expect.
+- *"`Result<Vaccine, string>`."* Better. But "not yet" carries a date and "not recommended" a text.
+  Squeezing both into `string` loses the date.
+
+**Where we land:**
+
+- **`closed record Vaccine`** with `Influenza(bool HighDose)` and `Covid`. Each case carries only
+  its own data, and switches are exhaustive without `_`.
+- **`union Eligibility(Vaccine, TooSoon, NotRecommended)`.** "Yes" is answered with the vaccine to
+  give: the rules turn a flu request into a high-dose one for people over 60. `Vaccine` is an
+  existing type and a closed hierarchy itself, so it can't also derive from a result base class.
+  That's where a union fits better than a second closed hierarchy.
+
+### Code
 
 `Domain.cs` (first version):
 
@@ -438,6 +524,48 @@ foreach (var file in Directory.GetFiles(Path.Combine("data", "inbox"), "*.json")
 nothing new: it's the same kind of union as `Eligibility` in step 2.
 
 **Goal:** book everyone who got at least one "yes" into back-to-back slots, and print the day plan.
+
+### Model it first
+
+> **Requirements**
+>
+> - Slots last 15 minutes, from 08:00 to 10:00, in two booths. Bookings are for the next three days.
+> - A family is vaccinated one after another in the same booth, so it needs back-to-back free slots.
+> - Book the earliest possible time.
+> - People press "submit" twice, sometimes with different email casing. Book each email only once.
+> - Booking can fail for several reasons, and each one gets its own message.
+> - The appointments are a `List<Appointment>`, because that's what we'll store as JSON in step 4.
+
+**Ask:**
+
+1. What does `Book(...)` return?
+2. How do we check whether a slot is taken?
+3. How do we search for a block of free slots?
+4. How do we detect duplicate emails?
+
+**Answers you'll likely hear, and how to respond:**
+
+- **Return type:**
+  - *`Appointment?`*: null means it failed, but why?
+  - *`bool TryBook(..., out Appointment? appointment, out string? reason)`*: string reasons, and
+    every caller has to remember to check them.
+  - *Exceptions*: the same problem as in step 2.
+
+  Then ask: what happens to all callers when a new failure reason is added? With a union and an
+  exhaustive switch, the compiler lists them.
+- **Slot lookup:** a `Schedule` class that wraps the list (more code, and JSON then has to store the
+  wrapper), or the same LINQ query in several places. An extension indexer gives the plain list an
+  `appointments[slot]` lookup without a wrapper.
+- **Search:** nested loops with a `found` flag, or a helper method that returns `bool`. Both work.
+  A labeled `continue booth;` says exactly what we mean: this booth doesn't work, try the next.
+- **Duplicates:** `ToLowerInvariant()` before every lookup, which is easy to forget in one place, or
+  a set that compares case-insensitively from the start.
+
+**Where we land:** `union BookingResult(Appointment, Duplicate, NothingToBook, NoFreeSlot)`, an
+extension indexer `this[Slot]` on `IEnumerable<Appointment>`, `continue booth;`, and a
+`HashSet<string>` created with `with(StringComparer.OrdinalIgnoreCase)`.
+
+### Code
 
 Add to `Domain.cs`:
 
@@ -669,6 +797,39 @@ compare it with `CSharp14Way.cs`.
 
 **Goal:** appointments survive a restart, and running the app again doesn't book anyone twice.
 
+### Model it first
+
+> **Requirements**
+>
+> - Appointments must survive a restart. A JSON file is enough.
+> - A human should be able to read the file.
+> - Adding a vaccine later must not require changes to the storage code.
+
+**Ask:**
+
+1. What does an appointment with two vaccines look like in JSON? Sketch it.
+2. How does the reader know that `{ "highDose": true }` is an `Influenza`?
+3. What did this cost in C# 14, and what happens if someone forgets a step?
+
+**Answers you'll likely hear, and how to respond:**
+
+- *"A `kind` property that we write and read ourselves."* Hand-written mapping code in both
+  directions, and one more place to update for every new vaccine.
+- *"`[JsonDerivedType]` attributes on the base class."* The C# 14 way. It works, but it's a second
+  list of subtypes next to the class declarations. Forget one and it fails at runtime with
+  `NotSupportedException`.
+- *"Make `Vaccine` a union instead."* Ask what a union writes: the bare case value, without a
+  discriminator. That worked for the portal input in step 1, where the two shapes are clearly
+  different. Here it doesn't: `Covid` has no properties at all, so there is nothing to recognize it
+  by.
+
+**Where we land:** nothing new to model. The closed hierarchy from step 2 already has
+`[JsonPolymorphic(InferClosedTypePolymorphism = true)]`, because we needed it to read
+`history.json`. It writes `"$type"`, and the list of subtypes comes from the compiler. This step
+only adds saving.
+
+### Code
+
 Change the top of `Program.cs`. The first run starts from the seed file:
 
 ```csharp
@@ -745,6 +906,32 @@ To start over at any time: `rm data/appointments.json`.
 
 **Goal:** offer RSV vaccination. Request 006 (Maria Steiner, 80) has been asking for it all day.
 
+### Model it first
+
+Before you touch the code, show the new requirements and ask the group to **list every place in
+the code that has to change**. Write the list on the whiteboard.
+
+> **Requirements**
+>
+> - RSV vaccination is approved.
+> - From 75, or from 60 with risk factors.
+> - A single dose: anyone who already had it can't book it again.
+> - The portal sends the code `"rsv"`.
+
+Typical lists contain: a new record, the eligibility rules, the display text, the portal code
+mapping, the JSON registration, and "search the code for every switch over vaccines".
+
+Then do the steps below and compare with the whiteboard:
+
+- **The compiler** finds two places: the display text and the rules.
+- **JSON** needs no change at all.
+- **The portal code mapping** is found by nobody but the humans, because the compiler can't check
+  strings. Discuss whether it's worth making that checkable too. For example, an exhaustive switch
+  from `Vaccine` to its portal code would turn a missing code into a compile error. For three
+  vaccines it may not be worth it; for thirty it would be.
+
+### Code
+
 First `rm data/appointments.json`. Step 4 already booked Maria (flu only), so without the reset her
 request would just be a duplicate.
 
@@ -804,6 +991,60 @@ search for `Rsv` to show it. In C# 14 you would maintain a
 `[JsonDerivedType]` list on the base class. Forget to add `Rsv` there and it compiles fine, then
 throws `NotSupportedException` at runtime the first time an RSV appointment is saved
 (`14_JsonUnions`, `CSharp14Way.cs`).
+
+---
+
+## Final modeling exercise: the vaccination day (no code)
+
+This one is for discussion only. The sample doesn't implement it, so the group designs it from
+scratch.
+
+> **Requirements**
+>
+> - On the day, an appointment goes through states: booked, checked in (with the time), vaccinated
+>   (with the time and a lot number for each vaccine), deferred (with a reason, for example fever;
+>   the person has to book again), or no-show.
+> - The status is stored in `appointments.json`.
+> - Reports: no-shows per day, and every lot number used.
+
+**Ask:**
+
+1. Union or closed hierarchy?
+2. Does the status belong to the appointment, or to each patient? A family member with a fever
+   can't be vaccinated, but the others can.
+3. How do we store "a lot number for each vaccine"?
+4. How does a status change look in code?
+
+**Answers you'll likely hear, and how to respond:**
+
+- *"An enum `Status` plus nullable `CheckedInAt`, `LotNumbers` and `DeferralReason` fields."* The
+  classic mix of nullable fields that `04_DomainModeling` replaces: the types don't say which
+  fields belong to which status.
+- *"A union of status records."* Fine in memory, but the status is stored. A union writes the bare
+  value without a discriminator, and `Booked` and `NoShow` have no properties at all. System.Text.Json
+  refuses to set up such a union with the structural classifier: "the case type ... can never be
+  selected uniquely".
+
+**A possible answer.** It's the same pattern as `Vaccine`: we own the types and store them, so it's
+a closed hierarchy with inferred polymorphism, plus an `AppointmentStatus Status` property on the
+record that holds it. This compiles and round-trips through JSON:
+
+```csharp
+[JsonPolymorphic(InferClosedTypePolymorphism = true)]
+public closed record AppointmentStatus;
+public sealed record Booked : AppointmentStatus;
+public sealed record CheckedIn(TimeOnly At) : AppointmentStatus;
+public sealed record Vaccinated(TimeOnly At, string[] LotNumbers) : AppointmentStatus;
+public sealed record Deferred(string Reason) : AppointmentStatus;
+public sealed record NoShow : AppointmentStatus;
+
+// A status change is a copy with a new status:
+appointment = appointment with { Status = new CheckedIn(new TimeOnly(8, 5)) };
+```
+
+It's a starting point, not the answer. Questions 2 and 3 should poke holes in it: `Status` probably
+belongs on `Patient`, and a `string[]` of lot numbers only matches the vaccines by position. For a
+code version, write the transitions as a switch over a tuple `(AppointmentStatus, Event)`.
 
 ---
 
