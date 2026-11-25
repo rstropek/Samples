@@ -15,7 +15,7 @@
     "@angular/cdk": "^6.3.0",
     "@angular/common": "^6.0.3",
     "@angular/compiler": "^6.0.3",
-    "@angular/core": "^6.0.3",
+    "@angular/core": "^11.0.5",
     "@angular/flex-layout": "^6.0.0-beta.16",
     "@angular/forms": "^6.0.3",
     "@angular/http": "^6.0.3",
